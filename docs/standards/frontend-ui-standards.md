@@ -26,6 +26,15 @@ Core rule:
 | [14](#14-testing-your-own-work) | Testing Your Own Work |
 | [15](#15-design-system-standard) | Design System Standard |
 | [16](#16-backend--frontend-error-contract) | Backend + Frontend Error Contract |
+| [17](#17-elements-grouping-management) | Elements Grouping Management |
+| [18](#18-weweb-development-standard) | WeWeb Development Standard |
+| [19](#19-naming-convention-standard) | Naming Convention Standard |
+| [20](#20-authentication--authorization-standard) | Authentication & Authorization Standard |
+| [21](#21-frontend-security-standard) | Frontend Security Standard |
+| [22](#22-performance-optimization-standard) | Performance Optimization Standard |
+| [23](#23-state-management-standard) | State Management Standard |
+| [24](#24-responsive-design-standard) | Responsive Design Standard |
+| [25](#25-console-error-standard) | Console Error Standard |
 
 ---
 
@@ -608,3 +617,292 @@ console.log(error);
 ```
 
 without showing anything to the user.
+
+---
+
+# 17. Elements Grouping Management
+
+All WeWeb assets must be organized into logical groups and folders to keep the project easy to navigate and maintain.
+
+## Recommended Organization
+
+| Asset Type | Organization Example |
+|------------|----------------------|
+| Pages | Public, Auth, Dashboard, Admin, Settings |
+| Components | Forms, Tables, Modals, Layout, Shared UI |
+| Workflows | Authentication, CRUD, Notifications, Utilities |
+| Variables | Page State, Global State, Modal State |
+| Collections | Users, Projects, Reports, Reference Data |
+| Formulas | Formatting, Filtering, Computed Values |
+
+## Page Grouping Examples
+
+Public
+
+```text
+home_page
+pricing_page
+```
+
+Auth
+
+```text
+login_page
+forgot_password_page
+```
+
+Dashboard
+
+```text
+dashboard_home
+project_details_page
+```
+
+Admin
+
+```text
+users_management_page
+roles_permissions_page
+```
+
+## Component Grouping Examples
+
+Modals
+
+```text
+delete_confirmation_modal
+```
+
+Shared UI
+
+```text
+button
+input
+tooltip
+```
+
+## Collections Grouping Examples
+
+Authentication
+
+```text
+login_user
+logout_user
+```
+
+Projects
+
+```text
+create_project
+update_project
+delete_project
+```
+
+## Rules
+
+```text
+[ ] Group pages into logical sections (Public, Auth, Dashboard, Admin, etc.).
+[ ] Group components by purpose (Forms, Tables, Modals, Layout, Shared UI).
+[ ] Group collections by feature or domain.
+[ ] Use descriptive names for variables and collections.
+[ ] Keep formulas organized and reusable.
+[ ] Archive or remove unused assets regularly.
+```
+
+---
+
+# 18. WeWeb Development Standard
+
+When using WeWeb, developers must use platform-native functionality wherever possible instead of custom code.
+
+## Core Rule
+
+Use built-in WeWeb features first. Custom JavaScript and custom CSS should only be used when the requirement cannot be implemented efficiently with native functionality.
+
+The goal is to keep the application maintainable, easier to debug, and fully compatible with future WeWeb updates. Native features are more predictable, easier for other developers to understand, and reduce technical debt.
+
+## Preferred WeWeb Features
+
+| Requirement | Preferred Approach |
+|-------------|--------------------|
+| Conditional logic | Conditional Rendering |
+| Data fetching | Collections |
+| Reusable UI | Components |
+| State management | Variables |
+| Derived values | Formulas |
+| User actions | Workflows |
+| Form validation | Built-in Validation |
+| Responsive design | Native Responsive Controls |
+| Repeating data | Repeat Items |
+| Navigation | Built-in Navigation Actions |
+| Local persistence | Turn on Local Storage in Variables |
+| URL parameters | URL Parameters |
+| Access control | Page Protection + Conditional Visibility |
+
+## Rules
+
+```text
+[ ] Prefer native WeWeb features over custom JavaScript.
+[ ] Avoid custom CSS unless absolutely necessary.
+[ ] Use Components for reusable UI.
+[ ] Use Workflows for structured actions.
+[ ] Use Variables for state management.
+[ ] Use Collections for API data.
+[ ] Use Formulas for computed values.
+[ ] Use Conditional Rendering for UI logic.
+[ ] Use Repeat Items for lists and tables.
+[ ] Use built-in validation whenever possible.
+[ ] Use Native Responsive Controls instead of custom media queries.
+[ ] Use URL Parameters and Local Storage when appropriate.
+[ ] Name all components, workflows, variables, and collections clearly.
+[ ] Document any custom code and explain why native WeWeb functionality was insufficient.
+[ ] Keep custom code isolated and minimal.
+```
+
+---
+
+# 19. Naming Convention Standard
+
+All frontend assets must use consistent and descriptive names.
+
+## Naming Rules
+
+| Asset Type | Convention | Example |
+|------------|------------|---------|
+| Pages | snake_case | project_details_page |
+| Components | snake_case | project_form |
+| Variables | snake_case | selected_project_id |
+| Workflows | snake_case | create_project |
+| Collections | snake_case | projects_collection |
+| States | snake_case | is_loading |
+
+## Rules
+
+```text
+[ ] Use descriptive names.
+[ ] Avoid generic names like data1, workflow2, temp.
+[ ] Use the same naming convention across the entire project.
+```
+
+---
+
+# 20. Authentication & Authorization Standard
+
+All private pages and actions must be protected.
+
+## Access Control Rules
+
+```text
+[ ] Protected pages require authentication.
+[ ] Actions must verify user permissions.
+[ ] UI should hide actions users cannot perform.
+[ ] Backend must enforce all permissions.
+[ ] Expired sessions should redirect to login.
+```
+
+## Examples
+
+| Scenario | Standard |
+|----------|----------|
+| User not logged in | Redirect to login |
+| User lacks permission | Show access denied message |
+| Session expired | Force re-authentication |
+| Admin-only action | Hidden or disabled for non-admins |
+
+---
+
+# 21. Frontend Security Standard
+
+Sensitive data must never be exposed in the frontend.
+
+## Security Rules
+
+```text
+[ ] API keys and secrets must never be stored in frontend code.
+[ ] Sensitive credentials must remain on the backend.
+[ ] Business logic must not rely solely on frontend workflows.
+[ ] All security checks must be enforced on the backend.
+[ ] Frontend validation is for UX only, not security.
+```
+
+---
+
+# 22. Performance Optimization Standard
+
+Applications must minimize unnecessary processing and API usage.
+
+## Performance Rules
+
+```text
+[ ] Avoid unnecessary API calls.
+[ ] Reuse existing collections and cached data.
+[ ] Debounce search inputs.
+[ ] Use server-side pagination and filtering.
+[ ] Disable repeated submissions while requests are in progress.
+```
+
+## Examples
+
+| Scenario | Standard |
+|----------|----------|
+| Search input | Debounce requests |
+| Large tables | Server-side pagination |
+| Repeated form submit | Disable button while loading |
+| Shared datasets | Reuse collections |
+
+---
+
+# 23. State Management Standard
+
+Variables and workflows must follow a predictable structure.
+
+## State Naming Examples
+
+```text
+is_loading
+is_submitting
+selected_project
+error_message
+search_query
+current_page
+```
+
+## Rules
+
+```text
+[ ] Use clear and descriptive variable names.
+[ ] Keep state centralized where practical.
+[ ] Reset temporary state after completion.
+[ ] Avoid duplicate state representing the same value.
+```
+
+---
+
+# 24. Responsive Design Standard
+
+All pages must work correctly across desktop, tablet, and mobile devices.
+
+## Responsive Rules
+
+```text
+[ ] Design mobile-first.
+[ ] No horizontal scrolling.
+[ ] Maintain consistent spacing and alignment.
+[ ] Buttons and inputs must remain usable on touch devices.
+[ ] All modals and tables must adapt to smaller screens.
+```
+
+---
+
+# 25. Console Error Standard
+
+Applications must not ship with unresolved browser errors.
+
+## Rules
+
+```text
+[ ] No JavaScript console errors.
+[ ] No failed network requests without handling.
+[ ] No missing assets or broken references.
+[ ] No warnings indicating broken functionality.
+```
