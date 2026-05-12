@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Django — Template Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="3-folder structure, base.html inheritance, zero inline styles/scripts, data-* attribute pattern, CSRF, static files."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Django — Template Checklist</h1>
+
+        <p class="page-subtitle">
+          3-folder structure, base.html inheritance, zero inline styles/scripts, data-* attribute pattern, CSRF, static files.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../django-checklist.html" class="btn btn-secondary">Back to Django Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#folder-structure" class="card card-clickable">Folder Structure</a>
+            <a href="#template-inheritance" class="card card-clickable">Template Inheritance</a>
+            <a href="#css-standards" class="card card-clickable">CSS Standards</a>
+            <a href="#javascript-standards" class="card card-clickable">JavaScript Standards</a>
+            <a href="#passing-data-to-javascript" class="card card-clickable">Passing Data to JavaScript</a>
+            <a href="#reusable-template-components" class="card card-clickable">Reusable Template Components</a>
+            <a href="#template-logic-rules" class="card card-clickable">Template Logic Rules</a>
+            <a href="#static-file-loading" class="card card-clickable">Static File Loading</a>
+            <a href="#naming-standards" class="card card-clickable">Naming Standards</a>
+            <a href="#anti-patterns" class="card card-clickable">Anti-Patterns</a>
+            <a href="#before-marking-done" class="card card-clickable">Before Marking Done</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="folder-structure" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Folder Structure</h2>
+
+          <label><input type="checkbox" data-checklist-item /> CSS in <code>static/css/</code> — never inline in templates</label><br />
+          <label><input type="checkbox" data-checklist-item /> JavaScript in <code>static/js/</code> — never inline in templates</label><br />
+          <label><input type="checkbox" data-checklist-item /> Templates in <code>templates/</code> — never mixed with static files</label><br />
+          <label><input type="checkbox" data-checklist-item /> App-specific templates in <code>templates/[app_name]/</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> App-specific CSS in <code>static/[app_name]/css/</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> App-specific JS in <code>static/[app_name]/js/</code></label>
+
+          <div class="divider"></div>
+
+          <h3>Correct Folder Structure</h3>
+          <pre>
+myproject/
+  static/
+    css/
+      base.css           ← global variables, reset, shared styles
+      components/
+        navbar.css
+        card.css
+        button.css
+      pages/
+        dashboard.css
+        project-detail.css
+    js/
+      components/
+        navbar.js
+        modal.js
+      pages/
+        dashboard.js
+        project-form.js
+  templates/
+    base.html
+    components/
+      navbar.html
+      footer.html
+      card.html
+    projects/
+      list.html
+      detail.html
+      form.html
+    users/
+      profile.html</pre>
+        </div>
+      </section>
+
+      <section id="template-inheritance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Template Inheritance</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Every page template extends base.html: <code>{% extends "base.html" %}</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>base.html</code> defines all layout blocks</label><br />
+          <label><input type="checkbox" data-checklist-item /> Child templates only override the blocks they need</label><br />
+          <label><input type="checkbox" data-checklist-item /> No duplicate HTML structure (no <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code> in child templates)</label>
+
+          <div class="divider"></div>
+
+          <h3>base.html Required Blocks</h3>
+          <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;{% block title %}App Name{% endblock %}&lt;/title&gt;
+  {% load static %}
+  &lt;link rel="stylesheet" href="{% static 'css/base.css' %}"&gt;
+  {% block extra_css %}{% endblock %}
+&lt;/head&gt;
+&lt;body&gt;
+  {% include "components/navbar.html" %}
+
+  &lt;main&gt;
+    {% block content %}{% endblock %}
+  &lt;/main&gt;
+
+  {% include "components/footer.html" %}
+
+  &lt;script src="{% static 'js/base.js' %}"&gt;&lt;/script&gt;
+  {% block extra_js %}{% endblock %}
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+          <h3>Child Template Pattern</h3>
+          <pre>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Projects — App Name{% endblock %}
+
+{% block extra_css %}
+&lt;link rel="stylesheet" href="{% static 'css/pages/projects.css' %}"&gt;
+{% endblock %}
+
+{% block content %}
+&lt;!-- page content here --&gt;
+{% endblock %}
+
+{% block extra_js %}
+&lt;script src="{% static 'js/pages/projects.js' %}"&gt;&lt;/script&gt;
+{% endblock %}</pre>
+        </div>
+      </section>
+
+      <section id="css-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. CSS Standards</h2>
+
+          <label><input type="checkbox" data-checklist-item /> No <code>&lt;style&gt;</code> blocks anywhere in templates — zero exceptions</label><br />
+          <label><input type="checkbox" data-checklist-item /> All CSS in <code>static/css/</code> files</label><br />
+          <label><input type="checkbox" data-checklist-item /> CSS variables defined in <code>base.css</code> (not hardcoded per file): <code>--color-primary</code>, <code>--color-text</code>, <code>--spacing-md</code>, <code>--font-base</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Component CSS in <code>static/css/components/</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Page-specific CSS in <code>static/css/pages/</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Responsive breakpoints defined consistently across all CSS files</label><br />
+          <label><input type="checkbox" data-checklist-item /> No <code>!important</code> unless absolutely unavoidable (comment explaining why)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Class names use kebab-case: <code>.project-card</code>, <code>.nav-item</code>, <code>.btn-primary</code></label>
+        </div>
+      </section>
+
+      <section id="javascript-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. JavaScript Standards</h2>
+
+          <label><input type="checkbox" data-checklist-item /> No <code>&lt;script&gt;</code> blocks with logic in templates — zero exceptions</label><br />
+          <label><input type="checkbox" data-checklist-item /> All JavaScript in <code>static/js/</code> files</label><br />
+          <label><input type="checkbox" data-checklist-item /> No inline event handlers in HTML: NOT <code>onclick="doSomething()"</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Event listeners added in JS files using <code>addEventListener</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> CSRF token helper defined in <code>base.js</code> and reused across all JS files</label><br />
+          <label><input type="checkbox" data-checklist-item /> All JS files are non-blocking: placed before <code>&lt;/body&gt;</code> or loaded with <code>defer</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> No JavaScript frameworks (React, Vue) mixed into Django templates — use Django templates OR a React frontend, not both</label>
+        </div>
+      </section>
+
+      <section id="passing-data-to-javascript" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Passing Data from Django to JavaScript</h2>
+
+          <p>Use <code>data-*</code> attributes — never string interpolation in <code>&lt;script&gt;</code> tags.</p>
+
+          <label><input type="checkbox" data-checklist-item /> Django context data passed to JS via <code>data-*</code> attributes on HTML elements</label><br />
+          <label><input type="checkbox" data-checklist-item /> Never: <code>&lt;script&gt;var projectId = "{{ project.id }}";&lt;/script&gt;</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Always: <code>&lt;div id="project-root" data-project-id="{{ project.id }}"&gt;&lt;/div&gt;</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> JS reads <code>data-*</code> attributes: <code>document.getElementById('project-root').dataset.projectId</code></label>
+
+          <div class="divider"></div>
+
+          <h3>Correct Pattern</h3>
+          <pre>
+&lt;!-- template: projects/detail.html --&gt;
+{% block content %}
+&lt;div
+  id="project-root"
+  data-project-id="{{ project.id }}"
+  data-workspace-id="{{ workspace.id }}"
+  data-can-edit="{{ can_edit|yesno:'true,false' }}"
+&gt;
+  &lt;!-- content --&gt;
+&lt;/div&gt;
+{% endblock %}</pre>
+
+          <pre>
+// static/js/pages/project-detail.js
+const root = document.getElementById('project-root');
+const projectId = root.dataset.projectId;
+const canEdit = root.dataset.canEdit === 'true';</pre>
+
+          <h3>CSRF Token in Fetch Requests</h3>
+          <pre>
+// static/js/base.js — included in base.html
+function getCsrfToken() {
+  return document.querySelector('[name=csrfmiddlewaretoken]')?.value
+    ?? document.cookie.split('; ')
+        .find(c =&gt; c.startsWith('csrftoken='))
+        ?.split('=')[1] ?? '';
+}
+
+// Usage in any fetch call
+fetch('/api/projects/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': getCsrfToken(),
+  },
+  body: JSON.stringify(data),
+});</pre>
+        </div>
+      </section>
+
+      <section id="reusable-template-components" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Reusable Template Components</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Repeated sections use <code>{% include %}</code> — not copy-pasted HTML</label><br />
+          <label><input type="checkbox" data-checklist-item /> Components stored in <code>templates/components/</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Component files named clearly: <code>navbar.html</code>, <code>footer.html</code>, <code>card.html</code>, <code>form-field.html</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Components accept context variables where needed</label><br />
+          <label><input type="checkbox" data-checklist-item /> Header/navbar is one file — not rebuilt on every page</label><br />
+          <label><input type="checkbox" data-checklist-item /> Footer is one file — not rebuilt on every page</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form field HTML (label + input + error display) is one component — not repeated inline</label>
+
+          <div class="divider"></div>
+
+          <h3>Include with Context</h3>
+          <pre>
+&lt;!-- Using a card component --&gt;
+{% for project in projects %}
+  {% include "components/project-card.html" with project=project %}
+{% endfor %}</pre>
+        </div>
+      </section>
+
+      <section id="template-logic-rules" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Template Logic Rules</h2>
+
+          <label><input type="checkbox" data-checklist-item /> No complex Python logic in templates — only display logic</label><br />
+          <label><input type="checkbox" data-checklist-item /> Allowed in templates: <code>{{ variable }}</code>, <code>{% if %}</code>, <code>{% for %}</code>, <code>{% include %}</code>, <code>{% extends %}</code>, <code>{% block %}</code>, <code>{{ variable|filter }}</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> NOT allowed in templates: complex calculations, database queries, string manipulation, complex conditional class logic</label><br />
+          <label><input type="checkbox" data-checklist-item /> Custom template filters defined in <code>templatetags/</code> — not inline in templates</label><br />
+          <label><input type="checkbox" data-checklist-item /> Template receives pre-processed context from the view — not raw querysets needing complex logic</label>
+        </div>
+      </section>
+
+      <section id="static-file-loading" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Static File Loading</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>{% load static %}</code> at the top of every template that uses <code>{% static %}</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Static files referenced using <code>{% static 'path/to/file' %}</code> — not hardcoded <code>/static/</code> paths</label><br />
+          <label><input type="checkbox" data-checklist-item /> Never hardcode: <code>&lt;link href="/static/css/base.css"&gt;</code> — always use <code>{% static %}</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>STATICFILES_DIRS</code> and <code>STATIC_URL</code> configured in <code>settings.py</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>python manage.py collectstatic</code> run before production deployment</label><br />
+          <label><input type="checkbox" data-checklist-item /> Versioning/cache busting handled via <code>ManifestStaticFilesStorage</code> or equivalent</label>
+        </div>
+      </section>
+
+      <section id="naming-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Naming Standards</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Template files: <code>snake_case.html</code> (<code>project_detail.html</code>, <code>user_profile.html</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> CSS files: <code>kebab-case.css</code> (<code>project-card.css</code>, <code>user-profile.css</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> JS files: <code>kebab-case.js</code> (<code>project-form.js</code>, <code>dashboard.js</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> CSS class names: <code>kebab-case</code> (<code>.project-card</code>, <code>.nav-item</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> JS function names: <code>camelCase</code> (<code>loadProjectData</code>, <code>handleFormSubmit</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>data-*</code> attribute names: <code>kebab-case</code> (<code>data-project-id</code>, <code>data-workspace-id</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Template blocks: <code>lowercase_underscore</code> (<code>content</code>, <code>extra_css</code>, <code>extra_js</code>, <code>page_title</code>)</label>
+        </div>
+      </section>
+
+      <section id="anti-patterns" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Anti-Patterns</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Anti-Pattern</th>
+                  <th>Impact</th>
+                  <th>Fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>&lt;style&gt;</code> block in template</td>
+                  <td>Styles can't be cached, inconsistent across pages</td>
+                  <td>Move to <code>static/css/</code></td>
+                </tr>
+                <tr>
+                  <td><code>&lt;script&gt;</code> block with logic in template</td>
+                  <td>Can't be linted, can't be reused, hard to debug</td>
+                  <td>Move to <code>static/js/</code></td>
+                </tr>
+                <tr>
+                  <td><code>var x = "{{ variable }}"</code> in script tag</td>
+                  <td>XSS risk, tightly coupled</td>
+                  <td>Use <code>data-*</code> attributes</td>
+                </tr>
+                <tr>
+                  <td><code>onclick="doSomething()"</code> inline</td>
+                  <td>Hard to maintain, can't be tested</td>
+                  <td>Use <code>addEventListener</code> in JS file</td>
+                </tr>
+                <tr>
+                  <td>Page template not extending base.html</td>
+                  <td>Duplicate head/body markup, inconsistent layout</td>
+                  <td>Always extend base.html</td>
+                </tr>
+                <tr>
+                  <td>Navbar HTML on every page</td>
+                  <td>One change needs updating every page</td>
+                  <td><code>{% include "components/navbar.html" %}</code></td>
+                </tr>
+                <tr>
+                  <td>Complex Python-like logic in templates</td>
+                  <td>Moves business logic to templates</td>
+                  <td>Prepare data in view/service</td>
+                </tr>
+                <tr>
+                  <td>Hardcoded <code>/static/</code> paths</td>
+                  <td>Breaks when <code>STATIC_URL</code> changes</td>
+                  <td>Use <code>{% static %}</code> tag</td>
+                </tr>
+                <tr>
+                  <td>app-name missing in template path</td>
+                  <td>Templates conflict across apps</td>
+                  <td>Use <code>templates/app_name/file.html</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="before-marking-done" class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Before Marking Done</span>
+          <h2 class="section-title">11. Django Template Checklist — Before Marking Done</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">Folder Structure</h3>
+              <label><input type="checkbox" data-checklist-item /> CSS only in <code>static/css/</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> JS only in <code>static/js/</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Templates only in <code>templates/</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> App-scoped templates in <code>templates/[app_name]/</code></label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Template Inheritance</h3>
+              <label><input type="checkbox" data-checklist-item /> Template starts with <code>{% extends "base.html" %}</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Only overriding blocks defined in base.html</label><br />
+              <label><input type="checkbox" data-checklist-item /> No duplicate <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, or <code>&lt;body&gt;</code> tags</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">CSS &amp; JavaScript</h3>
+              <label><input type="checkbox" data-checklist-item /> Zero <code>&lt;style&gt;</code> blocks in the template</label><br />
+              <label><input type="checkbox" data-checklist-item /> All styles in <code>static/css/</code> files</label><br />
+              <label><input type="checkbox" data-checklist-item /> CSS variables used (no hardcoded colors or spacing)</label><br />
+              <label><input type="checkbox" data-checklist-item /> Zero <code>&lt;script&gt;</code> blocks with logic in template</label><br />
+              <label><input type="checkbox" data-checklist-item /> All JS in <code>static/js/</code> files</label><br />
+              <label><input type="checkbox" data-checklist-item /> No inline event handlers (<code>onclick</code>, <code>onsubmit</code>, etc.)</label><br />
+              <label><input type="checkbox" data-checklist-item /> CSRF token handled via <code>getCsrfToken()</code> helper</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Data, Components &amp; Static</h3>
+              <label><input type="checkbox" data-checklist-item /> Django data passed via <code>data-*</code> attributes</label><br />
+              <label><input type="checkbox" data-checklist-item /> No string interpolation inside <code>&lt;script&gt;</code> tags</label><br />
+              <label><input type="checkbox" data-checklist-item /> JS reads <code>data-*</code> values from DOM elements</label><br />
+              <label><input type="checkbox" data-checklist-item /> Repeated sections use <code>{% include %}</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Navbar in <code>templates/components/navbar.html</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Footer in <code>templates/components/footer.html</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>{% load static %}</code> at top</label><br />
+              <label><input type="checkbox" data-checklist-item /> All static paths use <code>{% static 'path' %}</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> No hardcoded <code>/static/</code> paths</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Naming &amp; Mobile</h3>
+              <label><input type="checkbox" data-checklist-item /> Template files: <code>snake_case.html</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> CSS files: <code>kebab-case.css</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> JS files: <code>kebab-case.js</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Tested on mobile browser (responsive layout verified)</label>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-info">
+          <div class="alert-title">Practice Task</div>
+          <p>
+            Apply what you learned by building real Django templates with zero inline styles, zero inline scripts, and correct data-* attribute patterns. Covers: 3-folder structure, base.html inheritance, project list/form/detail templates, responsive grid in CSS with variables.
+          </p>
+          <a href="../../tasks/django/02-project-template.html" class="btn btn-primary btn-sm">
+            Open Task 02: Build the Project Detail Template
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Templates display data only. Zero inline styles. Zero inline scripts. All data passed via data-* attributes. Every page extends base.html.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../django-checklist.html" class="footer-link">Django Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

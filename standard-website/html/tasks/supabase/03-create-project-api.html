@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Task — Create Project API | Development Standards</title>
+  <meta name="description" content="Build the create_project RPC function with 7-step validation, workspace scoping, and audit log." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Supabase Task — Create Project API</h1>
+        <p class="page-subtitle">Build the create_project RPC function with 7-step validation, workspace scoping, and audit log.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-tasks.html" class="btn btn-secondary">Back to Supabase Tasks</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Platform:</strong> Supabase (RPC / Postgres Function)</p>
+<p><strong>Covers:</strong> <a href="../../checklists/supabase/new-api-endpoint.md">New API Endpoint Checklist</a> · <a href="../../standards/supabase/02-api-design.md">API Design Standards</a> · <a href="../../standards/supabase/03-api-documentation.md">API Documentation Standards</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>Workspace members need to create projects. A direct <code>supabase.from(&#x27;projects&#x27;).insert(...)</code> is not sufficient here because creating a project must also:</p>
+<ol>
+  <li>Validate the project name is unique within the workspace</li>
+  <li>Create a default "General" task list inside the project</li>
+  <li>Log an audit entry</li>
+</ol>
+<p>These three steps must be atomic — all succeed or none do. This means it must be an <strong>RPC (Postgres Function)</strong>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <h3>Part 1 — The RPC Function</h3>
+<p>A Postgres function named <code>create_project</code> that:</p>
+<ul>
+  <li>Takes inputs: <code>p_workspace_id</code>, <code>p_name</code>, <code>p_description</code> (optional), <code>p_start_date</code> (optional), <code>p_end_date</code> (optional)</li>
+  <li>Validates all inputs</li>
+  <li>Checks the caller is a member of the workspace (not just any user)</li>
+  <li>Checks the project name is unique within the workspace</li>
+  <li>Inserts the project</li>
+  <li>Inserts a default task list named "General" linked to the new project</li>
+  <li>Inserts an audit log entry</li>
+  <li>Returns the created project as JSON</li>
+  <li>Raises exceptions on every failure case with a consistent error format</li>
+</ul>
+<h3>Part 2 — The API Documentation</h3>
+<p>Write the complete API documentation for this endpoint following the <a href="../../templates/api-doc-template.md">API Documentation Template</a>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="rpc-specification" class="section">
+        <div class="content-card">
+          <h2 class="section-title">RPC Specification</h2>
+          <h3>Signature</h3>
+<pre><code class="language-sql">CREATE OR REPLACE FUNCTION create_project(
+  p_workspace_id  uuid,
+  p_name          text,
+  p_description   text DEFAULT NULL,
+  p_start_date    date DEFAULT NULL,
+  p_end_date      date DEFAULT NULL
+)
+RETURNS json
+LANGUAGE plpgsql
+SECURITY INVOKER  -- RLS still applies, user must be a workspace member</code></pre>
+<h3>Validation Steps (in this order)</h3>
+<ol>
+  <li><code>p_workspace_id</code> — must not be null</li>
+  <li><code>p_name</code> — must not be null or empty after trim; max 100 characters</li>
+  <li><code>p_description</code> — if provided, max 500 characters</li>
+  <li><code>p_end_date</code> — if provided and <code>p_start_date</code> is also provided, end must be after start</li>
+  <li>Workspace membership — caller (<code>auth.uid()</code>) must be a member with role: owner, admin, or member (not viewer)</li>
+  <li>Uniqueness — no active project with the same name in this workspace (<code>deleted_at IS NULL</code>)</li>
+</ol>
+<h3>Error Format</h3>
+<p>Use <code>RAISE EXCEPTION</code> with this format so the frontend can parse the error code:</p>
+<pre><code class="language-sql">RAISE EXCEPTION &#x27;VALIDATION_ERROR: name is required&#x27;;
+RAISE EXCEPTION &#x27;FORBIDDEN: you are not a member of this workspace&#x27;;
+RAISE EXCEPTION &#x27;DUPLICATE: a project with this name already exists&#x27;;</code></pre>
+<h3>Success Response</h3>
+<p>Return a JSON object:</p>
+<pre><code class="language-json">{
+  &quot;data&quot;: {
+    &quot;id&quot;: &quot;uuid&quot;,
+    &quot;workspace_id&quot;: &quot;uuid&quot;,
+    &quot;name&quot;: &quot;My Project&quot;,
+    &quot;description&quot;: null,
+    &quot;status&quot;: &quot;active&quot;,
+    &quot;start_date&quot;: null,
+    &quot;end_date&quot;: null,
+    &quot;created_by&quot;: &quot;uuid&quot;,
+    &quot;created_at&quot;: &quot;2024-01-15T10:00:00Z&quot;
+  }
+}</code></pre>
+<h3>Related Tables</h3>
+<p>You will need these tables in the function:</p>
+<ul>
+  <li><code>projects</code> — created in Task 01</li>
+  <li><code>task_lists</code> — assume it exists with columns: <code>id</code>, <code>project_id</code>, <code>name</code>, <code>created_by</code>, <code>created_at</code></li>
+  <li><code>audit_logs</code> — assume it exists with columns: <code>id</code>, <code>action</code>, <code>entity_type</code>, <code>entity_id</code>, <code>actor_id</code>, <code>created_at</code></li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="frontend-call-example" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Frontend Call Example</h2>
+          <p>The frontend will call this as:</p>
+<pre><code class="language-ts">const { data, error } = await supabase.rpc(&#x27;create_project&#x27;, {
+  p_workspace_id: workspaceId,
+  p_name: formData.name,
+  p_description: formData.description ?? null,
+  p_start_date: formData.startDate ?? null,
+  p_end_date: formData.endDate ?? null,
+});</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <ul>
+  <li>Do not let the frontend make three separate calls (insert project + insert task list + insert audit log) — all three must be in one atomic function</li>
+  <li>Do not use <code>SECURITY DEFINER</code> unless you have a specific reason and explicitly verify <code>auth.uid()</code> inside the function</li>
+  <li>Do not skip the uniqueness check — the DB constraint catches concurrent duplicates, but the function should check and return a clear error first</li>
+  <li>Do not return raw Postgres error messages — catch errors and re-raise with standard codes</li>
+  <li>Do not skip writing the API documentation — the frontend team cannot use this endpoint without it</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="checklist-to-run-when-done" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run When Done</h2>
+          <p>Use the <a href="../../checklists/supabase/new-api-endpoint.md#10-api-endpoint-checklist--before-marking-done">New API Endpoint Checklist</a>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <pre><code class="language-text">RPC FUNCTION
+[ ] Function created with correct signature and SECURITY INVOKER
+[ ] All 6 validation steps implemented in order
+[ ] Each validation raises exception with standard error code prefix
+[ ] Workspace membership checked (role not viewer)
+[ ] Uniqueness checked before insert
+[ ] Project inserted
+[ ] Default &quot;General&quot; task list inserted for the new project
+[ ] Audit log entry inserted
+[ ] All three inserts inside a transaction (implicit in plpgsql, but verify)
+[ ] Returns JSON with full project data
+
+ERROR CASES HANDLED
+[ ] Missing workspace_id → VALIDATION_ERROR
+[ ] Empty name → VALIDATION_ERROR
+[ ] Name too long → VALIDATION_ERROR
+[ ] End date before start date → VALIDATION_ERROR
+[ ] Non-member calling → FORBIDDEN
+[ ] Viewer calling → FORBIDDEN
+[ ] Duplicate project name → DUPLICATE
+[ ] Unexpected DB error → caught and re-raised as SERVER_ERROR
+
+TESTING
+[ ] Success: correct project + task list + audit log created
+[ ] Each validation error returns correct code
+[ ] Non-member call blocked
+[ ] Viewer call blocked
+[ ] Duplicate name blocked
+[ ] Cross-workspace attempt blocked (RLS handles this)
+
+DOCUMENTATION
+[ ] API documentation written using the template
+[ ] All error codes documented with example response
+[ ] Frontend call example included</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-tasks.html" class="footer-link">Supabase Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

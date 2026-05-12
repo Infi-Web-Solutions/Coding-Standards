@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Supabase — Edge Functions Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="When to use Edge Functions vs RPC, required structure, 10 mandatory steps, response standard helper, JWT auth pattern."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Supabase — Edge Functions Standard</h1>
+
+        <p class="page-subtitle">
+          When to use Edge Functions vs RPC, required structure, 10 mandatory steps, response standard helper, JWT auth pattern.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="edge-function-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">20. Edge Function Standards</h2>
+
+          <p>Use Edge Functions for:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Use Case</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>External APIs</td>
+                  <td>SendGrid, Stripe, OpenAI, Deepgram.</td>
+                </tr>
+                <tr>
+                  <td>Webhooks</td>
+                  <td>Stripe webhook, Smartlead webhook, Zoho webhook.</td>
+                </tr>
+                <tr>
+                  <td>Secret Logic</td>
+                  <td>API keys, service role operations.</td>
+                </tr>
+                <tr>
+                  <td>Heavy Validation</td>
+                  <td>Multi-step business rules.</td>
+                </tr>
+                <tr>
+                  <td>Background-like Process</td>
+                  <td>File parse, AI response generation.</td>
+                </tr>
+                <tr>
+                  <td>Admin Action</td>
+                  <td>Suspend user, generate report.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Edge Function Must Include</h3>
+          <pre><code class="language-text">1. CORS handling
+2. Method validation
+3. Auth validation
+4. Payload parsing
+5. Payload validation
+6. Permission check
+7. Business logic
+8. Error mapping
+9. Structured logs
+10. Safe response</code></pre>
+        </div>
+      </section>
+
+      <section id="edge-function-response-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">21. Edge Function Response Standard</h2>
+
+          <pre><code class="language-ts">function jsonResponse(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+      "Access-Control-Allow-Methods": "POST, OPTIONS"
+    }
+  });
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="edge-function-auth-pattern" class="section">
+        <div class="content-card">
+          <h2 class="section-title">22. Edge Function Auth Pattern</h2>
+
+          <p>For user-authenticated Edge Functions:</p>
+
+          <pre><code class="language-ts">const authHeader = req.headers.get("Authorization");
+
+if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  return jsonResponse({
+    success: false,
+    error: {
+      code: "UNAUTHENTICATED",
+      message: "Missing or invalid authorization token."
+    }
+  }, 401);
+}</code></pre>
+
+          <p>Then verify user using Supabase Auth:</p>
+
+          <pre><code class="language-ts">const supabase = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_ANON_KEY")!,
+  {
+    global: {
+      headers: {
+        Authorization: authHeader
+      }
+    }
+  }
+);
+
+const { data: userData, error: userError } = await supabase.auth.getUser();
+
+if (userError || !userData.user) {
+  return jsonResponse({
+    success: false,
+    error: {
+      code: "UNAUTHENTICATED",
+      message: "Invalid or expired session."
+    }
+  }, 401);
+}</code></pre>
+
+          <p>Create the Supabase client inside the function using the caller's <code>Authorization</code> header so RLS policies are applied under that user context.</p>
+        </div>
+      </section>
+
+      <section id="edge-function-example" class="section">
+        <div class="content-card">
+          <h2 class="section-title">23. Edge Function Example Documentation</h2>
+
+          <h3>API: Send Project Invite</h3>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Purpose</td>
+                  <td>Sends an invitation email to a new team member and creates an invitation record.</td>
+                </tr>
+                <tr>
+                  <td>API Type</td>
+                  <td>Supabase Edge Function</td>
+                </tr>
+                <tr>
+                  <td>Endpoint</td>
+                  <td><code>POST /functions/v1/send-project-invite</code></td>
+                </tr>
+                <tr>
+                  <td>Auth Required</td>
+                  <td>Yes — <code>Authorization: Bearer &lt;access_token&gt;</code></td>
+                </tr>
+                <tr>
+                  <td>Permission Required</td>
+                  <td>User must be workspace owner or admin.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Request Payload</h3>
+          <pre><code class="language-json">{
+  "workspace_id": "uuid",
+  "email": "user@example.com",
+  "role": "admin | manager | member | viewer"
+}</code></pre>
+
+          <h3>Validation Rules</h3>
+          <ul>
+            <li>workspace_id must be valid UUID.</li>
+            <li>email must be valid email.</li>
+            <li>role must be one of allowed roles.</li>
+            <li>user cannot invite owner unless current user is owner.</li>
+            <li>duplicate pending invite is not allowed.</li>
+          </ul>
+
+          <h3>Success Response</h3>
+          <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "invitation_id": "uuid",
+    "email": "user@example.com",
+    "role": "member",
+    "expires_at": "2026-05-14T10:00:00Z"
+  },
+  "message": "Invitation sent successfully."
+}</code></pre>
+
+          <h3>Error Responses</h3>
+          <ul>
+            <li>401 UNAUTHENTICATED</li>
+            <li>403 FORBIDDEN</li>
+            <li>409 INVITE_ALREADY_EXISTS</li>
+            <li>422 VALIDATION_ERROR</li>
+            <li>500 INTERNAL_ERROR</li>
+            <li>502 EMAIL_SERVICE_ERROR</li>
+          </ul>
+
+          <h3>Frontend Notes</h3>
+          <ul>
+            <li>Disable invite button while request is running.</li>
+            <li>If 401, redirect to login.</li>
+            <li>If 403, hide invite button for unauthorized role.</li>
+            <li>If 409, show "This user already has a pending invite."</li>
+            <li>If 502, show "Invite created but email could not be sent" only if backend confirms partial success.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Edge Functions must handle CORS, auth, validation, permission checks, business logic, and structured error responses.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

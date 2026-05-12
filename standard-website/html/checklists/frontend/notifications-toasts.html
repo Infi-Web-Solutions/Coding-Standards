@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Notifications & Toasts Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Checklist for toast notifications, inline banners, persistent alerts, notification content, async action feedback, and silent failure prevention."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Notifications &amp; Toasts Checklist</h1>
+
+        <p class="page-subtitle">
+          Every async action must give the user feedback. Success, error, and warning
+          notifications must be clear, consistent, and never silently disappear before
+          the user can read them.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Live Demo</h2>
+          <p class="ui-demo-note" style="margin-bottom: 20px;">Click the buttons below to trigger real toasts and see inline banners. Toasts appear top-right, stack, auto-dismiss, and can be closed manually.</p>
+
+          <div class="ui-demo" style="margin-bottom: 20px;">
+            <div class="ui-demo-title">Toast Notifications</div>
+            <p class="ui-demo-note" style="margin-bottom: 14px;">Each toast auto-dismisses after 4–6 seconds. Hover to pause. Click × to dismiss early.</p>
+            <div class="ui-demo-actions" style="justify-content: flex-start; flex-wrap: wrap; gap: 10px;">
+              <button type="button" class="btn btn-primary btn-sm" data-demo-toast-success>Show Success Toast</button>
+              <button type="button" class="btn btn-danger btn-sm" data-demo-toast-error>Show Error Toast</button>
+              <button type="button" class="btn btn-secondary btn-sm" data-demo-toast-warning>Show Warning Toast</button>
+              <button type="button" class="btn btn-secondary btn-sm" data-demo-toast-info>Show Info Toast</button>
+            </div>
+          </div>
+
+          <div class="ui-demo">
+            <div class="ui-demo-title">Inline Banners</div>
+            <p class="ui-demo-note" style="margin-bottom: 14px;">Inline banners stay visible until the user dismisses them. Use for errors or confirmations that require the user's attention before continuing.</p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div class="alert alert-danger" data-demo-banner-error style="position: relative; padding-right: 44px;">
+                <button type="button" data-demo-banner-dismiss aria-label="Dismiss" style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px; line-height: 1; color: inherit; opacity: 0.6; padding: 4px;">×</button>
+                <div class="alert-title">Permission Denied</div>
+                You do not have permission to edit this project.
+              </div>
+              <div class="alert alert-success" data-demo-banner-success style="position: relative; padding-right: 44px;">
+                <button type="button" data-demo-banner-dismiss aria-label="Dismiss" style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px; line-height: 1; color: inherit; opacity: 0.6; padding: 4px;">×</button>
+                <div class="alert-title">Invitation Sent</div>
+                Invitation sent to john@example.com.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. When to Use Each Notification Type</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Use When</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Toast</td>
+                  <td>Async action completed — create, update, delete, send</td>
+                  <td>4–5 seconds, auto-dismiss</td>
+                </tr>
+                <tr>
+                  <td>Inline Banner</td>
+                  <td>Form-level error from API or permission error on a page</td>
+                  <td>Persistent until dismissed or resolved</td>
+                </tr>
+                <tr>
+                  <td>Persistent Alert</td>
+                  <td>Account-level issue requiring attention</td>
+                  <td>Persistent, manual dismiss</td>
+                </tr>
+                <tr>
+                  <td>Field Error</td>
+                  <td>Specific form field validation failure</td>
+                  <td>Until the field is corrected</td>
+                </tr>
+                <tr>
+                  <td>Confirmation Dialog</td>
+                  <td>Before a destructive action</td>
+                  <td>User must respond</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">2. Toast Notifications</h2>
+
+            <h3>Types</h3>
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>When</th>
+                    <th>Color/Icon</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Success</td><td>Action completed</td><td>Green ✓</td></tr>
+                  <tr><td>Error</td><td>Action failed</td><td>Red ✕</td></tr>
+                  <tr><td>Warning</td><td>Action completed with caveat</td><td>Amber ⚠</td></tr>
+                  <tr><td>Info</td><td>Neutral information</td><td>Blue ℹ</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="divider"></div>
+
+            <label><input type="checkbox" data-checklist-item /> Position: top-right desktop, top-center or bottom-center mobile</label><br />
+            <label><input type="checkbox" data-checklist-item /> Z-index above all content including modals</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success toasts auto-dismiss after 4 seconds</label><br />
+            <label><input type="checkbox" data-checklist-item /> Error toasts auto-dismiss after 6 seconds</label><br />
+            <label><input type="checkbox" data-checklist-item /> Warning/info toasts auto-dismiss after 5 seconds</label><br />
+            <label><input type="checkbox" data-checklist-item /> User can manually dismiss any toast</label><br />
+            <label><input type="checkbox" data-checklist-item /> Hovering over a toast pauses auto-dismiss timer</label><br />
+            <label><input type="checkbox" data-checklist-item /> Multiple toasts stack vertically</label><br />
+            <label><input type="checkbox" data-checklist-item /> Maximum 3 toasts visible at once</label><br />
+            <label><input type="checkbox" data-checklist-item /> New toasts appear at top of stack</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Toast Content</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Message is specific: <code>Project created.</code> not <code>Success!</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Message is past tense for completed actions</label><br />
+            <label><input type="checkbox" data-checklist-item /> Error messages are human-readable, not raw error codes</label><br />
+            <label><input type="checkbox" data-checklist-item /> Optional action button in toast: Undo or View</label><br />
+            <label><input type="checkbox" data-checklist-item /> Undo action available for 5 seconds after delete if backend supports soft delete</label><br />
+            <label><input type="checkbox" data-checklist-item /> No technical jargon or internal error codes visible to user</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">3. Inline Banners</h2>
+            <p class="card-description">
+              Displayed inside the page or form — not floating. Used for errors that require the user's attention before they can continue.
+            </p>
+
+            <label><input type="checkbox" data-checklist-item /> Shown at top of the form or page section it relates to</label><br />
+            <label><input type="checkbox" data-checklist-item /> Stays visible until dismissed or resolved</label><br />
+            <label><input type="checkbox" data-checklist-item /> Includes X button to manually dismiss</label><br />
+            <label><input type="checkbox" data-checklist-item /> Color-coded by type</label><br />
+            <label><input type="checkbox" data-checklist-item /> Message explains what happened and what user should do</label><br />
+            <label><input type="checkbox" data-checklist-item /> Whole-form API errors use inline banner, not disappearing toast</label><br />
+            <label><input type="checkbox" data-checklist-item /> Permission errors use inline banner</label><br />
+            <label><input type="checkbox" data-checklist-item /> Rate limit/quota errors use inline banner</label><br />
+            <label><input type="checkbox" data-checklist-item /> Includes link/button if user can resolve it</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">4. Persistent Alerts</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Shown in fixed alert bar below navigation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Cannot be permanently dismissed if issue unresolved</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clearly explains issue and next action</label><br />
+            <label><input type="checkbox" data-checklist-item /> Removed automatically once issue is resolved</label><br />
+            <label><input type="checkbox" data-checklist-item /> Not used for one-off notifications</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">5. Notification Content Standards</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Written in plain language</label><br />
+            <label><input type="checkbox" data-checklist-item /> Specific — names the entity involved</label><br />
+            <label><input type="checkbox" data-checklist-item /> Actionable where relevant</label><br />
+            <label><input type="checkbox" data-checklist-item /> Consistent — same event always produces same message</label><br />
+            <label><input type="checkbox" data-checklist-item /> Correct tense</label><br />
+            <label><input type="checkbox" data-checklist-item /> No exclamation marks on error messages</label><br />
+            <label><input type="checkbox" data-checklist-item /> No all-caps</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">6. What Always Triggers a Notification</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Record created</label><br />
+            <label><input type="checkbox" data-checklist-item /> Record updated / saved</label><br />
+            <label><input type="checkbox" data-checklist-item /> Record deleted</label><br />
+            <label><input type="checkbox" data-checklist-item /> File uploaded</label><br />
+            <label><input type="checkbox" data-checklist-item /> Invitation sent</label><br />
+            <label><input type="checkbox" data-checklist-item /> Any async action that fails</label><br />
+            <label><input type="checkbox" data-checklist-item /> Permission denied when attempting an action</label><br />
+            <label><input type="checkbox" data-checklist-item /> Session expired</label><br />
+            <label><input type="checkbox" data-checklist-item /> Backend validation error on form submission</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. What Never Triggers a Toast</h2>
+
+          <ul>
+            <li>Page load / data fetch — no "Data loaded" success toast</li>
+            <li>Navigation between pages</li>
+            <li>Opening a modal</li>
+            <li>Typing in a form field</li>
+            <li>Client-side validation failure — use inline field errors instead</li>
+            <li>Background sync / auto-save — use subtle Saved indicator, not a toast</li>
+            <li>Hover / focus events</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-success">
+          <div class="alert-title">Before Marking Done</div>
+          Create, update, delete, send/invite, and every API failure must produce clear feedback. No async action should complete silently.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Notifications must be specific, human-readable, timely, and consistent.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../standards/frontend-standards.html" class="footer-link">Frontend Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast-container" style="position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;width:320px;"></div>
+  <script type="module" src="../../../js/main.js"></script>
+  <script type="module" src="../../../js/pages/notifications-demo.js"></script>
+</body>
+</html>

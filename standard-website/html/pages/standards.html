@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Standards Library | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Standards library for Supabase, Xano, Django, frontend, websites, reusable code, team ownership, QA, and third-party integrations."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="./standards.html" class="navbar-link active">Standards</a>
+        <a href="./checklists.html" class="navbar-link">Checklists</a>
+        <a href="./tasks.html" class="navbar-link">Tasks</a>
+        <a href="./templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>
+        Dark Mode
+      </button>
+    </div>
+  </header>
+
+  <main class="page standards-page-shell">
+    <div class="container">
+      <section class="section standards-hero">
+        <div class="standards-hero-copy page-header">
+          <span class="badge badge-primary">Standards</span>
+          <h1 class="page-title">Read the relevant standard before you start building.</h1>
+          <p class="page-subtitle">
+            These define how the team works — not suggestions, but rules everyone is expected to know and apply.
+          </p>
+
+          <div class="standards-hero-actions">
+            <a href="#standards-catalog" class="btn btn-primary">Browse Standards</a>
+            <a href="../pages/checklists.html" class="btn btn-secondary">Go to Checklists</a>
+          </div>
+        </div>
+
+        <aside class="standards-hero-aside">
+          <div class="standards-hero-panel">
+            <span class="standards-panel-label">What This Covers</span>
+            <h2>Cross-platform rules, platform guides, and implementation standards.</h2>
+            <p>Use this page as the team’s standards catalog across backend, frontend, Supabase, websites, integrations, and ownership rules.</p>
+          </div>
+
+          <div class="standards-search-panel">
+            <div class="standards-search-copy">
+              <span class="badge badge-info">Quick Filter</span>
+              <h2 class="section-title">Find a Standard</h2>
+              <p class="standards-search-note">
+                Search by platform, workflow, implementation type, or delivery requirement.
+              </p>
+            </div>
+
+            <div class="standards-search-field">
+              <label for="standards-search" class="form-label">Search standards</label>
+              <input
+                id="standards-search"
+                class="form-control"
+                type="search"
+                placeholder="Search Supabase, Xano, Django, frontend, QA, Stripe..."
+                data-search-input
+              />
+              <p class="form-help">
+                Minimum 2 characters. Results filter automatically.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="standards-catalog" class="section" data-search-scope>
+        <div class="page-header standards-catalog-header">
+          <div>
+            <span class="badge badge-info"><span data-standards-count>0</span> Standards</span>
+            <h2 class="section-title">Standards Catalog</h2>
+            <p class="section-description">All standards organized by category from the team standards README.</p>
+          </div>
+          <div class="standards-catalog-note">
+            <strong>Usage Rule</strong>
+            <span>Read the matching standard before building, then use the related checklist and templates before handoff.</span>
+          </div>
+        </div>
+
+        <section class="standards-group">
+          <div class="standards-group-header">
+            <span class="badge badge-primary">Cross-Platform Standards</span>
+            <p>These apply to every team member regardless of role or platform.</p>
+          </div>
+
+          <div class="standards-doc-list">
+            <a href="../standards/backend-first-logic.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Backend-First Logic The fundamental rule auth roles validation prices business rules file validation backend only anti-patterns platform-specific rules Supabase Xano Django WeWeb React">
+              <span class="standards-doc-meta">Cross-Platform</span>
+              <h3 class="card-title">Backend-First Logic</h3>
+              <p class="card-description">The fundamental rule: auth, roles, validation, prices, business rules, and file validation are always enforced on the backend. Frontend validates for UX only — it never enforces. Covers anti-patterns to avoid and platform-specific rules for Supabase, Xano, Django, WeWeb, and React.</p>
+            </a>
+
+            <a href="../standards/code-reusability-standards.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Code Reusability Standards Before you build anything check if it already exists shared component hook service function decision rules 3 identical uses extract platform-specific React WeWeb Xano Django Supabase naming conventions over-abstract">
+              <span class="standards-doc-meta">Cross-Platform</span>
+              <h3 class="card-title">Code Reusability Standards</h3>
+              <p class="card-description">Before you build anything — check if it already exists. When to extract to a shared component, hook, service, or function. Decision rules (3+ identical uses = extract), platform-specific guides for React, WeWeb, Xano, Django, and Supabase, naming conventions, and when NOT to over-abstract.</p>
+            </a>
+
+            <a href="../standards/team-ownership.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Team Ownership Standards work update format completed blocked issue raising ticket discipline PR standards communication rules escalation process accountability bugs">
+              <span class="standards-doc-meta">Cross-Platform</span>
+              <h3 class="card-title">Team Ownership Standards</h3>
+              <p class="card-description">How the team works — work update format (In Progress / Completed / Blocked), issue raising, ticket discipline, PR standards, communication rules, escalation process, and accountability for bugs.</p>
+            </a>
+
+            <a href="../standards/qa-delivery-standards.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="QA Delivery Standards done means self-testing checklist definition of done per role required test cases RLS testing matrix QA handoff checklist summary table">
+              <span class="standards-doc-meta">Cross-Platform</span>
+              <h3 class="card-title">QA &amp; Delivery Standards</h3>
+              <p class="card-description">What "done" actually means — self-testing checklist, definition of done per role, required test cases, RLS testing matrix, QA handoff checklist, and a summary table across all roles.</p>
+            </a>
+
+            <a href="../standards/frontend-ui-standards.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Frontend UI Standards UI rules React WeWeb add edit consistency form standards required field indicators password validation phone E.164 loading states error display notifications delete confirmation design system backend frontend error contract">
+              <span class="standards-doc-meta">Cross-Platform</span>
+              <h3 class="card-title">Frontend &amp; UI Standards</h3>
+              <p class="card-description">UI rules for React and WeWeb — Add/Edit consistency (same component, same schema), form standards, required field indicators, password validation, phone input (E.164), loading states, error display, notifications, delete confirmation, design system, and backend+frontend error contract.</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="standards-group">
+          <div class="standards-group-header">
+            <span class="badge badge-primary">Frontend Standards</span>
+            <p>Split into 6 focused files covering all frontend development patterns.</p>
+          </div>
+
+          <div class="standards-doc-list">
+            <a href="../standards/frontend-standards.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Frontend Overview Non-Negotiables loading states no silent failures backend enforces all rules">
+              <span class="standards-doc-meta">frontend/</span>
+              <h3 class="card-title">Overview &amp; Non-Negotiables</h3>
+              <p class="card-description">Core rules every frontend task must follow — loading states, no silent failures, backend enforces all rules.</p>
+            </a>
+
+            <a href="../standards/frontend-forms-validation.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="01 Forms Validation form structure field standards text date select file required markers validation timing error display add edit consistency password strength phone E.164 file upload disabled fields form submission">
+              <span class="standards-doc-meta">frontend/01</span>
+              <h3 class="card-title">01 — Forms &amp; Validation</h3>
+              <p class="card-description">Form structure, field standards (text/date/select/file), required field markers, validation timing (on submit vs on blur), error display rules, Add/Edit consistency, password strength, phone (E.164), file upload (MIME type), disabled fields, form submission.</p>
+            </a>
+
+            <a href="../standards/frontend-data-display.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="02 Data Display tables lists cards null em dash date formatting status badges loading empty error populated sorting search debounce autocomplete filters chips URL params pagination infinite scroll URL state empty states row bulk actions mobile">
+              <span class="standards-doc-meta">frontend/02</span>
+              <h3 class="card-title">02 — Data Display</h3>
+              <p class="card-description">Tables, lists, cards — null as em dash, date formatting, status badges, all 4 state requirements (loading/empty/error/populated), sorting, search (debounce, autocomplete), filters (chips, URL params), pagination, infinite scroll, URL state, empty states, row/bulk actions, mobile.</p>
+            </a>
+
+            <a href="../standards/frontend-ui-components.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="03 UI Components modals open close focus trap 3-level confirmation toasts timing stacking triggers loading states skeleton screens buttons badges tooltips dropdowns tabs accordion">
+              <span class="standards-doc-meta">frontend/03</span>
+              <h3 class="card-title">03 — UI Components</h3>
+              <p class="card-description">Modals (open/close/focus trap/3-level confirmation), toasts (types/timing/stacking/triggers), loading states (button labels table), skeleton screens (when to use), buttons, badges, tooltips, dropdowns, tabs, accordion.</p>
+            </a>
+
+            <a href="../standards/frontend-error-feedback.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="04 Error Feedback error types display locations field-level errors form API errors page-level errors API error code mapping empty states destructive action confirmation risk levels network errors auth errors message standards no silent failures">
+              <span class="standards-doc-meta">frontend/04</span>
+              <h3 class="card-title">04 — Error &amp; Feedback</h3>
+              <p class="card-description">Error types and display locations, field-level errors, form API errors, page-level errors, API error code mapping table, empty states, destructive action confirmation (3 risk levels), network errors, auth errors, message standards, no silent failures rules.</p>
+            </a>
+
+            <a href="../standards/frontend-permissions-auth.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="05 Permissions Auth UI backend enforces hide vs disable decision table reading role from auth session UI element permission states page-level access partial access real-time role changes auth flow standards">
+              <span class="standards-doc-meta">frontend/05</span>
+              <h3 class="card-title">05 — Permissions &amp; Auth UI</h3>
+              <p class="card-description">Fundamental rule (backend enforces), hide vs disable decision table, reading role from auth session (not URL/localStorage), UI element permission states (buttons/forms/nav/tables), page-level access, partial access, real-time role changes, auth flow standards.</p>
+            </a>
+
+            <a href="../standards/frontend-settings.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="06 Settings Profile page structure general settings email change timezone save behavior password change avatar upload MIME EXIF notification preferences connected accounts danger zone type-to-confirm">
+              <span class="standards-doc-meta">frontend/06</span>
+              <h3 class="card-title">06 — Settings &amp; Profile</h3>
+              <p class="card-description">Page structure, general settings (email change flow, timezone), save behavior (explicit vs auto-save), password change section, avatar upload (MIME/EXIF), notification preferences, connected accounts, danger zone (leave/delete with type-to-confirm).</p>
+            </a>
+
+            <a href="../standards/django-template-standards.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Django Template Standards three-folder rule CSS static css JS static js HTML templates base inheritance no inline styles scripts Django data via data attributes reusable include components static file loading naming conventions">
+              <span class="standards-doc-meta">Django Templates</span>
+              <h3 class="card-title">Django Template Standards</h3>
+              <p class="card-description">Three-folder rule (CSS in <code>static/css/</code>, JS in <code>static/js/</code>, HTML in <code>templates/</code>), base.html inheritance, no inline styles or scripts, Django data to JavaScript via <code>data-*</code> attributes (never string interpolation), reusable <code>{% include %}</code> components, static file loading with <code>{% static %}</code>, naming conventions.</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="standards-group">
+          <div class="standards-group-header">
+            <span class="badge badge-primary">Supabase Standards</span>
+            <p>Split into 7 focused files covering the full Supabase backend lifecycle.</p>
+          </div>
+
+          <div class="standards-doc-list">
+            <a href="../standards/supabase-standards.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Supabase Overview Definition of Done responsibilities full checklist key questions every API must answer">
+              <span class="standards-doc-meta">supabase/</span>
+              <h3 class="card-title">Overview &amp; Definition of Done</h3>
+              <p class="card-description">Developer responsibilities, full definition of done checklist, the key questions every API must answer.</p>
+            </a>
+
+            <a href="../standards/supabase-database-and-rls.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="01 Database RLS table schema naming plural snake_case constraints index rules RLS enabled every table policy types auth standards service role key rules">
+              <span class="standards-doc-meta">supabase/01</span>
+              <h3 class="card-title">01 — Database &amp; RLS</h3>
+              <p class="card-description">Table schema standards, naming conventions (plural snake_case), required constraints, index rules, RLS enabled on every table, policy types (SELECT/INSERT/UPDATE/DELETE), RLS anti-patterns, auth standards, service role key rules.</p>
+            </a>
+
+            <a href="../standards/supabase-api-design.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="02 API Design choosing direct table query RPC Edge Function 15-step core build flow response format standard success error JSON standard error codes frontend contract rules">
+              <span class="standards-doc-meta">supabase/02</span>
+              <h3 class="card-title">02 — API Design</h3>
+              <p class="card-description">Choosing between direct table query / RPC / Edge Function, 15-step core build flow, response format standard (success and error JSON), standard error codes, frontend contract rules.</p>
+            </a>
+
+            <a href="../standards/supabase-api-documentation.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="03 API Documentation full documentation template 17 fields frontend Supabase client call examples RPC call pattern worked example Add Project API error cases">
+              <span class="standards-doc-meta">supabase/03</span>
+              <h3 class="card-title">03 — API Documentation</h3>
+              <p class="card-description">Full documentation template (17 fields), frontend Supabase client call examples, RPC call pattern, complete worked example (Add Project API with all error cases).</p>
+            </a>
+
+            <a href="../standards/supabase-edge-functions.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="04 Edge Functions when to use required structure 10 mandatory steps response standard helper JWT auth pattern full example Send Project Invite">
+              <span class="standards-doc-meta">supabase/04</span>
+              <h3 class="card-title">04 — Edge Functions</h3>
+              <p class="card-description">When to use Edge Functions (vs RPC), required structure, 10 mandatory steps, response standard helper, JWT auth pattern, full example (Send Project Invite).</p>
+            </a>
+
+            <a href="../standards/supabase-validation-multitenant-storage.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="05 Validation Multi-Tenant Storage three validation layers frontend API database error handling contract field-level error format workspace scoping membership SQL role permission matrix storage bucket security path standard">
+              <span class="standards-doc-meta">supabase/05</span>
+              <h3 class="card-title">05 — Validation, Multi-Tenant &amp; Storage</h3>
+              <p class="card-description">Three validation layers (frontend / API / database), frontend error handling contract, field-level error format, multi-tenant workspace scoping, workspace membership SQL, role permission matrix, storage bucket security, storage path standard.</p>
+            </a>
+
+            <a href="../standards/supabase-operations-and-testing.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="06 Operations Testing audit log what to log Edge Function logging webhook signature idempotency API key management versioning migration standards 13 required test cases RLS testing matrix backend handoff checklist">
+              <span class="standards-doc-meta">supabase/06</span>
+              <h3 class="card-title">06 — Operations &amp; Testing</h3>
+              <p class="card-description">Audit log table and what to log, Edge Function logging rules, webhook signature and idempotency, API key management, versioning, migration standards, 13 required test cases, RLS testing matrix (6 roles × 4 operations), backend handoff checklist.</p>
+            </a>
+
+            <a href="../standards/supabase-rpc-functions.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="07 RPC Postgres Functions use RPC when atomic multi-step business logic SECURITY INVOKER SECURITY DEFINER p prefix return type standards validation order error raising transaction handling auth permission naming performance testing documentation">
+              <span class="standards-doc-meta">supabase/07</span>
+              <h3 class="card-title">07 — RPC &amp; Postgres Functions</h3>
+              <p class="card-description">When to use RPC vs direct query vs Edge Function, SECURITY INVOKER vs SECURITY DEFINER, parameter naming with <code>p_</code> prefix, return type standards, validation order, error raising format, transaction handling, auth pattern, naming conventions, performance rules, testing requirements, and documentation expectations.</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="standards-group">
+          <div class="standards-group-header">
+            <span class="badge badge-primary">Xano Standards</span>
+            <p>Full backend implementation standard for Xano endpoints, auth, validation, and reusable logic.</p>
+          </div>
+
+          <div class="standards-doc-list">
+            <a href="../standards/xano-standards.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Xano Standards auth token first step permission check from database never request three-layer input validation standard error response format error codes reusable Xano Functions naming database naming webhook signature idempotency env vars API documentation definition of done">
+              <span class="standards-doc-meta">Xano</span>
+              <h3 class="card-title">Xano Standards</h3>
+              <p class="card-description">Auth token as the first step in every endpoint, permission check from the database (never from request), three-layer input validation, standard error response format with error codes, reusable Xano Functions (naming: verb_noun, group organization), database naming conventions, webhook signature and idempotency, environment variables, API documentation standard, definition of done.</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="standards-group">
+          <div class="standards-group-header">
+            <span class="badge badge-primary">Website Standards</span>
+            <p>Split into 5 focused files covering the full website build and migration lifecycle.</p>
+          </div>
+
+          <div class="standards-doc-list">
+            <a href="../standards/website-standards.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Website Overview Replication Types six replication types Pixel-Perfect Functional Migration Modernized Backend CMS definition of done checklist 10 questions scope">
+              <span class="standards-doc-meta">website/</span>
+              <h3 class="card-title">Overview &amp; Replication Types</h3>
+              <p class="card-description">Six replication types (Pixel-Perfect / Functional / Migration / Modernized / Backend / CMS), full definition of done checklist, 10 questions to confirm scope.</p>
+            </a>
+
+            <a href="../standards/website-scoping-and-design.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="01 Scoping Design ownership permission confirmation client intake discovery audit page inventory template design extraction Figma deployed sites design token standard colors typography spacing breakpoints">
+              <span class="standards-doc-meta">website/01</span>
+              <h3 class="card-title">01 — Scoping &amp; Design</h3>
+              <p class="card-description">Ownership and permission confirmation, client intake checklist, discovery audit, page inventory template, design extraction from Figma and deployed sites, design token standard (colors, typography, spacing, breakpoints).</p>
+            </a>
+
+            <a href="../standards/website-building-by-platform.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="02 Building by Platform technology decision table React WeWeb Bubble WordPress Figma to React flow component list Figma to WeWeb standards anti-patterns Figma to Bubble build standards anti-patterns">
+              <span class="standards-doc-meta">website/02</span>
+              <h3 class="card-title">02 — Building by Platform</h3>
+              <p class="card-description">Technology decision table (React vs WeWeb vs Bubble vs WordPress), Figma-to-React development flow and component list, Figma-to-WeWeb build standards and anti-patterns, Figma-to-Bubble build standards and anti-patterns.</p>
+            </a>
+
+            <a href="../standards/website-migration.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="03 Migration reverse-engineering checklist migration flow WordPress audit migration decisions content migration standards SEO preservation checklist anti-patterns forms integrations replication">
+              <span class="standards-doc-meta">website/03</span>
+              <h3 class="card-title">03 — Migration</h3>
+              <p class="card-description">Existing site reverse-engineering checklist, migration flow, WordPress audit and migration decisions, content migration standards, SEO preservation checklist and anti-patterns, forms and integrations replication.</p>
+            </a>
+
+            <a href="../standards/website-responsive-qa-performance.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="04 Responsive QA Performance breakpoint standards responsive checklist pixel-perfect QA performance image optimization lazy loading Core Web Vitals accessibility security CMS decision table no-code naming animation replication">
+              <span class="standards-doc-meta">website/04</span>
+              <h3 class="card-title">04 — Responsive, QA &amp; Performance</h3>
+              <p class="card-description">Breakpoint standards, responsive checklist per screen size, pixel-perfect QA process, performance rules (image optimization, lazy loading, Core Web Vitals), accessibility must-haves, security checklist, CMS decision table, no-code naming standards, animation replication.</p>
+            </a>
+
+            <a href="../standards/website-launch-and-handoff.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="05 Launch Handoff header footer documentation tracking analytics installation redirect mapping launch checklist required documentation form API handoff template QA checklists visual functional SEO performance client review risks platform-specific risks definition of done client message template">
+              <span class="standards-doc-meta">website/05</span>
+              <h3 class="card-title">05 — Launch &amp; Handoff</h3>
+              <p class="card-description">Header/footer documentation, tracking and analytics installation, redirect mapping, launch checklist, required documentation, form/API handoff template, QA checklists (visual / functional / SEO / performance), client review standard, common risks, platform-specific risks, definition of done, client message template.</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="standards-group">
+          <div class="standards-group-header">
+            <span class="badge badge-primary">Third-Party Implementation Standards</span>
+            <p>Standards for integrating external payment and email services. Each file covers full setup, configuration, usage patterns, metadata conventions, security, and error handling.</p>
+          </div>
+
+          <div class="standards-doc-list">
+            <a href="../standards/third-party-standards.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Third-Party Overview core principles keys env vars secrets server-side webhook signatures verified idempotency never 500 webhooks">
+              <span class="standards-doc-meta">third-parties/</span>
+              <h3 class="card-title">Overview</h3>
+              <p class="card-description">Core principles: keys in env vars, secrets server-side only, webhook signatures always verified, idempotency, never 500 from webhooks.</p>
+            </a>
+
+            <a href="../standards/thirdparty-stripe.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Stripe API keys customer creation products prices lookup keys payment intents checkout sessions subscriptions all states webhooks signature verification idempotency event catalog metadata standards decline code mapping 3DS SCA refunds">
+              <span class="standards-doc-meta">Payments</span>
+              <h3 class="card-title">Stripe</h3>
+              <p class="card-description">API keys, Customer creation, Products &amp; Prices (lookup keys), Payment Intents, Checkout Sessions, Subscriptions (all states), Webhooks (signature verification + idempotency + event catalog), Metadata standards (consistent keys across objects), Decline code mapping, 3DS/SCA, Refunds.</p>
+            </a>
+
+            <a href="../standards/thirdparty-razorpay.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Razorpay API keys orders server-side paise amounts payment verification HMAC SHA256 required before activation Checkout.js subscriptions states events webhooks signature verification idempotency notes metadata refunds">
+              <span class="standards-doc-meta">Payments</span>
+              <h3 class="card-title">Razorpay</h3>
+              <p class="card-description">API keys, Orders (server-side, paise amounts), Payment verification (HMAC SHA256 — required before activation), Checkout.js integration, Subscriptions (all states + events), Webhooks (signature verification + idempotency), Notes/metadata standards, Refunds.</p>
+            </a>
+
+            <a href="../standards/thirdparty-sendgrid.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="SendGrid when to use vs Gmail domain authentication API key restricted access template decision tree code-rendered dynamic templates subject from transactional email link expiry retry logic bounce suppression handling">
+              <span class="standards-doc-meta">Email</span>
+              <h3 class="card-title">SendGrid</h3>
+              <p class="card-description">When to use vs Gmail, Domain authentication, API key (restricted access), Template decision tree (code-rendered vs Dynamic Template), Code-rendered template structure (HTML + plaintext), Dynamic Template standards (template IDs in env vars), Subject/from standards, Transactional email link expiry, Error handling + retry logic, Bounce/suppression handling.</p>
+            </a>
+
+            <a href="../standards/thirdparty-gmail.html" class="standards-doc-card card card-clickable" data-search-item data-standard-card data-search-text="Gmail when to use dev internal low-volume App Passwords SMTP 2FA OAuth2 setup Django configuration per environment console filebased SMTP MailHog rate limits switch to SendGrid">
+              <span class="standards-doc-meta">Email</span>
+              <h3 class="card-title">Gmail</h3>
+              <p class="card-description">When to use Gmail (dev/internal/low-volume), App Passwords (SMTP + 2FA), OAuth2 setup, Django configuration per environment (console/filebased/SMTP/MailHog), Rate limits, When to switch to SendGrid.</p>
+            </a>
+          </div>
+        </section>
+
+        <div class="content-card standards-empty-state" data-search-empty hidden>
+          <p>No matching content found.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Own the work, think beyond the ticket, communicate clearly,
+          test before handoff, and make every change traceable.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="./standards.html" class="footer-link">Standards</a>
+        <a href="./checklists.html" class="footer-link">Checklists</a>
+        <a href="./tasks.html" class="footer-link">Tasks</a>
+        <a href="./templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

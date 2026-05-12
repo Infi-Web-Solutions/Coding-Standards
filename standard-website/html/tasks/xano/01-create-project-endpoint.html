@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Xano Task — Create Project Endpoint | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Build a Xano POST endpoint to create a project — auth token first, DB permission check, three-layer validation, standard error format."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Xano Task — Create Project Endpoint</h1>
+
+        <p class="page-subtitle">
+          Build a Xano POST endpoint to create a project — auth token first, DB permission check, three-layer validation, standard error format.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../xano-tasks.html" class="btn btn-secondary">Back to Xano Tasks</a>
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+
+          <p>You are building the project creation endpoint for <strong>WorkFlow</strong> in Xano. Workspace members can create projects. The endpoint must follow the auth-first pattern — validating the token before any other logic runs — and use the database to check the caller's role, never trusting the request payload.</p>
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+
+          <p>A single Xano API endpoint:</p>
+
+          <pre><code class="language-text">POST /projects
+Authorization: Bearer &lt;auth_token&gt;</code></pre>
+        </div>
+      </section>
+
+      <section id="endpoint-specification" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Endpoint Specification</h2>
+
+          <h3>Request Body</h3>
+          <pre><code class="language-json">{
+  "workspace_id": "integer or uuid",
+  "name": "My Project",
+  "description": "Optional project description.",
+  "start_date": "2024-02-01",
+  "end_date": "2024-06-30"
+}</code></pre>
+
+          <h3>Steps (in this exact order)</h3>
+
+          <h4>Step 1 — Auth Token Validation</h4>
+          <p>Add the <strong>Auth Token</strong> middleware as a precondition (not a function step). This must be the first precondition. If the token is missing or invalid, Xano automatically returns 401 before any other step runs.</p>
+
+          <h4>Step 2 — Permission Check (via Reusable Function)</h4>
+          <p>Call a reusable Xano Function: <code>check_workspace_permission</code></p>
+          <p>This function should:</p>
+          <ul>
+            <li>Accept <code>workspace_id</code> and <code>user_id</code> (from the auth token) as inputs</li>
+            <li>Query the <code>workspace_members</code> table: find a record where <code>workspace_id = input.workspace_id AND user_id = auth_user.id</code></li>
+            <li>Return the membership record (including <code>role</code>)</li>
+            <li>If no record found → raise error: <code>FORBIDDEN: you are not a member of this workspace</code></li>
+            <li>If role is <code>viewer</code> → raise error: <code>FORBIDDEN: viewers cannot create projects</code></li>
+          </ul>
+          <p>If this function does not exist yet — create it. It will be reused across many endpoints.</p>
+
+          <h4>Step 3 — Input Validation</h4>
+          <p>Validate in this order, returning field-level errors:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Rule</th>
+                  <th>Error</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>workspace_id</code></td>
+                  <td>Required, must exist</td>
+                  <td>"workspace_id is required."</td>
+                </tr>
+                <tr>
+                  <td><code>name</code></td>
+                  <td>Required, not empty after trim, min 3 chars, max 100 chars</td>
+                  <td>"name is required." / "name must be at least 3 characters." / "name must be 100 characters or fewer."</td>
+                </tr>
+                <tr>
+                  <td><code>description</code></td>
+                  <td>Optional, max 500 chars if provided</td>
+                  <td>"description must be 500 characters or fewer."</td>
+                </tr>
+                <tr>
+                  <td><code>start_date</code></td>
+                  <td>Optional, must be a valid date if provided</td>
+                  <td>"start_date must be a valid date."</td>
+                </tr>
+                <tr>
+                  <td><code>end_date</code></td>
+                  <td>Optional, if provided and start_date also provided, must be after start_date</td>
+                  <td>"end_date must be after start_date."</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Return validation errors in this format:</p>
+          <pre><code class="language-json">{
+  "status": 400,
+  "code": "VALIDATION_ERROR",
+  "message": "Validation failed.",
+  "fields": {
+    "name": "name is required."
+  }
+}</code></pre>
+
+          <h4>Step 4 — Uniqueness Check</h4>
+          <p>Query the <code>projects</code> table:</p>
+          <ul>
+            <li>WHERE <code>workspace_id = input.workspace_id AND name = trimmed_name AND deleted_at IS NULL</code></li>
+            <li>If a record exists → return:</li>
+          </ul>
+          <pre><code class="language-json">{
+  "status": 409,
+  "code": "DUPLICATE",
+  "message": "A project with this name already exists in this workspace."
+}</code></pre>
+
+          <h4>Step 5 — Create the Project</h4>
+          <p>Insert into the <code>projects</code> table with:</p>
+          <ul>
+            <li><code>workspace_id</code> from input</li>
+            <li><code>name</code> from input (trimmed)</li>
+            <li><code>description</code> from input (or null)</li>
+            <li><code>status</code> = <code>"active"</code> (hardcoded — not from input)</li>
+            <li><code>start_date</code>, <code>end_date</code> from input (or null)</li>
+            <li><code>created_by</code> = <code>auth_user.id</code> (from the auth token — never from input)</li>
+          </ul>
+
+          <h4>Step 6 — Return Success</h4>
+          <pre><code class="language-json">{
+  "data": {
+    "id": 123,
+    "workspace_id": 1,
+    "name": "My Project",
+    "description": null,
+    "status": "active",
+    "start_date": "2024-02-01",
+    "end_date": "2024-06-30",
+    "created_by": 42,
+    "created_at": "2024-01-15T10:00:00Z"
+  },
+  "message": "Project created successfully."
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="reusable-function" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Reusable Function: <code>check_workspace_permission</code></h2>
+
+          <p>If this function does not exist, create it in the <strong>Auth Functions</strong> group:</p>
+
+          <p><strong>Inputs:</strong></p>
+          <ul>
+            <li><code>workspace_id</code> (integer/uuid)</li>
+            <li><code>user_id</code> (integer/uuid)</li>
+            <li><code>required_roles</code> (list of text) — optional, defaults to all roles except viewer</li>
+          </ul>
+
+          <p><strong>Steps:</strong></p>
+          <ol>
+            <li>Query <code>workspace_members</code> WHERE <code>workspace_id = input.workspace_id AND user_id = input.user_id</code></li>
+            <li>Precondition: record found → else raise <code>FORBIDDEN: not a member</code></li>
+            <li>If <code>required_roles</code> provided: precondition record.role IN required_roles → else raise <code>FORBIDDEN: insufficient role</code></li>
+            <li>Return: membership record (including role)</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="what-not-to-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+
+          <ul>
+            <li>Do not accept <code>created_by</code> from the request body — set it from <code>auth_user.id</code></li>
+            <li>Do not accept <code>status</code> from the request body — always default to <code>"active"</code></li>
+            <li>Do not skip the permission check — any authenticated user could create projects in any workspace</li>
+            <li>Do not duplicate the permission check logic inline — use the reusable <code>check_workspace_permission</code> function</li>
+            <li>Do not return 200 for error responses — use 400, 403, 409 etc.</li>
+            <li>Do not run business logic before validation completes</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+
+          <pre><code class="language-text">STRUCTURE
+[ ] Endpoint: POST /projects
+[ ] Auth Token middleware as first precondition
+[ ] Steps in correct order: auth → permission → validation → uniqueness → insert → response
+
+AUTH
+[ ] Auth token as first step (precondition, not function step)
+[ ] Invalid/missing token returns 401 automatically
+
+PERMISSION CHECK
+[ ] check_workspace_permission function exists (created if needed)
+[ ] Function checks workspace membership in DB — not from request
+[ ] Viewer role blocked
+[ ] Wrong workspace returns 403
+
+VALIDATION
+[ ] workspace_id required
+[ ] name required, trimmed, min 3, max 100
+[ ] description optional, max 500
+[ ] dates optional, format validated, end > start if both set
+[ ] Field-level errors returned
+
+UNIQUENESS
+[ ] Duplicate name check before insert
+[ ] Returns 409 DUPLICATE if found
+
+INSERT
+[ ] created_by = auth_user.id (not from input)
+[ ] status = 'active' (not from input)
+[ ] name trimmed before insert
+
+RESPONSE
+[ ] Success: { data: {...}, message: "..." } — 200
+[ ] Errors: { status, code, message } with correct HTTP status codes
+
+REUSABILITY
+[ ] check_workspace_permission is a separate reusable function
+[ ] Function is in the Auth Functions group
+[ ] Function will be usable by other endpoints
+
+TESTING (in Xano test runner)
+[ ] Success case: project created, correct response
+[ ] Missing name → VALIDATION_ERROR
+[ ] Non-member workspace → FORBIDDEN
+[ ] Viewer role → FORBIDDEN
+[ ] Duplicate name → DUPLICATE
+[ ] Unauthenticated → 401
+[ ] end_date before start_date → VALIDATION_ERROR</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Build Xano endpoints auth-first: token validation, DB permission check, three-layer validation, then insert.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../xano-tasks.html" class="footer-link">Xano Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QA &amp; Delivery Standards | Development Standards</title>
+  <meta name="description" content="What done actually means — self-testing checklist, definition of done per role, required test cases, RLS testing matrix, QA handoff checklist." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">QA &amp; Delivery Standards</h1>
+        <p class="page-subtitle">What done actually means — self-testing checklist, definition of done per role, required test cases, RLS testing matrix, QA handoff checklist.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p>Core rule:</p>
+<blockquote>A task is not done because it is built — it is done because it is tested, working, and documented.</blockquote>
+<hr />
+        </div>
+      </section>
+
+      <section id="contents" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>#</th>
+    <th>Section</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><a href="#1-self-testing--before-handing-off">1</a></td>
+    <td>Self-Testing Before Handoff</td>
+  </tr>
+  <tr>
+    <td><a href="#2-backend-api--definition-of-done">2</a></td>
+    <td>Backend API — Definition of Done</td>
+  </tr>
+  <tr>
+    <td><a href="#3-backend-api--test-cases-required">3</a></td>
+    <td>Backend Test Cases Required</td>
+  </tr>
+  <tr>
+    <td><a href="#4-rls-testing-matrix">4</a></td>
+    <td>RLS Testing Matrix</td>
+  </tr>
+  <tr>
+    <td><a href="#5-frontend-task--definition-of-done">5</a></td>
+    <td>Frontend Task — Definition of Done</td>
+  </tr>
+  <tr>
+    <td><a href="#6-website--definition-of-done">6</a></td>
+    <td>Website — Definition of Done</td>
+  </tr>
+  <tr>
+    <td><a href="#7-website-visual-qa">7</a></td>
+    <td>Website Visual QA</td>
+  </tr>
+  <tr>
+    <td><a href="#8-task-completion-comment-standard">8</a></td>
+    <td>Task Completion Comment</td>
+  </tr>
+  <tr>
+    <td><a href="#9-qa-handoff-checklist-from-developer-to-qa">9</a></td>
+    <td>QA Handoff Checklist</td>
+  </tr>
+  <tr>
+    <td><a href="#10-definition-of-done--summary">10</a></td>
+    <td>Definition of Done Summary</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>1. Self-Testing — Before Handing Off</h1>
+<p>Every developer must test their own work. QA should not catch issues that the developer could have found with a basic check.</p>
+        </div>
+      </section>
+
+      <section id="universal-self-test-checklist" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Universal Self-Test Checklist</h2>
+          <label><input type="checkbox" data-checklist-item /> Main success flow works end-to-end.</label><br />
+<label><input type="checkbox" data-checklist-item /> Required field validation works.</label><br />
+<label><input type="checkbox" data-checklist-item /> Invalid input shows correct error.</label><br />
+<label><input type="checkbox" data-checklist-item /> API failure is shown in UI (not just console).</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state shows during async actions.</label><br />
+<label><input type="checkbox" data-checklist-item /> Empty state is handled (no broken/blank screens).</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile layout is checked.</label><br />
+<label><input type="checkbox" data-checklist-item /> Similar Add/Edit pages are both checked.</label><br />
+<label><input type="checkbox" data-checklist-item /> Permission-based behavior is correct.</label><br />
+<label><input type="checkbox" data-checklist-item /> No broken layout on any breakpoint.</label><br />
+<label><input type="checkbox" data-checklist-item /> No silent failure anywhere.</label><br />
+<label><input type="checkbox" data-checklist-item /> Browser console has no obvious errors.</label><br />
+<hr />
+<h1>2. Backend API — Definition of Done</h1>
+<p>An API is complete only when all of these are checked:</p>
+<label><input type="checkbox" data-checklist-item /> Migration created</label><br />
+<label><input type="checkbox" data-checklist-item /> Table schema reviewed</label><br />
+<label><input type="checkbox" data-checklist-item /> Constraints added</label><br />
+<label><input type="checkbox" data-checklist-item /> Indexes added</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS enabled</label><br />
+<label><input type="checkbox" data-checklist-item /> SELECT policy added</label><br />
+<label><input type="checkbox" data-checklist-item /> INSERT policy added</label><br />
+<label><input type="checkbox" data-checklist-item /> UPDATE policy added</label><br />
+<label><input type="checkbox" data-checklist-item /> DELETE policy added (or intentionally blocked)</label><br />
+<label><input type="checkbox" data-checklist-item /> RPC/Edge Function created if needed</label><br />
+<label><input type="checkbox" data-checklist-item /> Auth requirement implemented</label><br />
+<label><input type="checkbox" data-checklist-item /> Role checks implemented</label><br />
+<label><input type="checkbox" data-checklist-item /> Input validation implemented</label><br />
+<label><input type="checkbox" data-checklist-item /> Error responses standardized</label><br />
+<label><input type="checkbox" data-checklist-item /> Logs/audit logs added</label><br />
+<label><input type="checkbox" data-checklist-item /> Storage policy added if files are involved</label><br />
+<label><input type="checkbox" data-checklist-item /> Webhook signature/idempotency added if webhook exists</label><br />
+<label><input type="checkbox" data-checklist-item /> API documented for frontend</label><br />
+<label><input type="checkbox" data-checklist-item /> Frontend sample code provided</label><br />
+<label><input type="checkbox" data-checklist-item /> Test cases documented</label><br />
+<label><input type="checkbox" data-checklist-item /> Tested as: owner / admin / member / viewer / non-member / anonymous</label><br />
+<label><input type="checkbox" data-checklist-item /> Staging verified</label><br />
+<hr />
+<h1>3. Backend API — Test Cases Required</h1>
+<p>Every API must be tested for all these cases:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Test Case</th>
+    <th>Required</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Authenticated success</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Anonymous request</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Expired token</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Wrong role</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Wrong workspace</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Missing required field</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Invalid field type</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Duplicate record</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Related record missing</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Database constraint failure</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>RLS denial</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>External service failure</td>
+    <td>If applicable</td>
+  </tr>
+  <tr>
+    <td>Retry/idempotency</td>
+    <td>If applicable</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>4. RLS Testing Matrix</h1>
+<p>For every table, test all combinations:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>User Type</th>
+    <th>SELECT</th>
+    <th>INSERT</th>
+    <th>UPDATE</th>
+    <th>DELETE</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Anonymous</td>
+    <td>No</td>
+    <td>No</td>
+    <td>No</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Owner</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Admin</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Depends</td>
+  </tr>
+  <tr>
+    <td>Manager</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Member</td>
+    <td>Yes</td>
+    <td>Depends</td>
+    <td>Depends</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Viewer</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>No</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Non-member</td>
+    <td>No</td>
+    <td>No</td>
+    <td>No</td>
+    <td>No</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>5. Frontend Task — Definition of Done</h1>
+<p>A frontend task is complete only when:</p>
+<label><input type="checkbox" data-checklist-item /> Main success flow works.</label><br />
+<label><input type="checkbox" data-checklist-item /> Required field validation works.</label><br />
+<label><input type="checkbox" data-checklist-item /> Invalid input shows field-level error.</label><br />
+<label><input type="checkbox" data-checklist-item /> API error is shown in UI (not just console).</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state is shown during submit/fetch/delete.</label><br />
+<label><input type="checkbox" data-checklist-item /> Empty state is handled gracefully.</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile layout tested.</label><br />
+<label><input type="checkbox" data-checklist-item /> Add/Edit pages use same component if for same entity.</label><br />
+<label><input type="checkbox" data-checklist-item /> Permission-based UI behavior correct (hide/disable/show).</label><br />
+<label><input type="checkbox" data-checklist-item /> No silent failures.</label><br />
+<label><input type="checkbox" data-checklist-item /> Ticket updated with testing evidence.</label><br />
+<hr />
+<h1>6. Website — Definition of Done</h1>
+<p>A website build or replica is complete only when:</p>
+<label><input type="checkbox" data-checklist-item /> Client ownership/permission confirmed (if replication)</label><br />
+<label><input type="checkbox" data-checklist-item /> Source website/Figma reviewed</label><br />
+<label><input type="checkbox" data-checklist-item /> Page inventory completed</label><br />
+<label><input type="checkbox" data-checklist-item /> Design tokens documented</label><br />
+<label><input type="checkbox" data-checklist-item /> Components documented</label><br />
+<label><input type="checkbox" data-checklist-item /> All required pages built</label><br />
+<label><input type="checkbox" data-checklist-item /> Desktop responsive tested</label><br />
+<label><input type="checkbox" data-checklist-item /> Tablet responsive tested</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile responsive tested</label><br />
+<label><input type="checkbox" data-checklist-item /> Forms validated and tested</label><br />
+<label><input type="checkbox" data-checklist-item /> Emails/CRM/webhooks tested</label><br />
+<label><input type="checkbox" data-checklist-item /> SEO metadata added</label><br />
+<label><input type="checkbox" data-checklist-item /> Redirects added (if migration)</label><br />
+<label><input type="checkbox" data-checklist-item /> Analytics/tracking installed</label><br />
+<label><input type="checkbox" data-checklist-item /> Images optimized</label><br />
+<label><input type="checkbox" data-checklist-item /> Accessibility basics checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Performance checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Staging link approved by client</label><br />
+<label><input type="checkbox" data-checklist-item /> Production deployed</label><br />
+<label><input type="checkbox" data-checklist-item /> SSL active</label><br />
+<label><input type="checkbox" data-checklist-item /> Handoff document delivered</label><br />
+<label><input type="checkbox" data-checklist-item /> Client knows how to edit/manage content</label><br />
+<hr />
+<h1>7. Website Visual QA</h1>
+        </div>
+      </section>
+
+      <section id="visual-comparison" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Visual Comparison</h2>
+          <label><input type="checkbox" data-checklist-item /> Header matches source/Figma</label><br />
+<label><input type="checkbox" data-checklist-item /> Footer matches source/Figma</label><br />
+<label><input type="checkbox" data-checklist-item /> Fonts match (family, weight, size)</label><br />
+<label><input type="checkbox" data-checklist-item /> Colors match (exact hex)</label><br />
+<label><input type="checkbox" data-checklist-item /> Buttons match (radius, hover, padding)</label><br />
+<label><input type="checkbox" data-checklist-item /> Cards match (shadow, border, spacing)</label><br />
+<label><input type="checkbox" data-checklist-item /> Images match (size, crop, quality)</label><br />
+<label><input type="checkbox" data-checklist-item /> Spacing matches (section padding, gaps)</label><br />
+<label><input type="checkbox" data-checklist-item /> Desktop layout checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Tablet layout checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile layout checked</label><br />
+        </div>
+      </section>
+
+      <section id="functional-qa" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Functional QA</h2>
+          <label><input type="checkbox" data-checklist-item /> All nav links work</label><br />
+<label><input type="checkbox" data-checklist-item /> All CTAs work</label><br />
+<label><input type="checkbox" data-checklist-item /> Contact form works and submits</label><br />
+<label><input type="checkbox" data-checklist-item /> Newsletter form works</label><br />
+<label><input type="checkbox" data-checklist-item /> Booking links work</label><br />
+<label><input type="checkbox" data-checklist-item /> External links open correctly (new tab if needed)</label><br />
+<label><input type="checkbox" data-checklist-item /> Social links work</label><br />
+<label><input type="checkbox" data-checklist-item /> Search works if present</label><br />
+<label><input type="checkbox" data-checklist-item /> CMS content loads if present</label><br />
+<label><input type="checkbox" data-checklist-item /> API errors are handled gracefully</label><br />
+        </div>
+      </section>
+
+      <section id="seo-qa" class="section">
+        <div class="content-card">
+          <h2 class="section-title">SEO QA</h2>
+          <label><input type="checkbox" data-checklist-item /> Title tags added to all pages</label><br />
+<label><input type="checkbox" data-checklist-item /> Meta descriptions added</label><br />
+<label><input type="checkbox" data-checklist-item /> Open Graph images added</label><br />
+<label><input type="checkbox" data-checklist-item /> Canonical URLs set</label><br />
+<label><input type="checkbox" data-checklist-item /> Sitemap generated and submitted</label><br />
+<label><input type="checkbox" data-checklist-item /> Robots.txt configured</label><br />
+<label><input type="checkbox" data-checklist-item /> Redirects tested (if migration)</label><br />
+<label><input type="checkbox" data-checklist-item /> No accidental noindex on important pages</label><br />
+<label><input type="checkbox" data-checklist-item /> Broken links checked</label><br />
+        </div>
+      </section>
+
+      <section id="performance-qa" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Performance QA</h2>
+          <label><input type="checkbox" data-checklist-item /> Images compressed (WebP preferred)</label><br />
+<label><input type="checkbox" data-checklist-item /> Fonts optimized (only needed weights)</label><br />
+<label><input type="checkbox" data-checklist-item /> Unused scripts removed</label><br />
+<label><input type="checkbox" data-checklist-item /> Lazy loading added below fold</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile speed checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Large layout shifts fixed</label><br />
+<hr />
+<h1>8. Task Completion Comment Standard</h1>
+<p>Before marking any task done, add a final comment to the ticket.</p>
+        </div>
+      </section>
+
+      <section id="template" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Template</h2>
+          <pre><code class="language-text">Status: Completed
+
+Work Done:
+- [What was built or fixed]
+- [What was updated]
+
+Testing Done:
+- [What success flows were tested]
+- [What error/edge cases were tested]
+- [Mobile checked: Yes/No]
+
+Notes:
+- [Any known issues or follow-up items, or &quot;None&quot;]</code></pre>
+        </div>
+      </section>
+
+      <section id="example" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Example</h2>
+          <pre><code class="language-text">Status: Completed
+
+Work Done:
+- Built shared Add/Edit Project form.
+- Added required field validation.
+- Added loading, success, and error states.
+- Matched design system spacing and button styles.
+
+Testing Done:
+- Tested create success flow.
+- Tested edit success flow.
+- Tested required field validation.
+- Tested API failure handling.
+- Checked mobile layout.
+
+Notes:
+- No known blockers.</code></pre>
+<hr />
+<h1>9. QA Handoff Checklist (From Developer to QA)</h1>
+<p>Before handing off to QA, confirm:</p>
+<label><input type="checkbox" data-checklist-item /> Task is self-tested.</label><br />
+<label><input type="checkbox" data-checklist-item /> Ticket is updated with what was done.</label><br />
+<label><input type="checkbox" data-checklist-item /> Test cases are listed in the ticket.</label><br />
+<label><input type="checkbox" data-checklist-item /> Screenshots/video attached if UI-related.</label><br />
+<label><input type="checkbox" data-checklist-item /> Edge cases that could not be tested are noted.</label><br />
+<label><input type="checkbox" data-checklist-item /> Any known issues are documented.</label><br />
+<label><input type="checkbox" data-checklist-item /> Related pages/modules that may be affected are listed.</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile was checked by developer.</label><br />
+<hr />
+<h1>10. Definition of Done — Summary</h1>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Role</th>
+    <th>Done When</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Backend Developer</td>
+    <td>Schema + RLS + Validation + Error handling + Logs + Tests + Documentation all complete</td>
+  </tr>
+  <tr>
+    <td>Frontend Developer</td>
+    <td>Main flow + Validation + Loading + Error UI + Mobile + Self-tested + Ticket updated</td>
+  </tr>
+  <tr>
+    <td>Website Builder</td>
+    <td>All pages + Forms + SEO + Redirects + Analytics + Mobile + Client approved staging</td>
+  </tr>
+  <tr>
+    <td>Any Team Member</td>
+    <td>Requirement met + Self-tested + Ticket updated with evidence + No silent failures</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

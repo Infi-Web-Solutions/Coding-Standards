@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Website — Building by Platform Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Technology decision table (React vs WeWeb vs Bubble vs WordPress), Figma-to-React flow, WeWeb build standards, Bubble build standards."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Website — Building by Platform Standard</h1>
+
+        <p class="page-subtitle">
+          Technology decision table (React vs WeWeb vs Bubble vs WordPress), Figma-to-React flow, WeWeb build standards, Bubble build standards.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="figma-to-react-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Figma to React Standard</h2>
+
+          <h3>Development Flow</h3>
+          <pre><code>1. Review Figma screens.
+2. Confirm desktop/tablet/mobile frames.
+3. Extract design tokens.
+4. Define component library.
+5. Set project structure.
+6. Build layout shell.
+7. Build reusable components.
+8. Build pages.
+9. Add responsive behavior.
+10. Add forms and validation.
+11. Add integrations.
+12. Add SEO metadata.
+13. Add animations carefully.
+14. QA against Figma.
+15. Deploy staging.
+16. Client review.
+17. Final production deploy.</code></pre>
+
+          <h3>React/Next.js Standards</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Framework</td><td>Next.js preferred for SEO/marketing sites.</td></tr>
+                <tr><td>Styling</td><td>Tailwind or well-structured CSS modules.</td></tr>
+                <tr><td>Components</td><td>Reusable component-first architecture.</td></tr>
+                <tr><td>Forms</td><td>React Hook Form + validation schema recommended.</td></tr>
+                <tr><td>SEO</td><td>Metadata per page.</td></tr>
+                <tr><td>Images</td><td>Optimized image component/CDN.</td></tr>
+                <tr><td>Routing</td><td>Clean URLs matching old site if migration.</td></tr>
+                <tr><td>Accessibility</td><td>Semantic HTML, labels, keyboard support.</td></tr>
+                <tr><td>Performance</td><td>Lazy load heavy sections/assets.</td></tr>
+                <tr><td>Deployment</td><td>Vercel/Netlify/custom server depending on app.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Component Standards</h3>
+          <p>Create reusable components:</p>
+          <pre><code>Button
+Input
+Textarea
+Select
+Checkbox
+Modal
+Navbar
+Footer
+HeroSection
+ServiceCard
+TestimonialCard
+PricingCard
+FAQAccordion
+BlogCard
+ContactForm
+CTASection
+Container
+SectionWrapper</code></pre>
+          <p>Do not duplicate the same button/card markup on every page.</p>
+        </div>
+      </section>
+
+      <section id="figma-to-weweb-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Figma to WeWeb Standard</h2>
+
+          <h3>Build Flow</h3>
+          <pre><code>1. Create global design system.
+2. Configure colors, typography, spacing.
+3. Create reusable sections/components.
+4. Build page structure.
+5. Connect backend/API if needed.
+6. Configure collections/data bindings.
+7. Add workflows/actions.
+8. Add responsive behavior.
+9. Add SEO metadata.
+10. Test published staging link.</code></pre>
+
+          <h3>WeWeb Standards</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Global Styles</td><td>Define before building pages.</td></tr>
+                <tr><td>Reusable Components</td><td>Header, footer, cards, forms.</td></tr>
+                <tr><td>Collections</td><td>Use for dynamic data.</td></tr>
+                <tr><td>API Calls</td><td>Centralize and name clearly.</td></tr>
+                <tr><td>Authentication</td><td>Use proper auth plugin/backend auth.</td></tr>
+                <tr><td>Variables</td><td>Use clean naming.</td></tr>
+                <tr><td>Workflows</td><td>Name workflow by action purpose.</td></tr>
+                <tr><td>Responsiveness</td><td>Test every breakpoint manually.</td></tr>
+                <tr><td>SEO</td><td>Configure page title, description, OG image.</td></tr>
+                <tr><td>Forms</td><td>Validate before API submission.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>WeWeb Anti-Patterns</h3>
+          <p>Avoid:</p>
+          <ul>
+            <li>Hardcoding repeated content everywhere.</li>
+            <li>No global styles.</li>
+            <li>Using random spacing values on every section.</li>
+            <li>Directly exposing private API keys.</li>
+            <li>Building API calls without error states.</li>
+            <li>No loading state for API-driven sections.</li>
+            <li>Using one giant page with unorganized layers.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="figma-to-bubble-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">11. Figma to Bubble Standard</h2>
+
+          <h3>Bubble Build Flow</h3>
+          <pre><code>1. Define app data structure.
+2. Create reusable styles.
+3. Build reusable elements.
+4. Build pages.
+5. Add workflows.
+6. Add database privacy rules.
+7. Add responsive rules.
+8. Add SEO/meta if public pages.
+9. Test user roles and workflows.</code></pre>
+
+          <h3>Bubble Standards</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Styles</td><td>Use Bubble style system, not random inline styling.</td></tr>
+                <tr><td>Reusable Elements</td><td>Header, footer, sidebar, cards.</td></tr>
+                <tr><td>Database</td><td>Clean data types and relationships.</td></tr>
+                <tr><td>Privacy Rules</td><td>Mandatory for user-owned/private data.</td></tr>
+                <tr><td>Workflows</td><td>Named and organized.</td></tr>
+                <tr><td>Conditions</td><td>Avoid too many messy conditions.</td></tr>
+                <tr><td>Responsive</td><td>Use new responsive engine properly.</td></tr>
+                <tr><td>Plugins</td><td>Use only necessary trusted plugins.</td></tr>
+                <tr><td>SEO</td><td>Configure page metadata where needed.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Bubble Anti-Patterns</h3>
+          <p>Avoid:</p>
+          <ul>
+            <li>No privacy rules.</li>
+            <li>Too many plugins.</li>
+            <li>Massive workflows with no naming.</li>
+            <li>Repeating same UI manually everywhere.</li>
+            <li>Exposing sensitive data in page source.</li>
+            <li>No database cleanup strategy.</li>
+            <li>No role-based access control.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Choose the right platform, follow the build flow, and apply reusable component standards before writing a single line of UI.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

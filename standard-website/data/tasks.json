@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Frontend Tasks",
+    "path": "html/tasks/frontend-tasks.html",
+    "category": "frontend"
+  },
+  {
+    "title": "Supabase Tasks",
+    "path": "html/tasks/supabase-tasks.html",
+    "category": "supabase"
+  },
+  {
+    "title": "Django Tasks",
+    "path": "html/tasks/django-tasks.html",
+    "category": "django"
+  },
+  {
+    "title": "Project Tasks",
+    "path": "html/tasks/project-tasks.html",
+    "category": "projects"
+  }
+]

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django Template Standards | Development Standards</title>
+  <meta name="description" content="Three-folder rule (CSS, JS, HTML kept separate), base.html inheritance, no inline styles or scripts, data-* attribute pattern." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Django Template Standards</h1>
+        <p class="page-subtitle">Three-folder rule (CSS, JS, HTML kept separate), base.html inheritance, no inline styles or scripts, data-* attribute pattern.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p>Core rule:</p>
+<blockquote>Templates display data. Views handle requests. Models handle data. Business logic never lives in templates. CSS, JavaScript, and HTML are always separated — never mixed into one file.</blockquote>
+<hr />
+        </div>
+      </section>
+
+      <section id="contents" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>#</th>
+    <th>Section</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><a href="#1-the-three-folder-rule">1</a></td>
+    <td>The Three-Folder Rule</td>
+  </tr>
+  <tr>
+    <td><a href="#2-static-folder-structure">2</a></td>
+    <td>Static Folder Structure</td>
+  </tr>
+  <tr>
+    <td><a href="#3-template-folder-structure">3</a></td>
+    <td>Template Folder Structure</td>
+  </tr>
+  <tr>
+    <td><a href="#4-file-naming-standard">4</a></td>
+    <td>File Naming Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#5-basehtml-standard">5</a></td>
+    <td>base.html Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#6-template-block-standards">6</a></td>
+    <td>Template Block Standards</td>
+  </tr>
+  <tr>
+    <td><a href="#7-css-organization-rules">7</a></td>
+    <td>CSS Organization Rules</td>
+  </tr>
+  <tr>
+    <td><a href="#8-javascript-rules">8</a></td>
+    <td>JavaScript Rules</td>
+  </tr>
+  <tr>
+    <td><a href="#9-what-goes-where--decision-table">9</a></td>
+    <td>What Goes Where — Decision Table</td>
+  </tr>
+  <tr>
+    <td><a href="#10-django-app-template-isolation">10</a></td>
+    <td>Django App Template Isolation</td>
+  </tr>
+  <tr>
+    <td><a href="#11-static-file-loading-standard">11</a></td>
+    <td>Static File Loading</td>
+  </tr>
+  <tr>
+    <td><a href="#12-reusable-template-components">12</a></td>
+    <td>Reusable Template Components</td>
+  </tr>
+  <tr>
+    <td><a href="#13-anti-patterns-to-avoid">13</a></td>
+    <td>Anti-Patterns to Avoid</td>
+  </tr>
+  <tr>
+    <td><a href="#14-definition-of-done--django-template-work">14</a></td>
+    <td>Definition of Done</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>1. The Three-Folder Rule</h1>
+<p>Every Django project must have a clean separation of static files across exactly three areas:</p>
+<pre><code class="language-text">static/
+  css/       ← All styles. Nothing else.
+  js/        ← All JavaScript. Nothing else.
+  images/    ← All images, icons, logos.
+
+templates/   ← All HTML. No inline styles. No inline scripts.</code></pre>
+<p><strong>Never:</strong></p>
+<ul>
+  <li>Write <code>&lt;style&gt;</code> blocks inside an HTML template.</li>
+  <li>Write <code>&lt;script&gt;</code> blocks with logic inside an HTML template.</li>
+  <li>Put images directly in your <code>templates/</code> folder.</li>
+  <li>Mix styles from multiple components into one giant CSS file.</li>
+</ul>
+<hr />
+<h1>2. Static Folder Structure</h1>
+        </div>
+      </section>
+
+      <section id="full-structure" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Full Structure</h2>
+          <pre><code class="language-text">static/
+  css/
+    base.css                  ← Reset, typography, global variables
+    layout.css                ← Grid, containers, section spacing
+    components/
+      button.css
+      card.css
+      form.css
+      modal.css
+      navbar.css
+      table.css
+      badge.css
+      alert.css
+    pages/
+      home.css
+      dashboard.css
+      login.css
+      profile.css
+
+  js/
+    base.js                   ← Global utilities, event init
+    components/
+      modal.js
+      dropdown.js
+      toast.js
+      form-validator.js
+      confirm-delete.js
+    pages/
+      dashboard.js
+      home.js
+      profile.js
+    utils/
+      api.js                  ← Fetch wrapper / CSRF helper
+      format.js               ← Date/number formatters
+      storage.js              ← localStorage helpers
+
+  images/
+    logo/
+      logo.svg
+      logo-white.svg
+    icons/
+      (SVG icons or icon sprites)
+    ui/
+      placeholder.png
+      avatar-default.png</code></pre>
+<hr />
+<h1>3. Template Folder Structure</h1>
+<pre><code class="language-text">templates/
+  base.html                   ← Master layout (head, nav, footer, blocks)
+  base_auth.html              ← Layout for login/signup (no nav)
+
+  includes/
+    navbar.html
+    footer.html
+    sidebar.html
+    pagination.html
+    messages.html             ← Django messages / toast alerts
+    breadcrumb.html
+
+  components/
+    card.html
+    modal_confirm.html
+    empty_state.html
+    loading_spinner.html
+    form_field.html           ← Reusable form field with label + error
+
+  pages/
+    home.html
+    dashboard.html
+    profile.html
+    settings.html
+
+  auth/
+    login.html
+    signup.html
+    forgot_password.html
+    reset_password.html
+
+  errors/
+    404.html
+    500.html
+    403.html
+
+  emails/
+    base_email.html
+    welcome.html
+    reset_password.html
+    notification.html
+
+  app_name/                   ← One subfolder per Django app
+    project_list.html
+    project_detail.html
+    project_create.html
+    project_edit.html</code></pre>
+<hr />
+<h1>4. File Naming Standard</h1>
+        </div>
+      </section>
+
+      <section id="css-files" class="section">
+        <div class="content-card">
+          <h2 class="section-title">CSS Files</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>button.css</code></td>
+    <td><code>btn_styles.css</code></td>
+  </tr>
+  <tr>
+    <td><code>project_card.css</code></td>
+    <td><code>ProjectCard.css</code></td>
+  </tr>
+  <tr>
+    <td><code>dashboard.css</code></td>
+    <td><code>page1.css</code></td>
+  </tr>
+  <tr>
+    <td><code>base.css</code></td>
+    <td><code>global_stuff.css</code></td>
+  </tr>
+  </tbody>
+</table></div>
+<p>Use <code>snake_case</code>. Name by component or page — not by author, date, or feature number.</p>
+        </div>
+      </section>
+
+      <section id="javascript-files" class="section">
+        <div class="content-card">
+          <h2 class="section-title">JavaScript Files</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>modal.js</code></td>
+    <td><code>Modal.js</code></td>
+  </tr>
+  <tr>
+    <td><code>form-validator.js</code></td>
+    <td><code>validation_stuff.js</code></td>
+  </tr>
+  <tr>
+    <td><code>api.js</code></td>
+    <td><code>helper.js</code></td>
+  </tr>
+  <tr>
+    <td><code>dashboard.js</code></td>
+    <td><code>page_script_2.js</code></td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="template-files" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Template Files</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>project_list.html</code></td>
+    <td><code>projects.html</code></td>
+  </tr>
+  <tr>
+    <td><code>project_detail.html</code></td>
+    <td><code>projectDetails.html</code></td>
+  </tr>
+  <tr>
+    <td><code>modal_confirm.html</code></td>
+    <td><code>ConfirmPopup.html</code></td>
+  </tr>
+  <tr>
+    <td><code>form_field.html</code></td>
+    <td><code>field.html</code></td>
+  </tr>
+  </tbody>
+</table></div>
+<p>Use <code>snake_case</code>. Name by entity + action/type.</p>
+<hr />
+<h1>5. base.html Standard</h1>
+<p>Every project must have one master layout that all pages extend.</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;{% block title %}App Name{% endblock %}&lt;/title&gt;
+
+  {% load static %}
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;{% static &#x27;css/base.css&#x27; %}&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;{% static &#x27;css/layout.css&#x27; %}&quot;&gt;
+  {% block extra_css %}{% endblock %}
+&lt;/head&gt;
+&lt;body class=&quot;{% block body_class %}{% endblock %}&quot;&gt;
+
+  {% include &quot;includes/navbar.html&quot; %}
+
+  &lt;main&gt;
+    {% include &quot;includes/messages.html&quot; %}
+    {% block content %}{% endblock %}
+  &lt;/main&gt;
+
+  {% include &quot;includes/footer.html&quot; %}
+
+  &lt;script src=&quot;{% static &#x27;js/base.js&#x27; %}&quot;&gt;&lt;/script&gt;
+  {% block extra_js %}{% endblock %}
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+      </section>
+
+      <section id="page-template-extending-base" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Page Template Extending Base</h2>
+          <pre><code class="language-html">{% extends &quot;base.html&quot; %}
+{% load static %}
+
+{% block title %}Projects — App Name{% endblock %}
+
+{% block extra_css %}
+&lt;link rel=&quot;stylesheet&quot; href=&quot;{% static &#x27;css/pages/dashboard.css&#x27; %}&quot;&gt;
+{% endblock %}
+
+{% block content %}
+&lt;section class=&quot;page-header&quot;&gt;
+  &lt;h1&gt;Projects&lt;/h1&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;project-list&quot;&gt;
+  {% for project in projects %}
+    {% include &quot;components/card.html&quot; with project=project %}
+  {% empty %}
+    {% include &quot;components/empty_state.html&quot; with message=&quot;No projects yet.&quot; %}
+  {% endfor %}
+&lt;/section&gt;
+{% endblock %}
+
+{% block extra_js %}
+&lt;script src=&quot;{% static &#x27;js/pages/dashboard.js&#x27; %}&quot;&gt;&lt;/script&gt;
+{% endblock %}</code></pre>
+<hr />
+<h1>6. Template Block Standards</h1>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Block</th>
+    <th>Purpose</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>{% block title %}</code></td>
+    <td>Page title in <code>&lt;head&gt;</code></td>
+  </tr>
+  <tr>
+    <td><code>{% block extra_css %}</code></td>
+    <td>Page-specific CSS files</td>
+  </tr>
+  <tr>
+    <td><code>{% block body_class %}</code></td>
+    <td>Body class for page-level styling</td>
+  </tr>
+  <tr>
+    <td><code>{% block content %}</code></td>
+    <td>Main page content</td>
+  </tr>
+  <tr>
+    <td><code>{% block extra_js %}</code></td>
+    <td>Page-specific JS files</td>
+  </tr>
+  <tr>
+    <td><code>{% block sidebar %}</code></td>
+    <td>Optional sidebar</td>
+  </tr>
+  </tbody>
+</table></div>
+<p>Never add page-specific CSS or JS in <code>base.html</code>. Always use <code>extra_css</code> and <code>extra_js</code> blocks.</p>
+<hr />
+<h1>7. CSS Organization Rules</h1>
+        </div>
+      </section>
+
+      <section id="basecss-contains" class="section">
+        <div class="content-card">
+          <h2 class="section-title">base.css — Contains</h2>
+          <pre><code class="language-css">/* 1. CSS Custom Properties (Variables) */
+:root {
+  --color-primary: #2563eb;
+  --color-text: #111827;
+  --color-background: #f9fafb;
+  --color-border: #e5e7eb;
+  --color-error: #dc2626;
+  --color-success: #16a34a;
+
+  --font-family: &#x27;Inter&#x27;, sans-serif;
+  --font-size-base: 16px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  --spacing-xl: 64px;
+}
+
+/* 2. Reset */
+/* 3. Typography */
+/* 4. Utility classes */</code></pre>
+        </div>
+      </section>
+
+      <section id="component-css-rule" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Component CSS Rule</h2>
+          <p>Each component CSS file only styles that component.</p>
+<pre><code class="language-css">/* button.css */
+.btn { ... }
+.btn-primary { ... }
+.btn-secondary { ... }
+.btn-danger { ... }
+.btn:disabled { ... }
+.btn.loading { ... }</code></pre>
+<p>Never put button styles in <code>card.css</code>. Never put modal styles in <code>dashboard.css</code>.</p>
+        </div>
+      </section>
+
+      <section id="page-css-rule" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Page CSS Rule</h2>
+          <p>Page CSS only styles page-specific layout. Reuse component classes.</p>
+<pre><code class="language-css">/* dashboard.css — only page-level layout */
+.dashboard-grid { ... }
+.dashboard-header { ... }
+.stats-row { ... }</code></pre>
+<hr />
+<h1>8. JavaScript Rules</h1>
+        </div>
+      </section>
+
+      <section id="no-inline-javascript-in-templates" class="section">
+        <div class="content-card">
+          <h2 class="section-title">No Inline JavaScript in Templates</h2>
+          <p>Bad:</p>
+<pre><code class="language-html">&lt;button onclick=&quot;deleteProject({{ project.id }})&quot;&gt;Delete&lt;/button&gt;
+
+&lt;script&gt;
+  function deleteProject(id) {
+    fetch(&#x27;/delete/&#x27; + id);
+  }
+&lt;/script&gt;</code></pre>
+<p>Good:</p>
+<pre><code class="language-html">&lt;button class=&quot;btn-delete&quot; data-id=&quot;{{ project.id }}&quot; data-url=&quot;{% url &#x27;project:delete&#x27; project.id %}&quot;&gt;
+  Delete
+&lt;/button&gt;</code></pre>
+<pre><code class="language-js">// js/pages/dashboard.js
+document.querySelectorAll(&#x27;.btn-delete&#x27;).forEach(btn =&gt; {
+  btn.addEventListener(&#x27;click&#x27;, () =&gt; {
+    const id = btn.dataset.id;
+    const url = btn.dataset.url;
+    // handle delete
+  });
+});</code></pre>
+        </div>
+      </section>
+
+      <section id="use-data--attributes-to-pass-django-data-to-js" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Use `data-*` Attributes to Pass Django Data to JS</h2>
+          <pre><code class="language-html">&lt;div id=&quot;project-map&quot;
+     data-lat=&quot;{{ project.latitude }}&quot;
+     data-lng=&quot;{{ project.longitude }}&quot;
+     data-name=&quot;{{ project.name }}&quot;&gt;
+&lt;/div&gt;</code></pre>
+<pre><code class="language-js">const map = document.getElementById(&#x27;project-map&#x27;);
+const lat = map.dataset.lat;
+const lng = map.dataset.lng;</code></pre>
+<p>Never interpolate Django variables directly inside JS strings in a template.</p>
+        </div>
+      </section>
+
+      <section id="csrf-token-for-ajax-calls" class="section">
+        <div class="content-card">
+          <h2 class="section-title">CSRF Token for AJAX Calls</h2>
+          <pre><code class="language-js">// utils/api.js
+function getCsrfToken() {
+  return document.querySelector(&#x27;[name=csrfmiddlewaretoken]&#x27;)?.value
+    || document.cookie.split(&#x27;; &#x27;)
+        .find(row =&gt; row.startsWith(&#x27;csrftoken=&#x27;))
+        ?.split(&#x27;=&#x27;)[1];
+}
+
+async function post(url, data) {
+  const response = await fetch(url, {
+    method: &#x27;POST&#x27;,
+    headers: {
+      &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+      &#x27;X-CSRFToken&#x27;: getCsrfToken()
+    },
+    body: JSON.stringify(data)
+  });
+  return response.json();
+}</code></pre>
+<hr />
+<h1>9. What Goes Where — Decision Table</h1>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Logic Type</th>
+    <th>Where It Lives</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Business rules (pricing, permissions, status transitions)</td>
+    <td>Django view or service function</td>
+  </tr>
+  <tr>
+    <td>Database queries</td>
+    <td>Django view, manager, or querysets — never in template</td>
+  </tr>
+  <tr>
+    <td>Validation</td>
+    <td>Django form / serializer — not template</td>
+  </tr>
+  <tr>
+    <td>Display formatting (date, number)</td>
+    <td>Django template filter or template tag</td>
+  </tr>
+  <tr>
+    <td>Page layout and structure</td>
+    <td>HTML template</td>
+  </tr>
+  <tr>
+    <td>Styling and appearance</td>
+    <td>CSS file</td>
+  </tr>
+  <tr>
+    <td>User interaction (click, toggle, submit)</td>
+    <td>JS file</td>
+  </tr>
+  <tr>
+    <td>Inline styles for specific element</td>
+    <td>Use a CSS class, not <code>style=&quot;&quot;</code></td>
+  </tr>
+  <tr>
+    <td>Hardcoded content that may change</td>
+    <td>Move to database or settings</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="never-put-in-templates" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Never Put in Templates</h2>
+          <pre><code class="language-text">× Queries ({% for obj in Model.objects.all() %} is not valid Django, but avoid heavy logic)
+× Business decisions (&quot;if price &gt; 100 and user.plan == &#x27;free&#x27;...&quot;)
+× Calculations
+× Sensitive data output without escaping
+× Inline styles
+× Inline script blocks with logic</code></pre>
+<hr />
+<h1>10. Django App Template Isolation</h1>
+<p>Every Django app should own its templates in a subfolder:</p>
+<pre><code class="language-text">templates/
+  projects/          ← Templates for the &quot;projects&quot; app
+    list.html
+    detail.html
+    create.html
+    edit.html
+  users/             ← Templates for the &quot;users&quot; app
+    profile.html
+    settings.html
+  billing/           ← Templates for the &quot;billing&quot; app
+    plans.html
+    invoices.html</code></pre>
+<p>Reference in views:</p>
+<pre><code class="language-python">return render(request, &#x27;projects/list.html&#x27;, context)</code></pre>
+<hr />
+<h1>11. Static File Loading Standard</h1>
+<p>Always use <code>{% load static %}</code> at the top of any template that references static files.</p>
+<pre><code class="language-html">{% load static %}
+&lt;link rel=&quot;stylesheet&quot; href=&quot;{% static &#x27;css/components/card.css&#x27; %}&quot;&gt;
+&lt;script src=&quot;{% static &#x27;js/pages/dashboard.js&#x27; %}&quot;&gt;&lt;/script&gt;
+&lt;img src=&quot;{% static &#x27;images/logo/logo.svg&#x27; %}&quot; alt=&quot;App Logo&quot;&gt;</code></pre>
+<p>Never hardcode static paths:</p>
+<pre><code class="language-html">&lt;!-- Bad --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/css/card.css&quot;&gt;
+
+&lt;!-- Good --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;{% static &#x27;css/components/card.css&#x27; %}&quot;&gt;</code></pre>
+<hr />
+<h1>12. Reusable Template Components</h1>
+<p>For UI patterns that repeat across pages, use <code>{% include %}</code>.</p>
+        </div>
+      </section>
+
+      <section id="reusable-card-component" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Reusable Card Component</h2>
+          <pre><code class="language-html">&lt;!-- templates/components/card.html --&gt;
+&lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;
+    &lt;h3&gt;{{ title }}&lt;/h3&gt;
+    {% if subtitle %}&lt;p class=&quot;card-subtitle&quot;&gt;{{ subtitle }}&lt;/p&gt;{% endif %}
+  &lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    {{ content }}
+  &lt;/div&gt;
+  {% if actions %}
+  &lt;div class=&quot;card-footer&quot;&gt;
+    {{ actions }}
+  &lt;/div&gt;
+  {% endif %}
+&lt;/div&gt;</code></pre>
+        </div>
+      </section>
+
+      <section id="usage" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Usage</h2>
+          <pre><code class="language-html">{% include &quot;components/card.html&quot; with title=&quot;Project Name&quot; subtitle=&quot;Created today&quot; %}</code></pre>
+        </div>
+      </section>
+
+      <section id="reusable-form-field" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Reusable Form Field</h2>
+          <pre><code class="language-html">&lt;!-- templates/components/form_field.html --&gt;
+&lt;div class=&quot;form-group {% if field.errors %}has-error{% endif %}&quot;&gt;
+  &lt;label for=&quot;{{ field.id_for_label }}&quot;&gt;
+    {{ field.label }}
+    {% if field.field.required %}&lt;span class=&quot;required-star&quot;&gt;*&lt;/span&gt;{% endif %}
+  &lt;/label&gt;
+  {{ field }}
+  {% if field.errors %}
+    &lt;span class=&quot;field-error&quot;&gt;{{ field.errors|first }}&lt;/span&gt;
+  {% endif %}
+  {% if field.help_text %}
+    &lt;span class=&quot;field-hint&quot;&gt;{{ field.help_text }}&lt;/span&gt;
+  {% endif %}
+&lt;/div&gt;</code></pre>
+        </div>
+      </section>
+
+      <section id="usage" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Usage</h2>
+          <pre><code class="language-html">{% for field in form %}
+  {% include &quot;components/form_field.html&quot; with field=field %}
+{% endfor %}</code></pre>
+<hr />
+<h1>13. Anti-Patterns to Avoid</h1>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Anti-Pattern</th>
+    <th>Fix</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>&lt;style&gt;</code> blocks inside templates</td>
+    <td>Move to component CSS file</td>
+  </tr>
+  <tr>
+    <td><code>&lt;script&gt;</code> with logic inside templates</td>
+    <td>Move to page JS file</td>
+  </tr>
+  <tr>
+    <td>Giant single <code>styles.css</code> for entire project</td>
+    <td>Split into base + component + page CSS files</td>
+  </tr>
+  <tr>
+    <td>Giant single <code>main.js</code> for entire project</td>
+    <td>Split into component and page JS files</td>
+  </tr>
+  <tr>
+    <td>Duplicating the same HTML section across pages</td>
+    <td>Extract to <code>{% include %}</code> component</td>
+  </tr>
+  <tr>
+    <td>Hardcoded color/spacing values in CSS</td>
+    <td>Use CSS custom properties in <code>base.css</code></td>
+  </tr>
+  <tr>
+    <td>Business logic in template conditionals</td>
+    <td>Move to view or model property</td>
+  </tr>
+  <tr>
+    <td>Django variables directly interpolated in JS strings</td>
+    <td>Use <code>data-*</code> attributes</td>
+  </tr>
+  <tr>
+    <td>No base template — every page is standalone</td>
+    <td>Implement template inheritance with <code>base.html</code></td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>14. Definition of Done — Django Template Work</h1>
+<label><input type="checkbox" data-checklist-item /> Template extends base.html using {% extends %}</label><br />
+<label><input type="checkbox" data-checklist-item /> No inline <style> blocks</label><br />
+<label><input type="checkbox" data-checklist-item /> No inline <script> blocks with logic</label><br />
+<label><input type="checkbox" data-checklist-item /> Page-specific CSS in static/css/pages/[page].css</label><br />
+<label><input type="checkbox" data-checklist-item /> Page-specific JS in static/js/pages/[page].js</label><br />
+<label><input type="checkbox" data-checklist-item /> CSS variables used from base.css (not hardcoded hex/px values)</label><br />
+<label><input type="checkbox" data-checklist-item /> Repeated UI sections extracted to {% include %} components</label><br />
+<label><input type="checkbox" data-checklist-item /> Django data passed to JS via data-* attributes (not string interpolation)</label><br />
+<label><input type="checkbox" data-checklist-item /> Template file named in snake_case matching entity + action</label><br />
+<label><input type="checkbox" data-checklist-item /> Static files referenced using {% static %} tag</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile layout checked</label><br />
+<label><input type="checkbox" data-checklist-item /> No business logic in template</label><br />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

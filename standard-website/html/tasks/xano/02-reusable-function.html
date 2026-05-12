@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Xano Task — Reusable Function | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Extract shared logic into a Xano Custom Function — single responsibility, verb_noun naming, inputs/outputs, error raising."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Xano Task — Reusable Function</h1>
+
+        <p class="page-subtitle">
+          Extract shared logic into a Xano Custom Function — single responsibility, verb_noun naming, inputs/outputs, error raising.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../xano-tasks.html" class="btn btn-secondary">Back to Xano Tasks</a>
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+
+          <p>Across your Xano API, you have at least 5 endpoints that all need to verify the same thing: "Is the authenticated user a member of the requested workspace, and what is their role?" Right now, each endpoint duplicates the same 4-step database lookup and permission check. This needs to be extracted into a reusable function.</p>
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+
+          <p>A Xano Custom Function named <code>check_workspace_permission</code>.</p>
+        </div>
+      </section>
+
+      <section id="requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Requirements</h2>
+
+          <h3>Function Inputs</h3>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Input</th>
+                  <th>Type</th>
+                  <th>Required</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>workspace_id</code></td>
+                  <td>integer</td>
+                  <td>Yes</td>
+                  <td>The workspace to check membership for</td>
+                </tr>
+                <tr>
+                  <td><code>user_id</code></td>
+                  <td>integer</td>
+                  <td>Yes</td>
+                  <td>The authenticated user's ID (from auth token)</td>
+                </tr>
+                <tr>
+                  <td><code>required_role</code></td>
+                  <td>text</td>
+                  <td>No</td>
+                  <td>Minimum required role: 'member', 'editor', 'admin', 'owner'. If not provided, any role is accepted.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>Function Logic (4 Steps)</h3>
+
+          <p><strong>Step 1 — Query workspace_members</strong></p>
+          <pre><code class="language-text">Query: workspace_members
+WHERE workspace_id = inputs.workspace_id
+  AND user_id = inputs.user_id
+  AND status = 'active'
+LIMIT 1</code></pre>
+
+          <p><strong>Step 2 — Check if member exists</strong></p>
+          <pre><code class="language-text">IF result is empty:
+  RAISE error:
+    code: "FORBIDDEN"
+    message: "You are not a member of this workspace."
+    http_status: 403</code></pre>
+
+          <p><strong>Step 3 — Check role if required_role is provided</strong></p>
+          <pre><code class="language-text">Role hierarchy: member &lt; editor &lt; admin &lt; owner
+
+IF required_role is provided:
+  IF user's role does not meet the minimum required_role:
+    RAISE error:
+      code: "FORBIDDEN"
+      message: "You need [required_role] access to perform this action."
+      http_status: 403</code></pre>
+
+          <p><strong>Step 4 — Return the member record</strong></p>
+          <pre><code class="language-json">{
+  "id": ...,
+  "workspace_id": ...,
+  "user_id": ...,
+  "role": "admin",
+  "status": "active"
+}</code></pre>
+
+          <div class="divider"></div>
+
+          <h3>Role Hierarchy</h3>
+
+          <p>The role check in Step 3 must implement a hierarchy. Requiring "admin" means "admin" OR "owner" — not only exactly "admin".</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Required Role</th>
+                  <th>Accepted Roles</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>member</td>
+                  <td>member, editor, admin, owner</td>
+                </tr>
+                <tr>
+                  <td>editor</td>
+                  <td>editor, admin, owner</td>
+                </tr>
+                <tr>
+                  <td>admin</td>
+                  <td>admin, owner</td>
+                </tr>
+                <tr>
+                  <td>owner</td>
+                  <td>owner only</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="how-it-gets-called" class="section">
+        <div class="content-card">
+          <h2 class="section-title">How It Gets Called</h2>
+
+          <p>After extraction, these 5 endpoints will call <code>check_workspace_permission</code> as a step (after auth token validation):</p>
+
+          <ol>
+            <li><strong>Create Project</strong> — <code>required_role: 'editor'</code></li>
+            <li><strong>Delete Project</strong> — <code>required_role: 'admin'</code></li>
+            <li><strong>Invite Member</strong> — <code>required_role: 'admin'</code></li>
+            <li><strong>Update Workspace Settings</strong> — <code>required_role: 'admin'</code></li>
+            <li><strong>Get Project Details</strong> — no required_role (any member)</li>
+          </ol>
+
+          <p>Each endpoint still validates its own auth token first. This function receives <code>user_id</code> from the endpoint — not from the token directly.</p>
+        </div>
+      </section>
+
+      <section id="what-not-to-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+
+          <pre><code class="language-text">x Put the auth token validation inside this reusable function
+x Hardcode workspace IDs or user IDs inside the function
+x Return null or false on permission failure — always raise an error
+x Use the wrong role comparison (treat roles as equal instead of hierarchical)
+x Duplicate this logic in any endpoint after extracting it</code></pre>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+
+          <pre><code class="language-text">[ ] Function named check_workspace_permission
+[ ] Inputs defined: workspace_id (integer), user_id (integer), required_role (text, optional)
+[ ] Step 1: queries workspace_members correctly with status = 'active'
+[ ] Step 2: raises FORBIDDEN with correct message if member not found
+[ ] Step 3: implements role hierarchy — not just equality check
+[ ] Step 4: returns the member record on success
+[ ] All 5 existing endpoints updated to call this function (duplicate logic removed)
+[ ] All 5 endpoints retested — no regressions
+[ ] Function documented: inputs, output shape, all error cases</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Extract shared workspace permission logic into a single reusable Xano function used by all endpoints.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../xano-tasks.html" class="footer-link">Xano Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

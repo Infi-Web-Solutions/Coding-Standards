@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Supabase — API Documentation Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Full documentation template (17 fields), frontend Supabase client call examples, RPC call pattern, complete worked example."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Supabase — API Documentation Standard</h1>
+
+        <p class="page-subtitle">
+          Full documentation template (17 fields), frontend Supabase client call examples, RPC call pattern, complete worked example.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="api-documentation-template" class="section">
+        <div class="content-card">
+          <h2 class="section-title">17. API Documentation Template</h2>
+
+          <p>Every backend API must be documented with all of the following fields.</p>
+
+          <h3>1. Purpose</h3>
+          <p>Creates a new project inside a workspace.</p>
+
+          <h3>2. API Type</h3>
+          <p>Direct Supabase Insert / RPC / Edge Function</p>
+
+          <h3>3. Endpoint / Table / Function</h3>
+          <p>Table: <code>public.projects</code> — Operation: insert</p>
+
+          <h3>4. Auth Required</h3>
+          <p>Yes. Frontend must pass the logged-in user's Supabase access token.</p>
+          <pre><code class="language-text">Authorization: Bearer &lt;access_token&gt;</code></pre>
+
+          <h3>5. Permission Required</h3>
+          <p>User must be a member of the workspace. Allowed roles:</p>
+          <ul>
+            <li>owner</li>
+            <li>admin</li>
+            <li>manager</li>
+          </ul>
+
+          <h3>6. Request Payload</h3>
+          <pre><code class="language-json">{
+  "workspace_id": "uuid",
+  "name": "string",
+  "description": "string | optional"
+}</code></pre>
+
+          <h3>7. Required Fields</h3>
+          <ul>
+            <li>workspace_id</li>
+            <li>name</li>
+          </ul>
+
+          <h3>8. Validation Rules</h3>
+          <ul>
+            <li>workspace_id must be a valid UUID.</li>
+            <li>name is required.</li>
+            <li>name must be 2–100 characters.</li>
+            <li>description is optional.</li>
+            <li>description max length: 1000 characters.</li>
+          </ul>
+
+          <h3>9. Success Response</h3>
+          <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "workspace_id": "uuid",
+    "name": "Website Redesign",
+    "description": "Client website project",
+    "status": "active",
+    "created_by": "uuid",
+    "created_at": "2026-05-07T10:00:00Z"
+  },
+  "message": "Project created successfully"
+}</code></pre>
+
+          <h3>10. Error Responses</h3>
+
+          <p><strong>401 UNAUTHENTICATED</strong></p>
+          <ul>
+            <li>User is not logged in.</li>
+            <li>Missing or expired token.</li>
+          </ul>
+          <p>Frontend Action: Redirect to login. Show: "Your session has expired. Please log in again."</p>
+
+          <p><strong>403 FORBIDDEN</strong></p>
+          <ul>
+            <li>User is not a workspace member.</li>
+            <li>User role is viewer/member without create permission.</li>
+          </ul>
+          <p>Frontend Action: Show "You do not have permission to create projects in this workspace."</p>
+
+          <p><strong>422 VALIDATION_ERROR</strong></p>
+          <ul>
+            <li>Missing name.</li>
+            <li>Invalid workspace_id.</li>
+            <li>Name too short or too long.</li>
+          </ul>
+          <p>Frontend Action: Highlight invalid field.</p>
+
+          <p><strong>409 CONFLICT</strong></p>
+          <ul>
+            <li>Project with same name already exists in workspace, if uniqueness rule is enabled.</li>
+          </ul>
+          <p>Frontend Action: Show "A project with this name already exists."</p>
+
+          <p><strong>500 INTERNAL_ERROR</strong></p>
+          <ul>
+            <li>Unexpected database/server error.</li>
+          </ul>
+          <p>Frontend Action: Show generic error and allow retry.</p>
+
+          <h3>11. RLS Policies Involved</h3>
+          <ul>
+            <li>Workspace members can view projects.</li>
+            <li>Owner/admin/manager can create projects.</li>
+            <li><code>created_by</code> must equal <code>auth.uid()</code>.</li>
+          </ul>
+
+          <h3>12. Frontend Implementation Notes</h3>
+          <ul>
+            <li>User must be logged in before calling this API.</li>
+            <li>Get access token from Supabase session.</li>
+            <li>Do not send <code>created_by</code> from frontend unless backend requires it.</li>
+            <li>If sent, <code>created_by</code> must match <code>auth.uid()</code>.</li>
+            <li>Show loader while request is pending.</li>
+            <li>Disable submit button during request.</li>
+            <li>Preserve form values if request fails.</li>
+          </ul>
+
+          <h3>13. Test Cases</h3>
+          <ul>
+            <li>Logged-in owner creates project successfully.</li>
+            <li>Logged-in manager creates project successfully.</li>
+            <li>Viewer cannot create project.</li>
+            <li>Non-member cannot create project.</li>
+            <li>Anonymous user cannot create project.</li>
+            <li>Missing name returns validation error.</li>
+            <li>Invalid workspace_id returns validation error.</li>
+            <li>Duplicate project name returns conflict.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="frontend-supabase-call" class="section">
+        <div class="content-card">
+          <h2 class="section-title">18. Example Frontend Supabase Call Documentation</h2>
+
+          <p>Backend developer should provide exact frontend example.</p>
+
+          <pre><code class="language-ts">const { data, error } = await supabase
+  .from("projects")
+  .insert({
+    workspace_id: workspaceId,
+    name: form.name.trim(),
+    description: form.description?.trim() || null,
+    created_by: user.id
+  })
+  .select("id, workspace_id, name, description, status, created_by, created_at")
+  .single();
+
+if (error) {
+  // Map Supabase/PostgREST error to frontend message
+  throw error;
+}
+
+return data;</code></pre>
+
+          <p>But for better security, prefer backend-controlled <code>created_by</code> through RPC when possible.</p>
+        </div>
+      </section>
+
+      <section id="rpc-pattern" class="section">
+        <div class="content-card">
+          <h2 class="section-title">19. Better Pattern: RPC for Create Project</h2>
+
+          <p>For important business workflows, use RPC so frontend does not control sensitive fields.</p>
+
+          <pre><code class="language-sql">create or replace function public.create_project(
+  p_workspace_id uuid,
+  p_name text,
+  p_description text default null
+)
+returns public.projects
+language plpgsql
+security invoker
+as $$
+declare
+  v_project public.projects;
+begin
+  if p_name is null or length(trim(p_name)) &lt; 2 then
+    raise exception 'Project name must be at least 2 characters'
+      using errcode = 'P0001';
+  end if;
+
+  insert into public.projects (
+    workspace_id,
+    name,
+    description,
+    created_by
+  )
+  values (
+    p_workspace_id,
+    trim(p_name),
+    nullif(trim(p_description), ''),
+    auth.uid()
+  )
+  returning * into v_project;
+
+  return v_project;
+end;
+$$;</code></pre>
+
+          <h3>Frontend Call</h3>
+          <pre><code class="language-ts">const { data, error } = await supabase.rpc("create_project", {
+  p_workspace_id: workspaceId,
+  p_name: form.name,
+  p_description: form.description || null
+});</code></pre>
+        </div>
+      </section>
+
+      <section id="full-example" class="section">
+        <div class="content-card">
+          <h2 class="section-title">41. Full API Documentation Example: Add Project</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Status</td>
+                  <td>Ready for frontend integration</td>
+                </tr>
+                <tr>
+                  <td>Owner</td>
+                  <td>Backend Team</td>
+                </tr>
+                <tr>
+                  <td>Last Updated</td>
+                  <td>2026-05-07</td>
+                </tr>
+                <tr>
+                  <td>API Type</td>
+                  <td>Supabase RPC</td>
+                </tr>
+                <tr>
+                  <td>Function Name</td>
+                  <td><code>create_project</code></td>
+                </tr>
+                <tr>
+                  <td>Auth Required</td>
+                  <td>Yes — <code>Authorization: Bearer &lt;access_token&gt;</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Allowed Roles</h3>
+          <ul>
+            <li>owner</li>
+            <li>admin</li>
+            <li>manager</li>
+          </ul>
+          <p>Not allowed: viewer, non-member, anonymous user.</p>
+
+          <h3>Request Payload</h3>
+          <pre><code class="language-json">{
+  "p_workspace_id": "uuid",
+  "p_name": "string",
+  "p_description": "string | null"
+}</code></pre>
+
+          <h3>Required Parameters</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Required</th>
+                  <th>Rules</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>p_workspace_id</td>
+                  <td>uuid</td>
+                  <td>Yes</td>
+                  <td>Must be a workspace the user belongs to.</td>
+                </tr>
+                <tr>
+                  <td>p_name</td>
+                  <td>string</td>
+                  <td>Yes</td>
+                  <td>2–100 characters after trim.</td>
+                </tr>
+                <tr>
+                  <td>p_description</td>
+                  <td>string/null</td>
+                  <td>No</td>
+                  <td>Max 1000 characters.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Frontend Example</h3>
+          <pre><code class="language-ts">const { data, error } = await supabase.rpc("create_project", {
+  p_workspace_id: workspaceId,
+  p_name: values.name,
+  p_description: values.description || null
+});</code></pre>
+
+          <h3>Success Response</h3>
+          <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "id": "2876d57e-6c37-4d56-84fc-87bdf03e97ba",
+    "workspace_id": "23f6c9f2-8947-47e8-a1c2-d7e27c9cdb18",
+    "name": "Hotel Renovation",
+    "description": "FF&amp;E renovation project",
+    "status": "active",
+    "created_by": "auth-user-id",
+    "created_at": "2026-05-07T10:00:00Z"
+  },
+  "message": "Project created successfully."
+}</code></pre>
+
+          <h3>Error Responses</h3>
+
+          <p><strong>401 UNAUTHENTICATED</strong> — User is not logged in / token missing or expired.</p>
+          <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "UNAUTHENTICATED",
+    "message": "Your session has expired. Please log in again."
+  }
+}</code></pre>
+          <p>Frontend: Redirect to login. Clear local auth state if needed.</p>
+
+          <p><strong>403 FORBIDDEN</strong> — User is not a member or role cannot create projects.</p>
+          <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "You do not have permission to create projects in this workspace."
+  }
+}</code></pre>
+          <p>Frontend: Show permission error. Hide create button for roles that cannot create.</p>
+
+          <p><strong>422 VALIDATION_ERROR</strong> — Project name missing, too short, too long, or invalid workspace_id.</p>
+          <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Please fix the highlighted fields.",
+    "fields": {
+      "p_name": "Project name must be between 2 and 100 characters."
+    }
+  }
+}</code></pre>
+          <p>Frontend: Show field-level validation.</p>
+
+          <p><strong>409 CONFLICT</strong> — Project name already exists in same workspace.</p>
+          <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "CONFLICT",
+    "message": "A project with this name already exists."
+  }
+}</code></pre>
+          <p>Frontend: Show duplicate error near project name field.</p>
+
+          <p><strong>500 INTERNAL_ERROR</strong> — Unexpected database/server failure.</p>
+          <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "Something went wrong. Please try again."
+  }
+}</code></pre>
+          <p>Frontend: Show retry option. Do not clear form data.</p>
+
+          <h3>RLS Policies Used</h3>
+          <ul>
+            <li>Table: <code>public.projects</code></li>
+            <li>Workspace members can view projects.</li>
+            <li>Owner/admin/manager can create projects.</li>
+            <li><code>created_by</code> must equal <code>auth.uid()</code>.</li>
+            <li>Non-members cannot access project rows.</li>
+          </ul>
+
+          <h3>Frontend UI Requirements</h3>
+          <ul>
+            <li>Disable submit button while request is running.</li>
+            <li>Show "Creating..." loading state.</li>
+            <li>Preserve input on failure.</li>
+            <li>On success, redirect to project detail page or update project list.</li>
+            <li>On 401, redirect to login.</li>
+            <li>On 403, show permission message.</li>
+            <li>On 422, highlight fields.</li>
+            <li>On 409, show duplicate project name warning.</li>
+          </ul>
+
+          <h3>Test Cases</h3>
+          <ol>
+            <li>Owner creates project successfully.</li>
+            <li>Admin creates project successfully.</li>
+            <li>Manager creates project successfully.</li>
+            <li>Viewer cannot create project.</li>
+            <li>Non-member cannot create project.</li>
+            <li>Anonymous user cannot create project.</li>
+            <li>Missing name returns validation error.</li>
+            <li>Duplicate name returns conflict.</li>
+            <li>Invalid workspace_id returns validation error.</li>
+            <li>User cannot create project in another workspace.</li>
+          </ol>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Every API must have complete documentation before frontend integration begins.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Backend Checklist",
+    "path": "html/checklists/backend-checklist.html",
+    "category": "backend"
+  },
+  {
+    "title": "Frontend Checklist",
+    "path": "html/checklists/frontend-checklist.html",
+    "category": "frontend"
+  },
+  {
+    "title": "Supabase Checklist",
+    "path": "html/checklists/supabase-checklist.html",
+    "category": "supabase"
+  },
+  {
+    "title": "Django Checklist",
+    "path": "html/checklists/django-checklist.html",
+    "category": "django"
+  },
+  {
+    "title": "Xano Checklist",
+    "path": "html/checklists/xano-checklist.html",
+    "category": "xano"
+  }
+]

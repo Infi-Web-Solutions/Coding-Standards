@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Website — Launch &amp; Handoff Standard | Development Standards</title>
+  <meta name="description" content="Header/footer documentation, analytics installation, redirect mapping, launch checklist, required documentation, client review standard." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Website — Launch &amp; Handoff Standard</h1>
+        <p class="page-subtitle">Header/footer documentation, analytics installation, redirect mapping, launch checklist, required documentation, client review standard.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <blockquote><strong>Part of:</strong> <a href="<README.md>">Website Replication Standards</a></blockquote>
+<p><strong>Covers:</strong> Sections 27–36 — Header/footer, tracking/analytics, redirects/launch, required documentation, QA checklists, client review, common risks, platform risks. Sections 37–39 — Definition of done, best rule, client message template</p>
+<hr />
+<h1>27. Header/Footer Replication Standard</h1>
+        </div>
+      </section>
+
+      <section id="header-must-document" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Header Must Document</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Item</th>
+    <th>Standard</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Logo</td>
+    <td>Desktop/mobile size.</td>
+  </tr>
+  <tr>
+    <td>Nav Links</td>
+    <td>URLs and active states.</td>
+  </tr>
+  <tr>
+    <td>Dropdowns</td>
+    <td>Items and hover/click behavior.</td>
+  </tr>
+  <tr>
+    <td>CTA Button</td>
+    <td>Text, link, style.</td>
+  </tr>
+  <tr>
+    <td>Sticky Behavior</td>
+    <td>Yes/no.</td>
+  </tr>
+  <tr>
+    <td>Mobile Menu</td>
+    <td>Drawer/fullscreen/dropdown.</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="footer-must-document" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Footer Must Document</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Item</th>
+    <th>Standard</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Logo</td>
+    <td>Correct asset.</td>
+  </tr>
+  <tr>
+    <td>Link Groups</td>
+    <td>Company, services, resources, legal.</td>
+  </tr>
+  <tr>
+    <td>Contact Info</td>
+    <td>Email, phone, address.</td>
+  </tr>
+  <tr>
+    <td>Social Links</td>
+    <td>Correct URLs.</td>
+  </tr>
+  <tr>
+    <td>Newsletter</td>
+    <td>If present, integration.</td>
+  </tr>
+  <tr>
+    <td>Copyright</td>
+    <td>Dynamic year preferred.</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>28. Tracking & Analytics Standard</h1>
+<p>Before launch, confirm:</p>
+<pre><code class="language-text id=&quot;wolnlo&quot;">GA4 installed
+GTM installed if needed
+Meta Pixel installed if needed
+LinkedIn Pixel installed if needed
+Form submit events tracked
+CTA clicks tracked
+Booking clicks tracked
+Purchase/payment events tracked if ecommerce
+Cookie consent respected if required</code></pre>
+        </div>
+      </section>
+
+      <section id="event-naming-example" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Event Naming Example</h2>
+          <pre><code class="language-text id=&quot;24l3ns&quot;">contact_form_submit
+newsletter_signup
+book_demo_click
+pricing_cta_click
+lead_form_submit
+download_brochure</code></pre>
+<hr />
+<h1>29. Redirection & Launch Standard</h1>
+<p>If replacing existing website, redirects are mandatory.</p>
+        </div>
+      </section>
+
+      <section id="redirect-mapping" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Redirect Mapping</h2>
+          <pre><code class="language-text id=&quot;m7cnzr&quot;">Old URL:
+New URL:
+Redirect Type: 301
+Priority:
+Tested: Yes/No</code></pre>
+<p>Example:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Old URL</th>
+    <th>New URL</th>
+    <th>Type</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>/about-us</code></td>
+    <td><code>/about</code></td>
+    <td>301</td>
+  </tr>
+  <tr>
+    <td><code>/services/web-design</code></td>
+    <td><code>/services</code></td>
+    <td>301</td>
+  </tr>
+  <tr>
+    <td><code>/contact-us</code></td>
+    <td><code>/contact</code></td>
+    <td>301</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="launch-checklist" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Launch Checklist</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Step</th>
+    <th>Standard</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Staging Approved</td>
+    <td>Client signs off.</td>
+  </tr>
+  <tr>
+    <td>DNS Access Ready</td>
+    <td>Domain access confirmed.</td>
+  </tr>
+  <tr>
+    <td>SSL Ready</td>
+    <td>HTTPS active.</td>
+  </tr>
+  <tr>
+    <td>Redirects Ready</td>
+    <td>Old URLs mapped.</td>
+  </tr>
+  <tr>
+    <td>Forms Tested</td>
+    <td>Emails/CRM working.</td>
+  </tr>
+  <tr>
+    <td>SEO Checked</td>
+    <td>Metadata/sitemap/robots.</td>
+  </tr>
+  <tr>
+    <td>Analytics Checked</td>
+    <td>Events firing.</td>
+  </tr>
+  <tr>
+    <td>Backup Taken</td>
+    <td>Old site backup.</td>
+  </tr>
+  <tr>
+    <td>Rollback Plan</td>
+    <td>Prepared.</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>30. Documentation Required for Replica Project</h1>
+        </div>
+      </section>
+
+      <section id="required-documents" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Required Documents</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Document</th>
+    <th>Purpose</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Scope Document</td>
+    <td>Defines exact replica expectations.</td>
+  </tr>
+  <tr>
+    <td>Page Inventory</td>
+    <td>All pages and URLs.</td>
+  </tr>
+  <tr>
+    <td>Design Token Sheet</td>
+    <td>Colors, fonts, spacing.</td>
+  </tr>
+  <tr>
+    <td>Component List</td>
+    <td>Reusable elements.</td>
+  </tr>
+  <tr>
+    <td>Form Documentation</td>
+    <td>Fields, validations, destination.</td>
+  </tr>
+  <tr>
+    <td>Integration Map</td>
+    <td>CRM, analytics, email, payments.</td>
+  </tr>
+  <tr>
+    <td>SEO Migration Sheet</td>
+    <td>Metadata and redirects.</td>
+  </tr>
+  <tr>
+    <td>QA Checklist</td>
+    <td>Desktop/tablet/mobile comparison.</td>
+  </tr>
+  <tr>
+    <td>Handoff Document</td>
+    <td>How client/frontend/admin uses it.</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>31. Replica Scope Document Template</h1>
+        </div>
+      </section>
+
+      <section id="project-type" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Project Type</h2>
+          <p>Figma to React / Figma to WeWeb / Existing Website to React / WordPress to WeWeb / Other</p>
+        </div>
+      </section>
+
+      <section id="replication-type" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Replication Type</h2>
+          <p>Pixel-perfect / Functional / Migration / Modernized</p>
+        </div>
+      </section>
+
+      <section id="source" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Source</h2>
+          <p>Figma URL: Existing Website URL: Admin Access: Assets Folder:</p>
+        </div>
+      </section>
+
+      <section id="pages-included" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Pages Included</h2>
+          <ol>
+  <li>Home</li>
+  <li>About</li>
+  <li>Services</li>
+  <li>Contact</li>
+  <li>Blog</li>
+  <li>Privacy Policy</li>
+</ol>
+        </div>
+      </section>
+
+      <section id="pages-excluded" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Pages Excluded</h2>
+          <ul>
+  <li>Example: Blog migration not included</li>
+  <li>Example: Payment flow not included</li>
+</ul>
+        </div>
+      </section>
+
+      <section id="design-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Design Requirements</h2>
+          <ul>
+  <li>Match colors</li>
+  <li>Match typography</li>
+  <li>Match spacing</li>
+  <li>Match responsive behavior</li>
+  <li>Match animations where practical</li>
+</ul>
+        </div>
+      </section>
+
+      <section id="functional-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Functional Requirements</h2>
+          <ul>
+  <li>Contact form</li>
+  <li>Newsletter form</li>
+  <li>Booking link</li>
+  <li>CRM integration</li>
+  <li>Analytics tracking</li>
+</ul>
+        </div>
+      </section>
+
+      <section id="seo-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">SEO Requirements</h2>
+          <ul>
+  <li>Preserve URLs</li>
+  <li>Add redirects</li>
+  <li>Add metadata</li>
+  <li>Generate sitemap</li>
+</ul>
+        </div>
+      </section>
+
+      <section id="platform" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Platform</h2>
+          <p>Frontend: Backend: CMS: Hosting:</p>
+        </div>
+      </section>
+
+      <section id="acceptance-criteria" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Acceptance Criteria</h2>
+          <ul>
+  <li>All pages match approved design/source.</li>
+  <li>All forms work.</li>
+  <li>Mobile responsive tested.</li>
+  <li>SEO metadata added.</li>
+  <li>Redirects tested.</li>
+  <li>Client approved staging before launch.</li>
+</ul>
+<pre><code>
+---
+
+# 32. API/Form Handoff Template
+
+For forms/API-connected sections:
+</code></pre>
+<h1>Form/API: Contact Form</h1>
+        </div>
+      </section>
+
+      <section id="page" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Page</h2>
+          <p>/contact</p>
+        </div>
+      </section>
+
+      <section id="purpose" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Purpose</h2>
+          <p>Collects website visitor inquiries and sends them to CRM/email.</p>
+        </div>
+      </section>
+
+      <section id="fields" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Fields</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Required</th>
+    <th>Validation</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>name</td>
+    <td>string</td>
+    <td>Yes</td>
+    <td>2–100 chars</td>
+  </tr>
+  <tr>
+    <td>email</td>
+    <td>email</td>
+    <td>Yes</td>
+    <td>Valid email</td>
+  </tr>
+  <tr>
+    <td>phone</td>
+    <td>phone</td>
+    <td>No</td>
+    <td>Country code + valid number</td>
+  </tr>
+  <tr>
+    <td>message</td>
+    <td>text</td>
+    <td>Yes</td>
+    <td>10–1000 chars</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="submit-destination" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Submit Destination</h2>
+          <ul>
+  <li>CRM: Zoho Leads</li>
+  <li>Email: sales@example.com</li>
+  <li>Database: leads table</li>
+</ul>
+        </div>
+      </section>
+
+      <section id="success-message" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Success Message</h2>
+          <p>"Thank you. Our team will contact you shortly."</p>
+        </div>
+      </section>
+
+      <section id="error-message" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Error Message</h2>
+          <p>"We could not submit your request. Please try again."</p>
+        </div>
+      </section>
+
+      <section id="spam-protection" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Spam Protection</h2>
+          <p>Honeypot / CAPTCHA / rate limit</p>
+        </div>
+      </section>
+
+      <section id="frontend-behavior" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Frontend Behavior</h2>
+          <ul>
+  <li>Disable submit while sending.</li>
+  <li>Show loading state.</li>
+  <li>Preserve fields on error.</li>
+  <li>Clear fields on success.</li>
+</ul>
+        </div>
+      </section>
+
+      <section id="visual-qa" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Visual QA</h2>
+          <label><input type="checkbox" data-checklist-item /> Header matches source</label><br />
+<label><input type="checkbox" data-checklist-item /> Footer matches source</label><br />
+<label><input type="checkbox" data-checklist-item /> Fonts match</label><br />
+<label><input type="checkbox" data-checklist-item /> Colors match</label><br />
+<label><input type="checkbox" data-checklist-item /> Buttons match</label><br />
+<label><input type="checkbox" data-checklist-item /> Cards match</label><br />
+<label><input type="checkbox" data-checklist-item /> Images match</label><br />
+<label><input type="checkbox" data-checklist-item /> Spacing matches</label><br />
+<label><input type="checkbox" data-checklist-item /> Desktop layout checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Tablet layout checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile layout checked</label><br />
+        </div>
+      </section>
+
+      <section id="functional-qa" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Functional QA</h2>
+          <label><input type="checkbox" data-checklist-item /> All nav links work</label><br />
+<label><input type="checkbox" data-checklist-item /> All CTAs work</label><br />
+<label><input type="checkbox" data-checklist-item /> Contact form works</label><br />
+<label><input type="checkbox" data-checklist-item /> Newsletter form works</label><br />
+<label><input type="checkbox" data-checklist-item /> Booking links work</label><br />
+<label><input type="checkbox" data-checklist-item /> External links open correctly</label><br />
+<label><input type="checkbox" data-checklist-item /> Social links work</label><br />
+<label><input type="checkbox" data-checklist-item /> Search works if present</label><br />
+<label><input type="checkbox" data-checklist-item /> CMS content loads if present</label><br />
+<label><input type="checkbox" data-checklist-item /> API errors are handled</label><br />
+        </div>
+      </section>
+
+      <section id="seo-qa" class="section">
+        <div class="content-card">
+          <h2 class="section-title">SEO QA</h2>
+          <label><input type="checkbox" data-checklist-item /> Title tags added</label><br />
+<label><input type="checkbox" data-checklist-item /> Meta descriptions added</label><br />
+<label><input type="checkbox" data-checklist-item /> Open Graph images added</label><br />
+<label><input type="checkbox" data-checklist-item /> Canonical URLs added</label><br />
+<label><input type="checkbox" data-checklist-item /> Sitemap generated</label><br />
+<label><input type="checkbox" data-checklist-item /> Robots.txt configured</label><br />
+<label><input type="checkbox" data-checklist-item /> Redirects tested</label><br />
+<label><input type="checkbox" data-checklist-item /> No accidental noindex</label><br />
+<label><input type="checkbox" data-checklist-item /> Broken links checked</label><br />
+        </div>
+      </section>
+
+      <section id="performance-qa" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Performance QA</h2>
+          <label><input type="checkbox" data-checklist-item /> Images compressed</label><br />
+<label><input type="checkbox" data-checklist-item /> Fonts optimized</label><br />
+<label><input type="checkbox" data-checklist-item /> Unused scripts removed</label><br />
+<label><input type="checkbox" data-checklist-item /> Lazy loading added</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile speed checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Large layout shifts fixed</label><br />
+<hr />
+<h1>34. Client Review Standard</h1>
+<p>Do not ask client to “check everything” vaguely.</p>
+<p>Give structured review:</p>
+<pre><code class="language-text id=&quot;klsz32&quot;">Please review these areas:
+
+1. Visual match against old website/Figma
+2. Text/content accuracy
+3. Images/logos
+4. Mobile responsiveness
+5. Form submissions
+6. Links and buttons
+7. SEO-critical URLs
+8. Any missing section/page</code></pre>
+<hr />
+<h1>35. Common Risks & How to Handle</h1>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Risk</th>
+    <th>Prevention</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Client expects exact copy but did not say pixel-perfect</td>
+    <td>Define replication type upfront.</td>
+  </tr>
+  <tr>
+    <td>Existing website has hidden pages</td>
+    <td>Crawl and create page inventory.</td>
+  </tr>
+  <tr>
+    <td>Missing original assets</td>
+    <td>Ask for source assets; avoid low-quality screenshots.</td>
+  </tr>
+  <tr>
+    <td>Fonts are paid/licensed</td>
+    <td>Confirm license or use fallback.</td>
+  </tr>
+  <tr>
+    <td>SEO loss after migration</td>
+    <td>Preserve URLs and metadata, add redirects.</td>
+  </tr>
+  <tr>
+    <td>No-code platform cannot match exact layout</td>
+    <td>Explain limitations before build.</td>
+  </tr>
+  <tr>
+    <td>Forms stop working</td>
+    <td>Document and test every form.</td>
+  </tr>
+  <tr>
+    <td>Tracking lost</td>
+    <td>Reinstall analytics/pixels.</td>
+  </tr>
+  <tr>
+    <td>CMS not planned</td>
+    <td>Ask before build.</td>
+  </tr>
+  <tr>
+    <td>Mobile layout differs</td>
+    <td>Define responsive standard early.</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>36. Platform-Specific Risk</h1>
+        </div>
+      </section>
+
+      <section id="react-risk" class="section">
+        <div class="content-card">
+          <h2 class="section-title">React Risk</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Risk</th>
+    <th>Fix</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Over-engineering simple website</td>
+    <td>Use static generation/simple architecture.</td>
+  </tr>
+  <tr>
+    <td>Poor SEO setup</td>
+    <td>Use Next.js metadata and sitemap.</td>
+  </tr>
+  <tr>
+    <td>Component duplication</td>
+    <td>Build reusable components.</td>
+  </tr>
+  <tr>
+    <td>Hardcoded content everywhere</td>
+    <td>Use CMS if client needs editing.</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="weweb-risk" class="section">
+        <div class="content-card">
+          <h2 class="section-title">WeWeb Risk</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Risk</th>
+    <th>Fix</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Poor responsive control</td>
+    <td>Test each breakpoint.</td>
+  </tr>
+  <tr>
+    <td>Messy structure</td>
+    <td>Use reusable components/global styles.</td>
+  </tr>
+  <tr>
+    <td>API keys exposed</td>
+    <td>Use backend/proxy for secrets.</td>
+  </tr>
+  <tr>
+    <td>No loading/error states</td>
+    <td>Add states for every API call.</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="bubble-risk" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Bubble Risk</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Risk</th>
+    <th>Fix</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Slow pages</td>
+    <td>Reduce workflows/plugins, optimize DB queries.</td>
+  </tr>
+  <tr>
+    <td>Privacy leaks</td>
+    <td>Configure privacy rules.</td>
+  </tr>
+  <tr>
+    <td>Messy workflows</td>
+    <td>Name and organize workflows.</td>
+  </tr>
+  <tr>
+    <td>Weak SEO</td>
+    <td>Use Bubble SEO settings carefully.</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="wordpress-migration-risk" class="section">
+        <div class="content-card">
+          <h2 class="section-title">WordPress Migration Risk</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Risk</th>
+    <th>Fix</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Losing blog SEO</td>
+    <td>Export/import posts with slugs/meta.</td>
+  </tr>
+  <tr>
+    <td>Plugin functionality missed</td>
+    <td>Audit plugins first.</td>
+  </tr>
+  <tr>
+    <td>Broken media</td>
+    <td>Migrate media library properly.</td>
+  </tr>
+  <tr>
+    <td>URL changes</td>
+    <td>Add 301 redirects.</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>37. Definition of Done</h1>
+<p>A website replica is complete only when:</p>
+<label><input type="checkbox" data-checklist-item /> Client ownership/permission confirmed</label><br />
+<label><input type="checkbox" data-checklist-item /> Source website/Figma reviewed</label><br />
+<label><input type="checkbox" data-checklist-item /> Page inventory completed</label><br />
+<label><input type="checkbox" data-checklist-item /> Design tokens documented</label><br />
+<label><input type="checkbox" data-checklist-item /> Components documented</label><br />
+<label><input type="checkbox" data-checklist-item /> All required pages built</label><br />
+<label><input type="checkbox" data-checklist-item /> Desktop responsive tested</label><br />
+<label><input type="checkbox" data-checklist-item /> Tablet responsive tested</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile responsive tested</label><br />
+<label><input type="checkbox" data-checklist-item /> Forms validated and tested</label><br />
+<label><input type="checkbox" data-checklist-item /> Emails/CRM/webhooks tested</label><br />
+<label><input type="checkbox" data-checklist-item /> SEO metadata added</label><br />
+<label><input type="checkbox" data-checklist-item /> Redirects added if migration</label><br />
+<label><input type="checkbox" data-checklist-item /> Analytics/tracking installed</label><br />
+<label><input type="checkbox" data-checklist-item /> Images optimized</label><br />
+<label><input type="checkbox" data-checklist-item /> Accessibility basics checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Performance checked</label><br />
+<label><input type="checkbox" data-checklist-item /> Staging link approved</label><br />
+<label><input type="checkbox" data-checklist-item /> Production deployed</label><br />
+<label><input type="checkbox" data-checklist-item /> SSL active</label><br />
+<label><input type="checkbox" data-checklist-item /> Handoff document delivered</label><br />
+<label><input type="checkbox" data-checklist-item /> Client knows how to edit/manage content</label><br />
+<hr />
+<h1>38. Best Internal Rule</h1>
+<p>For every replica project, ask:</p>
+<pre><code class="language-text id=&quot;9hylwf&quot;">Are we replicating:
+1. Visual design?
+2. Content?
+3. User flows?
+4. CMS/admin editing?
+5. SEO structure?
+6. Integrations?
+7. Tracking?
+8. Performance?
+9. Mobile behavior?
+10. Backend/database behavior?</code></pre>
+<p>If only the design is copied but forms, SEO, integrations, and responsive behavior are broken, the project is not complete.</p>
+<hr />
+<h1>39. Practical Client Message You Can Use</h1>
+<p>Before starting the website replication, we will first audit the existing website/Figma and create a clear page-by-page scope. This includes all pages, sections, forms, CTAs, responsive behavior, SEO metadata, integrations, analytics, and any CMS requirements.</p>
+<p>Our goal is not just to copy the visual design, but to rebuild the website properly so it works the same or better across desktop, tablet, and mobile. We will also check forms, tracking, redirects, performance, and launch requirements to make sure nothing breaks during migration.</p>
+<p>Once the audit is complete, we will confirm whether you need a pixel-perfect replica, a functional replica, or a modernized version of the current website.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

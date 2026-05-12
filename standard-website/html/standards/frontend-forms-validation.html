@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Forms & Validation Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Form structure, field standards by type, required markers, validation timing, error display, Add/Edit consistency, phone E.164, file MIME."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Forms &amp; Validation Standard</h1>
+
+        <p class="page-subtitle">
+          Form structure, field standards by type, required markers, validation timing, error display, Add/Edit consistency, phone E.164, file MIME.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#form-structure" class="card card-clickable">1. Form Structure</a>
+            <a href="#field-standards" class="card card-clickable">2. Field Standards</a>
+            <a href="#required-fields" class="card card-clickable">3. Required Fields</a>
+            <a href="#validation-timing" class="card card-clickable">4. Validation Timing</a>
+            <a href="#error-display" class="card card-clickable">5. Error Display</a>
+            <a href="#addedit-consistency" class="card card-clickable">6. Add/Edit Consistency</a>
+            <a href="#password-fields" class="card card-clickable">7. Password Fields</a>
+            <a href="#phone-fields" class="card card-clickable">8. Phone Fields</a>
+            <a href="#file-upload-fields" class="card card-clickable">9. File Upload Fields</a>
+            <a href="#disabled-fields" class="card card-clickable">10. Disabled Fields</a>
+            <a href="#form-submission" class="card card-clickable">11. Form Submission</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Actual UI Examples</h2>
+          <p class="section-description">
+            For frontend work, the standard should be visible in the UI itself. Use actual field patterns like these instead of treating the guidance as code-only notes.
+          </p>
+
+          <div class="ui-demo-grid">
+            <div class="ui-demo">
+              <div class="ui-demo-title">Create Form Example</div>
+              <form class="ui-demo-form">
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="std-project-name">Project Name <span class="ui-demo-required">*</span></label>
+                  <input id="std-project-name" class="form-control" type="text" placeholder="Enter project name" />
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="std-owner-email">Owner Email <span class="ui-demo-required">*</span></label>
+                  <input id="std-owner-email" class="form-control" type="email" placeholder="owner@company.com" autocomplete="email" />
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="std-status">Status <span class="ui-demo-required">*</span></label>
+                  <select id="std-status" class="form-control">
+                    <option>Select a status...</option>
+                    <option selected>Planning</option>
+                    <option>In Progress</option>
+                    <option>Done</option>
+                  </select>
+                </div>
+                <div class="ui-demo-actions">
+                  <button type="button" class="btn btn-secondary">Cancel</button>
+                  <button type="button" class="btn btn-primary">Create Project</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Error + Loading State Example</div>
+              <div class="ui-demo-form">
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="std-password">Password <span class="ui-demo-required">*</span></label>
+                  <div class="ui-demo-inline">
+                    <input id="std-password" class="form-control" type="password" value="short" />
+                    <button type="button" class="btn btn-secondary btn-sm">Show</button>
+                  </div>
+                  <div class="ui-demo-error">Password must be at least 8 characters.</div>
+                </div>
+                <div class="alert alert-danger">
+                  <div class="alert-title">Form-Level Error</div>
+                  A project with this name already exists.
+                </div>
+                <div class="ui-demo-actions">
+                  <button type="button" class="btn btn-primary ui-demo-button-loading">
+                    <span class="ui-demo-spinner"></span>
+                    Saving...
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="form-structure" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Form Structure</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Form uses <code>&lt;form&gt;</code> element — not a <code>&lt;div&gt;</code> with a click handler</label><br />
+          <label><input type="checkbox" data-checklist-item /> Submit triggered by button <code>type="submit"</code> — not an onClick handler alone</label><br />
+          <label><input type="checkbox" data-checklist-item /> One primary action button per form</label><br />
+          <label><input type="checkbox" data-checklist-item /> Cancel / secondary action on the left, primary action on the right</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form fields grouped logically — related fields together</label><br />
+          <label><input type="checkbox" data-checklist-item /> Section headings used when form has more than 6 fields</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form width appropriate to content — not full-width on wide screens unless needed</label>
+        </div>
+      </section>
+
+      <section id="field-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Field Standards</h2>
+
+          <h3>Text Inputs</h3>
+          <label><input type="checkbox" data-checklist-item /> Label above the field — not placeholder-only (placeholder is not a label)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Placeholder text describes the expected format: "e.g., John Smith" — not repeating the label</label><br />
+          <label><input type="checkbox" data-checklist-item /> Input autocomplete attributes set correctly: <code>name="email" autocomplete="email"</code>, <code>name="password" autocomplete="current-password"</code> (login) / <code>"new-password"</code> (signup), <code>name="name" autocomplete="name"</code></label><br />
+
+          <div class="divider"></div>
+
+          <h3>Date Fields</h3>
+          <label><input type="checkbox" data-checklist-item /> Date picker used — not a plain text input</label><br />
+          <label><input type="checkbox" data-checklist-item /> Format shown to user: "DD/MM/YYYY" or locale-appropriate</label><br />
+          <label><input type="checkbox" data-checklist-item /> Min/max date constraints applied where relevant</label><br />
+          <label><input type="checkbox" data-checklist-item /> Date stored as ISO 8601 (YYYY-MM-DD) — displayed in locale format</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Select / Dropdown</h3>
+          <label><input type="checkbox" data-checklist-item /> Native <code>&lt;select&gt;</code> for simple cases; custom component for branded UI</label><br />
+          <label><input type="checkbox" data-checklist-item /> Options loaded from backend — not hardcoded unless truly static</label><br />
+          <label><input type="checkbox" data-checklist-item /> Placeholder option: "Select a status..."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Searchable when &gt; 7 options</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Checkboxes &amp; Radio</h3>
+          <label><input type="checkbox" data-checklist-item /> Label is clickable (<code>htmlFor</code> / label wrapping)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Radio groups: one option selected by default where appropriate</label><br />
+          <label><input type="checkbox" data-checklist-item /> Checkbox groups: none selected by default is valid</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Textarea</h3>
+          <label><input type="checkbox" data-checklist-item /> Visible character count when there is a max length</label><br />
+          <label><input type="checkbox" data-checklist-item /> Textarea resizes vertically — not horizontally</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Rich Text Editor</h3>
+          <label><input type="checkbox" data-checklist-item /> Plain text fallback available if editor fails to load</label><br />
+          <label><input type="checkbox" data-checklist-item /> Content sanitized before saving to prevent XSS</label><br />
+          <label><input type="checkbox" data-checklist-item /> Max length enforced on the backend — editor max is UX only</label>
+        </div>
+      </section>
+
+      <section id="required-fields" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Required Fields</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Required fields marked with a red asterisk (*)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Asterisk explained once: "* Required field" (near top of form or in form legend)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Optional fields are not marked — only required ones are marked</label><br />
+          <label><input type="checkbox" data-checklist-item /> Backend validates required fields too — frontend required marker is UX only</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>aria-required="true"</code> on required inputs</label>
+        </div>
+      </section>
+
+      <section id="validation-timing" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Validation Timing</h2>
+
+          <h3>On Submit</h3>
+          <label><input type="checkbox" data-checklist-item /> All fields validated on submit — never skip validation because "it looks filled"</label><br />
+          <label><input type="checkbox" data-checklist-item /> If errors exist: form does NOT submit, first error field receives focus</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error messages appear next to each field</label><br />
+
+          <div class="divider"></div>
+
+          <h3>On Blur (after user leaves a field)</h3>
+          <label><input type="checkbox" data-checklist-item /> Validate after user leaves a field — not while typing</label><br />
+          <label><input type="checkbox" data-checklist-item /> Exception: real-time feedback for password strength (see Password Fields)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Do not validate on focus (on entering a field)</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Never</h3>
+          <label><input type="checkbox" data-checklist-item /> Do not validate an empty field on first focus</label><br />
+          <label><input type="checkbox" data-checklist-item /> Do not show errors before the user has touched the field (except after submit attempt)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Do not clear errors while user is still typing (clear on blur or on submit only)</label>
+        </div>
+      </section>
+
+      <section id="error-display" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Error Display</h2>
+
+          <h3>Field Errors</h3>
+          <label><input type="checkbox" data-checklist-item /> Error message directly below the field it belongs to</label><br />
+          <label><input type="checkbox" data-checklist-item /> Red/danger color for text and border</label><br />
+          <label><input type="checkbox" data-checklist-item /> Specific: "Email is required." not "Field required."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Specific: "Password must be at least 8 characters." not "Invalid password."</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>aria-describedby</code> on the input pointing to the error element</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>role="alert"</code> on the error element (or use <code>aria-live="polite"</code>)</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Form-Level Errors (API errors that don't map to a field)</h3>
+          <label><input type="checkbox" data-checklist-item /> Displayed in a banner above the submit button (or at top of form)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Red/danger styled banner — not a toast</label><br />
+          <label><input type="checkbox" data-checklist-item /> Specific: "A project with this name already exists." not "Error."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error does not disappear automatically — user must dismiss or correct</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Error Message Standards</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Situation</th>
+                  <th>Example Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Required field empty</td>
+                  <td>"[Field] is required."</td>
+                </tr>
+                <tr>
+                  <td>Email invalid</td>
+                  <td>"Enter a valid email address."</td>
+                </tr>
+                <tr>
+                  <td>Password too short</td>
+                  <td>"Password must be at least 8 characters."</td>
+                </tr>
+                <tr>
+                  <td>Passwords don't match</td>
+                  <td>"Passwords do not match."</td>
+                </tr>
+                <tr>
+                  <td>Name too long</td>
+                  <td>"[Field] must be 100 characters or fewer."</td>
+                </tr>
+                <tr>
+                  <td>Duplicate value</td>
+                  <td>"A project with this name already exists."</td>
+                </tr>
+                <tr>
+                  <td>API failure</td>
+                  <td>"Something went wrong. Please try again."</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="addedit-consistency" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Add/Edit Consistency</h2>
+
+          <p>This is a non-negotiable. Add and Edit for the same entity must be identical in every dimension:</p>
+
+          <h3>Component</h3>
+          <label><input type="checkbox" data-checklist-item /> Add and Edit use the exact same form component</label><br />
+          <label><input type="checkbox" data-checklist-item /> Edit passes initial values as props — it does not re-implement the form</label><br />
+          <label><input type="checkbox" data-checklist-item /> Validation schema is shared — not duplicated</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Fields</h3>
+          <label><input type="checkbox" data-checklist-item /> Same fields in same order</label><br />
+          <label><input type="checkbox" data-checklist-item /> Same labels, same placeholder text</label><br />
+          <label><input type="checkbox" data-checklist-item /> Same required/optional markers</label><br />
+          <label><input type="checkbox" data-checklist-item /> Same field types (both use a date picker — not one date picker, one text input)</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Validation</h3>
+          <label><input type="checkbox" data-checklist-item /> Same rules (same min/max, same regex)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Same error messages</label><br />
+          <label><input type="checkbox" data-checklist-item /> No validation rules that apply only to Add or only to Edit</label><br />
+
+          <div class="divider"></div>
+
+          <h3>UI &amp; Layout</h3>
+          <label><input type="checkbox" data-checklist-item /> Same width, same spacing</label><br />
+          <label><input type="checkbox" data-checklist-item /> Same button labels (except: Add = "Create Project", Edit = "Save Changes")</label><br />
+          <label><input type="checkbox" data-checklist-item /> Same cancel behavior (both navigate back or close modal)</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Submission</h3>
+          <label><input type="checkbox" data-checklist-item /> Both show loading state during submission</label><br />
+          <label><input type="checkbox" data-checklist-item /> Both show success feedback after submission</label><br />
+          <label><input type="checkbox" data-checklist-item /> Both show errors in the same location</label><br />
+          <label><input type="checkbox" data-checklist-item /> Add redirects to list or new item; Edit returns to detail or list — both are intentional</label>
+        </div>
+      </section>
+
+      <section id="password-fields" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Password Fields</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Password input <code>type="password"</code> — never <code>type="text"</code> for password</label><br />
+          <label><input type="checkbox" data-checklist-item /> "Show/hide password" toggle (eye icon) — switches between <code>type="password"</code> and <code>type="text"</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> New password: strength indicator shown while typing — Weak (red bar + "Weak — add uppercase, numbers, or symbols"), Medium (amber bar + "Medium — a bit stronger"), Strong (green bar + "Strong")</label><br />
+          <label><input type="checkbox" data-checklist-item /> Minimum: 8 characters (enforce on both frontend and backend)</label><br />
+          <label><input type="checkbox" data-checklist-item /> "Confirm password" field: validated against password field on blur</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>autocomplete="new-password"</code> on new password fields</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>autocomplete="current-password"</code> on current password / login fields</label><br />
+          <label><input type="checkbox" data-checklist-item /> Password never logged, never included in error messages</label>
+        </div>
+      </section>
+
+      <section id="phone-fields" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Phone Fields</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Phone number stored and validated in E.164 format: <code>+[country code][number]</code> — Example: +14155551234 (US), +447911123456 (UK)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Country code prefix selector shown to user (dropdown or dial code input)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Input masked/formatted for the user: (415) 555-1234 — stored as +14155551234</label><br />
+          <label><input type="checkbox" data-checklist-item /> Validated for correct digit count for the selected country</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error: "Enter a valid phone number including country code."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Phone field uses <code>type="tel"</code> and <code>autocomplete="tel"</code></label>
+        </div>
+      </section>
+
+      <section id="file-upload-fields" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. File Upload Fields</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Accepted file types shown to user: "JPG, PNG, or PDF up to 5 MB"</label><br />
+          <label><input type="checkbox" data-checklist-item /> File type validated by MIME type — not just by file extension</label><br />
+          <label><input type="checkbox" data-checklist-item /> File size validated on frontend (before upload) and backend (after upload)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Progress bar shown for uploads &gt; 1 second</label><br />
+          <label><input type="checkbox" data-checklist-item /> Upload can be cancelled while in progress</label><br />
+          <label><input type="checkbox" data-checklist-item /> Preview shown after selection (images: thumbnail; PDF: filename + icon)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Remove/change button available after selection</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error: "File must be JPG, PNG, or PDF."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error: "File size must be under 5 MB."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Drag-and-drop zone with clear visual feedback on drag-over</label><br />
+          <label><input type="checkbox" data-checklist-item /> Keyboard accessible: click to open file picker as fallback</label>
+        </div>
+      </section>
+
+      <section id="disabled-fields" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Disabled Fields</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Disabled fields are visually distinct: reduced opacity, cursor not-allowed</label><br />
+          <label><input type="checkbox" data-checklist-item /> Disabled fields are not editable — not just visually styled</label><br />
+          <label><input type="checkbox" data-checklist-item /> If a field is disabled due to a permission: tooltip explains why</label><br />
+          <label><input type="checkbox" data-checklist-item /> If a field is auto-populated (e.g., created by, date): shown as read-only, not disabled</label><br />
+          <label><input type="checkbox" data-checklist-item /> Read-only vs disabled: disabled excluded from form submit; read-only is included</label><br />
+          <label><input type="checkbox" data-checklist-item /> Never disable a field to hide a validation error — show the error instead</label>
+        </div>
+      </section>
+
+      <section id="form-submission" class="section">
+        <div class="content-card">
+          <h2 class="section-title">11. Form Submission</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Submit button disabled and shows loading spinner during submission</label><br />
+          <label><input type="checkbox" data-checklist-item /> No double-submit possible — button disabled or debounced</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form does not clear while submitting (user can see what they entered)</label><br />
+          <label><input type="checkbox" data-checklist-item /> On success — Add form: redirect to new item or list, show success toast</label><br />
+          <label><input type="checkbox" data-checklist-item /> On success — Edit form: return to view, show "Saved." toast or inline indicator</label><br />
+          <label><input type="checkbox" data-checklist-item /> On success — Modal form: close modal, show success toast, list refreshes</label><br />
+          <label><input type="checkbox" data-checklist-item /> On error — Form stays open with data intact</label><br />
+          <label><input type="checkbox" data-checklist-item /> On error — Error shown in UI — not just in console</label><br />
+          <label><input type="checkbox" data-checklist-item /> On error — User can correct and resubmit</label><br />
+          <label><input type="checkbox" data-checklist-item /> After success: scroll to top of page if there is a page transition</label>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Every form must handle every state, show every error, and behave identically whether adding or editing.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

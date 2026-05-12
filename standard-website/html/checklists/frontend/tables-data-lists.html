@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Tables & Data Lists Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Checklist for tables and data lists: display states, loading, empty, error, sorting, filtering, pagination, row actions, bulk actions, and mobile behavior."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Tables &amp; Data Lists Checklist</h1>
+
+        <p class="page-subtitle">
+          Every table or list must handle every state — loading, empty, error,
+          populated — and every action — sort, filter, paginate, select — before it
+          is considered done.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="ui-demo">
+          <div class="ui-demo-title">Interactive Table Demo — All States</div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <button type="button" class="btn btn-secondary btn-sm" data-tables-state="loading">Loading</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-tables-state="empty">Empty</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-tables-state="error">Error</button>
+            <button type="button" class="btn btn-primary btn-sm" data-tables-state="data">Data</button>
+          </div>
+
+          <div data-tables-demo-panel="loading" class="ui-demo-hidden">
+            <div class="ui-demo-table">
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border);">
+                      <input type="checkbox" disabled aria-label="Select all" />
+                    </th>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border);">Name</th>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border);">Status</th>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border);">Owner</th>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border);">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-box" style="width: 16px; height: 16px;"></div></td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-line" style="width: 140px;"></div></td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-line" style="width: 70px;"></div></td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-line" style="width: 90px;"></div></td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-line" style="width: 100px;"></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-box" style="width: 16px; height: 16px;"></div></td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-line" style="width: 160px;"></div></td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-line" style="width: 80px;"></div></td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-line" style="width: 80px;"></div></td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid var(--color-border);"><div class="ui-demo-skeleton-line" style="width: 100px;"></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 12px;"><div class="ui-demo-skeleton-box" style="width: 16px; height: 16px;"></div></td>
+                    <td style="padding: 10px 12px;"><div class="ui-demo-skeleton-line" style="width: 120px;"></div></td>
+                    <td style="padding: 10px 12px;"><div class="ui-demo-skeleton-line" style="width: 60px;"></div></td>
+                    <td style="padding: 10px 12px;"><div class="ui-demo-skeleton-line" style="width: 100px;"></div></td>
+                    <td style="padding: 10px 12px;"><div class="ui-demo-skeleton-line" style="width: 100px;"></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="ui-demo-note" style="margin-top: 10px;">Skeleton rows shown while data loads. Headers stay visible. Action buttons are disabled.</div>
+          </div>
+
+          <div data-tables-demo-panel="empty" class="ui-demo-hidden">
+            <div class="ui-demo-table" style="text-align: center; padding: 40px 20px;">
+              <div style="font-size: 2rem; margin-bottom: 12px;">📂</div>
+              <div style="font-weight: 600; margin-bottom: 6px;">No projects found.</div>
+              <div class="ui-demo-note" style="margin-bottom: 16px;">Create your first project to get started.</div>
+              <button type="button" class="btn btn-primary btn-sm">+ Create Project</button>
+            </div>
+            <div class="ui-demo-note" style="margin-top: 10px;">Empty state has a specific message and a clear CTA.</div>
+          </div>
+
+          <div data-tables-demo-panel="error" class="ui-demo-hidden">
+            <div class="ui-demo-table" style="text-align: center; padding: 40px 20px;">
+              <div style="font-size: 2rem; margin-bottom: 12px;">⚠️</div>
+              <div style="font-weight: 600; margin-bottom: 6px;">Failed to load projects.</div>
+              <div class="ui-demo-note" style="margin-bottom: 16px;">Something went wrong on our end. Please try again.</div>
+              <button type="button" class="btn btn-secondary btn-sm" data-tables-retry>Retry</button>
+            </div>
+            <div class="ui-demo-note" style="margin-top: 10px;">Error is shown inside the table area with a human-readable message and a Retry button.</div>
+          </div>
+
+          <div data-tables-demo-panel="data" class="ui-demo-hidden">
+            <div style="margin-bottom: 10px; font-size: 0.85rem; color: var(--color-text-muted);" data-tables-bulk-bar class="ui-demo-hidden">
+              <span data-tables-selected-count>0</span> row(s) selected —
+              <button type="button" class="btn btn-danger btn-sm" style="margin-left: 6px;">Delete Selected</button>
+            </div>
+            <div class="ui-demo-table" style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; min-width: 520px;">
+                <thead>
+                  <tr>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border);">
+                      <input type="checkbox" data-tables-select-all aria-label="Select all rows" />
+                    </th>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border); cursor: pointer; user-select: none;" data-tables-sort="name">
+                      Name <span data-tables-sort-arrow="name">↕</span>
+                    </th>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border); cursor: pointer; user-select: none;" data-tables-sort="status">
+                      Status <span data-tables-sort-arrow="status">↕</span>
+                    </th>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border); cursor: pointer; user-select: none;" data-tables-sort="owner">
+                      Owner <span data-tables-sort-arrow="owner">↕</span>
+                    </th>
+                    <th style="padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border);">Actions</th>
+                  </tr>
+                </thead>
+                <tbody data-tables-tbody>
+                </tbody>
+              </table>
+            </div>
+            <div class="ui-demo-note" style="margin-top: 10px;">Click column headers to sort. Use checkboxes to select rows. Bulk action bar appears on selection.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">Columns &amp; Data Display</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Column headers clearly label the data below them</label><br />
+            <label><input type="checkbox" data-checklist-item /> Column widths are set appropriately</label><br />
+            <label><input type="checkbox" data-checklist-item /> Long text truncated with ellipsis and tooltip</label><br />
+            <label><input type="checkbox" data-checklist-item /> Dates formatted for humans, not raw ISO timestamps</label><br />
+            <label><input type="checkbox" data-checklist-item /> Status values shown as badges with color coding</label><br />
+            <label><input type="checkbox" data-checklist-item /> Numbers aligned right and text aligned left</label><br />
+            <label><input type="checkbox" data-checklist-item /> Currency formatted with correct symbol and decimals</label><br />
+            <label><input type="checkbox" data-checklist-item /> Empty/null values shown as em dash — not blank/null/undefined</label><br />
+            <label><input type="checkbox" data-checklist-item /> Avatars/images have fallback initials or placeholder</label><br />
+            <label><input type="checkbox" data-checklist-item /> Boolean values shown as Yes/No or toggle icon</label><br />
+            <label><input type="checkbox" data-checklist-item /> Table has visible border or row separation</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Loading State</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Skeleton rows shown while data loads</label><br />
+            <label><input type="checkbox" data-checklist-item /> Skeleton row count matches expected page size</label><br />
+            <label><input type="checkbox" data-checklist-item /> Column headers remain visible during loading</label><br />
+            <label><input type="checkbox" data-checklist-item /> Action buttons disabled while loading</label><br />
+            <label><input type="checkbox" data-checklist-item /> Sorting and filter controls disabled while loading</label><br />
+            <label><input type="checkbox" data-checklist-item /> On re-fetch, existing data stays visible with subtle loading indicator</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Empty State</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Empty state shown when there are no records</label><br />
+            <label><input type="checkbox" data-checklist-item /> Empty state message is specific</label><br />
+            <label><input type="checkbox" data-checklist-item /> Empty state has a clear CTA</label><br />
+            <label><input type="checkbox" data-checklist-item /> No-record state differs from no-filter-match state</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clear filters button visible when empty due to filters</label><br />
+            <label><input type="checkbox" data-checklist-item /> Empty state includes appropriate icon or illustration</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Error State</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Error state shown if data fails to load</label><br />
+            <label><input type="checkbox" data-checklist-item /> Error message is human-readable</label><br />
+            <label><input type="checkbox" data-checklist-item /> Retry button visible</label><br />
+            <label><input type="checkbox" data-checklist-item /> Error shown in table/list area, not only console or toast</label><br />
+            <label><input type="checkbox" data-checklist-item /> Re-fetch failure keeps previously loaded data visible with error banner</label><br />
+            <label><input type="checkbox" data-checklist-item /> Specific error codes mapped to specific messages</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Sorting</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Sortable columns are visually indicated</label><br />
+            <label><input type="checkbox" data-checklist-item /> Active sort column shows direction</label><br />
+            <label><input type="checkbox" data-checklist-item /> First click sorts ascending</label><br />
+            <label><input type="checkbox" data-checklist-item /> Second click sorts descending</label><br />
+            <label><input type="checkbox" data-checklist-item /> Third click or clear button resets to default</label><br />
+            <label><input type="checkbox" data-checklist-item /> Default sort defined and documented</label><br />
+            <label><input type="checkbox" data-checklist-item /> Sort sent to backend, not only current page client-side</label><br />
+            <label><input type="checkbox" data-checklist-item /> Sort state preserved in URL or state when navigating away/back</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state shown while sorting</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Filtering</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Active filters visible as chips/tags</label><br />
+            <label><input type="checkbox" data-checklist-item /> Each active filter has individual X remove action</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clear all filters button visible when filters are active</label><br />
+            <label><input type="checkbox" data-checklist-item /> Filters sent to backend</label><br />
+            <label><input type="checkbox" data-checklist-item /> Filter values preserved in URL params</label><br />
+            <label><input type="checkbox" data-checklist-item /> Text search debounced around 300ms</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state shown while filter request runs</label><br />
+            <label><input type="checkbox" data-checklist-item /> Dropdown filters show all options</label><br />
+            <label><input type="checkbox" data-checklist-item /> Date range filters validate end date after start date</label><br />
+            <label><input type="checkbox" data-checklist-item /> Filter state preserved across refresh</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Pagination</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Previous, next, and page number controls visible</label><br />
+            <label><input type="checkbox" data-checklist-item /> Current page highlighted clearly</label><br />
+            <label><input type="checkbox" data-checklist-item /> Total record count shown</label><br />
+            <label><input type="checkbox" data-checklist-item /> Items per page selector available</label><br />
+            <label><input type="checkbox" data-checklist-item /> Previous button disabled on page 1</label><br />
+            <label><input type="checkbox" data-checklist-item /> Next button disabled on last page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Pagination resets to page 1 when sort/filter changes</label><br />
+            <label><input type="checkbox" data-checklist-item /> Page number preserved in URL param</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state shown between page changes</label><br />
+            <label><input type="checkbox" data-checklist-item /> Pagination hidden/disabled gracefully for single page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Pagination fetches from backend, not client slicing only</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Row Actions</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Row action buttons have consistent placement</label><br />
+            <label><input type="checkbox" data-checklist-item /> Destructive actions are visually differentiated</label><br />
+            <label><input type="checkbox" data-checklist-item /> Delete always shows confirmation dialog</label><br />
+            <label><input type="checkbox" data-checklist-item /> Edit behavior is consistent with Add pattern</label><br />
+            <label><input type="checkbox" data-checklist-item /> Hover state on rows is visible</label><br />
+            <label><input type="checkbox" data-checklist-item /> Actions disabled for rows user lacks permission for</label><br />
+            <label><input type="checkbox" data-checklist-item /> Disabled row actions show tooltip explaining why</label><br />
+            <label><input type="checkbox" data-checklist-item /> Actions match user's role and permissions</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state shown on specific row being actioned</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Bulk Actions</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Select all checkbox in header selects current page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Individual row checkboxes work</label><br />
+            <label><input type="checkbox" data-checklist-item /> Selected count shown</label><br />
+            <label><input type="checkbox" data-checklist-item /> Bulk action bar appears when rows are selected</label><br />
+            <label><input type="checkbox" data-checklist-item /> Bulk action bar disappears when selection cleared</label><br />
+            <label><input type="checkbox" data-checklist-item /> Bulk actions clearly labeled</label><br />
+            <label><input type="checkbox" data-checklist-item /> Bulk delete requires confirmation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Select all records option shown when applicable</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state shown during bulk operation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success feedback shown after bulk operation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Table refreshes after bulk action completes</label><br />
+            <label><input type="checkbox" data-checklist-item /> Selection cleared after bulk action</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Mobile</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Table does not cause horizontal scroll below 768px</label><br />
+          <label><input type="checkbox" data-checklist-item /> Non-essential columns hidden on mobile</label><br />
+          <label><input type="checkbox" data-checklist-item /> Card-based layout considered for mobile</label><br />
+          <label><input type="checkbox" data-checklist-item /> Row actions reachable on mobile</label><br />
+          <label><input type="checkbox" data-checklist-item /> Pagination controls usable on touch</label><br />
+          <label><input type="checkbox" data-checklist-item /> Filter and sort controls accessible on mobile</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-info">
+          <div class="alert-title">Before Marking Done</div>
+          <p>
+            All display states, sorting, filtering, pagination, row actions,
+            bulk actions, and mobile behavior must be manually tested.
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Tables must handle every data state and every user action before handoff.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../standards/frontend-standards.html" class="footer-link">Frontend Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+  <script type="module" src="../../../js/pages/tables-demo.js"></script>
+</body>
+</html>

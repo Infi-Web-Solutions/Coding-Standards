@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Task — RLS Policies | Development Standards</title>
+  <meta name="description" content="Write SELECT, INSERT, UPDATE, DELETE RLS policies for the projects table with workspace scoping." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Supabase Task — RLS Policies</h1>
+        <p class="page-subtitle">Write SELECT, INSERT, UPDATE, DELETE RLS policies for the projects table with workspace scoping.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-tasks.html" class="btn btn-secondary">Back to Supabase Tasks</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Platform:</strong> Supabase</p>
+<p><strong>Covers:</strong> <a href="../../checklists/supabase/rls-policies.md">RLS Policy Checklist</a> · <a href="../../standards/supabase/01-database-and-rls.md">Database & RLS Standards</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>Continuing from <a href="01-create-projects-table.md">Task 01</a>, the <code>projects</code> table is created with RLS enabled but no policies yet. You will now write all four RLS policies following the access model defined below.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="access-model" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Access Model</h2>
+          <p>Before writing a single policy, this is the agreed access model for the <code>projects</code> table:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Operation</th>
+    <th>Who Can Do It</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>SELECT</td>
+    <td>Any member of the workspace (all roles) — active projects only (deleted_at IS NULL)</td>
+  </tr>
+  <tr>
+    <td>INSERT</td>
+    <td>Any member of the workspace — created_by must be the current user</td>
+  </tr>
+  <tr>
+    <td>UPDATE</td>
+    <td>The project creator OR a workspace admin/owner</td>
+  </tr>
+  <tr>
+    <td>DELETE</td>
+    <td>Not allowed via RLS — soft delete only (UPDATE deleted_at)</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Role Definitions</h3>
+<p>Roles are stored in the <code>workspace_members</code> table:</p>
+<pre><code class="language-sql">workspace_members (
+  id           uuid,
+  workspace_id uuid,
+  user_id      uuid,
+  role         text  -- &#x27;owner&#x27;, &#x27;admin&#x27;, &#x27;member&#x27;, &#x27;viewer&#x27;
+)</code></pre>
+<p>Viewers can read but not create or edit projects.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-to-write" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Write</h2>
+          <p>Write four separate RLS policies as SQL. Each must:</p>
+<ul>
+  <li>Use <code>auth.uid()</code> — never hardcoded values</li>
+  <li>Verify workspace membership via a subquery on <code>workspace_members</code> — never just matching the payload's <code>workspace_id</code></li>
+  <li>Match the access model above exactly</li>
+</ul>
+<h3>Policy 1 — SELECT</h3>
+<p>Only workspace members can see projects in their workspace. Soft-deleted projects (<code>deleted_at IS NOT NULL</code>) are hidden from regular members. Admins and owners can see soft-deleted projects.</p>
+<blockquote>Hint: you may need two SELECT policies or a combined USING clause with role logic.</blockquote>
+<h3>Policy 2 — INSERT</h3>
+<p>Any workspace member (role: owner, admin, member — not viewer) can create a project.</p>
+<ul>
+  <li><code>workspace_id</code> in the new row must be a workspace the user belongs to</li>
+  <li><code>created_by</code> in the new row must equal <code>auth.uid()</code> — user cannot create projects attributed to someone else</li>
+</ul>
+<h3>Policy 3 — UPDATE</h3>
+<p>Only the project creator (<code>created_by = auth.uid()</code>) OR a workspace admin/owner can update a project.</p>
+<ul>
+  <li>Users cannot move a project to a different workspace (the <code>workspace_id</code> in the updated row must match the original)</li>
+  <li>Use both <code>USING</code> (existing row access) and <code>WITH CHECK</code> (updated row validation)</li>
+</ul>
+<h3>Policy 4 — DELETE</h3>
+<p>No policy. Hard deletes are not permitted. Any attempt to DELETE will be rejected by the default deny.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="testing-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Testing Requirements</h2>
+          <p>After writing all policies, verify each of the following manually or in a test:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Test</th>
+    <th>Expected Result</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>SELECT as anonymous</td>
+    <td>0 rows returned</td>
+  </tr>
+  <tr>
+    <td>SELECT as authenticated non-member</td>
+    <td>0 rows returned</td>
+  </tr>
+  <tr>
+    <td>SELECT as workspace member (role: member)</td>
+    <td>Own workspace active projects only</td>
+  </tr>
+  <tr>
+    <td>SELECT as workspace admin</td>
+    <td>Own workspace projects including soft-deleted</td>
+  </tr>
+  <tr>
+    <td>INSERT with correct workspace_id as member</td>
+    <td>Allowed, created_by = auth.uid()</td>
+  </tr>
+  <tr>
+    <td>INSERT with another user's workspace_id</td>
+    <td>Blocked</td>
+  </tr>
+  <tr>
+    <td>INSERT with created_by set to another user's UUID</td>
+    <td>Blocked (WITH CHECK fails)</td>
+  </tr>
+  <tr>
+    <td>INSERT as viewer</td>
+    <td>Blocked</td>
+  </tr>
+  <tr>
+    <td>UPDATE own project as member</td>
+    <td>Allowed</td>
+  </tr>
+  <tr>
+    <td>UPDATE another member's project as member</td>
+    <td>Blocked</td>
+  </tr>
+  <tr>
+    <td>UPDATE any project as admin</td>
+    <td>Allowed</td>
+  </tr>
+  <tr>
+    <td>UPDATE to change workspace_id</td>
+    <td>Blocked</td>
+  </tr>
+  <tr>
+    <td>DELETE as admin</td>
+    <td>Blocked (no DELETE policy)</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <ul>
+  <li>Do not use <code>FOR ALL</code> — write explicit policies per operation</li>
+  <li>Do not check <code>workspace_id = input.workspace_id</code> from the request payload — always use a subquery on <code>workspace_members</code></li>
+  <li>Do not read the role from a JWT claim or request body — query <code>workspace_members</code> table in the policy</li>
+  <li>Do not forget <code>WITH CHECK</code> on UPDATE — <code>USING</code> alone allows reading the row but not validating the new values</li>
+  <li>Do not create a DELETE policy — soft delete is the only permitted deletion method</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="checklist-to-run-when-done" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run When Done</h2>
+          <p>Use the <a href="../../checklists/supabase/rls-policies.md#7-rls-checklist--before-marking-done">RLS Policy Checklist</a>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <pre><code class="language-text">POLICIES WRITTEN
+[ ] SELECT policy: members see active projects in their workspace
+[ ] SELECT policy (admin/owner): can also see soft-deleted projects
+[ ] INSERT policy: members (not viewers) can insert; created_by = auth.uid() enforced
+[ ] UPDATE policy: creator OR admin/owner; workspace_id cannot change
+[ ] No DELETE policy (intentionally absent)
+
+POLICY CORRECTNESS
+[ ] All policies use auth.uid()
+[ ] Workspace membership verified via subquery on workspace_members
+[ ] Role read from workspace_members — not from JWT or request
+[ ] INSERT WITH CHECK enforces created_by = auth.uid()
+[ ] UPDATE WITH CHECK prevents workspace_id change
+
+TESTING
+[ ] Anonymous: blocked
+[ ] Non-member: blocked
+[ ] Member: sees own workspace, can insert and update own projects
+[ ] Viewer: can only select, cannot insert or update
+[ ] Admin: sees all including soft-deleted, can update any
+[ ] Wrong workspace_id in INSERT: blocked
+[ ] Wrong created_by in INSERT: blocked
+[ ] DELETE as admin: blocked</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-tasks.html" class="footer-link">Supabase Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

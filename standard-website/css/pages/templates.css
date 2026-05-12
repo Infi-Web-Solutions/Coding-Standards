@@ -1,0 +1,427 @@
+/* Templates library page */
+
+.templates-library-page {
+  background:
+    radial-gradient(circle at top center, rgba(0, 0, 0, 0.045), transparent 26%),
+    linear-gradient(180deg, var(--color-bg) 0%, var(--color-surface) 100%);
+}
+
+.templates-library-page .templates-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: var(--space-6);
+  align-items: stretch;
+  margin-bottom: var(--space-6);
+}
+
+.templates-library-page .templates-hero-copy {
+  margin-bottom: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(245, 245, 245, 0.94) 100%);
+  box-shadow: var(--shadow-md);
+}
+
+.templates-library-page .templates-hero-copy .page-title {
+  max-width: 10.8ch;
+  font-size: clamp(2.7rem, 4.6vw, 4.7rem);
+  line-height: 0.98;
+  letter-spacing: -0.07em;
+}
+
+.templates-library-page .templates-hero-copy .page-subtitle {
+  max-width: 620px;
+  font-size: var(--text-md);
+}
+
+.templates-library-page .templates-hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: var(--space-5);
+}
+
+.templates-library-page .templates-hero-aside {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.templates-library-page .templates-hero-panel,
+.templates-library-page .templates-search-panel,
+.templates-library-page .templates-overview-card,
+.templates-library-page .templates-overview-pill,
+.templates-library-page .templates-catalog-note,
+.templates-library-page .templates-process-card,
+.templates-library-page .templates-related-card,
+.templates-library-page .templates-empty-state {
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.templates-library-page .templates-hero-panel,
+.templates-library-page .templates-search-panel,
+.templates-library-page .templates-overview-card,
+.templates-library-page .templates-process-card {
+  padding: var(--space-5);
+}
+
+.templates-library-page .templates-hero-panel,
+.templates-library-page .templates-search-panel {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.templates-library-page .templates-hero-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(246, 246, 246, 0.92) 100%);
+}
+
+.templates-library-page .templates-search-panel {
+  background:
+    radial-gradient(circle at top left, rgba(0, 0, 0, 0.04), transparent 30%),
+    linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-muted) 100%);
+}
+
+.templates-library-page .templates-panel-label,
+.templates-library-page .templates-doc-meta,
+.templates-library-page .templates-overview-label {
+  display: inline-flex;
+  width: fit-content;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+.templates-library-page .templates-usage-list,
+.templates-library-page .templates-process-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 10px;
+  color: var(--color-text-muted);
+}
+
+.templates-library-page .templates-search-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.templates-library-page .templates-search-copy .badge,
+.templates-library-page .templates-catalog-header .badge,
+.templates-library-page .templates-related-header .badge {
+  justify-self: start;
+}
+
+.templates-library-page .templates-search-copy .section-title {
+  margin-bottom: 0;
+}
+
+.templates-library-page .templates-search-note {
+  max-width: 360px;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.templates-library-page .templates-search-field {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.templates-library-page .templates-search-field .form-label {
+  margin-bottom: 6px;
+  font-size: var(--text-xs);
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.templates-library-page .templates-search-field .form-control {
+  min-height: 42px;
+}
+
+.templates-library-page .templates-search-field .form-help {
+  margin-top: 6px;
+  font-size: var(--text-xs);
+}
+
+.templates-library-page .templates-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+.templates-library-page .templates-overview-card {
+  display: grid;
+  gap: var(--space-3);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(244, 244, 244, 0.92) 100%);
+}
+
+.templates-library-page .templates-overview-card h2 {
+  max-width: 22ch;
+  font-size: var(--text-2xl);
+}
+
+.templates-library-page .templates-overview-card p {
+  max-width: 58ch;
+  color: var(--color-text-muted);
+}
+
+.templates-library-page .templates-overview-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+.templates-library-page .templates-overview-pill,
+.templates-library-page .templates-related-card {
+  padding: 18px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.templates-library-page .templates-overview-pill:hover,
+.templates-library-page .templates-related-card:hover,
+.templates-library-page .templates-doc-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-text);
+}
+
+.templates-library-page .templates-catalog-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  gap: var(--space-5);
+  align-items: start;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-6);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(245, 245, 245, 0.94) 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+.templates-library-page .templates-catalog-header > div:first-child {
+  display: grid;
+  gap: 8px;
+}
+
+.templates-library-page .templates-catalog-header .section-title {
+  margin-bottom: 0;
+  max-width: 18ch;
+}
+
+.templates-library-page .templates-catalog-header .section-description {
+  max-width: 60ch;
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+
+.templates-library-page .templates-catalog-note {
+  padding: var(--space-4);
+  display: grid;
+  gap: 6px;
+  align-self: stretch;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.templates-library-page .templates-catalog-note strong {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+.templates-library-page .templates-catalog-note span {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.templates-library-page .templates-doc-list,
+.templates-library-page .templates-related-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.templates-library-page .templates-doc-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.templates-library-page .templates-doc-card {
+  min-height: 240px;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top left, rgba(0, 0, 0, 0.04), transparent 28%),
+    linear-gradient(180deg, var(--color-surface) 0%, rgba(245, 245, 245, 0.92) 100%);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.templates-library-page .templates-doc-card .card-title {
+  margin-top: var(--space-2);
+}
+
+.templates-library-page .templates-doc-meta {
+  padding: 4px 9px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+}
+
+.templates-library-page .templates-doc-detail {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.templates-library-page .templates-process {
+  margin-top: var(--space-6);
+}
+
+.templates-library-page .templates-process-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(244, 244, 244, 0.92) 100%);
+}
+
+.templates-library-page .templates-related-header {
+  margin-bottom: var(--space-5);
+}
+
+.templates-library-page .templates-related-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.templates-library-page .templates-related-card {
+  display: grid;
+  gap: 6px;
+}
+
+.templates-library-page .templates-related-card span {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.templates-library-page .templates-empty-state {
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+}
+
+.templates-library-page [data-search-item] {
+  height: 100%;
+}
+
+[data-theme="dark"] .templates-library-page {
+  background:
+    radial-gradient(circle at top center, rgba(255, 255, 255, 0.06), transparent 26%),
+    linear-gradient(180deg, #000000 0%, #050505 100%);
+}
+
+[data-theme="dark"] .templates-library-page .templates-hero-copy {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.88) 0%, rgba(12, 12, 12, 0.96) 100%);
+  border-color: #2a2a2a;
+}
+
+[data-theme="dark"] .templates-library-page .templates-hero-panel,
+[data-theme="dark"] .templates-library-page .templates-search-panel,
+[data-theme="dark"] .templates-library-page .templates-overview-card,
+[data-theme="dark"] .templates-library-page .templates-overview-pill,
+[data-theme="dark"] .templates-library-page .templates-catalog-note,
+[data-theme="dark"] .templates-library-page .templates-doc-card,
+[data-theme="dark"] .templates-library-page .templates-process-card,
+[data-theme="dark"] .templates-library-page .templates-related-card,
+[data-theme="dark"] .templates-library-page .templates-empty-state {
+  background: rgba(0, 0, 0, 0.78);
+  border-color: #2a2a2a;
+}
+
+[data-theme="dark"] .templates-library-page .templates-search-panel,
+[data-theme="dark"] .templates-library-page .templates-doc-card,
+[data-theme="dark"] .templates-library-page .templates-process-card,
+[data-theme="dark"] .templates-library-page .templates-overview-card,
+[data-theme="dark"] .templates-library-page .templates-catalog-header {
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 28%),
+    linear-gradient(180deg, #050505 0%, #0d0d0d 100%);
+}
+
+[data-theme="dark"] .templates-library-page .templates-catalog-note {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .templates-library-page .templates-search-field,
+[data-theme="dark"] .templates-library-page .templates-doc-meta {
+  border-color: #2a2a2a;
+}
+
+[data-theme="dark"] .templates-library-page .templates-doc-meta {
+  background: #0f0f0f;
+}
+
+[data-theme="dark"] .templates-library-page .templates-panel-label,
+[data-theme="dark"] .templates-library-page .templates-doc-meta,
+[data-theme="dark"] .templates-library-page .templates-overview-label,
+[data-theme="dark"] .templates-library-page .templates-catalog-note strong,
+[data-theme="dark"] .templates-library-page .templates-search-field .form-label {
+  color: #b3b3b3;
+}
+
+[data-theme="dark"] .templates-library-page .templates-usage-list,
+[data-theme="dark"] .templates-library-page .templates-process-list,
+[data-theme="dark"] .templates-library-page .templates-search-note,
+[data-theme="dark"] .templates-library-page .templates-search-field .form-help,
+[data-theme="dark"] .templates-library-page .templates-overview-card p,
+[data-theme="dark"] .templates-library-page .templates-catalog-note span,
+[data-theme="dark"] .templates-library-page .templates-doc-detail,
+[data-theme="dark"] .templates-library-page .templates-related-card span {
+  color: #e5e5e5;
+}
+
+@media (max-width: 1024px) {
+  .templates-library-page .templates-related-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .templates-library-page .templates-hero,
+  .templates-library-page .templates-overview,
+  .templates-library-page .templates-catalog-header {
+    grid-template-columns: 1fr;
+  }
+
+  .templates-library-page .templates-hero-aside {
+    grid-template-rows: auto;
+  }
+
+  .templates-library-page .templates-doc-list {
+    grid-template-columns: 1fr;
+  }
+
+  .templates-library-page .templates-hero-copy,
+  .templates-library-page .templates-hero-panel,
+  .templates-library-page .templates-search-panel,
+  .templates-library-page .templates-overview-card,
+  .templates-library-page .templates-catalog-header,
+  .templates-library-page .templates-catalog-note,
+  .templates-library-page .templates-process-card {
+    padding: var(--space-4);
+  }
+}

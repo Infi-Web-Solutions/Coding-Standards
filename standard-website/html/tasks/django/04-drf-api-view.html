@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django Task — DRF API View | Development Standards</title>
+  <meta name="description" content="Build ProjectListCreateView, ProjectDetailView, and ProjectArchiveView with IsWorkspaceMember permission class." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Django Task — DRF API View</h1>
+        <p class="page-subtitle">Build ProjectListCreateView, ProjectDetailView, and ProjectArchiveView with IsWorkspaceMember permission class.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../django-tasks.html" class="btn btn-secondary">Back to Django Tasks</a>
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>You need to build the REST API endpoints for the Project resource. These endpoints will be consumed by a React frontend. The endpoints must be authenticated, permission-checked, delegate to <code>ProjectService</code>, and return consistent JSON responses.</p>
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <ol>
+            <li><code>ProjectListCreateView</code> — <code>GET /api/v1/workspaces/{workspace_id}/projects/</code></li>
+            <li><code>ProjectDetailView</code> — <code>GET /api/v1/workspaces/{workspace_id}/projects/{project_id}/</code></li>
+            <li><code>ProjectArchiveView</code> — <code>POST /api/v1/workspaces/{workspace_id}/projects/{project_id}/archive/</code></li>
+            <li>A custom <code>IsWorkspaceMember</code> permission class</li>
+            <li>URL configuration</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Requirements</h2>
+
+          <h3>Permission Class: IsWorkspaceMember</h3>
+          <pre><code class="language-python"># File: permissions.py
+class IsWorkspaceMember(BasePermission):
+    """
+    Allows access only to authenticated users who are active members
+    of the workspace specified in the URL kwarg 'workspace_id'.
+    """
+    def has_permission(self, request, view):
+        workspace_id = view.kwargs.get('workspace_id')
+        return WorkspaceMember.objects.filter(
+            workspace_id=workspace_id,
+            user=request.user,
+            status='active'
+        ).exists()</code></pre>
+
+          <h3>ProjectListCreateView</h3>
+          <p><strong>GET</strong> — List projects in a workspace:</p>
+          <ul>
+            <li>Filter: <code>?status=active</code> (optional)</li>
+            <li>Sort: <code>?ordering=name</code> or <code>?ordering=-created_at</code> (default: <code>-created_at</code>)</li>
+            <li>Pagination: 25 per page</li>
+            <li>Response: <code>{ "count": 143, "next": "...", "previous": "...", "results": [...] }</code></li>
+          </ul>
+          <p><strong>POST</strong> — Create a new project:</p>
+          <ul>
+            <li>Request body: <code>{ "name": "...", "description": "...", "start_date": "...", "end_date": "..." }</code></li>
+            <li>Calls <code>ProjectService.create_project()</code></li>
+            <li>Success: 201 with the created project</li>
+            <li>Duplicate name: 409 Conflict: <code>{ "error": "DUPLICATE", "message": "A project with this name already exists." }</code></li>
+          </ul>
+
+          <h3>ProjectDetailView</h3>
+          <p><strong>GET</strong> — Get a single project:</p>
+          <ul>
+            <li>Returns full project detail</li>
+            <li>404 if project does not exist in this workspace</li>
+          </ul>
+
+          <h3>ProjectArchiveView</h3>
+          <p><strong>POST</strong> — Archive a project:</p>
+          <ul>
+            <li>Only workspace admins/owners can call this endpoint (add <code>IsWorkspaceAdmin</code> or check role in view)</li>
+            <li>Calls <code>ProjectService.archive_project()</code></li>
+            <li>Success: 200 with the updated project</li>
+            <li>Already archived: 409 Conflict</li>
+            <li>Non-admin calling: 403 Forbidden</li>
+          </ul>
+
+          <h3>Serializers</h3>
+          <p><strong>ProjectSerializer</strong> (read):</p>
+          <pre><code class="language-python">fields = ['id', 'name', 'description', 'status', 'start_date', 'end_date',
+          'created_by', 'created_at', 'updated_at']
+read_only_fields = ['id', 'created_by', 'created_at', 'updated_at', 'status']</code></pre>
+
+          <p><strong>ProjectWriteSerializer</strong> (write — for POST):</p>
+          <pre><code class="language-python">fields = ['name', 'description', 'start_date', 'end_date']
+# Validates: name required, max 100 chars, end_date &gt; start_date</code></pre>
+
+          <h3>URL Configuration</h3>
+          <pre><code class="language-python"># urls.py
+urlpatterns = [
+    path('workspaces/&lt;uuid:workspace_id&gt;/projects/',
+         ProjectListCreateView.as_view(), name='project-list'),
+    path('workspaces/&lt;uuid:workspace_id&gt;/projects/&lt;uuid:project_id&gt;/',
+         ProjectDetailView.as_view(), name='project-detail'),
+    path('workspaces/&lt;uuid:workspace_id&gt;/projects/&lt;uuid:project_id&gt;/archive/',
+         ProjectArchiveView.as_view(), name='project-archive'),
+]</code></pre>
+        </div>
+      </section>
+
+      <section id="error-response-format" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Error Response Format</h2>
+          <p>All error responses must follow:</p>
+          <pre><code class="language-json">{
+  "error": "ERROR_CODE",
+  "message": "Human-readable description."
+}</code></pre>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Situation</th>
+                  <th>Status</th>
+                  <th>Error Code</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Not authenticated</td>
+                  <td>401</td>
+                  <td><code>AUTH_REQUIRED</code></td>
+                </tr>
+                <tr>
+                  <td>Not a workspace member</td>
+                  <td>403</td>
+                  <td><code>FORBIDDEN</code></td>
+                </tr>
+                <tr>
+                  <td>Not an admin (for archive)</td>
+                  <td>403</td>
+                  <td><code>FORBIDDEN</code></td>
+                </tr>
+                <tr>
+                  <td>Project not found</td>
+                  <td>404</td>
+                  <td><code>NOT_FOUND</code></td>
+                </tr>
+                <tr>
+                  <td>Duplicate project name</td>
+                  <td>409</td>
+                  <td><code>DUPLICATE</code></td>
+                </tr>
+                <tr>
+                  <td>Project already archived</td>
+                  <td>409</td>
+                  <td><code>BUSINESS_RULE_VIOLATION</code></td>
+                </tr>
+                <tr>
+                  <td>Validation error</td>
+                  <td>400</td>
+                  <td><code>VALIDATION_ERROR</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <pre><code class="language-text">× Put business logic in the view (no Project.objects.create() in the view body)
+× Skip the IsWorkspaceMember permission class — do not rely on object-level filtering alone
+× Return 200 for a created resource — use 201
+× Return 200 for a conflict — use 409
+× Use fields = '__all__' in any serializer
+× Return all projects without pagination
+× Not test the 403 case for archive (non-admin calling it)</code></pre>
+        </div>
+      </section>
+
+      <section id="checklist-to-run" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run</h2>
+          <p>Before marking done, run the <a href="../../checklists/django/api-view.html">DRF API View Checklist</a>.</p>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <pre><code class="language-text">[ ] IsWorkspaceMember permission class queries the database for membership
+[ ] ProjectListCreateView: GET returns paginated list, filters by status, sorts correctly
+[ ] ProjectListCreateView: POST creates via ProjectService, returns 201
+[ ] ProjectListCreateView: POST duplicate → 409 with correct error format
+[ ] ProjectDetailView: GET returns single project
+[ ] ProjectDetailView: GET non-existent project → 404
+[ ] ProjectArchiveView: POST archives via ProjectService, returns 200
+[ ] ProjectArchiveView: POST non-admin → 403
+[ ] ProjectArchiveView: POST already archived → 409
+[ ] URL patterns named and follow kebab-case convention
+[ ] All views have permission_classes = [IsAuthenticated, IsWorkspaceMember]
+[ ] Serializers use explicit fields — no __all__
+[ ] All test cases pass: auth, permissions, CRUD, errors, pagination</code></pre>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../django-tasks.html" class="footer-link">Django Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

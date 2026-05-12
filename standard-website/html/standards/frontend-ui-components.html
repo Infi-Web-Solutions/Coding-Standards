@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>UI Components Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Modals, toasts, loading states, skeleton screens, buttons, badges, tooltips, dropdowns, tabs, accordion — all component patterns and rules."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">UI Components Standard</h1>
+
+        <p class="page-subtitle">
+          Modals, toasts, loading states, skeleton screens, buttons, badges, tooltips, dropdowns, tabs, accordion — all component patterns and rules.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#modals-dialogs" class="card card-clickable">1. Modals &amp; Dialogs</a>
+            <a href="#notifications-toasts" class="card card-clickable">2. Notifications &amp; Toasts</a>
+            <a href="#loading-states" class="card card-clickable">3. Loading States</a>
+            <a href="#skeleton-screens" class="card card-clickable">4. Skeleton Screens</a>
+            <a href="#buttons" class="card card-clickable">5. Buttons</a>
+            <a href="#badges-status" class="card card-clickable">6. Badges &amp; Status Indicators</a>
+            <a href="#tooltips" class="card card-clickable">7. Tooltips</a>
+            <a href="#dropdowns-select" class="card card-clickable">8. Dropdowns &amp; Select Menus</a>
+            <a href="#tabs" class="card card-clickable">9. Tabs</a>
+            <a href="#accordion" class="card card-clickable">10. Accordion &amp; Expandable</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="modals-dialogs" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Modals &amp; Dialogs</h2>
+
+          <h3>Opening</h3>
+          <label><input type="checkbox" data-checklist-item /> Triggered by a user action — not on page load (except critical interruptions like cookie consent)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Backdrop darkens behind the modal</label><br />
+          <label><input type="checkbox" data-checklist-item /> Background scroll locked (<code>body overflow: hidden</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Focus moves to the modal on open (first focusable element)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Screen reader announces the modal (<code>role="dialog"</code>, <code>aria-modal="true"</code>, <code>aria-labelledby</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Opening animation: fade or slide, under 200ms</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Closing</h3>
+          <label><input type="checkbox" data-checklist-item /> X close button in top-right</label><br />
+          <label><input type="checkbox" data-checklist-item /> Escape key closes the modal</label><br />
+          <label><input type="checkbox" data-checklist-item /> Clicking backdrop closes (unless unsaved form inside)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Focus returns to the trigger element on close</label><br />
+          <label><input type="checkbox" data-checklist-item /> Background scroll restored on close</label><br />
+          <label><input type="checkbox" data-checklist-item /> Unsaved form: "Discard changes?" confirmation before closing</label><br />
+          <label><input type="checkbox" data-checklist-item /> In-progress action: Escape and backdrop disabled until complete</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Structure</h3>
+          <label><input type="checkbox" data-checklist-item /> Visible title (h2 or h3 connected via <code>aria-labelledby</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Primary action on the right, cancel on the left</label><br />
+          <label><input type="checkbox" data-checklist-item /> Destructive primary action: red/danger styled</label><br />
+          <label><input type="checkbox" data-checklist-item /> Content scrolls inside the modal — not the page behind it</label><br />
+          <label><input type="checkbox" data-checklist-item /> Width appropriate to content: confirm = narrow, form = medium, preview = wide</label><br />
+          <label><input type="checkbox" data-checklist-item /> Does not exceed viewport height without an internal scroll area</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Confirmation Modals</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Risk Level</th>
+                  <th>Title</th>
+                  <th>Body</th>
+                  <th>Button</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Low risk (Archive, soft actions)</td>
+                  <td>"Archive Project?"</td>
+                  <td>What happens + whether it is reversible</td>
+                  <td>Action label (amber if reversible, red if not)</td>
+                </tr>
+                <tr>
+                  <td>Medium risk (Delete a record)</td>
+                  <td>"Delete Project?"</td>
+                  <td>"[Name]" specifically + consequence + affected count + "This action cannot be undone." if irreversible</td>
+                  <td>"Delete Project" — red/danger</td>
+                </tr>
+                <tr>
+                  <td>High risk (Delete account, all data)</td>
+                  <td>Same as medium</td>
+                  <td>Same as medium + type-to-confirm input ("Type DELETE to confirm")</td>
+                  <td>Disabled until input matches exactly (case-sensitive)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>Accessibility</h3>
+          <label><input type="checkbox" data-checklist-item /> <code>role="dialog"</code> + <code>aria-modal="true"</code> on modal root</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>aria-labelledby</code> pointing to title element</label><br />
+          <label><input type="checkbox" data-checklist-item /> Focus trapped inside modal (Tab cycles within modal only)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Background content <code>aria-hidden="true"</code> while modal is open</label><br />
+          <label><input type="checkbox" data-checklist-item /> Escape always works as a cancel</label>
+        </div>
+      </section>
+
+      <section id="notifications-toasts" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Notifications &amp; Toasts</h2>
+
+          <h3>Types and Purpose</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Color</th>
+                  <th>When</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Success</td>
+                  <td>Green</td>
+                  <td>Async action completed</td>
+                  <td>4 seconds</td>
+                </tr>
+                <tr>
+                  <td>Error</td>
+                  <td>Red</td>
+                  <td>Action failed</td>
+                  <td>6 seconds</td>
+                </tr>
+                <tr>
+                  <td>Warning</td>
+                  <td>Amber</td>
+                  <td>Completed with caveat</td>
+                  <td>5 seconds</td>
+                </tr>
+                <tr>
+                  <td>Info</td>
+                  <td>Blue</td>
+                  <td>Neutral information</td>
+                  <td>5 seconds</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>Behavior</h3>
+          <label><input type="checkbox" data-checklist-item /> Position: top-right (desktop), top-center or bottom-center (mobile)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Z-index above all content including modals</label><br />
+          <label><input type="checkbox" data-checklist-item /> X button on every toast for manual dismiss</label><br />
+          <label><input type="checkbox" data-checklist-item /> Hover pauses auto-dismiss timer</label><br />
+          <label><input type="checkbox" data-checklist-item /> Multiple toasts stack vertically — max 3 visible at once, others queued</label><br />
+          <label><input type="checkbox" data-checklist-item /> New toasts appear at top of stack, older shift down</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Content Rules</h3>
+          <label><input type="checkbox" data-checklist-item /> Specific: "Project 'Marketing Q1' deleted." not "Success!"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Past tense for completed actions: "Project saved." not "Saving project."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error messages: human-readable, no error codes, no stack traces</label><br />
+          <label><input type="checkbox" data-checklist-item /> Optional action in toast: "Undo" (5-second window) or "View"</label><br />
+          <label><input type="checkbox" data-checklist-item /> No exclamation marks on error messages</label><br />
+          <label><input type="checkbox" data-checklist-item /> Same event always produces the same message (consistent vocabulary)</label><br />
+
+          <div class="divider"></div>
+
+          <h3>What Triggers a Toast</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Always Show Toast</th>
+                  <th>Never Show Toast</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Create → success toast</td>
+                  <td>Page load or data fetch completing</td>
+                </tr>
+                <tr>
+                  <td>Update/save → success toast</td>
+                  <td>Navigation between pages</td>
+                </tr>
+                <tr>
+                  <td>Delete → success toast (+ optional undo)</td>
+                  <td>Opening or closing a modal</td>
+                </tr>
+                <tr>
+                  <td>Send/invite → success toast</td>
+                  <td>Client-side validation failure (use inline field errors)</td>
+                </tr>
+                <tr>
+                  <td>Any async failure → error toast or inline banner</td>
+                  <td>Background auto-save (use a subtle "Saved ✓" indicator, not a toast)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="loading-states" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Loading States</h2>
+
+          <h3>Buttons</h3>
+          <label><input type="checkbox" data-checklist-item /> Spinner replaces or appears next to label while action is in progress</label><br />
+          <label><input type="checkbox" data-checklist-item /> Button disabled during loading — no double submit</label><br />
+          <label><input type="checkbox" data-checklist-item /> Button label changes to reflect action: "Saving..." / "Deleting..." / "Sending..."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Button width does not change between default and loading state (fixed width/min-width)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Button returns to normal after success or failure</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Standard Loading Labels</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Default</th>
+                  <th>Loading</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Create / Add</td><td>Creating...</td></tr>
+                <tr><td>Save Changes</td><td>Saving...</td></tr>
+                <tr><td>Delete</td><td>Deleting...</td></tr>
+                <tr><td>Send / Invite</td><td>Sending...</td></tr>
+                <tr><td>Upload</td><td>Uploading...</td></tr>
+                <tr><td>Export</td><td>Exporting...</td></tr>
+                <tr><td>Submit</td><td>Submitting...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>Page &amp; Section Loading</h3>
+          <label><input type="checkbox" data-checklist-item /> Full page fetch: skeleton shown — never blank white page</label><br />
+          <label><input type="checkbox" data-checklist-item /> Layout frame (header/nav) visible while skeleton loads</label><br />
+          <label><input type="checkbox" data-checklist-item /> Skeleton is the initial render state — no flash of blank before skeleton</label><br />
+          <label><input type="checkbox" data-checklist-item /> Spinner (centered): only for very short operations &lt; 500ms; prefer skeleton for longer</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error state shown if load fails — with retry button, never a blank area</label>
+        </div>
+      </section>
+
+      <section id="skeleton-screens" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Skeleton Screens</h2>
+
+          <h3>Shape</h3>
+          <label><input type="checkbox" data-checklist-item /> Skeleton matches the approximate shape of the real content: card grid → skeleton cards, table → skeleton rows with column widths, form → skeleton inputs and labels, detail page → skeleton for each section</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Behavior</h3>
+          <label><input type="checkbox" data-checklist-item /> Animated shimmer / pulse effect — not a static grey block</label><br />
+          <label><input type="checkbox" data-checklist-item /> Number of skeleton items matches expected data count (page size for tables)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Skeleton disappears instantly when data arrives (no delayed swap)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No text content in skeleton — only grey placeholder shapes</label><br />
+
+          <div class="divider"></div>
+
+          <h3>When to Use</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Use Skeleton</th>
+                  <th>Use Spinner</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Initial page/section load, tables, card grids, form pre-fill</td>
+                  <td>Button action, small inline refresh, short operations &lt; 300ms</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="buttons" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Buttons</h2>
+
+          <h3>Types</h3>
+          <label><input type="checkbox" data-checklist-item /> Primary: one per view — the main action (filled, brand color)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Secondary: supporting actions (outlined or ghost)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Danger: destructive actions (red fill or red outline)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Ghost/link: tertiary actions (no background)</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Rules</h3>
+          <label><input type="checkbox" data-checklist-item /> Never use <code>&lt;div&gt;</code> or <code>&lt;span&gt;</code> as a button — always <code>&lt;button&gt;</code> or <code>&lt;a href&gt;</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>&lt;button&gt;</code> for actions (submit, open modal, delete)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>&lt;a href&gt;</code> for navigation (links to another page/URL)</label><br />
+          <label><input type="checkbox" data-checklist-item /> All buttons have a visible focus state (keyboard accessible)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Disabled state: visually distinct (reduced opacity, cursor not-allowed)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Disabled buttons still need a tooltip if the reason is not obvious</label><br />
+          <label><input type="checkbox" data-checklist-item /> Icon-only buttons have an <code>aria-label</code>: <code>aria-label="Delete project"</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Button text is an action verb: "Save Changes", "Delete Project" — not "OK" or "Submit"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state handled per the Loading States section above</label><br />
+          <label><input type="checkbox" data-checklist-item /> Touch target minimum: 44×44px on mobile</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Icon Buttons</h3>
+          <label><input type="checkbox" data-checklist-item /> Icon + label preferred over icon-only for clarity</label><br />
+          <label><input type="checkbox" data-checklist-item /> If icon-only: <code>aria-label</code> required</label><br />
+          <label><input type="checkbox" data-checklist-item /> Consistent icon library — do not mix icon sets</label>
+        </div>
+      </section>
+
+      <section id="badges-status" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Badges &amp; Status Indicators</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Status values always shown as a badge — never plain text in a table</label><br />
+          <label><input type="checkbox" data-checklist-item /> Badge colors are consistent throughout the app (Active = green, always)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Badge colors use CSS variables — never hardcoded hex per badge</label><br />
+          <label><input type="checkbox" data-checklist-item /> Badge font size: small (12–13px), font weight: medium</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>.badge-active</code> → green background</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>.badge-on-hold</code> → amber background</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>.badge-archived</code> → grey background</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>.badge-error</code> → red background</label><br />
+          <label><input type="checkbox" data-checklist-item /> Badge accessible: color is not the ONLY differentiator (also use text label)</label><br />
+          <label><input type="checkbox" data-checklist-item /> New status values: add to the shared badge component/constants — not inline per-page</label>
+        </div>
+      </section>
+
+      <section id="tooltips" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Tooltips</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Used for: explaining disabled UI elements, supplementary info, truncated text preview</label><br />
+          <label><input type="checkbox" data-checklist-item /> NOT used for: critical information the user cannot find elsewhere</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tooltip appears on hover (desktop) and on long-press or tap (mobile)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tooltip text is short: one sentence maximum</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tooltip position: avoids going off-screen (auto-flip if near edge)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Disabled buttons MUST have a tooltip explaining why they are disabled</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tooltip does not block nearby interactive elements</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tooltip has a slight delay (100–150ms) before appearing to avoid flicker on fast mouse-overs</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tooltips do not contain links or interactive elements — use a popover for that</label>
+        </div>
+      </section>
+
+      <section id="dropdowns-select" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Dropdowns &amp; Select Menus</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Native <code>&lt;select&gt;</code> acceptable for simple cases, custom component for branded UI</label><br />
+          <label><input type="checkbox" data-checklist-item /> Options fetched from backend — not hardcoded in frontend unless truly static</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state shown while options are fetching (spinner inside dropdown)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Searchable dropdown for &gt; 7 options (user can type to filter)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Dropdown closes on: option select, outside click, Escape key</label><br />
+          <label><input type="checkbox" data-checklist-item /> Selected value shown clearly inside the dropdown trigger</label><br />
+          <label><input type="checkbox" data-checklist-item /> Placeholder shown when no value selected: "Select status..."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Disabled options visually distinct with a tooltip explaining why</label><br />
+          <label><input type="checkbox" data-checklist-item /> Dropdown max height with internal scroll for long option lists</label><br />
+          <label><input type="checkbox" data-checklist-item /> Keyboard navigable: arrow keys to move, Enter to select, Escape to close</label><br />
+          <label><input type="checkbox" data-checklist-item /> Multi-select: selected values shown as chips inside or below the trigger</label>
+        </div>
+      </section>
+
+      <section id="tabs" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Tabs</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Active tab visually distinct (underline, background, or color change)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tab content loads when tab is clicked — not all upfront (lazy loading)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state inside tab panel while content loads</label><br />
+          <label><input type="checkbox" data-checklist-item /> URL updated with active tab: <code>?tab=members</code> (makes it shareable and bookmarkable)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tab order restored when user navigates back</label><br />
+          <label><input type="checkbox" data-checklist-item /> First tab active by default — or the tab from the URL param</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tab labels are short nouns: "Members" not "View Members"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Keyboard navigable: arrow keys to move between tabs</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tab content not destroyed on tab switch (maintain form state if inside a tab)</label>
+        </div>
+      </section>
+
+      <section id="accordion" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Accordion &amp; Expandable</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Expand/collapse triggered by clicking the header area — not just a small arrow icon</label><br />
+          <label><input type="checkbox" data-checklist-item /> Expand/collapse icon (chevron) rotates to show state</label><br />
+          <label><input type="checkbox" data-checklist-item /> Only one section open at a time OR multiple — decide and be consistent</label><br />
+          <label><input type="checkbox" data-checklist-item /> Content transition: smooth height animation (150–200ms)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Expanded state preserved across page interactions if relevant</label><br />
+          <label><input type="checkbox" data-checklist-item /> Keyboard: Enter or Space to toggle</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>aria-expanded</code> on the trigger, <code>aria-controls</code> pointing to the content panel</label><br />
+          <label><input type="checkbox" data-checklist-item /> Default state: first item open OR all closed — document the choice</label>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Modals, notifications, loading states, skeletons, and buttons. Every component must be accessible, consistent, and handle every state before it is considered done.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

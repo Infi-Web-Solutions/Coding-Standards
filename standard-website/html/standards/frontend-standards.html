@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontend &amp; UI Standards | Development Standards</title>
+  <meta name="description" content="Frontend and UI standards for forms, data display, UI components, errors, auth UI, and settings." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend &amp; UI Standards</span>
+        <h1 class="page-title">Frontend &amp; UI Standards</h1>
+        <p class="page-subtitle">The frontend is the user's entire experience of the product. Every state must be handled. Every error must be shown. Every action must give feedback. Every permission must be reflected — but enforced on the backend.</p>
+      </section>
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>File</th>
+                  <th>What It Covers</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><a href="./frontend-forms-validation.html">01 — Forms &amp; Validation</a></td><td>Form structure, field standards, required markers, validation timing, error display, Add/Edit consistency, password, phone, disabled fields</td></tr>
+                <tr><td><a href="./frontend-data-display.html">02 — Data Display</a></td><td>Tables, lists, cards, sorting, filtering, search (debounce, URL params, backend-sent), pagination, infinite scroll, empty states</td></tr>
+                <tr><td><a href="./frontend-ui-components.html">03 — UI Components</a></td><td>Modals (open/close, focus trap, accessibility), notifications and toasts (types, timing, stacking), loading states, skeleton screens, buttons</td></tr>
+                <tr><td><a href="./frontend-error-feedback.html">04 — Error &amp; Feedback</a></td><td>Error types and where they appear, API error code mapping, empty states, destructive action confirmation (3 risk levels), no silent failures</td></tr>
+                <tr><td><a href="./frontend-permissions-auth.html">05 — Permissions &amp; Auth UI</a></td><td>Role-based UI (hide vs disable), reading role from backend, page-level access, partial access, real-time role changes</td></tr>
+                <tr><td><a href="./frontend-settings.html">06 — Settings &amp; Profile</a></td><td>Settings page structure, save behavior, password change, avatar upload, notification preferences, danger zone</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">The Non-Negotiables</h2>
+          <label><input type="checkbox" data-checklist-item /> Add and Edit for the same entity use the same component and the same validation schema</label><br />
+          <label><input type="checkbox" data-checklist-item /> Every async action has a loading state — button spinner, disabled while loading, no double submit</label><br />
+          <label><input type="checkbox" data-checklist-item /> Every error is shown in the UI — never only in the console</label><br />
+          <label><input type="checkbox" data-checklist-item /> No destructive action without a confirmation dialog</label><br />
+          <label><input type="checkbox" data-checklist-item /> Mobile tested before marking done (375px and 768px)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Backend enforces all rules — frontend reflects permissions, never enforces them alone</label><br />
+          <label><input type="checkbox" data-checklist-item /> Search and filters go to the backend — never filter a client-side array</label><br />
+          <label><input type="checkbox" data-checklist-item /> State that should be shareable lives in URL params (search, filter, sort, page)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No silent failures anywhere in the app</label>
+        </div>
+      </section>
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Related</h2>
+          <ul>
+            <li><a href="./frontend-ui-standards.html">Frontend &amp; UI Standards (original)</a> — Original single-file reference (form standards, notifications, loading, delete confirmation, design system, error contract)</li>
+            <li><a href="./code-reusability-standards.html">Code Reusability Standards</a> — When to extract components, hooks, and services</li>
+            <li><a href="./backend-first-logic.html">Backend-First Logic</a> — What belongs on the backend vs frontend</li>
+            <li><a href="../checklists/frontend-checklist.html">Frontend Checklists</a> — Run these before marking any frontend task done</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

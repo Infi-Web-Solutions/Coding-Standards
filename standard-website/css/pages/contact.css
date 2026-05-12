@@ -1,0 +1,5 @@
+/* Contact/help page tweaks */
+
+[data-page="contact"] pre {
+  white-space: pre-wrap;
+}

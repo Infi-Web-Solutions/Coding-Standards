@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Settings & Profile Pages Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Checklist for settings pages, profile fields, save behavior, password change, avatar upload, notification preferences, connected accounts, and danger zone."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Settings &amp; Profile Pages Checklist</h1>
+
+        <p class="page-subtitle">
+          Settings pages must never silently save or silently fail. Every save action has
+          a clear loading state, success confirmation, and error message. Destructive
+          settings follow the destructive actions standard.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div data-settings-demo></div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">1. Page Structure</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Settings divided into clear sections: Profile, Security, Notifications, Integrations, Danger Zone</label><br />
+            <label><input type="checkbox" data-checklist-item /> Each section is visually distinct with separator, card, or panel</label><br />
+            <label><input type="checkbox" data-checklist-item /> If many sections, use sidebar or tabs instead of one long page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Active section highlighted in navigation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Page title clearly labeled: Settings or Account Settings</label><br />
+            <label><input type="checkbox" data-checklist-item /> Breadcrumb or back navigation available</label><br />
+            <label><input type="checkbox" data-checklist-item /> Personal settings and workspace settings separated clearly</label><br />
+            <label><input type="checkbox" data-checklist-item /> Settings changes do not affect other users unless explicitly team/workspace setting</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">2. General Settings Fields</h2>
+
+            <label><input type="checkbox" data-checklist-item /> First name and last name follow registration validation: min 1, max 100</label><br />
+            <label><input type="checkbox" data-checklist-item /> Email change requires current password confirmation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Email change sends verification email to new address before taking effect</label><br />
+            <label><input type="checkbox" data-checklist-item /> Email change sends confirmation email to old address</label><br />
+            <label><input type="checkbox" data-checklist-item /> Username is unique if applicable</label><br />
+            <label><input type="checkbox" data-checklist-item /> Username validated as alphanumeric plus hyphens only</label><br />
+            <label><input type="checkbox" data-checklist-item /> Timezone uses selector, not freetext field</label><br />
+            <label><input type="checkbox" data-checklist-item /> Language/locale uses dropdown with supported languages</label><br />
+            <label><input type="checkbox" data-checklist-item /> All fields pre-filled with current values — never blank</label><br />
+            <label><input type="checkbox" data-checklist-item /> All fields validated using same rules as registration</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">3. Save Behavior</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Explicit Save button per section, or auto-save with visible Saved indicator</label><br />
+            <label><input type="checkbox" data-checklist-item /> Auto-save never happens silently without feedback</label><br />
+            <label><input type="checkbox" data-checklist-item /> Auto-save shows Saving... while saving and Saved ✓ after completion</label><br />
+            <label><input type="checkbox" data-checklist-item /> Per-section save submits only that section, not the entire settings page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Save button shows loading state while saving</label><br />
+            <label><input type="checkbox" data-checklist-item /> Save button disabled during loading</label><br />
+            <label><input type="checkbox" data-checklist-item /> On success, show success toast or inline Saved ✓</label><br />
+            <label><input type="checkbox" data-checklist-item /> On error, show error inline or banner</label><br />
+            <label><input type="checkbox" data-checklist-item /> On error, do not silently reset field to old value</label><br />
+            <label><input type="checkbox" data-checklist-item /> Unsaved changes warning appears before navigating away</label><br />
+            <label><input type="checkbox" data-checklist-item /> After save, fields stay populated with new values</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">4. Password Change Section</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Password section separate from profile details</label><br />
+            <label><input type="checkbox" data-checklist-item /> Fields include current password, new password, confirm new password</label><br />
+            <label><input type="checkbox" data-checklist-item /> All three fields are password inputs with show/hide toggles</label><br />
+            <label><input type="checkbox" data-checklist-item /> Current password validated on backend</label><br />
+            <label><input type="checkbox" data-checklist-item /> New password complexity rules shown clearly</label><br />
+            <label><input type="checkbox" data-checklist-item /> Confirm new password validates in real time once both new password fields have values</label><br />
+            <label><input type="checkbox" data-checklist-item /> New password equal to current password is blocked on backend</label><br />
+            <label><input type="checkbox" data-checklist-item /> Submitting password form does not submit profile form</label><br />
+            <label><input type="checkbox" data-checklist-item /> On success, clear all password fields and show Password updated toast</label><br />
+            <label><input type="checkbox" data-checklist-item /> Wrong current password shows inline error on current password field</label><br />
+            <label><input type="checkbox" data-checklist-item /> After successful password change, optionally prompt logout other sessions</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">5. Avatar &amp; Profile Photo</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Upload button triggers file input</label><br />
+            <label><input type="checkbox" data-checklist-item /> Drag-and-drop supported if useful, but not drag-and-drop only</label><br />
+            <label><input type="checkbox" data-checklist-item /> Accepted file types: JPEG, PNG, WebP</label><br />
+            <label><input type="checkbox" data-checklist-item /> MIME type validated, not just extension</label><br />
+            <label><input type="checkbox" data-checklist-item /> Maximum file size 5MB enforced with clear error</label><br />
+            <label><input type="checkbox" data-checklist-item /> Minimum dimensions 100×100px recommended</label><br />
+            <label><input type="checkbox" data-checklist-item /> Server-side image resizing enforced</label><br />
+            <label><input type="checkbox" data-checklist-item /> Preview shown before confirming upload</label><br />
+            <label><input type="checkbox" data-checklist-item /> Upload has loading/progress indicator</label><br />
+            <label><input type="checkbox" data-checklist-item /> Avatar updates immediately in UI after success</label><br />
+            <label><input type="checkbox" data-checklist-item /> Header/nav avatar updates after success</label><br />
+            <label><input type="checkbox" data-checklist-item /> Fallback shows user initials if no avatar</label><br />
+            <label><input type="checkbox" data-checklist-item /> Remove photo option reverts to initials fallback</label><br />
+            <label><input type="checkbox" data-checklist-item /> Backend strips EXIF data from uploaded images</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">6. Notification Preferences</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Toggles or checkboxes for each notification type</label><br />
+            <label><input type="checkbox" data-checklist-item /> Notification categories clearly labeled</label><br />
+            <label><input type="checkbox" data-checklist-item /> Each toggle saves immediately on change</label><br />
+            <label><input type="checkbox" data-checklist-item /> Toggle save shows brief Saved confirmation near the toggle</label><br />
+            <label><input type="checkbox" data-checklist-item /> Toggle save does not use disruptive toast for every switch</label><br />
+            <label><input type="checkbox" data-checklist-item /> Unsubscribing from all emails includes confirmation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Users can re-subscribe from same settings page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Email unsubscribe link routes to this section</label><br />
+            <label><input type="checkbox" data-checklist-item /> Critical security emails cannot be disabled</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">7. Connected Accounts &amp; Integrations</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Connected accounts show provider logo</label><br />
+            <label><input type="checkbox" data-checklist-item /> Connected email/username shown</label><br />
+            <label><input type="checkbox" data-checklist-item /> Connection date shown</label><br />
+            <label><input type="checkbox" data-checklist-item /> Disconnect button exists for each connected account</label><br />
+            <label><input type="checkbox" data-checklist-item /> Disconnecting last login method warns user to set password first</label><br />
+            <label><input type="checkbox" data-checklist-item /> OAuth token shown only as Connected — never raw token</label><br />
+            <label><input type="checkbox" data-checklist-item /> Reconnect option exists if token expired or revoked</label><br />
+            <label><input type="checkbox" data-checklist-item /> Third-party integrations show connection status, scopes, and last used date</label><br />
+            <label><input type="checkbox" data-checklist-item /> Revoking third-party integration confirms before proceeding</label><br />
+            <label><input type="checkbox" data-checklist-item /> Disconnect follows destructive actions checklist</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">8. Danger Zone</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Danger Zone visually separated with red border or distinct background</label><br />
+            <label><input type="checkbox" data-checklist-item /> Section clearly labeled Danger Zone or Account Deletion</label><br />
+            <label><input type="checkbox" data-checklist-item /> Only irreversible or high-impact actions placed here</label><br />
+            <label><input type="checkbox" data-checklist-item /> Delete account, leave workspace, transfer ownership, cancel subscription placed here</label><br />
+            <label><input type="checkbox" data-checklist-item /> Every action follows destructive actions checklist</label><br />
+            <label><input type="checkbox" data-checklist-item /> Delete account requires type-to-confirm: Type DELETE to confirm</label><br />
+            <label><input type="checkbox" data-checklist-item /> Delete account explains what will be deleted</label><br />
+            <label><input type="checkbox" data-checklist-item /> Workspace owner must transfer ownership before account deletion</label><br />
+            <label><input type="checkbox" data-checklist-item /> Successful account deletion logs out and redirects to homepage</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-success">
+          <div class="alert-title">Before Marking Done</div>
+          Structure, fields, save behavior, password change, avatar upload, notification preferences, integrations, danger zone, and mobile behavior must all be tested.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Settings pages must save visibly, fail visibly, and protect destructive actions.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../standards/frontend-standards.html" class="footer-link">Frontend Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+  <script type="module" src="../../../js/pages/settings-demo.js"></script>
+</body>
+</html>

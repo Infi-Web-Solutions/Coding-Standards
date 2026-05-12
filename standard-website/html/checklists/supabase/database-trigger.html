@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase — Database Trigger Checklist | Development Standards</title>
+  <meta name="description" content="BEFORE vs AFTER, trigger function standards, timestamps, audit log pattern, SECURITY DEFINER when needed." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Supabase — Database Trigger Checklist</h1>
+        <p class="page-subtitle">BEFORE vs AFTER, trigger function standards, timestamps, audit log pattern, SECURITY DEFINER when needed.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-checklist.html" class="btn btn-secondary">Back to Supabase Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <blockquote>Run this checklist every time you create a database trigger or trigger function.</blockquote>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-decision-should-this-be-a-trigger" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Decision — Should This Be a Trigger?</h2>
+          <pre><code class="language-text">USE A TRIGGER WHEN:
+[ ] An action must always happen after a database event — no exceptions
+[ ] The action is too low-level to put in application code (audit logging, timestamps)
+[ ] The action must apply even if data is modified by a migration script or admin
+
+DO NOT USE A TRIGGER WHEN:
+[ ] The action involves external services (email, webhooks) — use an Edge Function
+[ ] The logic is complex business logic — put it in an RPC function instead
+[ ] The trigger would create circular dependencies
+[ ] The trigger would cause N+1 database calls</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="2-trigger-function" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Trigger Function</h2>
+          <label><input type="checkbox" data-checklist-item /> Trigger function uses RETURNS TRIGGER</label><br />
+<label><input type="checkbox" data-checklist-item /> Named clearly: trigger_fn_[action]: trigger_fn_set_timestamps, trigger_fn_audit_log</label><br />
+<label><input type="checkbox" data-checklist-item /> LANGUAGE plpgsql (not SQL for complex logic)</label><br />
+<label><input type="checkbox" data-checklist-item /> Function handles both OLD and NEW records correctly for UPDATE triggers</label><br />
+<label><input type="checkbox" data-checklist-item /> Returns NEW for BEFORE triggers (modify the row before write)</label><br />
+<label><input type="checkbox" data-checklist-item /> Returns NULL to cancel the operation (intentional in BEFORE trigger only)</label><br />
+<label><input type="checkbox" data-checklist-item /> Returns NEW for AFTER triggers (return value ignored but convention)</label><br />
+<label><input type="checkbox" data-checklist-item /> Error raised with RAISE EXCEPTION if trigger validation fails (BEFORE triggers only)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="3-trigger-definition" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Trigger Definition</h2>
+          <label><input type="checkbox" data-checklist-item /> BEFORE or AFTER chosen correctly:</label><br />
+<p class="checklist-note">— BEFORE: to validate or modify the row before it is written</p>
+<p class="checklist-note">— AFTER:  to react to a change (create related records, audit log)</p>
+<label><input type="checkbox" data-checklist-item /> FOR EACH ROW (almost always) vs FOR EACH STATEMENT (bulk operations)</label><br />
+<label><input type="checkbox" data-checklist-item /> Trigger event: INSERT, UPDATE, DELETE, or combination</label><br />
+<label><input type="checkbox" data-checklist-item /> For UPDATE triggers: OF column_list used when only specific column changes matter</label><br />
+<p class="checklist-note">(avoids trigger firing on every unrelated update)</p>
+<label><input type="checkbox" data-checklist-item /> Trigger attached to the correct table</label><br />
+<label><input type="checkbox" data-checklist-item /> Conditional trigger: WHEN clause used to skip unnecessary invocations</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="4-common-trigger-patterns" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Common Trigger Patterns</h2>
+          <h3>Automatic Timestamps</h3>
+<pre><code class="language-sql">CREATE OR REPLACE FUNCTION trigger_fn_set_timestamps()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF TG_OP = &#x27;INSERT&#x27; THEN
+    NEW.created_at := now();
+  END IF;
+  NEW.updated_at := now();
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER set_timestamps
+BEFORE INSERT OR UPDATE ON projects
+FOR EACH ROW EXECUTE FUNCTION trigger_fn_set_timestamps();</code></pre>
+<label><input type="checkbox" data-checklist-item /> created_at only set on INSERT (not overwritten on UPDATE)</label><br />
+<label><input type="checkbox" data-checklist-item /> updated_at set on both INSERT and UPDATE</label><br />
+<label><input type="checkbox" data-checklist-item /> Uses now() for consistency</label><br />
+<h3>Audit Log</h3>
+<pre><code class="language-sql">CREATE OR REPLACE FUNCTION trigger_fn_audit_log()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER  -- needs to write audit_logs even if RLS blocks the user
+AS $$
+BEGIN
+  INSERT INTO audit_logs (action, table_name, record_id, old_data, new_data, actor_id)
+  VALUES (
+    TG_OP,
+    TG_TABLE_NAME,
+    COALESCE(NEW.id, OLD.id),
+    CASE WHEN TG_OP = &#x27;DELETE&#x27; THEN row_to_json(OLD) ELSE NULL END,
+    CASE WHEN TG_OP != &#x27;DELETE&#x27; THEN row_to_json(NEW) ELSE NULL END,
+    auth.uid()
+  );
+  RETURN NEW;
+END;
+$$;</code></pre>
+<label><input type="checkbox" data-checklist-item /> Stores both old and new values for UPDATE</label><br />
+<label><input type="checkbox" data-checklist-item /> Stores actor_id (auth.uid()) — who made the change</label><br />
+<label><input type="checkbox" data-checklist-item /> SECURITY DEFINER only for audit_log insert — justified by need to bypass RLS</label><br />
+<label><input type="checkbox" data-checklist-item /> Does not log sensitive fields (passwords, tokens, PII unless required by compliance)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="5-performance-rules" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Performance Rules</h2>
+          <label><input type="checkbox" data-checklist-item /> Trigger does not perform N+1 queries (no loop with individual queries)</label><br />
+<label><input type="checkbox" data-checklist-item /> Trigger function is fast — no heavy computation or external calls</label><br />
+<label><input type="checkbox" data-checklist-item /> For UPDATE triggers: WHEN clause limits when the trigger fires</label><br />
+<label><input type="checkbox" data-checklist-item /> Trigger does not call other triggers in a chain</label><br />
+<label><input type="checkbox" data-checklist-item /> Indexes exist for any columns the trigger queries</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="6-testing" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Testing</h2>
+          <label><input type="checkbox" data-checklist-item /> INSERT: trigger fires correctly</label><br />
+<label><input type="checkbox" data-checklist-item /> UPDATE: trigger fires on relevant column changes; does not fire on irrelevant columns</label><br />
+<label><input type="checkbox" data-checklist-item /> DELETE: trigger fires correctly; OLD record data is correct</label><br />
+<label><input type="checkbox" data-checklist-item /> BEFORE trigger: validation correctly cancels invalid writes</label><br />
+<label><input type="checkbox" data-checklist-item /> AFTER trigger: related records created correctly after the write</label><br />
+<label><input type="checkbox" data-checklist-item /> Failure in trigger: entire transaction rolled back (including the original write)</label><br />
+<label><input type="checkbox" data-checklist-item /> Performance: trigger does not add significant latency to high-volume operations</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="7-documentation" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Documentation</h2>
+          <label><input type="checkbox" data-checklist-item /> Trigger name and purpose documented</label><br />
+<label><input type="checkbox" data-checklist-item /> Which table and which events (INSERT, UPDATE, DELETE) it listens to</label><br />
+<label><input type="checkbox" data-checklist-item /> What the trigger does (one paragraph)</label><br />
+<label><input type="checkbox" data-checklist-item /> Any SECURITY DEFINER usage justified in a comment above the function</label><br />
+<label><input type="checkbox" data-checklist-item /> Listed in the migration file that creates it</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <label><input type="checkbox" data-checklist-item /> Trigger fires on the correct event(s) and table</label><br />
+<label><input type="checkbox" data-checklist-item /> BEFORE vs AFTER chosen correctly for the use case</label><br />
+<label><input type="checkbox" data-checklist-item /> Trigger function is correct and fast</label><br />
+<label><input type="checkbox" data-checklist-item /> SECURITY DEFINER justified if used</label><br />
+<label><input type="checkbox" data-checklist-item /> All test cases pass (INSERT, UPDATE, DELETE)</label><br />
+<label><input type="checkbox" data-checklist-item /> Migration file includes both trigger function and trigger creation</label><br />
+<label><input type="checkbox" data-checklist-item /> Trigger documented</label><br />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-checklist.html" class="footer-link">Supabase Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stripe Integration Standard | Development Standards</title>
+  <meta name="description" content="API keys, Customer creation, Products &amp; Prices, Payment Intents, Checkout Sessions, Subscriptions, Webhooks, Metadata, Decline codes, Refunds." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Stripe Integration Standard</h1>
+        <p class="page-subtitle">API keys, Customer creation, Products &amp; Prices, Payment Intents, Checkout Sessions, Subscriptions, Webhooks, Metadata, Decline codes, Refunds.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p>Covers every part of a Stripe integration: account setup, API keys, customers, products, payments, subscriptions, webhooks, metadata, error handling, and refunds.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-account-setup-and-api-keys" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Account Setup and API Keys</h2>
+          <h3>Key Types</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Key</th>
+    <th>Where Used</th>
+    <th>Exposure</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Publishable key (<code>pk_...</code>)</td>
+    <td>Frontend (browser/client)</td>
+    <td>Safe to expose</td>
+  </tr>
+  <tr>
+    <td>Secret key (<code>sk_...</code>)</td>
+    <td>Backend only</td>
+    <td><strong>NEVER expose to browser</strong></td>
+  </tr>
+  <tr>
+    <td>Webhook signing secret (<code>whsec_...</code>)</td>
+    <td>Backend webhook handler only</td>
+    <td><strong>NEVER expose</strong></td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Environment Variables</h3>
+<pre><code>STRIPE_PUBLISHABLE_KEY=pk_test_...   # or pk_live_...
+STRIPE_SECRET_KEY=sk_test_...        # or sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...</code></pre>
+<ul>
+  <li>Use <code>pk_test_</code> / <code>sk_test_</code> locally and in staging</li>
+  <li>Use <code>pk_live_</code> / <code>sk_live_</code> in production only</li>
+  <li>Never commit any Stripe key to version control</li>
+  <li>Rotate immediately if a secret key or webhook secret is exposed</li>
+</ul>
+<h3>Local Webhook Testing</h3>
+<p>Use Stripe CLI to forward webhook events to your local server:</p>
+<pre><code class="language-bash">stripe listen --forward-to localhost:8000/webhooks/stripe/</code></pre>
+<p>The CLI prints a temporary webhook signing secret — use it in local <code>.env</code>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="2-stripe-customer" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Stripe Customer</h2>
+          <h3>When to Create a Customer</h3>
+<p>Create a Stripe Customer:</p>
+<ul>
+  <li>When a user initiates their first payment, OR</li>
+  <li>At user sign-up if your app is payment-centric</li>
+</ul>
+<p>Do NOT create a Stripe Customer at sign-up for apps where most users never pay.</p>
+<h3>What to Store</h3>
+<p>Store <code>stripe_customer_id</code> in your database against the user record:</p>
+<pre><code class="language-sql">ALTER TABLE users ADD COLUMN stripe_customer_id text UNIQUE;</code></pre>
+<h3>Customer Metadata</h3>
+<p>Always set metadata on the Customer object:</p>
+<pre><code class="language-python">stripe.Customer.create(
+    email=user.email,
+    name=user.get_full_name(),
+    metadata={
+        &#x27;user_id&#x27;: str(user.id),
+        &#x27;workspace_id&#x27;: str(workspace.id),
+    }
+)</code></pre>
+<h3>Never Store Card Details</h3>
+<p>Do not store raw card numbers, CVVs, or full card data. Stripe's tokenization (via Stripe.js / Elements) handles this entirely.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="3-products-and-prices" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Products and Prices</h2>
+          <h3>Concepts</h3>
+<ul>
+  <li><strong>Product</strong>: what you sell (e.g., "Pro Plan", "Enterprise Plan")</li>
+  <li><strong>Price</strong>: how you sell it (e.g., $29/month, $290/year, $0.01/API call)</li>
+  <li>One product can have many prices (monthly vs annual, different currencies)</li>
+</ul>
+<h3>Where to Create</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Scenario</th>
+    <th>Create In</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Fixed subscription tiers</td>
+    <td>Stripe Dashboard — create once, reference by price_id</td>
+  </tr>
+  <tr>
+    <td>Dynamic pricing (per-seat, usage-based)</td>
+    <td>Code — create via API at runtime</td>
+  </tr>
+  <tr>
+    <td>Marketing changes copy/price often</td>
+    <td>Dashboard — non-engineers can update</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Product Metadata</h3>
+<pre><code class="language-python"># Set when creating a product in code
+stripe.Product.create(
+    name=&#x27;Pro Plan&#x27;,
+    metadata={
+        &#x27;plan&#x27;: &#x27;pro&#x27;,
+        &#x27;feature_set&#x27;: &#x27;analytics,api,export&#x27;,
+    }
+)</code></pre>
+<h3>Price Lookup Keys</h3>
+<p>Use lookup keys for prices so you reference them by name, not hardcoded price_id:</p>
+<pre><code class="language-python">stripe.Price.create(
+    product=product.id,
+    unit_amount=2900,  # in cents
+    currency=&#x27;usd&#x27;,
+    recurring={&#x27;interval&#x27;: &#x27;month&#x27;},
+    lookup_key=&#x27;pro-monthly&#x27;,
+)</code></pre>
+<p>Then retrieve by lookup key instead of hardcoding:</p>
+<pre><code class="language-python">prices = stripe.Price.list(lookup_keys=[&#x27;pro-monthly&#x27;])
+price_id = prices.data[0].id</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="4-one-time-payments-payment-intents" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. One-Time Payments — Payment Intents</h2>
+          <h3>Flow</h3>
+<pre><code>Client: &quot;Start payment&quot; 
+→ Server: create PaymentIntent → returns client_secret
+→ Client: stripe.confirmCardPayment(client_secret)
+→ Stripe: confirms payment
+→ Webhook: payment_intent.succeeded → update DB</code></pre>
+<h3>Creating a Payment Intent (server-side)</h3>
+<pre><code class="language-python">intent = stripe.PaymentIntent.create(
+    amount=2900,           # in cents — never floats
+    currency=&#x27;usd&#x27;,
+    customer=user.stripe_customer_id,
+    metadata={
+        &#x27;workspace_id&#x27;: str(workspace.id),
+        &#x27;user_id&#x27;: str(user.id),
+        &#x27;purpose&#x27;: &#x27;pro_upgrade&#x27;,
+    },
+    idempotency_key=f&#x27;{user.id}-{workspace.id}-{purpose}-{timestamp}&#x27;,
+)
+return {&#x27;client_secret&#x27;: intent.client_secret}</code></pre>
+<h3>Rules</h3>
+<ul>
+  <li>Amount always in <strong>smallest currency unit</strong> (cents for USD, pence for GBP, paise for INR)</li>
+  <li>Use integer amounts — never floats</li>
+  <li>Return <code>client_secret</code> to the frontend — never the secret key</li>
+  <li>Use idempotency keys to prevent duplicate charges on retried requests</li>
+  <li>Activate after success via <strong>webhook</strong> (<code>payment_intent.succeeded</code>), not the client-side callback</li>
+</ul>
+<h3>Confirming on the Client (Stripe.js)</h3>
+<pre><code class="language-js">const stripe = Stripe(PUBLISHABLE_KEY);  // from env, not hardcoded
+
+const {error} = await stripe.confirmCardPayment(clientSecret, {
+    payment_method: { card: cardElement }
+});
+
+if (error) {
+    // Show error to user — never log raw error to analytics
+} else {
+    // Payment pending — wait for webhook to update backend
+}</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="5-checkout-sessions-hosted-checkout" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Checkout Sessions (Hosted Checkout)</h2>
+          <p>Use Checkout Sessions when you want Stripe to host the payment page (simpler integration, less custom UI).</p>
+<pre><code class="language-python">session = stripe.checkout.Session.create(
+    customer=user.stripe_customer_id,
+    payment_method_types=[&#x27;card&#x27;],
+    line_items=[{
+        &#x27;price&#x27;: &#x27;price_id_here&#x27;,
+        &#x27;quantity&#x27;: 1,
+    }],
+    mode=&#x27;payment&#x27;,  # or &#x27;subscription&#x27;
+    success_url=f&#x27;{APP_BASE_URL}/payment/success?session_id={{CHECKOUT_SESSION_ID}}&#x27;,
+    cancel_url=f&#x27;{APP_BASE_URL}/payment/cancelled&#x27;,
+    metadata={
+        &#x27;workspace_id&#x27;: str(workspace.id),
+        &#x27;user_id&#x27;: str(user.id),
+    },
+)
+return {&#x27;checkout_url&#x27;: session.url}</code></pre>
+<h3>Rules for Checkout Sessions</h3>
+<ul>
+  <li>Activate via <strong>webhook</strong> (<code>checkout.session.completed</code>), not the <code>success_url</code> redirect — the redirect is unreliable (user might close browser before it loads)</li>
+  <li>Include <code>{CHECKOUT_SESSION_ID}</code> in <code>success_url</code> so you can verify if needed</li>
+  <li>Set metadata on the session for webhook processing</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="6-subscriptions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Subscriptions</h2>
+          <h3>Creating a Subscription</h3>
+<pre><code class="language-python">subscription = stripe.Subscription.create(
+    customer=user.stripe_customer_id,
+    items=[{&#x27;price&#x27;: price_id}],
+    trial_period_days=14,      # optional
+    metadata={
+        &#x27;workspace_id&#x27;: str(workspace.id),
+        &#x27;plan&#x27;: &#x27;pro&#x27;,
+    },
+)</code></pre>
+<h3>Subscription States</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Status</th>
+    <th>Meaning</th>
+    <th>Action</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>active</code></td>
+    <td>Paying and active</td>
+    <td>Grant access</td>
+  </tr>
+  <tr>
+    <td><code>trialing</code></td>
+    <td>In free trial</td>
+    <td>Grant access</td>
+  </tr>
+  <tr>
+    <td><code>past_due</code></td>
+    <td>Payment failed, retrying</td>
+    <td>Warn user, restrict non-critical features</td>
+  </tr>
+  <tr>
+    <td><code>canceled</code></td>
+    <td>Ended</td>
+    <td>Revoke access</td>
+  </tr>
+  <tr>
+    <td><code>unpaid</code></td>
+    <td>All retries failed</td>
+    <td>Restrict access</td>
+  </tr>
+  <tr>
+    <td><code>incomplete</code></td>
+    <td>First payment pending</td>
+    <td>Do not grant access yet</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Handling Subscription Lifecycle via Webhooks</h3>
+<pre><code class="language-python"># Events to handle:
+&#x27;customer.subscription.created&#x27;   → provision access
+&#x27;customer.subscription.updated&#x27;   → update plan/status in DB
+&#x27;customer.subscription.deleted&#x27;   → revoke access
+&#x27;invoice.payment_succeeded&#x27;       → record payment, send receipt
+&#x27;invoice.payment_failed&#x27;          → notify user, update payment status</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="7-webhooks" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Webhooks</h2>
+          <h3>Why Webhooks, Not Client Callbacks</h3>
+<p>Client-side callbacks (success page redirect) are <strong>unreliable</strong> — the user might close the browser, lose connection, or the callback might never fire. Always use webhooks as the source of truth for payment state.</p>
+<h3>Signature Verification (Required, Always)</h3>
+<pre><code class="language-python">import stripe
+from django.http import HttpResponse
+
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META.get(&#x27;HTTP_STRIPE_SIGNATURE&#x27;)
+    
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError:
+        return HttpResponse(status=400)  # Invalid payload
+    except stripe.error.SignatureVerificationError:
+        return HttpResponse(status=400)  # Invalid signature
+    
+    handle_event(event)
+    return HttpResponse(status=200)</code></pre>
+<h3>Idempotency — Process Each Event Once</h3>
+<pre><code class="language-python">def handle_event(event):
+    # Check if already processed
+    if StripeEvent.objects.filter(event_id=event[&#x27;id&#x27;]).exists():
+        return  # Skip duplicate
+    
+    StripeEvent.objects.create(event_id=event[&#x27;id&#x27;], type=event[&#x27;type&#x27;])
+    
+    if event[&#x27;type&#x27;] == &#x27;payment_intent.succeeded&#x27;:
+        handle_payment_succeeded(event[&#x27;data&#x27;][&#x27;object&#x27;])
+    elif event[&#x27;type&#x27;] == &#x27;customer.subscription.deleted&#x27;:
+        handle_subscription_cancelled(event[&#x27;data&#x27;][&#x27;object&#x27;])
+    # ...</code></pre>
+<h3>Webhook Response Rules</h3>
+<ul>
+  <li>Always return <strong>200</strong> after receiving the event (even if you skip processing it)</li>
+  <li>Never return 500 for business logic failures — log the error and return 200</li>
+  <li>Stripe retries on 4xx/5xx responses — returning 500 causes duplicate processing</li>
+</ul>
+<h3>Events to Handle</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Event</th>
+    <th>Action</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>payment_intent.succeeded</code></td>
+    <td>Activate order/access, send receipt</td>
+  </tr>
+  <tr>
+    <td><code>payment_intent.payment_failed</code></td>
+    <td>Notify user, do not activate</td>
+  </tr>
+  <tr>
+    <td><code>checkout.session.completed</code></td>
+    <td>Activate purchase</td>
+  </tr>
+  <tr>
+    <td><code>customer.subscription.created</code></td>
+    <td>Provision plan access</td>
+  </tr>
+  <tr>
+    <td><code>customer.subscription.updated</code></td>
+    <td>Sync plan changes to DB</td>
+  </tr>
+  <tr>
+    <td><code>customer.subscription.deleted</code></td>
+    <td>Revoke access after period ends</td>
+  </tr>
+  <tr>
+    <td><code>invoice.payment_succeeded</code></td>
+    <td>Record payment in billing history</td>
+  </tr>
+  <tr>
+    <td><code>invoice.payment_failed</code></td>
+    <td>Email user, mark payment as failed</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="8-metadata-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Metadata Standards</h2>
+          <p>Consistent metadata keys across all Stripe objects:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Object</th>
+    <th>Required Metadata Keys</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Customer</td>
+    <td><code>user_id</code>, <code>workspace_id</code></td>
+  </tr>
+  <tr>
+    <td>PaymentIntent</td>
+    <td><code>workspace_id</code>, <code>user_id</code>, <code>purpose</code></td>
+  </tr>
+  <tr>
+    <td>Checkout Session</td>
+    <td><code>workspace_id</code>, <code>user_id</code>, <code>plan</code> (if subscription)</td>
+  </tr>
+  <tr>
+    <td>Subscription</td>
+    <td><code>workspace_id</code>, <code>plan</code></td>
+  </tr>
+  <tr>
+    <td>Invoice</td>
+    <td>auto-inherited from subscription</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Rules</h3>
+<ul>
+  <li>Use <code>snake_case</code> for all metadata keys</li>
+  <li>Values must be strings (convert UUIDs and integers to <code>str()</code>)</li>
+  <li>Metadata values max 500 characters, max 50 keys</li>
+  <li>Do NOT store sensitive data (passwords, secrets, PII beyond what Stripe already has) in metadata</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="9-error-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Error Handling</h2>
+          <h3>Decline Codes</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Code</th>
+    <th>User Message</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>card_declined</code></td>
+    <td>"Your card was declined. Please try a different card."</td>
+  </tr>
+  <tr>
+    <td><code>insufficient_funds</code></td>
+    <td>"Your card has insufficient funds."</td>
+  </tr>
+  <tr>
+    <td><code>incorrect_cvc</code></td>
+    <td>"Your card's security code is incorrect."</td>
+  </tr>
+  <tr>
+    <td><code>expired_card</code></td>
+    <td>"Your card has expired."</td>
+  </tr>
+  <tr>
+    <td><code>processing_error</code></td>
+    <td>"An error occurred. Please try again."</td>
+  </tr>
+  </tbody>
+</table></div>
+<p>Never show raw Stripe error messages to users. Map decline codes to user-friendly messages.</p>
+<h3>3D Secure / SCA (Strong Customer Authentication)</h3>
+<pre><code class="language-js">const {paymentIntent, error} = await stripe.confirmCardPayment(clientSecret);
+
+if (error?.payment_intent?.status === &#x27;requires_action&#x27;) {
+    // Stripe.js handles the 3DS challenge automatically with confirmCardPayment
+    // Show user: &quot;Your bank requires additional verification.&quot;
+}</code></pre>
+<h3>Network / API Errors</h3>
+<pre><code class="language-python">try:
+    intent = stripe.PaymentIntent.create(...)
+except stripe.error.CardError as e:
+    # Decline — show decline message
+    return {&#x27;error&#x27;: e.user_message}
+except stripe.error.RateLimitError:
+    # Too many requests — retry later
+    raise
+except stripe.error.InvalidRequestError:
+    # Invalid parameters — log, fix code
+    raise
+except stripe.error.StripeError:
+    # General error — log, show generic error
+    raise</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="10-refunds" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Refunds</h2>
+          <pre><code class="language-python">refund = stripe.Refund.create(
+    payment_intent=payment_intent_id,
+    amount=500,   # partial refund in cents; omit for full refund
+    reason=&#x27;requested_by_customer&#x27;,  # or &#x27;fraudulent&#x27;, &#x27;duplicate&#x27;
+    metadata={
+        &#x27;refunded_by&#x27;: str(admin_user.id),
+        &#x27;reason_detail&#x27;: &#x27;Customer reported non-delivery&#x27;,
+    },
+)</code></pre>
+<h3>Rules</h3>
+<ul>
+  <li>Always refund via API — never manually in the Stripe Dashboard (for consistency with your DB records)</li>
+  <li>Store <code>refund_id</code> in your database</li>
+  <li>Update order/payment status in your DB after successful refund</li>
+  <li>Confirm via webhook <code>charge.refunded</code> before marking as fully refunded in DB</li>
+  <li>Partial refunds: specify <code>amount</code> in cents; omit for full refund</li>
+</ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

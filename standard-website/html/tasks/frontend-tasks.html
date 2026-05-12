@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontend Practice Tasks | Development Standards</title>
+  <meta name="description" content="Frontend practice tasks for registration, login, reset password, and shared add/edit forms." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="tasks">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../index.html" class="navbar-link">Home</a><a href="../pages/standards.html" class="navbar-link">Standards</a><a href="../pages/checklists.html" class="navbar-link">Checklists</a><a href="../pages/tasks.html" class="navbar-link active">Tasks</a><a href="../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-info">Frontend Practice Tasks</span><h1 class="page-title">Frontend Practice Tasks</h1><p class="page-subtitle">Practice the frontend patterns used in real product work.</p></section>
+    <section class="section"><div class="content-card">
+      <div class="table-wrapper"><table class="table"><thead><tr><th>Task</th><th>What You Practice</th></tr></thead><tbody>
+        <tr><td><a href="./frontend/01-registration-form.html">01 — Registration Form</a></td><td>Form field validation: email, password strength + complexity, confirm password, phone (E.164 + country code selector), terms checkbox, all loading/error/success states</td></tr>
+        <tr><td><a href="./frontend/02-login-form.html">02 — Login Form with Forgot &amp; Reset Password</a></td><td>Complete auth flow: login error handling (email enumeration prevention), forgot password confirmation, reset password with token validation on page load</td></tr>
+        <tr><td><a href="./frontend/03-add-edit-project-form.html">03 — Shared Add / Edit Project Form</a></td><td>Add/Edit consistency: one shared component, one imported validation schema, pre-fill skeleton loader, identical field order, labels, error messages, and submit behavior in both modes</td></tr>
+      </tbody></table></div>
+      <div class="divider"></div>
+      <h2 class="section-title">Standards to Read First</h2>
+      <ul>
+        <li><a href="../standards/frontend-ui-standards.html">Frontend &amp; UI Standards</a></li>
+        <li><a href="../checklists/frontend/form-field-validation.html">Form Field Validation Checklist</a></li>
+        <li><a href="../checklists/frontend/login-signup.html">Login &amp; Signup Standards</a></li>
+        <li><a href="../checklists/frontend/add-edit-consistency.html">Add / Edit Consistency</a></li>
+      </ul>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

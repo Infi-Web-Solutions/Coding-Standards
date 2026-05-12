@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Frontend Standards",
+    "path": "html/standards/frontend-standards.html",
+    "category": "frontend"
+  },
+  {
+    "title": "Supabase Standards",
+    "path": "html/standards/supabase-standards.html",
+    "category": "supabase"
+  },
+  {
+    "title": "Django Standards",
+    "path": "html/standards/django-standards.html",
+    "category": "django"
+  },
+  {
+    "title": "Website Standards",
+    "path": "html/standards/website-standards.html",
+    "category": "website"
+  }
+]

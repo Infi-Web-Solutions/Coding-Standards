@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checklist — Xano Webhook Endpoint | Development Standards</title>
+  <meta name="description" content="Checklist for building a Xano webhook endpoint with signature verification, idempotency, logging, and safe processing." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+<body data-page="checklists">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../../index.html" class="navbar-link">Home</a><a href="../../pages/standards.html" class="navbar-link">Standards</a><a href="../../pages/checklists.html" class="navbar-link active">Checklists</a><a href="../../pages/tasks.html" class="navbar-link">Tasks</a><a href="../../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-primary">Xano Checklist</span><h1 class="page-title">Checklist — Xano Webhook Endpoint</h1><p class="page-subtitle">Run this checklist every time you build an endpoint that receives a webhook from an external service (Stripe, SendGrid, Calendly, etc.).</p></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Webhook Signature Verification</h2>
+      <label><input type="checkbox" data-checklist-item /> Signature verified before processing any payload</label><br />
+      <label><input type="checkbox" data-checklist-item /> Signature secret stored in Xano Environment Variables — not hardcoded</label><br />
+      <label><input type="checkbox" data-checklist-item /> Request rejected with 401 if signature is invalid</label><br />
+      <label><input type="checkbox" data-checklist-item /> Signature header name known and documented</label><br />
+      <label><input type="checkbox" data-checklist-item /> Timing-safe comparison used for signature verification</label>
+      <h2 class="section-title">Endpoint Configuration and Payload Handling</h2>
+      <label><input type="checkbox" data-checklist-item /> Endpoint is unauthenticated (no Xano Auth Token check)</label><br />
+      <label><input type="checkbox" data-checklist-item /> Method is POST</label><br />
+      <label><input type="checkbox" data-checklist-item /> URL is unique and not guessable if needed</label><br />
+      <label><input type="checkbox" data-checklist-item /> Payload event type checked before processing</label><br />
+      <label><input type="checkbox" data-checklist-item /> Required fields extracted and validated before use</label><br />
+      <label><input type="checkbox" data-checklist-item /> Idempotency key stored and checked before processing the same event twice</label>
+      <h2 class="section-title">Processing, Response, and Logging</h2>
+      <label><input type="checkbox" data-checklist-item /> Processing logic separated from signature verification</label><br />
+      <label><input type="checkbox" data-checklist-item /> Business logic uses reusable functions where appropriate</label><br />
+      <label><input type="checkbox" data-checklist-item /> Return 200 quickly — do not do slow blocking operations synchronously</label><br />
+      <label><input type="checkbox" data-checklist-item /> Return 401 for signature failure and 400 for malformed payload</label><br />
+      <label><input type="checkbox" data-checklist-item /> Do not return 500 for business logic failures — return 200 and log internally</label><br />
+      <label><input type="checkbox" data-checklist-item /> Every received webhook logged with timestamp, event type, and event ID</label><br />
+      <label><input type="checkbox" data-checklist-item /> Do not log full payloads if they contain card data or PII</label>
+      <h2 class="section-title">Testing and Done When</h2>
+      <label><input type="checkbox" data-checklist-item /> Tested with a real payload from the provider's test mode</label><br />
+      <label><input type="checkbox" data-checklist-item /> Valid signature processed and invalid signature rejected</label><br />
+      <label><input type="checkbox" data-checklist-item /> Idempotency tested with duplicate event delivery</label><br />
+      <label><input type="checkbox" data-checklist-item /> Unknown event type ignored gracefully with 200 returned</label><br />
+      <label><input type="checkbox" data-checklist-item /> Endpoint URL registered with the external service</label>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

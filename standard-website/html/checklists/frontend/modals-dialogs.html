@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Modals & Dialogs Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Checklist for modal opening, closing, content structure, confirmation modals, form modals, accessibility, nested modals, and mobile behavior."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Modals &amp; Dialogs Checklist</h1>
+
+        <p class="page-subtitle">
+          A modal must be openable, closeable, and accessible. It must trap focus inside,
+          respond to the Escape key, block background scroll, and handle loading/error states
+          for any async action inside it.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Live Demo</h2>
+          <p class="ui-demo-note" style="margin-bottom: 20px;">Interact with the examples below to see the correct modal behavior in action — focus trapping, loading states, validation, error display, ESC key, and backdrop click.</p>
+
+          <div class="ui-demo-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="ui-demo">
+              <div class="ui-demo-title">Confirmation Modal — Delete Action</div>
+              <p class="ui-demo-note" style="margin-bottom: 16px;">A destructive confirmation modal with a loading state on the primary action button. ESC key, backdrop click, and the close button all close it.</p>
+              <div class="ui-demo-actions" style="justify-content: flex-start;">
+                <button type="button" class="btn btn-danger" data-demo-open-confirm>Open Delete Modal</button>
+              </div>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Form Modal — Add Project</div>
+              <p class="ui-demo-note" style="margin-bottom: 16px;">A form modal with field validation, inline error handling, a loading Save button, and a "Trigger Error" button to simulate a server error inside the modal.</p>
+              <div class="ui-demo-actions" style="justify-content: flex-start;">
+                <button type="button" class="btn btn-primary" data-demo-open-form>Open Add Project Modal</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">1. Opening a Modal</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Modal is triggered by a clear user action</label><br />
+            <label><input type="checkbox" data-checklist-item /> Opening animation is present and under 200ms</label><br />
+            <label><input type="checkbox" data-checklist-item /> Background backdrop darkens</label><br />
+            <label><input type="checkbox" data-checklist-item /> Background scroll is locked when modal is open</label><br />
+            <label><input type="checkbox" data-checklist-item /> Focus moves to the modal on open</label><br />
+            <label><input type="checkbox" data-checklist-item /> First focusable element inside the modal receives focus</label><br />
+            <label><input type="checkbox" data-checklist-item /> Screen reader announces modal with <code>role="dialog"</code>, <code>aria-modal="true"</code>, and <code>aria-labelledby</code></label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">2. Closing a Modal</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Close button visible in top-right corner</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clicking backdrop closes modal unless unsaved form protection applies</label><br />
+            <label><input type="checkbox" data-checklist-item /> Escape key closes modal</label><br />
+            <label><input type="checkbox" data-checklist-item /> Closing animation matches open animation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Focus returns to the trigger button on close</label><br />
+            <label><input type="checkbox" data-checklist-item /> Background scroll restored on close</label><br />
+            <label><input type="checkbox" data-checklist-item /> Unsaved changes show Discard changes confirmation before closing</label><br />
+            <label><input type="checkbox" data-checklist-item /> Escape/backdrop disabled while loading operation is in progress</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">3. Modal Content Structure</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Modal has visible title using h2 or h3</label><br />
+            <label><input type="checkbox" data-checklist-item /> Title connected via <code>aria-labelledby</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Modal has clear primary action and cancel/close button</label><br />
+            <label><input type="checkbox" data-checklist-item /> Primary action on the right, cancel on the left or bottom</label><br />
+            <label><input type="checkbox" data-checklist-item /> Destructive primary actions styled red/danger</label><br />
+            <label><input type="checkbox" data-checklist-item /> Modal content scrolls internally, not the page behind it</label><br />
+            <label><input type="checkbox" data-checklist-item /> Modal width appropriate for content</label><br />
+            <label><input type="checkbox" data-checklist-item /> Modal centered vertically and horizontally</label><br />
+            <label><input type="checkbox" data-checklist-item /> Modal does not exceed viewport height without internal scroll</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">4. Confirmation Modals</h2>
+            <p class="card-description">
+              Used before destructive or irreversible actions like delete, archive, or remove member.
+            </p>
+
+            <label><input type="checkbox" data-checklist-item /> Title states action: <code>Delete Project?</code>, not <code>Are you sure?</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Body explains consequence</label><br />
+            <label><input type="checkbox" data-checklist-item /> Body names the specific item</label><br />
+            <label><input type="checkbox" data-checklist-item /> Primary button label states the action</label><br />
+            <label><input type="checkbox" data-checklist-item /> Cancel button clearly visible and labeled Cancel</label><br />
+            <label><input type="checkbox" data-checklist-item /> Primary button is danger/red for destructive action</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state on primary button</label><br />
+            <label><input type="checkbox" data-checklist-item /> On success: modal closes, success toast shown, list refreshes</label><br />
+            <label><input type="checkbox" data-checklist-item /> On error: modal stays open, error shown inside modal</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">5. Form Modals</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Same component used for Add and Edit</label><br />
+            <label><input type="checkbox" data-checklist-item /> Form validation runs before submission</label><br />
+            <label><input type="checkbox" data-checklist-item /> API/server errors shown inside modal</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state on submit button</label><br />
+            <label><input type="checkbox" data-checklist-item /> No double submit possible</label><br />
+            <label><input type="checkbox" data-checklist-item /> On success: modal closes, success toast shown, parent list refreshes</label><br />
+            <label><input type="checkbox" data-checklist-item /> On error: modal stays open, form stays populated, error shown</label><br />
+            <label><input type="checkbox" data-checklist-item /> Cancel confirms discard if form has unsaved input</label><br />
+            <label><input type="checkbox" data-checklist-item /> Long form modal scrolls internally</label><br />
+            <label><input type="checkbox" data-checklist-item /> Tab order loops inside the modal</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">6. Accessibility</h2>
+
+            <label><input type="checkbox" data-checklist-item /> <code>role="dialog"</code> on modal root</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>aria-modal="true"</code> on modal root</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>aria-labelledby</code> points to modal title</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>aria-describedby</code> points to modal body if applicable</label><br />
+            <label><input type="checkbox" data-checklist-item /> Focus trapped inside modal</label><br />
+            <label><input type="checkbox" data-checklist-item /> Escape key closes modal</label><br />
+            <label><input type="checkbox" data-checklist-item /> Focus returns to trigger element on close</label><br />
+            <label><input type="checkbox" data-checklist-item /> Background content has <code>aria-hidden="true"</code> while modal is open</label><br />
+            <label><input type="checkbox" data-checklist-item /> All interactive elements inside modal are keyboard-accessible</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">7. Stacking &amp; Nested Modals</h2>
+            <p class="card-description">
+              Avoid nesting modals whenever possible — re-think the UX first.
+            </p>
+
+            <label><input type="checkbox" data-checklist-item /> Nested modals avoided where possible</label><br />
+            <label><input type="checkbox" data-checklist-item /> If nested: second modal has higher z-index and second backdrop darkens above first</label><br />
+            <label><input type="checkbox" data-checklist-item /> Escape closes only the topmost modal</label><br />
+            <label><input type="checkbox" data-checklist-item /> Focus moves to second modal on open and returns to first on close</label><br />
+            <label><input type="checkbox" data-checklist-item /> Max nesting depth is 2 levels — never 3+</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">8. Mobile</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Modal is full-screen or bottom sheet on mobile</label><br />
+            <label><input type="checkbox" data-checklist-item /> Bottom sheet slides up from bottom on mobile when suitable</label><br />
+            <label><input type="checkbox" data-checklist-item /> Scrollable content area inside the sheet for long forms</label><br />
+            <label><input type="checkbox" data-checklist-item /> Close handle visible at top of bottom sheet</label><br />
+            <label><input type="checkbox" data-checklist-item /> Tap outside / swipe down closes modal with unsaved changes protection</label><br />
+            <label><input type="checkbox" data-checklist-item /> Keyboard does not push modal content out of view</label><br />
+            <label><input type="checkbox" data-checklist-item /> Touch targets are at least 44×44px</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-success">
+          <div class="alert-title">Before Marking Done</div>
+          Modal open, close, focus trap, Escape behavior, scroll lock, loading state, error state, accessibility, and mobile behavior must all be tested.
+        </div>
+      </section>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-backdrop" data-demo-confirm-modal role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+      <div class="modal">
+        <div class="modal-header" style="display: flex; align-items: center; justify-content: space-between;">
+          <h2 class="modal-title" id="confirm-modal-title">Delete Project?</h2>
+          <button type="button" class="btn btn-secondary btn-sm" data-demo-confirm-cancel aria-label="Close modal" style="margin-left: auto;">✕</button>
+        </div>
+        <div class="modal-body" id="confirm-modal-desc">
+          This will permanently remove <strong>Marketing Q1</strong> and all 14 tasks inside it. This action cannot be undone.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-demo-confirm-cancel>Cancel</button>
+          <button type="button" class="btn btn-danger" data-demo-confirm-delete>Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Modal -->
+    <div class="modal-backdrop" data-demo-form-modal role="dialog" aria-modal="true" aria-labelledby="form-modal-title">
+      <div class="modal">
+        <div class="modal-header" style="display: flex; align-items: center; justify-content: space-between;">
+          <h2 class="modal-title" id="form-modal-title">Add Project</h2>
+          <button type="button" class="btn btn-secondary btn-sm" data-demo-form-cancel aria-label="Close modal" style="margin-left: auto;">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger ui-demo-hidden" data-demo-form-error-alert style="margin-bottom: 16px;">
+            <div class="alert-title">Could not save project</div>
+            Server returned an error. Please check your input and try again.
+          </div>
+          <div class="ui-demo-field" style="margin-bottom: 16px;">
+            <label class="ui-demo-label" for="demo-form-title">Project Title <span class="ui-demo-required">*</span></label>
+            <input id="demo-form-title" class="form-control" type="text" placeholder="Enter project title" data-demo-form-title autocomplete="off" />
+            <div class="ui-demo-error ui-demo-hidden" data-demo-form-title-error></div>
+          </div>
+          <div class="ui-demo-field">
+            <label class="ui-demo-label" for="demo-form-desc">Description</label>
+            <textarea id="demo-form-desc" class="form-control" rows="3" placeholder="Optional project description" data-demo-form-desc></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="justify-content: space-between;">
+          <button type="button" class="btn btn-secondary btn-sm" data-demo-form-trigger-error>Trigger Error</button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary" data-demo-form-cancel>Cancel</button>
+            <button type="button" class="btn btn-primary" data-demo-form-save>Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Modals must be accessible, focus-safe, scroll-safe, and resilient during async actions.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../standards/frontend-standards.html" class="footer-link">Frontend Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+  <script type="module" src="../../../js/pages/modals-demo.js"></script>
+</body>
+</html>

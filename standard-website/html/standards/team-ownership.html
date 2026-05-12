@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Ownership &amp; Process Standards | Development Standards</title>
+  <meta name="description" content="Work update format, issue raising, ticket discipline, PR standards, communication rules, escalation process, and accountability for bugs." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body class="team-ownership-page" data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Team Ownership &amp; Process Standards</h1>
+        <p class="page-subtitle">Work update format, issue raising, ticket discipline, PR standards, communication rules, escalation process, and accountability for bugs.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+      <section class="section ownership-intro-grid">
+        <div class="content-card ownership-rule-card">
+          <span class="ownership-kicker">Core Rule</span>
+          <blockquote>Every team member must own their work end-to-end: understand the requirement, ask questions early, build with standards, test their own work, update clearly, raise issues in the ticket, and stay accountable for changes. Before marking things Done — meet the standards.</blockquote>
+        </div>
+
+        <div class="content-card ownership-guide-card">
+          <span class="ownership-kicker">How To Use This Standard</span>
+          <div class="ownership-guide-list">
+            <div class="ownership-guide-item">
+              <strong>Before starting</strong>
+              <span>Use the requirement and impact checklists so you do not begin with silent assumptions.</span>
+            </div>
+            <div class="ownership-guide-item">
+              <strong>While working</strong>
+              <span>Follow the update, work-log, issue-raising, and escalation rules to keep work traceable.</span>
+            </div>
+            <div class="ownership-guide-item">
+              <strong>Before closing</strong>
+              <span>Use the completion, PR, and non-negotiable sections as the final quality gate.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contents" class="section ownership-contents-section">
+        <div class="content-card ownership-contents-card">
+          <h2 class="section-title">Contents</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>#</th>
+    <th>Section</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><a href="#1-self-ownership-standard">1</a></td>
+    <td>Self-Ownership Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#2-before-starting-any-task">2</a></td>
+    <td>Before Starting Any Task</td>
+  </tr>
+  <tr>
+    <td><a href="#3-work-update-standard">3</a></td>
+    <td>Work Update Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#4-work-log-standard">4</a></td>
+    <td>Work Log Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#5-issue-raising-standard">5</a></td>
+    <td>Issue Raising Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#6-change-impact-standard">6</a></td>
+    <td>Change Impact Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#7-commenting--code-explanation-standard">7</a></td>
+    <td>Commenting & Code Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#8-accountability-for-bugs">8</a></td>
+    <td>Accountability for Bugs</td>
+  </tr>
+  <tr>
+    <td><a href="#9-communication-standard">9</a></td>
+    <td>Communication Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#10-when-to-ask-for-help">10</a></td>
+    <td>When to Ask for Help</td>
+  </tr>
+  <tr>
+    <td><a href="#11-ticket-discipline-standard">11</a></td>
+    <td>Ticket Discipline</td>
+  </tr>
+  <tr>
+    <td><a href="#12-final-completion-standard">12</a></td>
+    <td>Final Completion Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#13-pull-request--code-review-standard">13</a></td>
+    <td>Pull Request Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#14-developer-mindset-standard">14</a></td>
+    <td>Developer Mindset</td>
+  </tr>
+  <tr>
+    <td><a href="#15-non-negotiable-standards">15</a></td>
+    <td>Non-Negotiables</td>
+  </tr>
+  <tr>
+    <td><a href="#16-team-standard-summary">16</a></td>
+    <td>Team Standard Summary</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1 id="1-self-ownership-standard">1. Self-Ownership Standard</h1>
+        </div>
+      </section>
+
+      <section id="what-self-ownership-means" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What Self-Ownership Means</h2>
+          <p>Every team member is responsible for:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Area</th>
+    <th>Expected Standard</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Understanding</td>
+    <td>Read the task properly before starting.</td>
+  </tr>
+  <tr>
+    <td>Clarification</td>
+    <td>Ask questions before building unclear requirements.</td>
+  </tr>
+  <tr>
+    <td>Research</td>
+    <td>Try to understand and solve independently first.</td>
+  </tr>
+  <tr>
+    <td>Accountability</td>
+    <td>Own your changes, bugs, and fixes.</td>
+  </tr>
+  <tr>
+    <td>Quality</td>
+    <td>Do not depend only on QA/client to find basic issues.</td>
+  </tr>
+  <tr>
+    <td>Documentation</td>
+    <td>Keep ticket updates clear and traceable.</td>
+  </tr>
+  <tr>
+    <td>Communication</td>
+    <td>Give concise updates with time and status.</td>
+  </tr>
+  <tr>
+    <td>Escalation</td>
+    <td>Ask for help when blocked after proper effort.</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="good-ownership-behavior" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Good Ownership Behavior</h2>
+          <pre><code class="language-text">I reviewed the task, found that the add/edit form design needs to stay consistent across both pages.
+I checked both flows, updated the shared component, and tested validation on create and edit.</code></pre>
+        </div>
+      </section>
+
+      <section id="poor-ownership-behavior" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Poor Ownership Behavior</h2>
+          <pre><code class="language-text">Done.</code></pre>
+<p>or</p>
+<pre><code class="language-text">It was not mentioned in the ticket, so I did not check it.</code></pre>
+<p>If you are building something, you should think about the surrounding system — not only the exact line written in the ticket.</p>
+<hr />
+<h1 id="2-before-starting-any-task">2. Before Starting Any Task</h1>
+<p>Before development starts, every member must check these points.</p>
+        </div>
+      </section>
+
+      <section id="requirement-understanding-checklist" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Requirement Understanding Checklist</h2>
+          <label><input type="checkbox" data-checklist-item /> What exactly needs to be built/fixed?</label><br />
+<label><input type="checkbox" data-checklist-item /> Which page/module does it affect?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this frontend, backend, database, no-code, API, or design work?</label><br />
+<label><input type="checkbox" data-checklist-item /> Are there similar existing pages/components?</label><br />
+<label><input type="checkbox" data-checklist-item /> Should this be reusable?</label><br />
+<label><input type="checkbox" data-checklist-item /> What validations are needed?</label><br />
+<label><input type="checkbox" data-checklist-item /> What error states are needed?</label><br />
+<label><input type="checkbox" data-checklist-item /> What loading states are needed?</label><br />
+<label><input type="checkbox" data-checklist-item /> What success/failure states are needed?</label><br />
+<label><input type="checkbox" data-checklist-item /> Does this affect any other page/API/component?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is there any security or permission concern?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is anything unclear that should be asked before starting?</label><br />
+        </div>
+      </section>
+
+      <section id="rule" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Rule</h2>
+          <p>If something is unclear, do not assume silently.</p>
+<p>Raise concise questions in the ticket:</p>
+<pre><code class="language-text">Need clarification before implementation:
+
+1. Should this field be required or optional?
+2. Should this be added to both Add and Edit forms?
+3. Should users with Viewer role see this button disabled or hidden?</code></pre>
+<hr />
+<h1 id="3-work-update-standard">3. Work Update Standard</h1>
+<p>Updates must be clear, short, and useful.</p>
+        </div>
+      </section>
+
+      <section id="update-must-include" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Update Must Include</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Item</th>
+    <th>Required</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>What was done</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Time spent</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Current status</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Issue/blocker if any</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Next step</td>
+    <td>If still in progress</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="standard-update-format" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Standard Update Format</h2>
+          <pre><code class="language-text">Time Spent: 1h 20m
+
+Status: In Progress
+
+Work Done:
+- Updated Add Project form layout.
+- Added required field validation for name and phone.
+- Matched UI spacing with Edit Project form.
+
+Issue:
+- Phone validation took extra time because country-code handling was missing.
+
+Next:
+- Testing mobile layout and error states.</code></pre>
+        </div>
+      </section>
+
+      <section id="for-completed-work" class="section">
+        <div class="content-card">
+          <h2 class="section-title">For Completed Work</h2>
+          <pre><code class="language-text">Time Spent: 2h
+
+Status: Completed
+
+Work Done:
+- Added delete confirmation popup.
+- Added loading state on delete button.
+- Added success and error notifications.
+- Tested delete success, permission error, and API failure cases.</code></pre>
+        </div>
+      </section>
+
+      <section id="for-blocked-work" class="section">
+        <div class="content-card">
+          <h2 class="section-title">For Blocked Work</h2>
+          <pre><code class="language-text">Time Spent: 45m
+
+Status: Blocked
+
+Work Done:
+- Checked current API integration.
+- Verified frontend payload.
+- Found backend is not returning field-level validation errors.
+
+Blocker:
+- Need backend response format confirmation before final UI error handling.</code></pre>
+<hr />
+<h1 id="4-work-log-standard">4. Work Log Standard</h1>
+<p>Work logs should be concise. They are not for long explanations.</p>
+        </div>
+      </section>
+
+      <section id="good-work-log" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Good Work Log</h2>
+          <pre><code class="language-text">1h 30m — Built Add/Edit form validation and tested required fields.</code></pre>
+<pre><code class="language-text">45m — Fixed mobile spacing issue in project card component.</code></pre>
+<pre><code class="language-text">2h — Debugged API failure; issue was caused by missing workspace_id in payload.</code></pre>
+        </div>
+      </section>
+
+      <section id="bad-work-log" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Bad Work Log</h2>
+          <pre><code class="language-text">Worked on task.</code></pre>
+<pre><code class="language-text">Fixed issues.</code></pre>
+<pre><code class="language-text">Did frontend.</code></pre>
+        </div>
+      </section>
+
+      <section id="when-something-took-more-time" class="section">
+        <div class="content-card">
+          <h2 class="section-title">When Something Took More Time</h2>
+          <p>Mention the reason briefly:</p>
+<pre><code class="language-text">2h 15m — Fixed form submission issue. Extra time was required because the API was silently failing without a proper error response.</code></pre>
+<p>Do not write long stories. Keep it clear and professional.</p>
+<hr />
+<h1 id="5-issue-raising-standard">5. Issue Raising Standard</h1>
+<p>If you find a bug, blocker, unclear requirement, or related issue, raise it in the ticket/task system.</p>
+<p><strong>Do not only mention it in chat.</strong> Chat messages get lost. Tickets remain traceable.</p>
+        </div>
+      </section>
+
+      <section id="when-to-raise-an-issue" class="section">
+        <div class="content-card">
+          <h2 class="section-title">When to Raise an Issue</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Situation</th>
+    <th>Action</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Found a bug while working</td>
+    <td>Add comment in ticket.</td>
+  </tr>
+  <tr>
+    <td>Found related issue outside current scope</td>
+    <td>Create linked ticket or add note.</td>
+  </tr>
+  <tr>
+    <td>Requirement unclear</td>
+    <td>Ask in ticket.</td>
+  </tr>
+  <tr>
+    <td>API missing expected field</td>
+    <td>Raise issue in backend ticket.</td>
+  </tr>
+  <tr>
+    <td>UI inconsistency found</td>
+    <td>Mention in ticket with screenshot.</td>
+  </tr>
+  <tr>
+    <td>Another module may be affected</td>
+    <td>Add impact note.</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="issue-format" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Issue Format</h2>
+          <pre><code class="language-text">Issue Found:
+The Edit Project form has different validation from Add Project form.
+
+Impact:
+Users can submit invalid phone numbers from Edit form.
+
+Suggested Fix:
+Use the same shared validation schema/component for both Add and Edit forms.</code></pre>
+<hr />
+<h1 id="6-change-impact-standard">6. Change Impact Standard</h1>
+<p>Before changing anything, check where else it may affect.</p>
+        </div>
+      </section>
+
+      <section id="impact-checklist" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Impact Checklist</h2>
+          <label><input type="checkbox" data-checklist-item /> Is this component reused anywhere?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this API used by another page?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this database field used in filters/search/export?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this validation also needed in edit flow?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this change affecting mobile layout?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this change affecting permissions?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this change affecting notifications?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this change affecting reports/analytics?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this change affecting old data?</label><br />
+        </div>
+      </section>
+
+      <section id="good-change-note" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Good Change Note</h2>
+          <pre><code class="language-text">Impact Checked:
+- Add Project page
+- Edit Project page
+- Project detail page
+- Project list table
+- API payload
+- Form validation schema
+
+Change applied through shared component to keep Add/Edit UI consistent.</code></pre>
+        </div>
+      </section>
+
+      <section id="bad-approach" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Bad Approach</h2>
+          <p>Changing only one place without checking related pages.</p>
+<p>Example:</p>
+<pre><code class="language-text">Added validation on Add form but forgot Edit form.</code></pre>
+<p>This creates inconsistent product behavior.</p>
+<hr />
+<h1 id="7-commenting--code-explanation-standard">7. Commenting & Code Explanation Standard</h1>
+<p>Comments should explain <strong>why</strong>, not obvious <strong>what</strong>.</p>
+        </div>
+      </section>
+
+      <section id="good-comment" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Good Comment</h2>
+          <pre><code class="language-ts">// Keep submit button disabled during API request to prevent duplicate project creation.</code></pre>
+        </div>
+      </section>
+
+      <section id="bad-comment" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Bad Comment</h2>
+          <pre><code class="language-ts">// This is a button</code></pre>
+        </div>
+      </section>
+
+      <section id="ticket-comment-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Ticket Comment Standard</h2>
+          <p>Keep comments concise and useful:</p>
+<pre><code class="language-text">Updated ProjectForm to be shared by Add and Edit pages so validation and UI remain consistent.</code></pre>
+<hr />
+<h1 id="8-accountability-for-bugs">8. Accountability for Bugs</h1>
+<p>If your change creates a bug, own it.</p>
+        </div>
+      </section>
+
+      <section id="expected-behavior" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Expected Behavior</h2>
+          <pre><code class="language-text">I found that my previous change affected the Edit flow. I have reopened the ticket, added the issue details, and I am fixing it now.</code></pre>
+        </div>
+      </section>
+
+      <section id="poor-behavior" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Poor Behavior</h2>
+          <pre><code class="language-text">It was working on my side.</code></pre>
+<p>or</p>
+<pre><code class="language-text">QA should have checked it.</code></pre>
+<p>Ownership means fixing and improving the standard so the same bug does not happen again.</p>
+<hr />
+<h1 id="9-communication-standard">9. Communication Standard</h1>
+<p>Communication should be:</p>
+<pre><code class="language-text">Clear
+Short
+Specific
+Traceable
+Professional</code></pre>
+        </div>
+      </section>
+
+      <section id="bad-communication" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Bad Communication</h2>
+          <pre><code class="language-text">There is issue.</code></pre>
+        </div>
+      </section>
+
+      <section id="good-communication" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Good Communication</h2>
+          <pre><code class="language-text">Issue:
+The save button does not show loading state during API request.
+
+Impact:
+User can click multiple times and create duplicate records.
+
+Fix:
+I will disable the button while request is pending and show &quot;Saving...&quot;.</code></pre>
+<hr />
+<h1 id="10-when-to-ask-for-help">10. When to Ask for Help</h1>
+<p>First, try to understand and debug yourself. But do not waste too much time silently.</p>
+        </div>
+      </section>
+
+      <section id="escalation-rule" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Escalation Rule</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Situation</th>
+    <th>Standard</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Requirement unclear</td>
+    <td>Ask immediately</td>
+  </tr>
+  <tr>
+    <td>Blocked by missing API/access</td>
+    <td>Ask immediately</td>
+  </tr>
+  <tr>
+    <td>Technical issue after reasonable debugging</td>
+    <td>Ask with details</td>
+  </tr>
+  <tr>
+    <td>Security/payment/auth issue</td>
+    <td>Ask early</td>
+  </tr>
+  <tr>
+    <td>Production issue</td>
+    <td>Escalate immediately</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="help-request-format" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Help Request Format</h2>
+          <pre><code class="language-text">Need help on:
+Project creation API returning 403.
+
+What I checked:
+- User is logged in.
+- Token is being sent.
+- workspace_id is correct.
+- Same user can view workspace.
+
+Possible Cause:
+RLS insert policy may not allow manager role.
+
+Request:
+Can backend confirm insert policy for manager role?</code></pre>
+<hr />
+<h1 id="11-ticket-discipline-standard">11. Ticket Discipline Standard</h1>
+<p>All important information must be in the ticket.</p>
+        </div>
+      </section>
+
+      <section id="ticket-must-contain" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Ticket Must Contain</h2>
+          <label><input type="checkbox" data-checklist-item /> Requirement</label><br />
+<label><input type="checkbox" data-checklist-item /> Clarifying questions</label><br />
+<label><input type="checkbox" data-checklist-item /> Work updates</label><br />
+<label><input type="checkbox" data-checklist-item /> Issues found</label><br />
+<label><input type="checkbox" data-checklist-item /> Blockers</label><br />
+<label><input type="checkbox" data-checklist-item /> Testing notes</label><br />
+<label><input type="checkbox" data-checklist-item /> Final completion note</label><br />
+<label><input type="checkbox" data-checklist-item /> Screenshots/video if UI-related</label><br />
+<label><input type="checkbox" data-checklist-item /> Related tickets if any</label><br />
+        </div>
+      </section>
+
+      <section id="do-not-keep-only-in-chat" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Do Not Keep Only in Chat</h2>
+          <p>These must not stay only in chat:</p>
+<pre><code class="language-text">Bugs
+Blockers
+Client decisions
+Requirement changes
+API changes
+Design changes
+Permission changes
+Known issues</code></pre>
+<hr />
+<h1 id="12-final-completion-standard">12. Final Completion Standard</h1>
+<p>Before marking a task done, add a final comment in the ticket.</p>
+        </div>
+      </section>
+
+      <section id="completion-comment-template" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Completion Comment Template</h2>
+          <pre><code class="language-text">Status: Completed
+
+Work Done:
+- Built shared Add/Edit Project form.
+- Added required field validation.
+- Added loading, success, and error states.
+- Added delete confirmation modal.
+- Matched design system spacing and button styles.
+
+Testing Done:
+- Tested create success flow.
+- Tested edit success flow.
+- Tested required field validation.
+- Tested API failure handling.
+- Checked mobile layout.
+
+Notes:
+- No known blockers.</code></pre>
+        </div>
+      </section>
+
+      <section id="if-there-is-a-known-issue" class="section">
+        <div class="content-card">
+          <h2 class="section-title">If There Is a Known Issue</h2>
+          <pre><code class="language-text">Known Issue:
+Bulk delete behavior is not included in this task and should be handled in a separate ticket.</code></pre>
+<hr />
+<h1 id="13-pull-request--code-review-standard">13. Pull Request / Code Review Standard</h1>
+<p>Every PR should include:</p>
+<label><input type="checkbox" data-checklist-item /> What changed</label><br />
+<label><input type="checkbox" data-checklist-item /> Why changed</label><br />
+<label><input type="checkbox" data-checklist-item /> Screenshots/video for UI changes</label><br />
+<label><input type="checkbox" data-checklist-item /> Test cases completed</label><br />
+<label><input type="checkbox" data-checklist-item /> Affected pages/modules</label><br />
+<label><input type="checkbox" data-checklist-item /> Any migrations/API changes</label><br />
+<label><input type="checkbox" data-checklist-item /> Known risks</label><br />
+        </div>
+      </section>
+
+      <section id="pr-description-example" class="section">
+        <div class="content-card">
+          <h2 class="section-title">PR Description Example</h2>
+          <pre><code class="language-text">Summary:
+Added shared ProjectForm component for Add and Edit project pages.
+
+Changes:
+- Created reusable ProjectForm.
+- Added validation schema.
+- Added loading/error/success states.
+- Updated Add Project and Edit Project pages to use same component.
+
+Testing:
+- Create project success.
+- Edit project success.
+- Missing name validation.
+- API error message.
+- Mobile layout.
+
+Impact:
+Affects Add Project and Edit Project pages.</code></pre>
+<hr />
+<h1 id="14-developer-mindset-standard">14. Developer Mindset Standard</h1>
+<p>Every team member should ask themselves before completing work:</p>
+<pre><code class="language-text">Would I accept this quality if I were the client?
+Would a normal user understand this error?
+Can this silently fail?
+Is this consistent with similar pages?
+Can this break another module?
+Is this reusable?
+Is this secure?
+Did I test it myself?
+Did I update the ticket properly?</code></pre>
+<hr />
+<h1 id="15-non-negotiable-standards">15. Non-Negotiable Standards</h1>
+<p>These are mandatory. No exceptions.</p>
+<pre><code class="language-text">1.  No silent failures.
+2.  No unclear &quot;done&quot; comments.
+3.  No untested task completion.
+4.  No inconsistent Add/Edit form behavior.
+5.  No API error only in console.
+6.  No missing required validation.
+7.  No missing loading state on submit buttons.
+8.  No destructive action without confirmation.
+9.  No important issue only in chat.
+10. No changing shared logic without checking impact.
+11. No duplicate UI/code when a reusable component is possible.
+12. No disabled field without clear visual indication.
+13. No unclear work logs.
+14. No skipping mobile check.
+15. No marking complete without self-testing.</code></pre>
+<hr />
+<h1 id="16-team-standard-summary">16. Team Standard Summary</h1>
+<p>Every task should follow this flow:</p>
+<pre><code class="language-text">Understand → Clarify → Plan → Build → Test → Update → Raise Issues → Complete with Evidence</code></pre>
+<p>The goal is not just to finish tickets. The goal is to build in a way that is:</p>
+<pre><code class="language-text">Accountable
+Traceable
+Consistent
+Reusable
+Secure
+User-friendly
+Maintainable
+Tested
+Professional</code></pre>
+<hr />
+<h1>One-Line Rule</h1>
+<pre><code class="language-text">Own the work, think beyond the ticket, communicate clearly, test before handoff, and make every change traceable.</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

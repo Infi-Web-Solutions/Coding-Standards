@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation — Invite System (React + Supabase) | Development Standards</title>
+  <meta name="description" content="Detailed evaluation checklist covering database table, RLS, Edge Function, RPC, members page, send modal, and accept page." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-danger">Evaluation Checklist</span>
+        <h1 class="page-title">Evaluation — Invite System (React + Supabase)</h1>
+        <p class="page-subtitle">Detailed evaluation checklist covering database table, RLS, Edge Function, RPC, members page, send modal, and accept page.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Project Spec:</strong> <a href="../react-supabase/01-invite-system.md">01-invite-system.md</a></p>
+<p><strong>Stack:</strong> React (TypeScript) + Supabase</p>
+<p><strong>Evaluator:</strong> ___________</p>
+<p><strong>Submission Date:</strong> ___________</p>
+<p><strong>Pass Threshold:</strong> 90%</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="how-to-mark" class="section">
+        <div class="content-card">
+          <h2 class="section-title">How to Mark</h2>
+          <ul>
+  <li><code>[✓]</code> Fully correct</li>
+  <li><code>[~]</code> Partial — note the gap below the item</li>
+  <li><code>[✗]</code> Missing or wrong</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-database-workspaceinvites-table" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Database — `workspace_invites` Table</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>id</code>: UUID, default <code>gen_random_uuid()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>workspace_id</code>: UUID, FK → workspaces.id, ON DELETE CASCADE</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>email</code>: text, NOT NULL</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>role</code>: text, NOT NULL, default <code>&#x27;member&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>token</code>: text, NOT NULL, UNIQUE — generated from <code>gen_random_uuid()::text</code> (not a sequential ID)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>status</code>: text, NOT NULL, default <code>&#x27;pending&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>invited_by</code>: UUID, FK → auth.users.id</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>expires_at</code>: timestamptz, NOT NULL, default <code>now() + interval &#x27;7 days&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>accepted_at</code>: timestamptz, nullable</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>created_at</code>: timestamptz, default <code>now()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> CHECK constraint: <code>role IN (&#x27;admin&#x27;, &#x27;member&#x27;)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> CHECK constraint: <code>status IN (&#x27;pending&#x27;, &#x27;accepted&#x27;, &#x27;revoked&#x27;, &#x27;expired&#x27;)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> UNIQUE INDEX on <code>token</code> column</label><br />
+<label><input type="checkbox" data-checklist-item /> Index on <code>(workspace_id, status)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Index on <code>email</code></label><br />
+<label><input type="checkbox" data-checklist-item /> RLS enabled</label><br />
+        </div>
+      </section>
+
+      <section id="2-rls-policies-workspaceinvites" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. RLS Policies — `workspace_invites`</h2>
+          <label><input type="checkbox" data-checklist-item /> SELECT: workspace admin/owner can view all invites for their workspace</label><br />
+<label><input type="checkbox" data-checklist-item /> SELECT: a user can view their own pending invite via <code>email = auth.email()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> INSERT: workspace admin/owner only</label><br />
+<label><input type="checkbox" data-checklist-item /> UPDATE: workspace admin/owner only (for revoke — status change)</label><br />
+<label><input type="checkbox" data-checklist-item /> DELETE: not allowed — soft delete only via status='revoked'</label><br />
+<label><input type="checkbox" data-checklist-item /> Policies use <code>auth.uid()</code> or <code>auth.email()</code> correctly — not hardcoded</label><br />
+        </div>
+      </section>
+
+      <section id="3-edge-function-send-workspace-invite" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Edge Function — `send-workspace-invite`</h2>
+          <label><input type="checkbox" data-checklist-item /> Function validates the JWT — rejects unauthenticated requests (401)</label><br />
+<label><input type="checkbox" data-checklist-item /> Parses body: <code>workspace_id</code>, <code>email</code>, <code>role</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Validates email format — returns 400 if invalid</label><br />
+<label><input type="checkbox" data-checklist-item /> Validates role is <code>&#x27;admin&#x27;</code> or <code>&#x27;member&#x27;</code> — returns 400 if invalid</label><br />
+<label><input type="checkbox" data-checklist-item /> Checks caller is admin/owner of the workspace — returns 403 if not</label><br />
+<label><input type="checkbox" data-checklist-item /> Checks email is not already an active member of the workspace — returns 409 if already a member</label><br />
+<label><input type="checkbox" data-checklist-item /> Checks no pending invite already exists for this email in this workspace — if found, returns 409 with existing invite details (so frontend can offer "Resend")</label><br />
+<label><input type="checkbox" data-checklist-item /> Creates invite record with generated token and <code>expires_at = now() + 7 days</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Sends invite email via Resend (or configured email provider)</label><br />
+<label><input type="checkbox" data-checklist-item /> Email subject includes admin's name and workspace name</label><br />
+<label><input type="checkbox" data-checklist-item /> Email body includes workspace name, role, and invite link: <code>{APP_BASE_URL}/accept-invite?token={token}</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Returns: <code>{ &quot;data&quot;: { invite_id, email, role, expires_at } }</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>RESEND_API_KEY</code> and <code>APP_BASE_URL</code> read from environment variables (not hardcoded)</label><br />
+<label><input type="checkbox" data-checklist-item /> Error responses use consistent format with HTTP codes and error codes</label><br />
+        </div>
+      </section>
+
+      <section id="4-rpc-acceptworkspaceinvite" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. RPC — `accept_workspace_invite`</h2>
+          <label><input type="checkbox" data-checklist-item /> Function uses <code>SECURITY DEFINER</code> (required to write workspace_members)</label><br />
+<label><input type="checkbox" data-checklist-item /> First line inside function body: <code>v_user_id uuid := auth.uid()</code> — auth checked immediately</label><br />
+<label><input type="checkbox" data-checklist-item /> Raises <code>AUTH_REQUIRED</code> if <code>auth.uid()</code> is NULL</label><br />
+<label><input type="checkbox" data-checklist-item /> Finds invite by <code>p_token</code> — raises <code>NOT_FOUND</code> if not found</label><br />
+<label><input type="checkbox" data-checklist-item /> Checks <code>status = &#x27;pending&#x27;</code> — raises <code>BUSINESS_RULE_VIOLATION</code> if already accepted/revoked/expired</label><br />
+<label><input type="checkbox" data-checklist-item /> Checks <code>expires_at &gt;= now()</code> — if expired, sets status='expired' and raises <code>BUSINESS_RULE_VIOLATION</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Checks caller's email matches invite email — raises <code>FORBIDDEN</code> if different email</label><br />
+<label><input type="checkbox" data-checklist-item /> Checks user is not already a workspace member — raises <code>DUPLICATE</code> if already a member</label><br />
+<label><input type="checkbox" data-checklist-item /> Inserts into <code>workspace_members</code> with correct workspace_id, user_id, role, status='active'</label><br />
+<label><input type="checkbox" data-checklist-item /> Updates invite: <code>status=&#x27;accepted&#x27;</code>, <code>accepted_at=now()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Both INSERT and UPDATE are atomic (within the same function transaction)</label><br />
+<label><input type="checkbox" data-checklist-item /> Returns: <code>{ &quot;data&quot;: { workspace_id, role }, &quot;message&quot;: &quot;...&quot; }</code></label><br />
+        </div>
+      </section>
+
+      <section id="5-react-members-invites-page" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. React — Members &amp; Invites Page</h2>
+          <label><input type="checkbox" data-checklist-item /> Page URL: <code>/workspaces/{id}/members</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Two tabs: "Members" and "Pending Invites"</label><br />
+<label><input type="checkbox" data-checklist-item /> Tab state in URL: <code>?tab=members</code> or <code>?tab=invites</code></label><br />
+<label><input type="checkbox" data-checklist-item /> "Pending Invites" tab: hidden entirely for member-role users (not just empty)</label><br />
+<label><input type="checkbox" data-checklist-item /> Tab label shows pending count: "Pending Invites (3)"</label><br />
+<p><strong>Members Tab:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Lists all active workspace members</label><br />
+<label><input type="checkbox" data-checklist-item /> Columns: Avatar · Name · Email · Role badge · Joined Date · Actions</label><br />
+<label><input type="checkbox" data-checklist-item /> Role change: inline dropdown → saves immediately with "Saving…" indicator while API updates</label><br />
+<label><input type="checkbox" data-checklist-item /> Remove member: shows confirmation "Remove [Name] from workspace?" before deletion</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state: skeleton rows</label><br />
+<label><input type="checkbox" data-checklist-item /> Empty state: "No members yet."</label><br />
+<label><input type="checkbox" data-checklist-item /> Error state: error + retry button</label><br />
+<p><strong>Pending Invites Tab:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Lists only <code>pending</code> status invites (not accepted/revoked)</label><br />
+<label><input type="checkbox" data-checklist-item /> Expired invites shown separately with "Expired" badge — no action buttons on expired</label><br />
+<label><input type="checkbox" data-checklist-item /> Columns: Email · Role · Invited By · Expires On · Actions (Copy Link, Resend, Revoke)</label><br />
+<label><input type="checkbox" data-checklist-item /> Copy Link: copies full <code>{APP_BASE_URL}/accept-invite?token={token}</code> to clipboard, "Link copied." toast</label><br />
+<label><input type="checkbox" data-checklist-item /> Resend: calls Edge Function again with same email/role, "Invite resent." toast</label><br />
+<label><input type="checkbox" data-checklist-item /> Revoke: confirmation "Revoke invite to [email]?" → updates <code>status=&#x27;revoked&#x27;</code> (not a delete)</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state: skeleton rows</label><br />
+<label><input type="checkbox" data-checklist-item /> Empty state: "No pending invites."</label><br />
+        </div>
+      </section>
+
+      <section id="6-react-send-invite-modal" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. React — Send Invite Modal</h2>
+          <label><input type="checkbox" data-checklist-item /> "Invite Member" button: visible to admin/owner only</label><br />
+<label><input type="checkbox" data-checklist-item /> Modal fields: Email (email input) + Role (dropdown: Member / Admin)</label><br />
+<label><input type="checkbox" data-checklist-item /> Email required — error if blank or invalid format</label><br />
+<label><input type="checkbox" data-checklist-item /> Submit calls the Edge Function</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state on submit button</label><br />
+<label><input type="checkbox" data-checklist-item /> On success: "Invite sent to [email]." toast, invites list refreshes</label><br />
+<label><input type="checkbox" data-checklist-item /> If already pending (409 with existing invite): "An invite to this email is already pending. Resend it?" with Resend button — not a generic error</label><br />
+<label><input type="checkbox" data-checklist-item /> If already a member (409): "This email is already a member of this workspace." as field error</label><br />
+<label><input type="checkbox" data-checklist-item /> API error: banner shown above the submit button</label><br />
+        </div>
+      </section>
+
+      <section id="7-react-accept-invite-page" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. React — Accept Invite Page</h2>
+          <label><input type="checkbox" data-checklist-item /> URL: <code>/accept-invite?token={token}</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Token extracted from URL query params on page load</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state: spinner + "Verifying your invite…" shown while checking token</label><br />
+<label><input type="checkbox" data-checklist-item /> Valid invite: shows workspace name, invited role, invited email</label><br />
+<label><input type="checkbox" data-checklist-item /> Valid invite: "Accept Invite" button calls <code>accept_workspace_invite</code> RPC</label><br />
+<label><input type="checkbox" data-checklist-item /> On accept success: redirects to workspace dashboard with "Welcome to [Workspace]!" toast</label><br />
+<label><input type="checkbox" data-checklist-item /> If user is not logged in: "Please sign in with [email] to accept this invite." + sign-in link</label><br />
+<label><input type="checkbox" data-checklist-item /> Invalid token / already used: "This invite link is invalid or has already been used."</label><br />
+<label><input type="checkbox" data-checklist-item /> Expired invite: "This invite has expired. Ask your admin to send a new one."</label><br />
+<label><input type="checkbox" data-checklist-item /> Wrong email (logged in as different email): "This invite was sent to a different email address."</label><br />
+<label><input type="checkbox" data-checklist-item /> Already a member: "You are already a member of this workspace." + link to workspace</label><br />
+<label><input type="checkbox" data-checklist-item /> All 5 error states have distinct messages — not a single generic "Something went wrong"</label><br />
+        </div>
+      </section>
+
+      <section id="8-standards-compliance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Standards Compliance</h2>
+          <label><input type="checkbox" data-checklist-item /> Token uses UUID format (not sequential integer or guessable string)</label><br />
+<label><input type="checkbox" data-checklist-item /> Revoked invites: status='revoked' (not deleted from DB)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>SECURITY DEFINER</code> used only on <code>accept_workspace_invite</code> — not <code>create_folder</code> style functions unnecessarily</label><br />
+<label><input type="checkbox" data-checklist-item /> No sensitive data (tokens, secrets) stored client-side beyond the URL</label><br />
+<label><input type="checkbox" data-checklist-item /> TypeScript interfaces defined for Invite, Member (no <code>any</code> types)</label><br />
+<label><input type="checkbox" data-checklist-item /> Custom hooks for data fetching returning <code>{ data, isLoading, error, refetch }</code></label><br />
+<label><input type="checkbox" data-checklist-item /> All async actions have loading states</label><br />
+<label><input type="checkbox" data-checklist-item /> No silent failures</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile tested at 375px and 768px</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="score-summary" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Score Summary</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Section</th>
+    <th>Total Items</th>
+    <th>✓ Pass</th>
+    <th>~ Partial</th>
+    <th>✗ Fail</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>1. Database Table</td>
+    <td>16</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2. RLS Policies</td>
+    <td>6</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>3. Edge Function</td>
+    <td>14</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>4. RPC Function</td>
+    <td>13</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>5. Members & Invites Page</td>
+    <td>18</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>6. Send Invite Modal</td>
+    <td>8</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>7. Accept Invite Page</td>
+    <td>11</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>8. Standards</td>
+    <td>9</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><strong>Total</strong></td>
+    <td><strong>95</strong></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  </tbody>
+</table></div>
+<p><strong>Score: ___ / 95 (___%)</strong> — Pass / Conditional / Fail</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="evaluator-notes" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Evaluator Notes</h2>
+          <p>_Record specific failures, partial items, or other observations here._</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

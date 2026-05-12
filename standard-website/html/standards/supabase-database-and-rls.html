@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Supabase — Database &amp; RLS Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Table schema standards, naming conventions, required constraints, index rules, RLS enabled on every table, policy types, anti-patterns."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Supabase — Database &amp; RLS Standard</h1>
+
+        <p class="page-subtitle">
+          Table schema standards, naming conventions, required constraints, index rules, RLS enabled on every table, policy types, anti-patterns.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="backend-responsibilities" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Backend Supabase Developer Responsibilities</h2>
+
+          <h3>P0 — Mandatory Responsibilities</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Responsibility</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Database Schema</td>
+                  <td>Create clean tables, constraints, indexes, relationships, timestamps.</td>
+                </tr>
+                <tr>
+                  <td>RLS Policies</td>
+                  <td>Implement row-level access rules for every exposed table.</td>
+                </tr>
+                <tr>
+                  <td>API Layer</td>
+                  <td>Decide whether API is direct Supabase query, RPC, or Edge Function.</td>
+                </tr>
+                <tr>
+                  <td>Auth Rules</td>
+                  <td>Define who can call what: anonymous, authenticated, owner, admin, org member.</td>
+                </tr>
+                <tr>
+                  <td>Validation</td>
+                  <td>Validate payload on frontend and backend/server/database.</td>
+                </tr>
+                <tr>
+                  <td>Error Handling</td>
+                  <td>Return predictable errors, never silent failure.</td>
+                </tr>
+                <tr>
+                  <td>Documentation</td>
+                  <td>Write clear frontend-facing API contract for every API.</td>
+                </tr>
+                <tr>
+                  <td>Testing</td>
+                  <td>Test success, validation error, unauthorized, forbidden, duplicate, missing data.</td>
+                </tr>
+                <tr>
+                  <td>Security</td>
+                  <td>No service-role key exposed, no open table without RLS, no unsafe policies.</td>
+                </tr>
+                <tr>
+                  <td>Observability</td>
+                  <td>Log important actions, failed requests, webhook retries, background job failures.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="api-types" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Supabase API Types</h2>
+
+          <p>A Supabase developer must choose the correct API pattern.</p>
+
+          <h3>API Type Decision Table</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>API Type</th>
+                  <th>Use When</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Direct Supabase Client Query</td>
+                  <td>Simple CRUD where RLS is enough.</td>
+                  <td>Add project, list user projects.</td>
+                </tr>
+                <tr>
+                  <td>RPC / Postgres Function</td>
+                  <td>Transactional DB logic or complex query.</td>
+                  <td>Create project + owner membership in one transaction.</td>
+                </tr>
+                <tr>
+                  <td>Edge Function</td>
+                  <td>Business logic, external APIs, webhooks, secret-based work.</td>
+                  <td>Stripe webhook, SendGrid email, AI processing.</td>
+                </tr>
+                <tr>
+                  <td>Database Trigger</td>
+                  <td>Automatic database-side event.</td>
+                  <td>Create profile after auth user creation.</td>
+                </tr>
+                <tr>
+                  <td>Database Webhook</td>
+                  <td>Notify external service after insert/update/delete.</td>
+                  <td>Send event to automation system.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="core-rule" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Core Rule: Never Build APIs Randomly</h2>
+
+          <p>Every API must follow this flow:</p>
+
+          <pre><code class="language-text">1. Define business requirement.
+2. Define database tables needed.
+3. Define user roles and permissions.
+4. Create migration.
+5. Add constraints and indexes.
+6. Enable RLS.
+7. Add RLS policies.
+8. Create API / RPC / Edge Function.
+9. Add payload validation.
+10. Add structured error handling.
+11. Add logs/audit logs.
+12. Test all success and failure cases.
+13. Write frontend API documentation.
+14. Give frontend sample request/response.
+15. Mention exact auth/session requirement.</code></pre>
+        </div>
+      </section>
+
+      <section id="database-schema-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Database Schema Standards</h2>
+
+          <h3>P0 — Every Table Should Have</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Column</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>id</code></td>
+                  <td>UUID primary key.</td>
+                </tr>
+                <tr>
+                  <td><code>created_at</code></td>
+                  <td>Timestamp with timezone, default <code>now()</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>updated_at</code></td>
+                  <td>Timestamp with timezone, updated automatically.</td>
+                </tr>
+                <tr>
+                  <td><code>created_by</code></td>
+                  <td>User UUID where ownership matters.</td>
+                </tr>
+                <tr>
+                  <td><code>updated_by</code></td>
+                  <td>User UUID where audit matters.</td>
+                </tr>
+                <tr>
+                  <td><code>workspace_id</code> / <code>organization_id</code></td>
+                  <td>Required for multi-tenant SaaS.</td>
+                </tr>
+                <tr>
+                  <td><code>deleted_at</code></td>
+                  <td>Soft delete if record recovery is needed.</td>
+                </tr>
+                <tr>
+                  <td><code>status</code></td>
+                  <td>Use enum/check constraint for workflow records.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Example</h3>
+          <pre><code class="language-sql">create table public.projects (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid not null references public.workspaces(id) on delete cascade,
+  name text not null,
+  description text,
+  status text not null default 'active' check (status in ('active', 'archived')),
+  created_by uuid not null references auth.users(id),
+  updated_by uuid references auth.users(id),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  deleted_at timestamptz
+);</code></pre>
+        </div>
+      </section>
+
+      <section id="naming-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Naming Standards</h2>
+
+          <h3>Table Naming</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Good</th>
+                  <th>Bad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>projects</code></td>
+                  <td><code>Project</code></td>
+                </tr>
+                <tr>
+                  <td><code>project_members</code></td>
+                  <td><code>projectMember</code></td>
+                </tr>
+                <tr>
+                  <td><code>workspace_invitations</code></td>
+                  <td><code>workspaceInviteData</code></td>
+                </tr>
+                <tr>
+                  <td><code>audit_logs</code></td>
+                  <td><code>logsTable</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Use:</p>
+          <pre><code class="language-text">snake_case
+plural table names
+clear foreign key names
+predictable column names</code></pre>
+
+          <h3>Column Naming</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Purpose</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Foreign key</td>
+                  <td><code>user_id</code>, <code>project_id</code>, <code>workspace_id</code></td>
+                </tr>
+                <tr>
+                  <td>Boolean</td>
+                  <td><code>is_active</code>, <code>is_verified</code>, <code>has_access</code></td>
+                </tr>
+                <tr>
+                  <td>Timestamp</td>
+                  <td><code>created_at</code>, <code>updated_at</code>, <code>deleted_at</code>, <code>expires_at</code></td>
+                </tr>
+                <tr>
+                  <td>Count</td>
+                  <td><code>message_count</code>, <code>member_count</code></td>
+                </tr>
+                <tr>
+                  <td>JSON</td>
+                  <td><code>metadata</code>, <code>settings</code>, <code>config</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="constraint-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Constraint Standards</h2>
+
+          <p>A Supabase developer should not depend only on application code.</p>
+
+          <h3>P0 Constraints</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Constraint</th>
+                  <th>Use For</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>not null</code></td>
+                  <td>Required fields.</td>
+                </tr>
+                <tr>
+                  <td><code>unique</code></td>
+                  <td>Email, slug, invite token, external IDs.</td>
+                </tr>
+                <tr>
+                  <td><code>foreign key</code></td>
+                  <td>Relationships.</td>
+                </tr>
+                <tr>
+                  <td><code>check</code></td>
+                  <td>Status, amount, enum-like values.</td>
+                </tr>
+                <tr>
+                  <td><code>default</code></td>
+                  <td>IDs, timestamps, default status.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Example</h3>
+          <pre><code class="language-sql">alter table public.projects
+add constraint projects_name_length_check
+check (char_length(name) between 2 and 100);</code></pre>
+        </div>
+      </section>
+
+      <section id="indexing-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Indexing Standards</h2>
+
+          <h3>P0 Indexes</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Scenario</th>
+                  <th>Index</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Tenant filtering</td>
+                  <td><code>workspace_id</code></td>
+                </tr>
+                <tr>
+                  <td>Ownership filtering</td>
+                  <td><code>created_by</code></td>
+                </tr>
+                <tr>
+                  <td>Search by status</td>
+                  <td><code>status</code></td>
+                </tr>
+                <tr>
+                  <td>Date sorting</td>
+                  <td><code>created_at desc</code></td>
+                </tr>
+                <tr>
+                  <td>Foreign keys</td>
+                  <td>All FK columns</td>
+                </tr>
+                <tr>
+                  <td>Soft delete queries</td>
+                  <td>Partial index where <code>deleted_at is null</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Example</h3>
+          <pre><code class="language-sql">create index projects_workspace_id_idx
+on public.projects(workspace_id);
+
+create index projects_workspace_active_idx
+on public.projects(workspace_id, created_at desc)
+where deleted_at is null;</code></pre>
+        </div>
+      </section>
+
+      <section id="rls-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. RLS Standards</h2>
+
+          <h3>P0 Rules</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Rule</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Enable RLS</td>
+                  <td>Every exposed table.</td>
+                </tr>
+                <tr>
+                  <td>No open policies</td>
+                  <td>Never use <code>true</code> unless table is intentionally public.</td>
+                </tr>
+                <tr>
+                  <td>Separate policies</td>
+                  <td>Separate select, insert, update, delete policies.</td>
+                </tr>
+                <tr>
+                  <td>Use <code>auth.uid()</code></td>
+                  <td>For user ownership checks.</td>
+                </tr>
+                <tr>
+                  <td>Use membership tables</td>
+                  <td>For team/workspace apps.</td>
+                </tr>
+                <tr>
+                  <td>Use <code>with check</code></td>
+                  <td>Mandatory for insert/update ownership validation.</td>
+                </tr>
+                <tr>
+                  <td>Test with real users</td>
+                  <td>Test owner, member, outsider, anonymous.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Enable RLS</h3>
+          <pre><code class="language-sql">alter table public.projects enable row level security;</code></pre>
+        </div>
+      </section>
+
+      <section id="rls-policy-types" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. RLS Policy Types</h2>
+
+          <h3>SELECT Policy</h3>
+          <p>Controls what rows user can read.</p>
+          <pre><code class="language-sql">create policy "Users can view projects in their workspace"
+on public.projects
+for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.workspace_members wm
+    where wm.workspace_id = projects.workspace_id
+      and wm.user_id = auth.uid()
+  )
+);</code></pre>
+
+          <h3>INSERT Policy</h3>
+          <p>Controls what rows user can create.</p>
+          <pre><code class="language-sql">create policy "Workspace members can create projects"
+on public.projects
+for insert
+to authenticated
+with check (
+  created_by = auth.uid()
+  and exists (
+    select 1
+    from public.workspace_members wm
+    where wm.workspace_id = projects.workspace_id
+      and wm.user_id = auth.uid()
+      and wm.role in ('owner', 'admin', 'manager')
+  )
+);</code></pre>
+
+          <h3>UPDATE Policy</h3>
+          <p>Controls what rows user can update.</p>
+          <pre><code class="language-sql">create policy "Admins and managers can update projects"
+on public.projects
+for update
+to authenticated
+using (
+  exists (
+    select 1
+    from public.workspace_members wm
+    where wm.workspace_id = projects.workspace_id
+      and wm.user_id = auth.uid()
+      and wm.role in ('owner', 'admin', 'manager')
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.workspace_members wm
+    where wm.workspace_id = projects.workspace_id
+      and wm.user_id = auth.uid()
+      and wm.role in ('owner', 'admin', 'manager')
+  )
+);</code></pre>
+
+          <h3>DELETE Policy</h3>
+          <p>Prefer soft delete over hard delete.</p>
+          <pre><code class="language-sql">create policy "Only owners can delete projects"
+on public.projects
+for delete
+to authenticated
+using (
+  exists (
+    select 1
+    from public.workspace_members wm
+    where wm.workspace_id = projects.workspace_id
+      and wm.user_id = auth.uid()
+      and wm.role = 'owner'
+  )
+);</code></pre>
+        </div>
+      </section>
+
+      <section id="rls-anti-patterns" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. RLS Anti-Patterns</h2>
+
+          <p>Avoid these:</p>
+
+          <pre><code class="language-sql">using (true)</code></pre>
+
+          <pre><code class="language-sql">with check (true)</code></pre>
+
+          <pre><code class="language-sql">created_by = auth.uid()</code></pre>
+
+          <p>...without also checking workspace membership.</p>
+
+          <pre><code class="language-sql">auth.jwt() -&gt; 'user_metadata' -&gt;&gt; 'role' = 'admin'</code></pre>
+
+          <p>Do not use user-editable metadata for authorization. Supabase specifically warns that <code>raw_user_meta_data</code> can be updated by authenticated users, while <code>raw_app_meta_data</code> is safer for authorization data.</p>
+        </div>
+      </section>
+
+      <section id="auth-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">11. Auth Standards</h2>
+
+          <h3>P0 Auth Requirements</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>API Type</th>
+                  <th>Auth Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Public API</td>
+                  <td>No auth, but rate-limited and sanitized.</td>
+                </tr>
+                <tr>
+                  <td>User API</td>
+                  <td>Requires Supabase access token.</td>
+                </tr>
+                <tr>
+                  <td>Workspace API</td>
+                  <td>Requires authenticated user + workspace membership.</td>
+                </tr>
+                <tr>
+                  <td>Admin API</td>
+                  <td>Requires admin role from secure source.</td>
+                </tr>
+                <tr>
+                  <td>Webhook API</td>
+                  <td>Requires signature verification.</td>
+                </tr>
+                <tr>
+                  <td>Edge Function</td>
+                  <td>Must validate JWT or use secure server-side pattern.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Frontend must send:</p>
+          <pre><code class="language-ts">Authorization: Bearer &lt;supabase_access_token&gt;</code></pre>
+        </div>
+      </section>
+
+      <section id="service-role-key-rules" class="section">
+        <div class="content-card">
+          <h2 class="section-title">12. Service Role Key Rules</h2>
+
+          <h3>Absolute Rule</h3>
+          <pre><code class="language-text">The service_role key must never be used in frontend code.</code></pre>
+
+          <h3>Service Role Can Be Used Only In</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Place</th>
+                  <th>Allowed?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Browser frontend</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Mobile app</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Public GitHub repo</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Supabase Edge Function secret</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Private backend server</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Secure cron job</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Local development <code>.env</code></td>
+                  <td>Yes, carefully</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Service Role Use Cases</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Use Case</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Admin-only operation</td>
+                  <td>Suspend user.</td>
+                </tr>
+                <tr>
+                  <td>Webhook processing</td>
+                  <td>Stripe subscription update.</td>
+                </tr>
+                <tr>
+                  <td>Background job</td>
+                  <td>Process uploaded file.</td>
+                </tr>
+                <tr>
+                  <td>System automation</td>
+                  <td>Create default workspace/profile.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Even when using service role, the developer must manually check authorization because service role bypasses RLS.</p>
+        </div>
+      </section>
+
+      <section id="api-design-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">13. API Design Standards</h2>
+
+          <h3>Every API Must Define</h3>
+          <pre><code class="language-text">1. API name
+2. Purpose
+3. Endpoint / Supabase table / RPC / Edge Function name
+4. Auth required or not
+5. Required role
+6. Required headers
+7. Request payload
+8. Validation rules
+9. Success response
+10. Error responses
+11. RLS policies involved
+12. Frontend implementation notes
+13. Test cases
+14. Example request
+15. Example response</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Every exposed Supabase table must have RLS enabled, proper constraints, indexes, and complete documentation before production.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Reusability Standards | Development Standards</title>
+  <meta name="description" content="Before you build anything — check if it already exists. When to extract to a shared component, hook, service, or function." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Code Reusability Standards</h1>
+        <p class="page-subtitle">Before you build anything — check if it already exists. When to extract to a shared component, hook, service, or function.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p>Core rule:</p>
+<blockquote>Before you build anything, ask: "Does this already exist, or will it exist again?" If the answer is yes to either — build it once, build it properly, and reuse it everywhere.</blockquote>
+<hr />
+        </div>
+      </section>
+
+      <section id="contents" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>#</th>
+    <th>Section</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><a href="#1-the-reusability-check--before-you-start-building">1</a></td>
+    <td>Reusability Check — Before You Build</td>
+  </tr>
+  <tr>
+    <td><a href="#2-the-reusability-decision-rule">2</a></td>
+    <td>The Decision Rule</td>
+  </tr>
+  <tr>
+    <td><a href="#3-platform-specific-reusability-guide">3</a></td>
+    <td>Platform-Specific Guide (React / WeWeb / Xano / Django / Supabase)</td>
+  </tr>
+  <tr>
+    <td><a href="#4-reusability-naming-conventions">4</a></td>
+    <td>Naming Conventions</td>
+  </tr>
+  <tr>
+    <td><a href="#5-reusability-anti-patterns">5</a></td>
+    <td>Anti-Patterns</td>
+  </tr>
+  <tr>
+    <td><a href="#6-when-not-to-over-abstract">6</a></td>
+    <td>When NOT to Over-Abstract</td>
+  </tr>
+  <tr>
+    <td><a href="#7-reusability-checklist--before-marking-done">7</a></td>
+    <td>Checklist Before Marking Done</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>1. The Reusability Check — Before You Start Building</h1>
+<p>Run this check on every new task before writing a single line:</p>
+<label><input type="checkbox" data-checklist-item /> Does this component/function/logic already exist in the codebase?</label><br />
+<label><input type="checkbox" data-checklist-item /> Is this used in more than one place right now?</label><br />
+<label><input type="checkbox" data-checklist-item /> Will this logically be needed in other places in the future?</label><br />
+<label><input type="checkbox" data-checklist-item /> Am I copy-pasting code from somewhere else?</label><br />
+<label><input type="checkbox" data-checklist-item /> Am I building the same form/table/modal that already exists on another page?</label><br />
+<label><input type="checkbox" data-checklist-item /> Am I writing the same validation logic that exists in another file?</label><br />
+<label><input type="checkbox" data-checklist-item /> Am I calling the same API in the same way somewhere else?</label><br />
+<p><strong>If any answer is yes — stop. Extract before you build.</strong></p>
+<hr />
+<h1>2. The Reusability Decision Rule</h1>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Situation</th>
+    <th>Decision</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Used in 2 or more places right now</td>
+    <td>Must be reusable</td>
+  </tr>
+  <tr>
+    <td>Will clearly be used again soon</td>
+    <td>Build reusable from the start</td>
+  </tr>
+  <tr>
+    <td>Complex logic with a clear purpose</td>
+    <td>Extract to a named function</td>
+  </tr>
+  <tr>
+    <td>You're copy-pasting from another file</td>
+    <td>Stop. Extract first.</td>
+  </tr>
+  <tr>
+    <td>Identical UI component used on two pages</td>
+    <td>Shared component</td>
+  </tr>
+  <tr>
+    <td>Same API call pattern in multiple files</td>
+    <td>Shared service/hook</td>
+  </tr>
+  <tr>
+    <td>Same validation rules in Add and Edit</td>
+    <td>Shared validation schema</td>
+  </tr>
+  <tr>
+    <td>Same error handling logic repeated</td>
+    <td>Shared error handler</td>
+  </tr>
+  <tr>
+    <td>Three or more similar lines doing the same pattern</td>
+    <td>Extract to function</td>
+  </tr>
+  </tbody>
+</table></div>
+<p><strong>Three or more similar lines = automatic extraction.</strong></p>
+<hr />
+<h1>3. Platform-Specific Reusability Guide</h1>
+        </div>
+      </section>
+
+      <section id="react-nextjs" class="section">
+        <div class="content-card">
+          <h2 class="section-title">React / Next.js</h2>
+          <h3>What to Make Reusable</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Item</th>
+    <th>Where It Lives</th>
+    <th>Example</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Shared UI component</td>
+    <td><code>components/ui/</code></td>
+    <td><code>Button.tsx</code>, <code>Input.tsx</code>, <code>Modal.tsx</code></td>
+  </tr>
+  <tr>
+    <td>Feature-specific component</td>
+    <td><code>components/[feature]/</code></td>
+    <td><code>ProjectCard.tsx</code>, <code>MemberList.tsx</code></td>
+  </tr>
+  <tr>
+    <td>Shared form</td>
+    <td><code>components/forms/</code></td>
+    <td><code>ProjectForm.tsx</code> (used in Add + Edit)</td>
+  </tr>
+  <tr>
+    <td>Custom hook</td>
+    <td><code>hooks/</code></td>
+    <td><code>useProjects.ts</code>, <code>useAuth.ts</code></td>
+  </tr>
+  <tr>
+    <td>API call logic</td>
+    <td><code>services/</code> or <code>lib/</code></td>
+    <td><code>projects.service.ts</code></td>
+  </tr>
+  <tr>
+    <td>Validation schema</td>
+    <td><code>validations/</code></td>
+    <td><code>project.schema.ts</code></td>
+  </tr>
+  <tr>
+    <td>Error handler</td>
+    <td><code>utils/api-error-handler.ts</code></td>
+    <td>Used across all API calls</td>
+  </tr>
+  <tr>
+    <td>Constants and enums</td>
+    <td><code>constants/</code></td>
+    <td><code>roles.ts</code>, <code>status.ts</code></td>
+  </tr>
+  <tr>
+    <td>Type definitions</td>
+    <td><code>types/</code></td>
+    <td><code>Project.ts</code>, <code>User.ts</code></td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Folder Structure</h3>
+<pre><code class="language-text">src/
+  components/
+    ui/
+      Button.tsx
+      Input.tsx
+      Modal.tsx
+      Table.tsx
+      Badge.tsx
+    forms/
+      ProjectForm.tsx       ← Used in Add Project AND Edit Project
+      MemberInviteForm.tsx
+    modals/
+      DeleteConfirmModal.tsx
+      ConfirmActionModal.tsx
+
+  hooks/
+    useProjects.ts
+    useWorkspace.ts
+    useAuth.ts
+
+  services/
+    projects.service.ts
+    members.service.ts
+    auth.service.ts
+
+  validations/
+    project.schema.ts
+    member.schema.ts
+
+  utils/
+    api-error-handler.ts
+    date-formatter.ts
+    string-utils.ts
+
+  constants/
+    roles.ts
+    status.ts
+    routes.ts
+
+  types/
+    project.ts
+    user.ts
+    workspace.ts</code></pre>
+<h3>Anti-Patterns</h3>
+<pre><code class="language-text">× Same Button component defined in 5 different files.
+× ProjectForm duplicated in AddProject.tsx and EditProject.tsx with different validation.
+× fetch(&#x27;/api/projects&#x27;) called directly in 8 different components.
+× Same error handling logic copy-pasted across every form submit handler.
+× Validation rules written inline in each form component.</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="weweb" class="section">
+        <div class="content-card">
+          <h2 class="section-title">WeWeb</h2>
+          <h3>What to Make Reusable</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Item</th>
+    <th>Where It Lives</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Header / Navbar</td>
+    <td>Reusable Element</td>
+  </tr>
+  <tr>
+    <td>Footer</td>
+    <td>Reusable Element</td>
+  </tr>
+  <tr>
+    <td>Sidebar</td>
+    <td>Reusable Element</td>
+  </tr>
+  <tr>
+    <td>Card component</td>
+    <td>Reusable Element</td>
+  </tr>
+  <tr>
+    <td>Form section</td>
+    <td>Reusable Element</td>
+  </tr>
+  <tr>
+    <td>Modal / Popup</td>
+    <td>Reusable Element</td>
+  </tr>
+  <tr>
+    <td>API call</td>
+    <td>Named Collection or Action</td>
+  </tr>
+  <tr>
+    <td>Global variables</td>
+    <td>WeWeb Global Variables</td>
+  </tr>
+  <tr>
+    <td>Color/typography</td>
+    <td>WeWeb Global Design Styles</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>WeWeb Reusability Rules</h3>
+<label><input type="checkbox" data-checklist-item /> Header and footer are Reusable Elements — not rebuilt on every page.</label><br />
+<label><input type="checkbox" data-checklist-item /> Global colors and typography defined in WeWeb's design system — not hardcoded per element.</label><br />
+<label><input type="checkbox" data-checklist-item /> API collections named clearly and reused across pages that need the same data.</label><br />
+<label><input type="checkbox" data-checklist-item /> Shared modals (delete confirmation, invite, etc.) are Reusable Elements.</label><br />
+<label><input type="checkbox" data-checklist-item /> Form submission workflows are named clearly and reused where the same form appears.</label><br />
+<label><input type="checkbox" data-checklist-item /> Page-specific spacing uses global spacing values — not random custom values.</label><br />
+<h3>Naming Reusable Elements</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>Card — Project</code></td>
+    <td><code>Group 4</code></td>
+  </tr>
+  <tr>
+    <td><code>Modal — Delete Confirmation</code></td>
+    <td><code>Popup copy</code></td>
+  </tr>
+  <tr>
+    <td><code>Header — Authenticated</code></td>
+    <td><code>Header thing</code></td>
+  </tr>
+  <tr>
+    <td><code>Form — Invite Member</code></td>
+    <td><code>Section 2</code></td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="xano" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Xano</h2>
+          <h3>What to Make Reusable</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Item</th>
+    <th>Where It Lives</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Auth/permission check</td>
+    <td>Xano Function: <code>check_workspace_permission</code></td>
+  </tr>
+  <tr>
+    <td>Slug generator</td>
+    <td>Xano Function: <code>generate_slug</code></td>
+  </tr>
+  <tr>
+    <td>Email sender</td>
+    <td>Xano Function: <code>send_email</code></td>
+  </tr>
+  <tr>
+    <td>Date formatter</td>
+    <td>Xano Function: <code>format_date</code></td>
+  </tr>
+  <tr>
+    <td>Price calculator</td>
+    <td>Xano Function: <code>calculate_invoice_total</code></td>
+  </tr>
+  <tr>
+    <td>Pagination logic</td>
+    <td>Xano Function: <code>paginate_query</code></td>
+  </tr>
+  <tr>
+    <td>Webhook signature check</td>
+    <td>Xano Function: <code>verify_webhook_signature</code></td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Rule</h3>
+<p>If you write the same 3+ steps in two different Xano endpoints — extract to a function.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="django" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Django</h2>
+          <h3>What to Make Reusable</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Item</th>
+    <th>Where It Lives</th>
+    <th>Example</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Business logic</td>
+    <td><code>services.py</code> or <code>managers.py</code></td>
+    <td><code>ProjectService.create_project()</code></td>
+  </tr>
+  <tr>
+    <td>Reusable queries</td>
+    <td><code>managers.py</code></td>
+    <td><code>Project.objects.active()</code></td>
+  </tr>
+  <tr>
+    <td>Permission mixin</td>
+    <td><code>mixins.py</code></td>
+    <td><code>WorkspaceMemberMixin</code></td>
+  </tr>
+  <tr>
+    <td>Reusable form</td>
+    <td><code>forms.py</code></td>
+    <td><code>ProjectForm</code> (used in create + update views)</td>
+  </tr>
+  <tr>
+    <td>Template component</td>
+    <td><code>templates/components/</code></td>
+    <td><code>card.html</code>, <code>form_field.html</code></td>
+  </tr>
+  <tr>
+    <td>Template filter</td>
+    <td><code>templatetags/</code></td>
+    <td>`{{ date</td>
+    <td>format_date }}`</td>
+  </tr>
+  <tr>
+    <td>Shared validation</td>
+    <td><code>validators.py</code></td>
+    <td><code>validate_phone_number()</code></td>
+  </tr>
+  <tr>
+    <td>Utility functions</td>
+    <td><code>utils.py</code></td>
+    <td><code>generate_slug()</code>, <code>send_notification()</code></td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Fat Models, Thin Views Rule</h3>
+<pre><code class="language-text">View: Handle the HTTP request and response. Not more.
+Model/Service: Handle the business logic.
+Form/Serializer: Handle validation.
+Template: Handle display only.</code></pre>
+<p>Bad — business logic in view:</p>
+<pre><code class="language-python">def create_project(request):
+    name = request.POST.get(&#x27;name&#x27;)
+    slug = name.lower().replace(&#x27; &#x27;, &#x27;-&#x27;)
+    existing = Project.objects.filter(slug=slug, workspace=workspace).first()
+    if existing:
+        ...
+    Project.objects.create(name=name, slug=slug, workspace=workspace, created_by=request.user)
+    send_email(...)
+    log_audit(...)</code></pre>
+<p>Good — logic extracted to service:</p>
+<pre><code class="language-python"># services/project_service.py
+class ProjectService:
+    @staticmethod
+    def create_project(workspace, name, created_by):
+        slug = generate_slug(name)
+        if Project.objects.filter(slug=slug, workspace=workspace).exists():
+            raise ConflictError(&#x27;Project name already exists.&#x27;)
+        project = Project.objects.create(name=name, slug=slug, workspace=workspace, created_by=created_by)
+        send_notification(created_by, &#x27;project_created&#x27;, project)
+        AuditLog.log(&#x27;project.created&#x27;, actor=created_by, entity=project)
+        return project
+
+# views.py
+def create_project(request):
+    form = ProjectForm(request.POST)
+    if not form.is_valid():
+        return error_response(form.errors)
+    project = ProjectService.create_project(
+        workspace=request.workspace,
+        name=form.cleaned_data[&#x27;name&#x27;],
+        created_by=request.user
+    )
+    return success_response(project)</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="supabase" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Supabase</h2>
+          <h3>What to Make Reusable</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Item</th>
+    <th>Where It Lives</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Complex multi-step operations</td>
+    <td>RPC / Postgres Function</td>
+  </tr>
+  <tr>
+    <td>Repeated RLS patterns</td>
+    <td>Consistent policy templates</td>
+  </tr>
+  <tr>
+    <td>Common query patterns</td>
+    <td>Postgres Views or Functions</td>
+  </tr>
+  <tr>
+    <td>Validation logic</td>
+    <td>DB check constraints + RPC</td>
+  </tr>
+  <tr>
+    <td>Audit logging</td>
+    <td>DB trigger</td>
+  </tr>
+  <tr>
+    <td>Workspace membership check</td>
+    <td>Consistent subquery pattern</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Reusable RPC Pattern</h3>
+<p>If the same business operation happens in multiple places (e.g., "create project + create default task + create activity log"), put it in one RPC function — not in three separate frontend calls.</p>
+<p>Bad:</p>
+<pre><code class="language-ts">// Frontend makes 3 sequential calls
+await supabase.from(&#x27;projects&#x27;).insert(...)
+await supabase.from(&#x27;tasks&#x27;).insert(...)
+await supabase.from(&#x27;activity_logs&#x27;).insert(...)</code></pre>
+<p>Good:</p>
+<pre><code class="language-ts">// Frontend makes 1 call, backend handles the rest
+await supabase.rpc(&#x27;create_project_with_defaults&#x27;, { p_workspace_id, p_name })</code></pre>
+<hr />
+<h1>4. Reusability Naming Conventions</h1>
+<p>Names must be clear enough that another team member knows what it does without reading the code.</p>
+        </div>
+      </section>
+
+      <section id="functions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Functions</h2>
+          <pre><code class="language-text">verb_noun or getVerb (for getters)</code></pre>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>formatDate(date)</code></td>
+    <td><code>dateHelper(d)</code></td>
+  </tr>
+  <tr>
+    <td><code>generateSlug(name)</code></td>
+    <td><code>makeSlug(n)</code></td>
+  </tr>
+  <tr>
+    <td><code>validatePhoneNumber(phone)</code></td>
+    <td><code>checkPhone(p)</code></td>
+  </tr>
+  <tr>
+    <td><code>calculateInvoiceTotal(items)</code></td>
+    <td><code>doCalc(stuff)</code></td>
+  </tr>
+  <tr>
+    <td><code>sendEmailNotification(user, template)</code></td>
+    <td><code>sendEmail(u, t)</code></td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="components-react" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Components (React)</h2>
+          <pre><code class="language-text">PascalCase, named by what it IS</code></pre>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>ProjectCard</code></td>
+    <td><code>Card2</code></td>
+  </tr>
+  <tr>
+    <td><code>DeleteConfirmModal</code></td>
+    <td><code>Popup</code></td>
+  </tr>
+  <tr>
+    <td><code>MemberInviteForm</code></td>
+    <td><code>FormComponent</code></td>
+  </tr>
+  <tr>
+    <td><code>WorkspaceSelector</code></td>
+    <td><code>Dropdown</code></td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="hooks-react" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Hooks (React)</h2>
+          <pre><code class="language-text">useNoun or useVerbNoun</code></pre>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>useProjects</code></td>
+    <td><code>useData</code></td>
+  </tr>
+  <tr>
+    <td><code>useWorkspaceMembers</code></td>
+    <td><code>useMembers2</code></td>
+  </tr>
+  <tr>
+    <td><code>useProjectForm</code></td>
+    <td><code>useForm</code></td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="services-reactdjango" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Services (React/Django)</h2>
+          <pre><code class="language-text">noun.service.ts / NounService</code></pre>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>projects.service.ts</code></td>
+    <td><code>api.ts</code></td>
+  </tr>
+  <tr>
+    <td><code>ProjectService</code></td>
+    <td><code>Helper</code></td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>5. Reusability Anti-Patterns</h1>
+<p>These are the most common violations. Watch for all of them.</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Anti-Pattern</th>
+    <th>Impact</th>
+    <th>Fix</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Same component markup in 5 files</td>
+    <td>One change breaks inconsistently</td>
+    <td>Extract to shared component</td>
+  </tr>
+  <tr>
+    <td>Add form and Edit form have different validation</td>
+    <td>Users can bypass validation on edit</td>
+    <td>Shared validation schema</td>
+  </tr>
+  <tr>
+    <td>Same fetch call to <code>/projects</code> in 8 components</td>
+    <td>Changes require editing 8 files</td>
+    <td>Shared service/hook</td>
+  </tr>
+  <tr>
+    <td>Business logic inline in a view function</td>
+    <td>Cannot reuse, cannot test, grows forever</td>
+    <td>Extract to service</td>
+  </tr>
+  <tr>
+    <td>Same 10-line error handler in every form</td>
+    <td>One fix needed everywhere</td>
+    <td>Shared <code>handleApiError()</code> util</td>
+  </tr>
+  <tr>
+    <td>Template section copy-pasted to 4 pages</td>
+    <td>Update one, forget the rest</td>
+    <td><code>{% include %}</code> component</td>
+  </tr>
+  <tr>
+    <td>Same Xano permission check steps in 12 endpoints</td>
+    <td>Change once, must update 12</td>
+    <td>Xano reusable function</td>
+  </tr>
+  <tr>
+    <td>WeWeb header rebuilt on every page</td>
+    <td>Style changes require page-by-page updates</td>
+    <td>Reusable Element</td>
+  </tr>
+  <tr>
+    <td>Django utility function defined in <code>views.py</code></td>
+    <td>Cannot be used by other views/apps</td>
+    <td>Move to <code>utils.py</code></td>
+  </tr>
+  <tr>
+    <td>Hardcoded string <code>&quot;admin&quot;</code> in 20 places</td>
+    <td>Rename role → 20 places to update</td>
+    <td>Constants file</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>6. When NOT to Over-Abstract</h1>
+<p>Reusability is good — over-abstraction creates complexity.</p>
+<p><strong>Do not make something reusable if:</strong></p>
+<pre><code class="language-text">× It is only used in one place and has no clear future use.
+× Making it &quot;generic&quot; requires more complex parameters than just duplicating it.
+× The abstraction would make the code harder to read than the original.
+× It is a one-time migration script or throwaway utility.</code></pre>
+<p><strong>The rule:</strong> Three or more identical uses = extract. One use = keep it where it is.</p>
+<hr />
+<h1>7. Reusability Checklist — Before Marking Done</h1>
+<label><input type="checkbox" data-checklist-item /> Checked if this component/function already exists before building.</label><br />
+<label><input type="checkbox" data-checklist-item /> Checked all pages that use the same entity/flow for consistency.</label><br />
+<label><input type="checkbox" data-checklist-item /> Add and Edit forms share the same component and validation schema.</label><br />
+<label><input type="checkbox" data-checklist-item /> No logic copy-pasted from another file (extracted if needed).</label><br />
+<label><input type="checkbox" data-checklist-item /> Any function used in 2+ places has been extracted and named properly.</label><br />
+<label><input type="checkbox" data-checklist-item /> Shared utilities placed in the correct shared folder (utils/, services/, etc.).</label><br />
+<label><input type="checkbox" data-checklist-item /> No hardcoded strings for roles, statuses, or routes (moved to constants).</label><br />
+<label><input type="checkbox" data-checklist-item /> New reusable component/function is named clearly so others can discover it.</label><br />
+<label><input type="checkbox" data-checklist-item /> No inline styles or logic that should be in shared CSS/component.</label><br />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

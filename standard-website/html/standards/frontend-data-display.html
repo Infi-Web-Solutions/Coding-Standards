@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Data Display Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Tables, lists, cards — null handling, date formatting, status badges, all 4 states (loading/empty/error/populated), sorting, filters, pagination."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Data Display Standard</h1>
+
+        <p class="page-subtitle">
+          Tables, lists, cards — null handling, date formatting, status badges, all 4 states (loading/empty/error/populated), sorting, filters, pagination.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#core-rule" class="card card-clickable">1. Core Rule</a>
+            <a href="#table-list-standards" class="card card-clickable">2. Table &amp; List Standards</a>
+            <a href="#data-display-rules" class="card card-clickable">3. Data Display Rules</a>
+            <a href="#state-requirements" class="card card-clickable">4. State Requirements</a>
+            <a href="#sorting" class="card card-clickable">5. Sorting</a>
+            <a href="#search" class="card card-clickable">6. Search</a>
+            <a href="#filters" class="card card-clickable">7. Filters</a>
+            <a href="#pagination" class="card card-clickable">8. Pagination</a>
+            <a href="#infinite-scroll" class="card card-clickable">9. Infinite Scroll / Load More</a>
+            <a href="#url-state" class="card card-clickable">10. URL State</a>
+            <a href="#empty-states" class="card card-clickable">11. Empty States</a>
+            <a href="#row-item-actions" class="card card-clickable">12. Row &amp; Item Actions</a>
+            <a href="#bulk-actions" class="card card-clickable">13. Bulk Actions</a>
+            <a href="#cards-list-items" class="card card-clickable">14. Cards &amp; List Items</a>
+            <a href="#mobile" class="card card-clickable">15. Mobile</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="core-rule" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Core Rule</h2>
+
+          <div class="alert alert-info">
+            <div class="alert-title">Non-Negotiable</div>
+            <p>Search and filters always go to the backend. Never filter or sort a pre-loaded client-side array. A client-side filter only works on the current page — it misses all other pages.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="table-list-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Table &amp; List Standards</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Every table has a defined default sort (newest first is default if no other business reason)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Column headers describe the data below — no vague "Info" or "Details" headers</label><br />
+          <label><input type="checkbox" data-checklist-item /> Column widths set appropriately for their content (fixed width for status/date, flexible for name)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tables do not cause horizontal scroll on desktop (1280px+)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Skeleton rows shown during initial load — not a blank table or a centered spinner</label><br />
+          <label><input type="checkbox" data-checklist-item /> Skeleton row count matches the expected page size</label><br />
+          <label><input type="checkbox" data-checklist-item /> Column headers remain visible during skeleton loading</label><br />
+          <label><input type="checkbox" data-checklist-item /> All interactive elements in the table (sort icons, row actions) disabled during loading</label>
+        </div>
+      </section>
+
+      <section id="data-display-rules" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Data Display Rules</h2>
+
+          <h3>Formatting</h3>
+          <label><input type="checkbox" data-checklist-item /> Null / empty values displayed as "—" (em dash) — not blank, "null", "N/A", or "undefined"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Dates formatted consistently: "15 Jan 2024" — never raw ISO strings shown to users</label><br />
+          <label><input type="checkbox" data-checklist-item /> Times include timezone context if relevant: "2:00 PM EST" or converted to user's local time</label><br />
+          <label><input type="checkbox" data-checklist-item /> Currency: correct symbol + 2 decimal places aligned right: "$1,234.50"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Large numbers: comma-separated: "12,345" not "12345"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Percentages: "87%" not "0.87"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Long text: truncated at column width with ellipsis + full value in tooltip on hover</label><br />
+          <label><input type="checkbox" data-checklist-item /> Boolean values: "Yes / No" or a check/cross icon — never "true/false"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Status values: color-coded badges — not plain text</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Images &amp; Avatars</h3>
+          <label><input type="checkbox" data-checklist-item /> Avatar has fallback: initials in a colored circle if image fails or is missing</label><br />
+          <label><input type="checkbox" data-checklist-item /> Fallback color is deterministic (based on user's name or ID — same color every time)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Images have meaningful alt text</label><br />
+          <label><input type="checkbox" data-checklist-item /> Images never load without explicit width and height (prevents layout shift)</label>
+        </div>
+      </section>
+
+      <section id="state-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. State Requirements</h2>
+
+          <p>Every table or list must handle all four states:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>State</th>
+                  <th>What to Show</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Loading</strong></td>
+                  <td>Skeleton rows matching page size — column headers visible</td>
+                </tr>
+                <tr>
+                  <td><strong>Empty (no data)</strong></td>
+                  <td>Illustration/icon + specific message + create action CTA</td>
+                </tr>
+                <tr>
+                  <td><strong>Empty (filter mismatch)</strong></td>
+                  <td>"No results match your filters." + clear filters button</td>
+                </tr>
+                <tr>
+                  <td><strong>Error</strong></td>
+                  <td>Error message + retry button — never a blank area</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <label><input type="checkbox" data-checklist-item /> Loading state: skeleton rows with shimmer animation</label><br />
+          <label><input type="checkbox" data-checklist-item /> Empty (no records exist): "No [entities] yet." + create button</label><br />
+          <label><input type="checkbox" data-checklist-item /> Empty (filter/search match): "No [entities] match your search." + clear button</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error: "Could not load [entities]. Please try again." + retry button</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error: if data was previously loaded, keep showing it with an error banner above</label><br />
+          <label><input type="checkbox" data-checklist-item /> All four states tested manually before marking done</label>
+        </div>
+      </section>
+
+      <section id="sorting" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Sorting</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Sortable columns shown with a sort icon in the header</label><br />
+          <label><input type="checkbox" data-checklist-item /> Active sort column shows direction: ↑ ascending, ↓ descending</label><br />
+          <label><input type="checkbox" data-checklist-item /> Click once → ascending; click same column again → descending; click again or clear → default</label><br />
+          <label><input type="checkbox" data-checklist-item /> Sort request sent to backend — not client-side array sorting</label><br />
+          <label><input type="checkbox" data-checklist-item /> Sort state preserved in URL: <code>?sort=name&amp;order=asc</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Sort state preserved when navigating away and back</label><br />
+          <label><input type="checkbox" data-checklist-item /> Default sort documented per table (usually <code>created_at DESC</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state while sort request is in progress</label><br />
+          <label><input type="checkbox" data-checklist-item /> Pagination resets to page 1 when sort changes</label>
+        </div>
+      </section>
+
+      <section id="search" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Search</h2>
+
+          <h3>Behavior</h3>
+          <label><input type="checkbox" data-checklist-item /> Debounced: 300ms delay after user stops typing before sending the request</label><br />
+          <label><input type="checkbox" data-checklist-item /> Never fire on every keystroke</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading indicator shown while search is processing</label><br />
+          <label><input type="checkbox" data-checklist-item /> Previous results stay visible while new search loads (not replaced with blank)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Minimum character length enforced if needed (e.g., 2+ chars before searching)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Clear (X) button inside input when it has a value</label><br />
+          <label><input type="checkbox" data-checklist-item /> Clearing input returns to unfiltered results — not empty results</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Technical</h3>
+          <label><input type="checkbox" data-checklist-item /> Search request sent to backend — never filtering a pre-loaded array</label><br />
+          <label><input type="checkbox" data-checklist-item /> User input is parameterized — not interpolated into queries or code</label><br />
+          <label><input type="checkbox" data-checklist-item /> Search preserved in URL: <code>?search=query</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Pagination resets to page 1 when search changes</label><br />
+          <label><input type="checkbox" data-checklist-item /> Sort state preserved when search changes</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Autocomplete / Suggestions</h3>
+          <label><input type="checkbox" data-checklist-item /> Suggestions fetched from backend — debounced, same as search</label><br />
+          <label><input type="checkbox" data-checklist-item /> Keyboard navigable: arrow keys to move, Enter to select, Escape to close</label><br />
+          <label><input type="checkbox" data-checklist-item /> Selecting a suggestion populates the input and triggers the search</label><br />
+          <label><input type="checkbox" data-checklist-item /> No suggestion list shown until user has typed the minimum character count</label><br />
+          <label><input type="checkbox" data-checklist-item /> Suggestion list closes on outside click or Escape</label>
+        </div>
+      </section>
+
+      <section id="filters" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Filters</h2>
+
+          <h3>Display</h3>
+          <label><input type="checkbox" data-checklist-item /> Active filters shown as chips/tags above the results</label><br />
+          <label><input type="checkbox" data-checklist-item /> Each chip shows: filter name + value: "Status: Active"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Each chip has an X to remove that specific filter</label><br />
+          <label><input type="checkbox" data-checklist-item /> "Clear all filters" button visible when any filter is active</label><br />
+          <label><input type="checkbox" data-checklist-item /> Number of active filters shown in filter button badge if filters are in a panel</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Behavior</h3>
+          <label><input type="checkbox" data-checklist-item /> Filters sent to backend — not applied to current page data only</label><br />
+          <label><input type="checkbox" data-checklist-item /> Multiple filters combine with AND logic (unless OR is explicitly designed)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Filter state preserved in URL params: <code>?status=active&amp;assignee=me</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Pagination resets to page 1 when any filter changes</label><br />
+          <label><input type="checkbox" data-checklist-item /> Sort state preserved when filters change</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state while filter request is processing</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Filter Inputs</h3>
+          <label><input type="checkbox" data-checklist-item /> Dropdown filters: show ALL possible values — not just values in current results</label><br />
+          <label><input type="checkbox" data-checklist-item /> Date range: end date must be after start date (validate, show error if not)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Text filter: debounced same as search</label><br />
+          <label><input type="checkbox" data-checklist-item /> Multi-select filter: selected values shown inside the input or as chips</label><br />
+          <label><input type="checkbox" data-checklist-item /> Filter panel/drawer: "Apply" button OR immediate on-change — be consistent throughout the app</label>
+        </div>
+      </section>
+
+      <section id="pagination" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Pagination</h2>
+
+          <h3>Display</h3>
+          <label><input type="checkbox" data-checklist-item /> Total record count shown: "Showing 1–20 of 143 results"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Page navigation: previous button, page numbers, next button</label><br />
+          <label><input type="checkbox" data-checklist-item /> Current page clearly highlighted</label><br />
+          <label><input type="checkbox" data-checklist-item /> Previous button disabled on page 1</label><br />
+          <label><input type="checkbox" data-checklist-item /> Next button disabled on last page</label><br />
+          <label><input type="checkbox" data-checklist-item /> Items per page selector: 10, 25, 50, 100 (or app-appropriate defaults)</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Behavior</h3>
+          <label><input type="checkbox" data-checklist-item /> User's items-per-page preference saved (localStorage or user settings)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Pagination state preserved in URL: <code>?page=3&amp;per_page=25</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Page resets to 1 when search, filter, or sort changes</label><br />
+          <label><input type="checkbox" data-checklist-item /> Pagination fetches from backend — never slicing a pre-loaded array</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state between page changes</label><br />
+          <label><input type="checkbox" data-checklist-item /> If only 1 page of results: pagination controls hidden or shown as inactive</label><br />
+          <label><input type="checkbox" data-checklist-item /> Jump-to-page input for large datasets (optional, useful when &gt; 50 pages)</label>
+        </div>
+      </section>
+
+      <section id="infinite-scroll" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Infinite Scroll / Load More</h2>
+
+          <p>Use for browsing contexts (feeds, galleries, activity logs). Not for data that needs precise navigation.</p>
+
+          <label><input type="checkbox" data-checklist-item /> "Load more" button preferred over automatic scroll trigger (gives user control)</label><br />
+          <label><input type="checkbox" data-checklist-item /> "Load more" shows a spinner while next page loads</label><br />
+          <label><input type="checkbox" data-checklist-item /> "Load more" disabled while loading (no double-click)</label><br />
+          <label><input type="checkbox" data-checklist-item /> "End of results" message shown when all data is loaded</label><br />
+          <label><input type="checkbox" data-checklist-item /> Previously loaded items remain in the list — not replaced on each load</label><br />
+          <label><input type="checkbox" data-checklist-item /> Scroll position preserved if user navigates away and returns</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error loading next page: error shown near "Load more" button + retry</label>
+        </div>
+      </section>
+
+      <section id="url-state" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. URL State</h2>
+
+          <p>All search, filter, sort, and pagination state must live in URL params.</p>
+
+          <label><input type="checkbox" data-checklist-item /> Search: <code>?search=query</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Filters: <code>?status=active&amp;assignee=me</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Sort: <code>?sort=name&amp;order=asc</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Page: <code>?page=3</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Per page: <code>?per_page=25</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> URL updated without full page reload (replaceState for filter changes, pushState for page changes)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Refreshing the page restores the exact view</label><br />
+          <label><input type="checkbox" data-checklist-item /> Sharing the URL reproduces the same search/filter/sort/page for another user</label><br />
+          <label><input type="checkbox" data-checklist-item /> Back button restores the previous filter/search state</label>
+        </div>
+      </section>
+
+      <section id="empty-states" class="section">
+        <div class="content-card">
+          <h2 class="section-title">11. Empty States</h2>
+
+          <h3>No Data Exists</h3>
+          <label><input type="checkbox" data-checklist-item /> Illustration or icon — not just text</label><br />
+          <label><input type="checkbox" data-checklist-item /> Specific message: "No projects yet." — not "No data." or "Empty."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Call to action: "Create your first project" button or link</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Search Returned No Results</h3>
+          <label><input type="checkbox" data-checklist-item /> "No results for '[search term]'."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Suggestion: "Try a different search term."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Clear search button visible</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Filter Returned No Results</h3>
+          <label><input type="checkbox" data-checklist-item /> "No [entities] match your current filters."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Shows what filters are active</label><br />
+          <label><input type="checkbox" data-checklist-item /> "Clear all filters" button prominent</label><br />
+
+          <div class="divider"></div>
+
+          <h3>Combination (search + filter)</h3>
+          <label><input type="checkbox" data-checklist-item /> "No results for '[term]' with these filters."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Both "Clear search" and "Clear filters" available</label><br />
+
+          <div class="divider"></div>
+
+          <div class="alert alert-warning">
+            <p><strong>Rule:</strong> Never show a blank table body or an empty list without a message.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="row-item-actions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">12. Row &amp; Item Actions</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Actions (Edit, Delete, View, Archive) in a consistent column or menu — same position in every row</label><br />
+          <label><input type="checkbox" data-checklist-item /> Destructive actions (Delete) visually differentiated: red icon, trash icon</label><br />
+          <label><input type="checkbox" data-checklist-item /> Delete always shows a confirmation dialog</label><br />
+          <label><input type="checkbox" data-checklist-item /> Edit navigates to edit page or opens edit modal — must be consistent with the Add pattern</label><br />
+          <label><input type="checkbox" data-checklist-item /> Row actions are role-appropriate: members cannot see delete if they cannot delete</label><br />
+          <label><input type="checkbox" data-checklist-item /> Disabled row actions have a tooltip: "Admin access required to delete this."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state on the specific row being actioned — not the whole table</label><br />
+          <label><input type="checkbox" data-checklist-item /> After delete: row removed from list without full page refresh</label><br />
+          <label><input type="checkbox" data-checklist-item /> Hover state on rows shows background highlight to signal interactivity</label>
+        </div>
+      </section>
+
+      <section id="bulk-actions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">13. Bulk Actions</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Header checkbox selects/deselects all rows on the current page</label><br />
+          <label><input type="checkbox" data-checklist-item /> Individual row checkboxes</label><br />
+          <label><input type="checkbox" data-checklist-item /> Selection count shown: "3 selected" or "3 of 20 selected"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Bulk action bar appears only when rows are selected, disappears when cleared</label><br />
+          <label><input type="checkbox" data-checklist-item /> Bulk action bar clearly labeled: "Delete selected (3)", not just "Delete"</label><br />
+          <label><input type="checkbox" data-checklist-item /> "Select all N records" option when all current-page rows are checked</label><br />
+          <label><input type="checkbox" data-checklist-item /> Bulk delete requires confirmation: "Delete 3 projects? This cannot be undone."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state during bulk operation</label><br />
+          <label><input type="checkbox" data-checklist-item /> Success: "3 projects deleted." toast shown</label><br />
+          <label><input type="checkbox" data-checklist-item /> Partial success: "2 of 3 projects deleted. 1 could not be deleted." with reason</label><br />
+          <label><input type="checkbox" data-checklist-item /> Selection cleared after operation, table refreshes</label>
+        </div>
+      </section>
+
+      <section id="cards-list-items" class="section">
+        <div class="content-card">
+          <h2 class="section-title">14. Cards &amp; List Items</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Card padding consistent with design system spacing (not random per-card padding)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Card hover state visible (shadow lift or background change)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Cards link to the entity's detail page — entire card or a dedicated "View" link</label><br />
+          <label><input type="checkbox" data-checklist-item /> Action buttons inside cards (Edit, Delete) have consistent placement</label><br />
+          <label><input type="checkbox" data-checklist-item /> Card images have aspect ratio maintained — never distorted</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading: skeleton cards in the same grid layout as real cards</label><br />
+          <label><input type="checkbox" data-checklist-item /> Empty state: empty card grid with a centered "Add first..." card or message</label>
+        </div>
+      </section>
+
+      <section id="mobile" class="section">
+        <div class="content-card">
+          <h2 class="section-title">15. Mobile</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Tables: no horizontal scroll on mobile — essential columns only, or card layout instead</label><br />
+          <label><input type="checkbox" data-checklist-item /> On mobile (&lt; 768px): hide non-essential table columns (keep: Name, Status, one action)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Card grids: 1 column on mobile, 2 on tablet, 3 on desktop</label><br />
+          <label><input type="checkbox" data-checklist-item /> Row actions reachable on mobile: not hidden by table overflow</label><br />
+          <label><input type="checkbox" data-checklist-item /> Pagination controls large enough to tap (min 44×44px touch targets)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Filter and sort accessible on mobile: drawer or collapsible panel</label><br />
+          <label><input type="checkbox" data-checklist-item /> Search input full-width on mobile</label><br />
+          <label><input type="checkbox" data-checklist-item /> "Load more" button full-width on mobile</label>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Tables, lists, cards, search, filters, and pagination. Every data display component must handle every state and every user action must go to the backend.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

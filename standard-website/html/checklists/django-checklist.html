@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Django Checklists | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Django checklist index for views, templates, models, forms, serializers, and DRF API views."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Django</span>
+        <h1 class="page-title">Django Checklists</h1>
+        <p class="page-subtitle">Use these before marking any Django task done.</p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/checklists.html" class="btn btn-secondary">Back to Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-3">
+          <a href="./django/new-view.html" class="card card-clickable">
+            <h2 class="card-title">New View</h2>
+            <p class="card-description">Building any Django view — auth, permissions, form validation, business logic placement, response handling</p>
+          </a>
+
+          <a href="./django/template.html" class="card card-clickable">
+            <h2 class="card-title">Template</h2>
+            <p class="card-description">Building any Django HTML template — 3-folder structure, inheritance, no inline styles/scripts, data-* pattern</p>
+          </a>
+
+          <a href="./django/model.html" class="card card-clickable">
+            <h2 class="card-title">Model</h2>
+            <p class="card-description">Creating or modifying a Django model — field types, relationships, on_delete, null/blank, constraints, indexes, Meta class, migrations</p>
+          </a>
+
+          <a href="./django/form-serializer.html" class="card card-clickable">
+            <h2 class="card-title">Form / Serializer</h2>
+            <p class="card-description">Building a Django Form or DRF Serializer — field definitions, validation timing, field-level vs cross-field validation, read_only/write_only</p>
+          </a>
+
+          <a href="./django/api-view.html" class="card card-clickable">
+            <h2 class="card-title">DRF API View</h2>
+            <p class="card-description">Building a DRF API view — view type selection, permission classes, serializer wiring, service delegation, response format, pagination</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Quick Reference — Core Django Rules</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Business logic in services.py — not in views, templates, or models</label><br />
+          <label><input type="checkbox" data-checklist-item /> Every protected view uses @login_required or LoginRequiredMixin</label><br />
+          <label><input type="checkbox" data-checklist-item /> All user input validated through Django Form or Serializer, not raw request.POST</label><br />
+          <label><input type="checkbox" data-checklist-item /> No &lt;style&gt; blocks in templates — CSS in static/css/</label><br />
+          <label><input type="checkbox" data-checklist-item /> No &lt;script&gt; blocks with logic in templates — JS in static/js/</label><br />
+          <label><input type="checkbox" data-checklist-item /> Every template extends base.html</label><br />
+          <label><input type="checkbox" data-checklist-item /> Repeated HTML sections use {% include %}, not copy-pasted</label><br />
+          <label><input type="checkbox" data-checklist-item /> Django data passed to JS via data-* attributes — never string interpolation in &lt;script&gt;</label><br />
+          <label><input type="checkbox" data-checklist-item /> Role/permissions read from database — never from request payload or session</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Related Standards</h2>
+
+          <div class="grid grid-3">
+            <a href="../standards/backend-first-logic.html" class="card card-clickable">Backend-First Logic Standard</a>
+            <a href="../standards/django-template-standards.html" class="card card-clickable">Django Template Standards</a>
+            <a href="../standards/code-reusability-standards.html" class="card card-clickable">Code Reusability Standards</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Django work must keep auth, permissions, validation, services, templates, and migrations clean.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/checklists.html" class="footer-link">All Checklists</a>
+        <a href="../standards/django-standards.html" class="footer-link">Django Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Django — Model Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Field types, relationships (on_delete, related_name), null/blank rules, constraints, indexes, Meta class, migrations."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Django — Model Checklist</h1>
+
+        <p class="page-subtitle">
+          Field types, relationships (on_delete, related_name), null/blank rules, constraints, indexes, Meta class, migrations.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../django-checklist.html" class="btn btn-secondary">Back to Django Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#field-definitions" class="card card-clickable">Field Definitions</a>
+            <a href="#relationships" class="card card-clickable">Relationships</a>
+            <a href="#null-and-blank" class="card card-clickable">Null and Blank</a>
+            <a href="#indexes-and-constraints" class="card card-clickable">Indexes and Constraints</a>
+            <a href="#meta-class" class="card card-clickable">Meta Class</a>
+            <a href="#model-methods" class="card card-clickable">Model Methods</a>
+            <a href="#soft-delete" class="card card-clickable">Soft Delete</a>
+            <a href="#migration" class="card card-clickable">Migration</a>
+            <a href="#testing" class="card card-clickable">Testing</a>
+            <a href="#done-when" class="card card-clickable">Done When</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="field-definitions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Field Definitions</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Every field has the correct type (<code>CharField</code>, <code>TextField</code>, <code>IntegerField</code>, etc.)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>CharField</code> has a <code>max_length</code> set — never omitted</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>TextField</code> used for long text — not <code>CharField</code> with a large <code>max_length</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>DateTimeField</code> used with <code>auto_now_add=True</code> for <code>created_at</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>DateTimeField</code> used with <code>auto_now=True</code> for <code>updated_at</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>UUIDField</code> used for external-facing IDs (not sequential integers in public APIs)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>DecimalField</code> used for money — not <code>FloatField</code> (avoid floating point errors)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>BooleanField</code> has a default value (<code>True</code> or <code>False</code> — never <code>null=True</code> on a boolean)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Choices: defined as class-level constants or <code>TextChoices</code> — not raw strings inline</label>
+        </div>
+      </section>
+
+      <section id="relationships" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Relationships</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>ForeignKey</code> has <code>on_delete</code> behavior set explicitly — never omitted:</label><br />
+          <div style="margin-left: 24px; margin-bottom: 8px;">
+            <label><input type="checkbox" data-checklist-item /> <code>CASCADE</code>: delete related records when parent deleted (tasks when project deleted)</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>SET_NULL</code>: set to null when parent deleted (requires <code>null=True</code>, <code>blank=True</code>)</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>PROTECT</code>: prevent deleting parent if children exist (for important linked data)</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>SET_DEFAULT</code>: set to a default value (rare)</label>
+          </div>
+          <label><input type="checkbox" data-checklist-item /> <code>related_name</code> set on all <code>ForeignKey</code> and <code>ManyToManyField</code> relationships (avoids Django's auto-generated <code>_set</code> names in queries)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>ManyToManyField</code>: <code>through</code> model used when the relationship has extra data</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>GenericForeignKey</code>: used only when truly necessary (adds complexity — prefer explicit FK)</label>
+        </div>
+      </section>
+
+      <section id="null-and-blank" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Null and Blank</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>null=True</code> used only for fields where NULL is meaningful in the database</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>blank=True</code> used for fields that can be empty in forms (separate from null)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>CharField</code>: avoid <code>null=True</code> — use <code>blank=True</code> + <code>default=""</code> instead (empty string is cleaner)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>DateTimeField</code>: <code>null=True</code>, <code>blank=True</code> acceptable for optional dates (e.g., <code>deleted_at</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>ForeignKey</code>: <code>null=True</code> if the relationship is optional</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>BooleanField</code>: never <code>null=True</code> — always has a default</label>
+        </div>
+      </section>
+
+      <section id="indexes-and-constraints" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Indexes and Constraints</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>db_index=True</code> on columns frequently used in WHERE, ORDER BY, or JOIN</label><br />
+          <label><input type="checkbox" data-checklist-item /> Unique constraints using <code>UniqueConstraint</code> in <code>Meta.constraints</code> (not just <code>unique=True</code> on a field)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Composite unique constraints documented: e.g., unique together on <code>(workspace, name)</code> where <code>deleted_at IS NULL</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Check constraints using <code>CheckConstraint</code>: e.g., <code>end_date &gt; start_date</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Indexes on ForeignKey fields (Django adds these automatically, but verify)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Full-text search: <code>GinIndex</code> or <code>GistIndex</code> if needed</label>
+        </div>
+      </section>
+
+      <section id="meta-class" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Meta Class</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>class Meta</code> defined with:</label><br />
+          <div style="margin-left: 24px; margin-bottom: 8px;">
+            <label><input type="checkbox" data-checklist-item /> <code>ordering</code>: default sort order defined (e.g., <code>ordering = ['-created_at']</code>)</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>verbose_name</code> and <code>verbose_name_plural</code> set</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>db_table</code> set if the table name should differ from Django's default</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>constraints</code> list (<code>UniqueConstraint</code>, <code>CheckConstraint</code>)</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>indexes</code> list (<code>Index</code>)</label>
+          </div>
+        </div>
+      </section>
+
+      <section id="model-methods" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Model Methods</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>__str__</code> method defined — returns a human-readable representation</label><br />
+          <label><input type="checkbox" data-checklist-item /> No business logic in <code>__str__</code> (no database queries)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Business logic lives in <code>services.py</code> — not in model methods</label><br />
+          <label><input type="checkbox" data-checklist-item /> Model methods acceptable for: property-style data access, simple computed properties</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>@property</code> decorator used for computed fields not stored in the DB</label><br />
+          <label><input type="checkbox" data-checklist-item /> No API calls or file operations in model methods</label><br />
+          <label><input type="checkbox" data-checklist-item /> No direct database writes inside <code>save()</code> override (use a signal or service instead)</label>
+        </div>
+      </section>
+
+      <section id="soft-delete" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Soft Delete</h2>
+
+          <p>IF SOFT DELETE IS REQUIRED:</p>
+          <label><input type="checkbox" data-checklist-item /> <code>deleted_at = DateTimeField(null=True, blank=True, default=None)</code> on the model</label><br />
+          <label><input type="checkbox" data-checklist-item /> Custom manager filters out deleted records by default: <code>.filter(deleted_at__isnull=True)</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Second manager (e.g., <code>all_objects</code>) provides access to all records including deleted</label><br />
+          <label><input type="checkbox" data-checklist-item /> Soft delete: set <code>deleted_at = now()</code> — do not call <code>.delete()</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Hard delete available via <code>all_objects.filter().delete()</code> for admin/cleanup only</label><br />
+          <label><input type="checkbox" data-checklist-item /> Uniqueness constraints account for soft delete: unique on <code>(workspace, name)</code> where <code>deleted_at IS NULL</code></label>
+        </div>
+      </section>
+
+      <section id="migration" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Migration</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Migration generated and reviewed before running: <code>python manage.py makemigrations</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Migration file reviewed — no unexpected changes</label><br />
+          <label><input type="checkbox" data-checklist-item /> Migration is reversible: no <code>RunPython</code> without a reverse function (or documented as <code>atomic=False</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Data migrations: use <code>RunPython</code> with a reverse function that undoes the changes</label><br />
+          <label><input type="checkbox" data-checklist-item /> No raw SQL in migrations without a comment explaining why</label><br />
+          <label><input type="checkbox" data-checklist-item /> Migration file committed with the model changes (not applied without committing)</label>
+        </div>
+      </section>
+
+      <section id="testing" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Testing</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Model can be created with valid data (factory or fixture)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Field constraints tested: null, blank, max_length violations raise correct errors</label><br />
+          <label><input type="checkbox" data-checklist-item /> ForeignKey <code>on_delete</code> behavior tested (CASCADE, PROTECT, SET_NULL)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Unique constraints tested: duplicate raises <code>IntegrityError</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Check constraints tested: violation raises <code>IntegrityError</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Soft delete tested: deleted records excluded from default queryset</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>__str__</code> tested: returns expected string</label>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Before Marking Done</span>
+          <h2 class="section-title">Done When</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">Fields &amp; Relationships</h3>
+              <label><input type="checkbox" data-checklist-item /> All fields have correct types, null/blank settings</label><br />
+              <label><input type="checkbox" data-checklist-item /> ForeignKey <code>on_delete</code> set on all relationships</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>related_name</code>s set on all FK and M2M fields</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Indexes &amp; Constraints</h3>
+              <label><input type="checkbox" data-checklist-item /> Indexes defined for frequently-queried columns</label><br />
+              <label><input type="checkbox" data-checklist-item /> Unique and check constraints defined in <code>Meta.constraints</code></label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Meta &amp; Methods</h3>
+              <label><input type="checkbox" data-checklist-item /> <code>class Meta</code> has <code>ordering</code>, <code>verbose_name</code>, <code>verbose_name_plural</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>__str__</code> returns a useful human-readable string</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Migration &amp; Tests</h3>
+              <label><input type="checkbox" data-checklist-item /> Migration generated and reviewed</label><br />
+              <label><input type="checkbox" data-checklist-item /> Tests pass for field constraints, relationships, and constraints</label>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-info">
+          <div class="alert-title">Practice Task</div>
+          <p>
+            Create a Project model with all required fields, indexes, constraints, soft delete, and a ProjectService class with create and archive methods.
+          </p>
+          <a href="../../tasks/django/03-model-and-service.html" class="btn btn-primary btn-sm">
+            Open Task: Model and Service Task
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Every Django model must have correct field types, on_delete rules, related_names, indexes, constraints, and a reviewed migration before use.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../django-checklist.html" class="footer-link">Django Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

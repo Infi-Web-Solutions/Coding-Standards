@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Task — Storage Setup | Development Standards</title>
+  <meta name="description" content="Create the project-attachments private storage bucket with RLS, the task_attachments table, and signed URL generation." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Supabase Task — Storage Setup</h1>
+        <p class="page-subtitle">Create the project-attachments private storage bucket with RLS, the task_attachments table, and signed URL generation.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-tasks.html" class="btn btn-secondary">Back to Supabase Tasks</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Platform:</strong> Supabase Storage</p>
+<p><strong>Checklist to Run:</strong> <a href="../../checklists/supabase/storage-bucket.md">Storage Bucket Checklist</a></p>
+<p><strong>Standard:</strong> <a href="../../standards/supabase/05-validation-multitenant-storage.md">Supabase Standards — Multi-Tenant & Storage</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>The app allows users to upload files to tasks within projects. Each file upload is attached to a specific task. Users should only be able to see and download files for tasks in workspaces they are a member of. File uploads are managed by users — they can upload and delete their own files. Workspace admins can delete any file in the workspace.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <ol>
+  <li>A Supabase Storage bucket named <code>project-attachments</code> (private)</li>
+  <li>RLS policies on <code>storage.objects</code> for the bucket</li>
+  <li>A <code>task_attachments</code> table to track file metadata</li>
+  <li>The upload flow, download flow, and delete flow (describe each — implementation optional)</li>
+</ol>
+<hr />
+        </div>
+      </section>
+
+      <section id="requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Requirements</h2>
+          <h3>Bucket</h3>
+<ul>
+  <li>Name: <code>project-attachments</code></li>
+  <li>Visibility: <strong>Private</strong> (all access via RLS or signed URLs)</li>
+  <li>Allowed MIME types: <code>image/jpeg</code>, <code>image/png</code>, <code>application/pdf</code>, <code>application/msword</code>, <code>application/vnd.openxmlformats-officedocument.wordprocessingml.document</code></li>
+  <li>Max file size: 10 MB (enforce in bucket config)</li>
+</ul>
+<h3>File Path Structure</h3>
+<pre><code>{workspace_id}/{project_id}/{task_id}/{uuid}-{sanitized_filename}</code></pre>
+<p>Example: <code>a1b2c3d4.../e5f6g7h8.../i9j0k1l2.../550e8400-marketing-brief.pdf</code></p>
+<ul>
+  <li>UUID prefix prevents filename collisions</li>
+  <li>Sanitized filename: lowercase, spaces replaced with hyphens, no special characters</li>
+</ul>
+<h3><code>task_attachments</code> Table</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Column</th>
+    <th>Type</th>
+    <th>Notes</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>id</td>
+    <td>uuid</td>
+    <td>PK, default gen_random_uuid()</td>
+  </tr>
+  <tr>
+    <td>task_id</td>
+    <td>uuid</td>
+    <td>FK → tasks.id, ON DELETE CASCADE</td>
+  </tr>
+  <tr>
+    <td>workspace_id</td>
+    <td>uuid</td>
+    <td>FK → workspaces.id, ON DELETE CASCADE (for RLS)</td>
+  </tr>
+  <tr>
+    <td>uploaded_by</td>
+    <td>uuid</td>
+    <td>FK → auth.users.id</td>
+  </tr>
+  <tr>
+    <td>storage_path</td>
+    <td>text</td>
+    <td>Full path in the bucket</td>
+  </tr>
+  <tr>
+    <td>filename</td>
+    <td>text</td>
+    <td>Original filename for display</td>
+  </tr>
+  <tr>
+    <td>file_size_bytes</td>
+    <td>integer</td>
+    <td>Size in bytes</td>
+  </tr>
+  <tr>
+    <td>mime_type</td>
+    <td>text</td>
+    <td>e.g., 'application/pdf'</td>
+  </tr>
+  <tr>
+    <td>created_at</td>
+    <td>timestamptz</td>
+    <td>default now()</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>RLS Policies on <code>storage.objects</code></h3>
+<p><strong>SELECT (download):</strong> User must be a member of the workspace matching the first segment of the file path.</p>
+<p><strong>INSERT (upload):</strong> User must be authenticated and a member of the workspace in the first path segment.</p>
+<p><strong>DELETE:</strong> User uploaded the file (uploaded_by = auth.uid()) OR user is admin/owner of the workspace.</p>
+<h3>Frontend Upload Flow</h3>
+<ol>
+  <li>User selects a file — validate type and size before upload begins</li>
+  <li>Show upload progress bar</li>
+  <li>On upload success: insert a row into <code>task_attachments</code> with the storage path</li>
+  <li>Show the file in the task's attachment list</li>
+  <li>On upload error: show the error, do not insert into <code>task_attachments</code></li>
+</ol>
+<h3>Frontend Download Flow</h3>
+<ol>
+  <li>User clicks "Download" on an attachment</li>
+  <li>Frontend calls <code>supabase.storage.from(&#x27;project-attachments&#x27;).createSignedUrl(path, 300)</code> (5-minute expiry)</li>
+  <li>Open the signed URL in a new tab</li>
+  <li>Never store the signed URL in the database</li>
+</ol>
+<h3>File Deletion Flow</h3>
+<ol>
+  <li>User clicks "Delete" on an attachment</li>
+  <li>Confirmation dialog: "Delete [filename]? This cannot be undone."</li>
+  <li>On confirm: delete the <code>task_attachments</code> row AND delete the file from Storage</li>
+  <li>If Storage delete fails: show an error, keep the DB record (no orphaned reference without a file)</li>
+</ol>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <pre><code class="language-text">× Make the bucket public (all files contain user data)
+× Store signed URLs in the database (they expire and become invalid)
+× Store the file as a blob in the database
+× Use the service role key in frontend code
+× Trust file extension alone for MIME type validation
+× Delete the DB record but leave the file in Storage (orphaned files)
+× Allow one user&#x27;s path to be readable by users in a different workspace</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="checklist-to-run" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run</h2>
+          <p>Before marking done, run: <a href="../../checklists/supabase/storage-bucket.md">Storage Bucket Checklist</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <label><input type="checkbox" data-checklist-item /> Bucket created as private with correct MIME type and size limits</label><br />
+<label><input type="checkbox" data-checklist-item /> File path structure follows {workspace_id}/{project_id}/{task_id}/{uuid}-{filename}</label><br />
+<label><input type="checkbox" data-checklist-item /> task_attachments table created with all columns and constraints</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS policies on storage.objects: SELECT, INSERT, DELETE</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS tested: member can access their workspace's files; non-member cannot</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS tested: uploader can delete their own file; admin can delete any file</label><br />
+<label><input type="checkbox" data-checklist-item /> Frontend upload flow: validates type and size before upload; shows progress</label><br />
+<label><input type="checkbox" data-checklist-item /> Frontend download flow: uses signed URLs (not public URLs); 5-minute expiry</label><br />
+<label><input type="checkbox" data-checklist-item /> File deletion: removes both the DB record and the Storage file</label><br />
+<label><input type="checkbox" data-checklist-item /> Documented: bucket name, path structure, RLS policies, signed URL expiry</label><br />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-tasks.html" class="footer-link">Supabase Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

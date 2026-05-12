@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loading States &amp; Skeletons Checklist | Development Standards</title>
+  <meta name="description" content="Checklist with visual examples for button loading states, skeleton screens, table loading, and inline loading." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Loading States &amp; Skeletons Checklist</h1>
+        <p class="page-subtitle">Every async action must show a loading state. No button fires twice. No page renders blank. No action happens silently. Loading is not optional.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Actual UI Examples</h2>
+          <div class="ui-demo-grid">
+            <div class="ui-demo">
+              <div class="ui-demo-title">Button Loading States</div>
+              <div class="ui-demo-inline">
+                <button type="button" class="btn btn-primary ui-demo-button-loading">
+                  <span class="ui-demo-spinner"></span>
+                  Creating...
+                </button>
+                <button type="button" class="btn btn-danger ui-demo-button-loading">
+                  <span class="ui-demo-spinner"></span>
+                  Deleting...
+                </button>
+              </div>
+              <div class="ui-demo-note">The width stays stable and the button is disabled while the request is active.</div>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Page Skeleton</div>
+              <div class="ui-demo-skeleton-card">
+                <div class="ui-demo-skeleton-line" style="width: 36%;"></div>
+                <div class="ui-demo-skeleton-line" style="width: 82%;"></div>
+                <div class="ui-demo-skeleton-line" style="width: 100%; height: 44px; margin-top: 16px;"></div>
+                <div class="ui-demo-skeleton-line" style="width: 100%; height: 44px;"></div>
+                <div class="ui-demo-skeleton-line" style="width: 64%;"></div>
+              </div>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Table Loading</div>
+              <table class="ui-demo-table">
+                <thead>
+                  <tr>
+                    <th>Project</th>
+                    <th>Status</th>
+                    <th>Owner</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><div class="ui-demo-skeleton-line" style="width: 72%;"></div></td>
+                    <td><div class="ui-demo-skeleton-line" style="width: 56%;"></div></td>
+                    <td><div class="ui-demo-skeleton-line" style="width: 64%;"></div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="ui-demo-skeleton-line" style="width: 66%;"></div></td>
+                    <td><div class="ui-demo-skeleton-line" style="width: 48%;"></div></td>
+                    <td><div class="ui-demo-skeleton-line" style="width: 70%;"></div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="ui-demo-skeleton-line" style="width: 80%;"></div></td>
+                    <td><div class="ui-demo-skeleton-line" style="width: 52%;"></div></td>
+                    <td><div class="ui-demo-skeleton-line" style="width: 60%;"></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Inline and Component Loading</div>
+              <div class="ui-demo-form">
+                <div class="ui-demo-inline">
+                  <span class="ui-demo-spinner ui-demo-spinner-dark"></span>
+                  <span class="ui-demo-note">Searching...</span>
+                </div>
+                <div class="ui-demo-inline">
+                  <span class="ui-demo-avatar">JS</span>
+                  <div class="ui-demo-note">Avatar placeholder shown until image loads.</div>
+                </div>
+                <div class="ui-demo-progress">
+                  <div class="ui-demo-progress-bar" style="width: 58%;"></div>
+                </div>
+                <div class="ui-demo-note">Upload progress: 58%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">1. Button Loading States</h2>
+            <label><input type="checkbox" data-checklist-item /> Button shows a spinner while the async action is in progress</label><br />
+            <label><input type="checkbox" data-checklist-item /> Button is disabled while loading and cannot be clicked twice</label><br />
+            <label><input type="checkbox" data-checklist-item /> Button text changes to reflect the action</label><br />
+            <label><input type="checkbox" data-checklist-item /> Button returns to normal state after success or failure</label><br />
+            <label><input type="checkbox" data-checklist-item /> Button width does not change when switching to loading state</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Loading Button Labels</h2>
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Action</th>
+                    <th>Default Label</th>
+                    <th>Loading Label</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Create</td><td>Create Project</td><td>Creating...</td></tr>
+                  <tr><td>Save</td><td>Save Changes</td><td>Saving...</td></tr>
+                  <tr><td>Delete</td><td>Delete</td><td>Deleting...</td></tr>
+                  <tr><td>Send</td><td>Send Invite</td><td>Sending...</td></tr>
+                  <tr><td>Upload</td><td>Upload</td><td>Uploading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">2. Page &amp; Section Loading</h2>
+            <label><input type="checkbox" data-checklist-item /> Full-page data fetch shows a skeleton immediately — never blank white page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Header, nav, and layout frame remain visible while content loads</label><br />
+            <label><input type="checkbox" data-checklist-item /> Center spinner used only for very short operations under 500ms</label><br />
+            <label><input type="checkbox" data-checklist-item /> Error state shown if page data fails to load</label><br />
+            <label><input type="checkbox" data-checklist-item /> Retry button visible on page-level error state</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">3. Skeleton Screens</h2>
+            <label><input type="checkbox" data-checklist-item /> Skeleton matches the approximate layout of the real content</label><br />
+            <label><input type="checkbox" data-checklist-item /> Skeleton uses shimmer or pulse — not static grey bars</label><br />
+            <label><input type="checkbox" data-checklist-item /> Number of skeleton items matches expected data density</label><br />
+            <label><input type="checkbox" data-checklist-item /> Skeleton disappears instantly when data arrives</label><br />
+            <label><input type="checkbox" data-checklist-item /> No text content inside skeleton placeholders</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">4. Table Loading</h2>
+            <label><input type="checkbox" data-checklist-item /> Skeleton rows shown instead of a spinner in the table area</label><br />
+            <label><input type="checkbox" data-checklist-item /> Column headers remain visible during loading</label><br />
+            <label><input type="checkbox" data-checklist-item /> Sort and filter controls disabled during load</label><br />
+            <label><input type="checkbox" data-checklist-item /> Re-fetch keeps existing rows visible with a subtle overlay or spinner</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">5. Inline &amp; Component Loading</h2>
+            <label><input type="checkbox" data-checklist-item /> Dropdowns show spinner while options load</label><br />
+            <label><input type="checkbox" data-checklist-item /> Search/autocomplete shows loading indicator while fetching</label><br />
+            <label><input type="checkbox" data-checklist-item /> Images and avatars show placeholders until loaded</label><br />
+            <label><input type="checkbox" data-checklist-item /> Uploads show progress bar or percentage</label><br />
+            <label><input type="checkbox" data-checklist-item /> Widgets use individual loading states rather than hiding the whole page</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. What Never Needs a Loading State</h2>
+          <ul>
+            <li>Client-side navigation that is instantaneous</li>
+            <li>Show/hide and expand/collapse toggles</li>
+            <li>Client-side form validation</li>
+            <li>Hover or focus state changes</li>
+            <li>Animations and transitions</li>
+            <li>Reading from in-memory state without an API call</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">No async action should happen silently, and no page should render blank while loading.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../standards/frontend-ui-components.html" class="footer-link">UI Components Standard</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

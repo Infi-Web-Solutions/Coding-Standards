@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django Template &amp; Static File Standards | Development Standards</title>
+  <meta name="description" content="Django template and static file standards for clean separation of HTML, CSS, JavaScript, and business logic." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="standards">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../index.html" class="navbar-link">Home</a><a href="../pages/standards.html" class="navbar-link active">Standards</a><a href="../pages/checklists.html" class="navbar-link">Checklists</a><a href="../pages/tasks.html" class="navbar-link">Tasks</a><a href="../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-primary">Django</span><h1 class="page-title">Django Template &amp; Static File Standards</h1><p class="page-subtitle">Templates display data. Views handle requests. Models handle data. Business logic never lives in templates. CSS, JavaScript, and HTML are always separated — never mixed into one file.</p></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Contents</h2>
+      <div class="table-wrapper"><table class="table"><thead><tr><th>#</th><th>Section</th></tr></thead><tbody>
+        <tr><td>1</td><td>The Three-Folder Rule</td></tr>
+        <tr><td>2</td><td>Static Folder Structure</td></tr>
+        <tr><td>3</td><td>Template Folder Structure</td></tr>
+        <tr><td>4</td><td>File Naming Standard</td></tr>
+        <tr><td>5</td><td>base.html Standard</td></tr>
+        <tr><td>6</td><td>Template Block Standards</td></tr>
+        <tr><td>7</td><td>CSS Organization Rules</td></tr>
+        <tr><td>8</td><td>JavaScript Rules</td></tr>
+        <tr><td>9</td><td>What Goes Where — Decision Table</td></tr>
+        <tr><td>10</td><td>Django App Template Isolation</td></tr>
+        <tr><td>11</td><td>Static File Loading</td></tr>
+        <tr><td>12</td><td>Reusable Template Components</td></tr>
+        <tr><td>13</td><td>Anti-Patterns to Avoid</td></tr>
+        <tr><td>14</td><td>Definition of Done — Django Template Work</td></tr>
+      </tbody></table></div>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">The Three-Folder Rule</h2>
+      <pre><code class="language-text">static/
+  css/       &lt;- All styles. Nothing else.
+  js/        &lt;- All JavaScript. Nothing else.
+  images/    &lt;- All images, icons, logos.
+
+templates/   &lt;- All HTML. No inline styles. No inline scripts.</code></pre>
+      <p><strong>Never:</strong></p>
+      <ul>
+        <li>Write <code>&lt;style&gt;</code> blocks inside an HTML template.</li>
+        <li>Write <code>&lt;script&gt;</code> blocks with logic inside an HTML template.</li>
+        <li>Put images directly in your <code>templates/</code> folder.</li>
+        <li>Mix styles from multiple components into one giant CSS file.</li>
+      </ul>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Reference Document</h2>
+      <p>This page now follows the root source document. For the full section-by-section standard, use <a href="./django-template-standards.html">Django Template Standards</a>.</p>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

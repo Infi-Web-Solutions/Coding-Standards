@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Work Log Template",
+    "path": "html/templates/work-log-template.html"
+  },
+  {
+    "title": "Bug Report Template",
+    "path": "html/templates/bug-report-template.html"
+  },
+  {
+    "title": "Completion Comment Template",
+    "path": "html/templates/completion-comment-template.html"
+  }
+]

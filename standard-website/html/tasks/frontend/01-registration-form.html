@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontend Task — Registration Form | Development Standards</title>
+  <meta name="description" content="Build a registration form with all field validations, password strength, error display, and loading state." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Frontend Task — Registration Form</h1>
+        <p class="page-subtitle">Build a registration form with all field validations, password strength, error display, and loading state.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-tasks.html" class="btn btn-secondary">Back to Frontend Tasks</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Platform:</strong> React (or WeWeb)</p>
+<p><strong>Covers:</strong> <a href="../../checklists/frontend/form-field-validation.md">Form Field Validation</a> · <a href="../../standards/frontend-ui-standards.md">Frontend & UI Standards</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>You are building the signup page for a project management app called <strong>WorkFlow</strong>. New users register with their name, email, password, and an optional phone number. They must accept the Terms & Conditions before submitting.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <p>A registration form component with the following fields:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Required</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>First Name</td>
+    <td>Text input</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Last Name</td>
+    <td>Text input</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Email</td>
+    <td>Email input</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Password</td>
+    <td>Password input</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Confirm Password</td>
+    <td>Password input</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Phone Number</td>
+    <td>Tel input with country code selector</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Terms & Conditions checkbox</td>
+    <td>Checkbox</td>
+    <td>Yes</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Requirements</h2>
+          <h3>Fields</h3>
+<ul>
+  <li>First name and last name: minimum 1 character, maximum 100 characters</li>
+  <li>Email: valid email format, trimmed and lowercased before submission</li>
+  <li>Password: minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character</li>
+  <li>Confirm password: must exactly match the password field — validated client-side in real time once both fields have values</li>
+  <li>Phone (optional): if filled, must be a valid international number in E.164 format — include a country code dropdown</li>
+  <li>Terms checkbox: must be checked before the form can submit</li>
+</ul>
+<h3>Validation Behavior</h3>
+<ul>
+  <li>Show a password strength indicator (Weak / Fair / Strong) while the user types in the password field</li>
+  <li>Validate fields on blur (when the user leaves the field) — not while typing</li>
+  <li>Confirm password validates in real time once both fields have values</li>
+  <li>Required field asterisks shown next to labels</li>
+  <li>Show character count on first name and last name fields (max 100)</li>
+</ul>
+<h3>Error Messages</h3>
+<p>Use exact wording from the <a href="../../checklists/frontend/login-signup.md#error-messages-1">Login & Signup Standards</a>:</p>
+<ul>
+  <li>Empty required field: "Field name is required."</li>
+  <li>Invalid email: "Enter a valid email address."</li>
+  <li>Weak password: "Password must be at least 8 characters with uppercase, lowercase, number, and special character."</li>
+  <li>Passwords don't match: "Passwords do not match."</li>
+  <li>Terms not checked: "You must accept the Terms & Conditions to continue."</li>
+</ul>
+<h3>States</h3>
+<ul>
+  <li><strong>Default</strong> — form fields empty, submit button disabled until all required fields are valid</li>
+  <li><strong>Loading</strong> — submit button shows spinner and is disabled, no double submit possible</li>
+  <li><strong>Error</strong> — inline field errors shown below each field, form stays populated</li>
+  <li><strong>Duplicate email</strong> — show "An account with this email already exists. Log in instead?" with a link to login</li>
+  <li><strong>Success</strong> — show "Check your inbox to verify your email." message</li>
+</ul>
+<h3>UI Details</h3>
+<ul>
+  <li>Password and Confirm Password fields each have a show/hide toggle (eye icon)</li>
+  <li>Terms & Conditions text links to the terms page — opens in a new tab</li>
+  <li>"Already have an account? Log in" link visible below the form</li>
+  <li><code>autocomplete=&quot;new-password&quot;</code> on both password fields</li>
+  <li><code>autocomplete=&quot;email&quot;</code> on the email field</li>
+  <li>Form does not reset when a submission error occurs</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <ul>
+  <li>Do not put validation logic directly in the submit handler — use a schema (Zod, Yup, or similar)</li>
+  <li>Do not call the API without running full validation first</li>
+  <li>Do not show the success message while still on the same form view without clearing it</li>
+  <li>Do not accept the role or user ID from the form payload — backend assigns them</li>
+  <li>Do not skip the loading state</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="checklist-to-run-when-done" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run When Done</h2>
+          <p>Use the <a href="../../checklists/frontend/form-field-validation.md">Form Field Validation Checklist</a> and the <a href="../../checklists/frontend/login-signup.md#10-auth-checklist--before-marking-done">Login & Signup Checklist</a> — Signup Form section.</p>
+<p>Then run the <a href="../../checklists/frontend-checklist.md">Frontend Checklist</a>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <label><input type="checkbox" data-checklist-item /> All fields render correctly with correct input types</label><br />
+<label><input type="checkbox" data-checklist-item /> Validation fires on blur for each field</label><br />
+<label><input type="checkbox" data-checklist-item /> Password strength indicator updates while typing</label><br />
+<label><input type="checkbox" data-checklist-item /> Confirm password validates in real time once both fields have values</label><br />
+<label><input type="checkbox" data-checklist-item /> All error messages match the standard wording</label><br />
+<label><input type="checkbox" data-checklist-item /> Submit button disabled until form is valid</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state shows during submission (no double submit)</label><br />
+<label><input type="checkbox" data-checklist-item /> Duplicate email shows "Log in instead?" link</label><br />
+<label><input type="checkbox" data-checklist-item /> Success state shown after submission</label><br />
+<label><input type="checkbox" data-checklist-item /> Phone field accepts country code + number and validates E.164 format</label><br />
+<label><input type="checkbox" data-checklist-item /> Terms link opens in new tab</label><br />
+<label><input type="checkbox" data-checklist-item /> "Already have an account?" link is visible</label><br />
+<label><input type="checkbox" data-checklist-item /> Form stays populated when submission fails</label><br />
+<label><input type="checkbox" data-checklist-item /> Tested on mobile (no layout breakage, keyboard does not obscure submit button)</label><br />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../frontend-tasks.html" class="footer-link">Frontend Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

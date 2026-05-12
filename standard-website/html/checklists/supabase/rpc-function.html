@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase — RPC Function Checklist | Development Standards</title>
+  <meta name="description" content="SECURITY mode, parameter naming, 8-step validation order, error format, transaction safety." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Supabase — RPC Function Checklist</h1>
+        <p class="page-subtitle">SECURITY mode, parameter naming, 8-step validation order, error format, transaction safety.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-checklist.html" class="btn btn-secondary">Back to Supabase Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <blockquote>Run this checklist every time you write a new Postgres/RPC function exposed via <code>supabase.rpc()</code>.</blockquote>
+<p><strong>Standard:</strong> <a href="../../standards/supabase/07-rpc-functions.md">RPC & Postgres Function Standards</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-decision" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Decision</h2>
+          <label><input type="checkbox" data-checklist-item /> Confirmed RPC is the right choice (multi-step, business logic, or atomic operation)</label><br />
+<label><input type="checkbox" data-checklist-item /> Not using RPC for simple single-table CRUD (use direct table query instead)</label><br />
+<label><input type="checkbox" data-checklist-item /> Not using RPC when an Edge Function is needed (secret key, third-party API, email)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="2-security-invoker-vs-security-definer" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. SECURITY INVOKER vs SECURITY DEFINER</h2>
+          <label><input type="checkbox" data-checklist-item /> Default is SECURITY INVOKER (RLS applies) — used unless documented reason to bypass</label><br />
+<label><input type="checkbox" data-checklist-item /> SECURITY DEFINER only if explicitly justified in a comment above the function</label><br />
+<label><input type="checkbox" data-checklist-item /> If SECURITY DEFINER:</label><br />
+<p class="checklist-note">[ ] auth.uid() captured as the FIRST line of the DECLARE block</p>
+<p class="checklist-note">[ ] auth.uid() validated: IF v_user_id IS NULL THEN RAISE EXCEPTION 'AUTH_REQUIRED...'</p>
+<p class="checklist-note">[ ] Manual permission checks replace RLS checks</p>
+<p class="checklist-note">[ ] Reviewed by a second developer before merging</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="3-function-signature" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Function Signature</h2>
+          <label><input type="checkbox" data-checklist-item /> Function name: snake_case verb_noun pattern (create_project, delete_member)</label><br />
+<label><input type="checkbox" data-checklist-item /> All parameters prefixed with p_: p_workspace_id, p_name</label><br />
+<label><input type="checkbox" data-checklist-item /> Optional parameters use DEFAULT NULL</label><br />
+<label><input type="checkbox" data-checklist-item /> Parameter types are correct:</label><br />
+<p class="checklist-note">[ ] UUIDs typed as uuid (not text)</p>
+<p class="checklist-note">[ ] Timestamps typed as timestamptz (not timestamp)</p>
+<p class="checklist-note">[ ] Dates typed as date (not text)</p>
+<p class="checklist-note">[ ] Booleans typed as boolean (not text or integer)</p>
+<p class="checklist-note">[ ] Arrays typed correctly: uuid[], text[]</p>
+<label><input type="checkbox" data-checklist-item /> Internal variables prefixed with v_: v_project, v_count</label><br />
+<label><input type="checkbox" data-checklist-item /> No single-letter variable names</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="4-return-type" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Return Type</h2>
+          <label><input type="checkbox" data-checklist-item /> Return type chosen and documented:</label><br />
+<p class="checklist-note">[ ] RETURNS json — single record or mixed data</p>
+<p class="checklist-note">[ ] RETURNS TABLE — multiple rows with known columns</p>
+<p class="checklist-note">[ ] RETURNS void — side effects only</p>
+<label><input type="checkbox" data-checklist-item /> Success response shape follows standard:</label><br />
+<p class="checklist-note">json_build_object('data', row_to_json(v_record), 'message', '...')</p>
+<label><input type="checkbox" data-checklist-item /> Never returning error codes inside the data — errors use RAISE EXCEPTION</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="5-validation-order" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Validation Order</h2>
+          <p>All validation done in this order — stop at first failure:</p>
+<label><input type="checkbox" data-checklist-item /> 1. Auth check: v_user_id IS NULL → RAISE EXCEPTION 'AUTH_REQUIRED: ...'</label><br />
+<label><input type="checkbox" data-checklist-item /> 2. Required field checks: p_name IS NULL OR trim(p_name) = ''</label><br />
+<label><input type="checkbox" data-checklist-item /> 3. Length checks: length(trim(p_name)) > 100</label><br />
+<label><input type="checkbox" data-checklist-item /> 4. Format / enum checks: p_status NOT IN ('active', 'on-hold', 'archived')</label><br />
+<label><input type="checkbox" data-checklist-item /> 5. Cross-field checks: p_end_date <= p_start_date</label><br />
+<label><input type="checkbox" data-checklist-item /> 6. Existence checks (FK): workspace not found → NOT_FOUND</label><br />
+<label><input type="checkbox" data-checklist-item /> 7. Permission checks: not a member → FORBIDDEN; wrong role → FORBIDDEN</label><br />
+<label><input type="checkbox" data-checklist-item /> 8. Business rule checks: duplicate name, limit exceeded → DUPLICATE / BUSINESS_RULE_VIOLATION</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="6-error-raising" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Error Raising</h2>
+          <label><input type="checkbox" data-checklist-item /> All RAISE EXCEPTION follow the format: 'ERROR_CODE: description'</label><br />
+<label><input type="checkbox" data-checklist-item /> Error codes used:</label><br />
+<p class="checklist-note">[ ] AUTH_REQUIRED — user not authenticated</p>
+<p class="checklist-note">[ ] VALIDATION_ERROR — field-level validation failure</p>
+<p class="checklist-note">[ ] NOT_FOUND — FK target or entity does not exist</p>
+<p class="checklist-note">[ ] FORBIDDEN — not a member or wrong role</p>
+<p class="checklist-note">[ ] DUPLICATE — uniqueness violation</p>
+<p class="checklist-note">[ ] BUSINESS_RULE_VIOLATION — business constraint violated</p>
+<p class="checklist-note">[ ] SERVER_ERROR — unexpected/catch-all error</p>
+<label><input type="checkbox" data-checklist-item /> No raw Postgres error messages exposed (wrap in EXCEPTION WHEN OTHERS)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="7-transaction-safety" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Transaction Safety</h2>
+          <label><input type="checkbox" data-checklist-item /> Multi-step operations (inserts, updates, audit log) all inside one function</label><br />
+<label><input type="checkbox" data-checklist-item /> No COMMIT or ROLLBACK called manually — Postgres handles this</label><br />
+<label><input type="checkbox" data-checklist-item /> EXCEPTION WHEN OTHERS block at the end to catch and re-raise as SERVER_ERROR</label><br />
+<label><input type="checkbox" data-checklist-item /> If one step fails, earlier steps are automatically rolled back</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="8-performance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Performance</h2>
+          <label><input type="checkbox" data-checklist-item /> SELECT * not used inside function — select only needed columns</label><br />
+<label><input type="checkbox" data-checklist-item /> FOUND checked after a SELECT INTO (not checking the variable itself)</label><br />
+<label><input type="checkbox" data-checklist-item /> No N+1 queries inside a loop — use JOIN or IN clause</label><br />
+<label><input type="checkbox" data-checklist-item /> LIMIT used on any query that could return unbounded rows</label><br />
+<label><input type="checkbox" data-checklist-item /> Indexes exist for all WHERE columns used in the function</label><br />
+<label><input type="checkbox" data-checklist-item /> Read-only functions marked as STABLE</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="9-documentation" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Documentation</h2>
+          <label><input type="checkbox" data-checklist-item /> Function documented using the API Documentation Template</label><br />
+<label><input type="checkbox" data-checklist-item /> All parameters listed with type, required/optional, constraints</label><br />
+<label><input type="checkbox" data-checklist-item /> Success response JSON example included</label><br />
+<label><input type="checkbox" data-checklist-item /> All RAISE EXCEPTION codes listed with frontend handling example</label><br />
+<label><input type="checkbox" data-checklist-item /> Frontend call example: supabase.rpc('function_name', { p_param: value })</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="10-testing" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Testing</h2>
+          <label><input type="checkbox" data-checklist-item /> Success case tested: correct inputs → correct data returned</label><br />
+<label><input type="checkbox" data-checklist-item /> Missing required field: VALIDATION_ERROR raised</label><br />
+<label><input type="checkbox" data-checklist-item /> Invalid format: VALIDATION_ERROR raised</label><br />
+<label><input type="checkbox" data-checklist-item /> Non-existent FK: NOT_FOUND raised</label><br />
+<label><input type="checkbox" data-checklist-item /> Non-member caller: FORBIDDEN raised</label><br />
+<label><input type="checkbox" data-checklist-item /> Wrong role: FORBIDDEN raised</label><br />
+<label><input type="checkbox" data-checklist-item /> Duplicate record: DUPLICATE raised</label><br />
+<label><input type="checkbox" data-checklist-item /> All side effects verified (related records, audit log)</label><br />
+<label><input type="checkbox" data-checklist-item /> Transaction atomicity: simulate mid-function failure → earlier steps rolled back</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS still enforced (SECURITY INVOKER): cross-workspace access blocked</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <label><input type="checkbox" data-checklist-item /> Function uses correct SECURITY mode with justification documented</label><br />
+<label><input type="checkbox" data-checklist-item /> All parameters correctly typed and prefixed</label><br />
+<label><input type="checkbox" data-checklist-item /> Validation in correct order, all failure cases handled</label><br />
+<label><input type="checkbox" data-checklist-item /> Errors follow the ERROR_CODE: description format</label><br />
+<label><input type="checkbox" data-checklist-item /> Multi-step operations are atomic (single function)</label><br />
+<label><input type="checkbox" data-checklist-item /> Performance rules followed (no SELECT *, no N+1)</label><br />
+<label><input type="checkbox" data-checklist-item /> Fully documented for frontend handoff</label><br />
+<label><input type="checkbox" data-checklist-item /> All test cases pass</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="practice-task" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Practice Task</h2>
+          <p><strong>→ <a href="../../tasks/supabase/05-rpc-function-task.md">Archive Project RPC Function</a></strong> Build an atomic RPC that archives a project, sets all open tasks to on-hold, and writes an audit log — in one transaction, with full validation.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-checklist.html" class="footer-link">Supabase Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

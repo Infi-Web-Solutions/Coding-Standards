@@ -1,0 +1,10 @@
+{
+  "primary": [
+    { "label": "Home", "href": "index.html" },
+    { "label": "Standards", "href": "html/pages/standards.html" },
+    { "label": "Checklists", "href": "html/pages/checklists.html" },
+    { "label": "Tasks", "href": "html/pages/tasks.html" },
+    { "label": "Templates", "href": "html/pages/templates.html" },
+    { "label": "Contact", "href": "html/pages/contact.html" }
+  ]
+}

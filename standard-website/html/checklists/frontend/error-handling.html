@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error Handling Checklist | Development Standards</title>
+  <meta name="description" content="Checklist for field-level errors, form-level API errors, page-level errors, auth errors, and readable frontend error handling." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+<body data-page="checklists">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../../index.html" class="navbar-link">Home</a><a href="../../pages/standards.html" class="navbar-link">Standards</a><a href="../../pages/checklists.html" class="navbar-link active">Checklists</a><a href="../../pages/tasks.html" class="navbar-link">Tasks</a><a href="../../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class=”page”>
+    <div class=”container”>
+
+      <section class=”page-header”>
+        <span class=”badge badge-primary”>Frontend Checklist</span>
+        <h1 class=”page-title”>Error Handling Checklist</h1>
+        <p class=”page-subtitle”>Every error must be shown to the user. No error stays only in the console. No form resets after a failed submission. Every error has a human-readable message and a clear next step.</p>
+        <div style=”display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;”>
+          <a href=”../frontend-checklist.html” class=”btn btn-secondary”>Back to Frontend Checklist</a>
+          <span class=”badge badge-info” data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           DEMO 1: Field-Level Error
+           ================================================================ -->
+      <section class=”section”>
+        <div class=”content-card”>
+          <h2 class=”section-title”>Demo 1 — Field-Level Error</h2>
+          <p class=”ui-demo-note” style=”margin-bottom: 16px;”>Click “Trigger Field Error” to show an inline field error beneath the input. Click “Clear Error” or start typing to dismiss it.</p>
+
+          <div class=”ui-demo” data-field-error-demo>
+            <div class=”ui-demo-title”>Email Field with Inline Error</div>
+            <div class=”ui-demo-field”>
+              <label class=”ui-demo-label” for=”fe-email”>Email Address <span class=”ui-demo-required”>*</span></label>
+              <input id=”fe-email” data-fe-email class=”form-control” type=”email” placeholder=”name@example.com” value=”taken@example.com” autocomplete=”off” />
+              <div class=”ui-demo-error ui-demo-hidden” data-fe-email-error></div>
+            </div>
+            <div class=”ui-demo-actions”>
+              <button type=”button” class=”btn btn-danger btn-sm” data-fe-trigger>Trigger Field Error</button>
+              <button type=”button” class=”btn btn-secondary btn-sm” data-fe-clear>Clear Error</button>
+            </div>
+          </div>
+
+          <div class=”divider”></div>
+          <label><input type=”checkbox” data-checklist-item /> Shown directly below the field they apply to</label><br />
+          <label><input type=”checkbox” data-checklist-item /> Specific and human-readable — not just “Invalid”</label><br />
+          <label><input type=”checkbox” data-checklist-item /> Error clears when the user starts correcting the field</label><br />
+          <label><input type=”checkbox” data-checklist-item /> Scroll to the first error on submit when needed</label>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           DEMO 2: Form Banner Error
+           ================================================================ -->
+      <section class=”section”>
+        <div class=”content-card”>
+          <h2 class=”section-title”>Demo 2 — Form Banner Error</h2>
+          <p class=”ui-demo-note” style=”margin-bottom: 16px;”>Click “Trigger API Error” to show a persistent red banner at the top of the form. Dismiss it with the × button.</p>
+
+          <div class=”ui-demo” data-form-banner-demo>
+            <div class=”ui-demo-title”>Mini Form with API Error Banner</div>
+
+            <!-- Banner (hidden by default) -->
+            <div class=”alert alert-danger ui-demo-hidden” data-fb-banner style=”margin-bottom: 16px;”>
+              <div style=”display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;”>
+                <div>
+                  <div class=”alert-title”>Unable to save changes.</div>
+                  You do not have permission to edit this project.
+                </div>
+                <button type=”button” class=”btn btn-secondary btn-sm” data-fb-dismiss style=”flex-shrink: 0;” aria-label=”Dismiss error”>×</button>
+              </div>
+            </div>
+
+            <div class=”ui-demo-field”>
+              <label class=”ui-demo-label” for=”fb-name”>Name</label>
+              <input id=”fb-name” class=”form-control” type=”text” value=”Alpha Project” />
+            </div>
+            <div class=”ui-demo-field”>
+              <label class=”ui-demo-label” for=”fb-email”>Email</label>
+              <input id=”fb-email” class=”form-control” type=”email” value=”pm@example.com” />
+            </div>
+            <div class=”ui-demo-actions”>
+              <button type=”button” class=”btn btn-danger btn-sm” data-fb-trigger>Trigger API Error</button>
+              <button type=”button” class=”btn btn-primary btn-sm”>Save Changes</button>
+            </div>
+          </div>
+
+          <div class=”divider”></div>
+          <label><input type=”checkbox” data-checklist-item /> Form does not reset after a failed API call</label><br />
+          <label><input type=”checkbox” data-checklist-item /> Field-specific API errors map back to the correct field</label><br />
+          <label><input type=”checkbox” data-checklist-item /> General API errors appear in a banner above the submit button</label><br />
+          <label><input type=”checkbox” data-checklist-item /> Submit button loading state is removed after error</label>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           DEMO 3: Page-Level Error
+           ================================================================ -->
+      <section class=”section”>
+        <div class=”content-card”>
+          <h2 class=”section-title”>Demo 3 — Page-Level Error</h2>
+          <p class=”ui-demo-note” style=”margin-bottom: 16px;”>Toggle between normal data view and error states. Retry simulates recovering from the error after 1.2 seconds.</p>
+
+          <div class=”ui-demo” data-page-error-demo>
+            <div class=”ui-demo-title”>Page State Switcher</div>
+
+            <div class=”ui-demo-actions” style=”margin-bottom: 20px;”>
+              <button type=”button” class=”btn btn-secondary btn-sm” data-pe-show-normal>Normal State</button>
+              <button type=”button” class=”btn btn-danger btn-sm” data-pe-show-error>Server Error</button>
+              <button type=”button” class=”btn btn-warning btn-sm” data-pe-show-network>Network Error</button>
+            </div>
+
+            <!-- Normal state -->
+            <div data-pe-normal>
+              <div class=”alert alert-success” style=”margin-bottom: 12px;”>
+                <div class=”alert-title”>Projects loaded successfully</div>
+                Showing 12 projects across 3 teams.
+              </div>
+              <div style=”display: flex; flex-direction: column; gap: 8px;”>
+                <div class=”content-card” style=”padding: 12px 16px;”>Alpha Project <span class=”badge badge-success” style=”margin-left: 8px;”>Active</span></div>
+                <div class=”content-card” style=”padding: 12px 16px;”>Beta Dashboard <span class=”badge badge-warning” style=”margin-left: 8px;”>Draft</span></div>
+                <div class=”content-card” style=”padding: 12px 16px;”>Gamma Campaign <span class=”badge badge-info” style=”margin-left: 8px;”>Paused</span></div>
+              </div>
+            </div>
+
+            <!-- Server error state -->
+            <div data-pe-error class=”ui-demo-hidden” style=”text-align: center; padding: 32px 16px;”>
+              <div style=”font-size: 2.5rem; margin-bottom: 12px;” aria-hidden=”true”>⚠️</div>
+              <h3 style=”margin: 0 0 8px;”>Something went wrong.</h3>
+              <p class=”ui-demo-note” style=”margin-bottom: 20px;”>We couldn't load your projects. This is our fault, not yours.</p>
+              <button type=”button” class=”btn btn-primary” data-pe-retry>Retry</button>
+            </div>
+
+            <!-- Network error state -->
+            <div data-pe-network class=”ui-demo-hidden” style=”text-align: center; padding: 32px 16px;”>
+              <div style=”font-size: 2.5rem; margin-bottom: 12px;” aria-hidden=”true”>📡</div>
+              <h3 style=”margin: 0 0 8px;”>No internet connection.</h3>
+              <p class=”ui-demo-note” style=”margin-bottom: 20px;”>Check your connection and try again. Your unsaved data is still here.</p>
+              <button type=”button” class=”btn btn-primary” data-pe-retry-network>Try Again</button>
+            </div>
+          </div>
+
+          <div class=”divider”></div>
+          <label><input type=”checkbox” data-checklist-item /> Page-level failures show an error state, not a blank page</label><br />
+          <label><input type=”checkbox” data-checklist-item /> Retry button is available</label><br />
+          <label><input type=”checkbox” data-checklist-item /> Network failure preserves entered form data</label><br />
+          <label><input type=”checkbox” data-checklist-item /> Slow connection keeps loading visible until complete or timeout</label>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           Error Type Reference Table
+           ================================================================ -->
+      <section class=”section”>
+        <div class=”content-card”>
+          <h2 class=”section-title”>Error Types &amp; Where They Appear</h2>
+          <div class=”table-wrapper”>
+            <table class=”table”>
+              <thead>
+                <tr>
+                  <th>Error Type</th>
+                  <th>Source</th>
+                  <th>Where to Show</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Required field empty</td><td>Client validation</td><td>Inline below the field</td></tr>
+                <tr><td>Invalid format</td><td>Client validation</td><td>Inline below the field</td></tr>
+                <tr><td>Business rule failure</td><td>API response</td><td>Inline field or form banner</td></tr>
+                <tr><td>API server error</td><td>API response</td><td>Form banner or error toast</td></tr>
+                <tr><td>Network failure</td><td>Browser/fetch</td><td>Toast or inline banner</td></tr>
+                <tr><td>Session expired</td><td>API response</td><td>Redirect to login with message</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           API Error Code Mapping Table
+           ================================================================ -->
+      <section class=”section”>
+        <div class=”content-card”>
+          <h2 class=”section-title”>API Error Code → User Message Mapping</h2>
+          <p class=”ui-demo-note” style=”margin-bottom: 16px;”>Map every API error code to a plain-English message before displaying it. Never show raw codes or stack traces.</p>
+          <div class=”table-wrapper”>
+            <table class=”table”>
+              <thead>
+                <tr>
+                  <th>Error Code</th>
+                  <th>HTTP Status</th>
+                  <th>User-Facing Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>AUTH_REQUIRED</code></td>
+                  <td>401</td>
+                  <td>Please log in to continue.</td>
+                </tr>
+                <tr>
+                  <td><code>FORBIDDEN</code></td>
+                  <td>403</td>
+                  <td>You don't have permission to do this.</td>
+                </tr>
+                <tr>
+                  <td><code>NOT_FOUND</code></td>
+                  <td>404</td>
+                  <td>This record no longer exists.</td>
+                </tr>
+                <tr>
+                  <td><code>VALIDATION_ERROR</code></td>
+                  <td>422</td>
+                  <td>Shows field-level errors inline.</td>
+                </tr>
+                <tr>
+                  <td><code>SERVER_ERROR</code></td>
+                  <td>500</td>
+                  <td>Something went wrong. Please try again.</td>
+                </tr>
+                <tr>
+                  <td><code>NETWORK_ERROR</code></td>
+                  <td>—</td>
+                  <td>Check your internet connection.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           Checklist cards
+           ================================================================ -->
+      <section class=”section”>
+        <div class=”grid grid-2”>
+          <article class=”card”>
+            <h2 class=”card-title”>Permission and Auth Errors</h2>
+            <label><input type=”checkbox” data-checklist-item /> 403 shows a readable permission message</label><br />
+            <label><input type=”checkbox” data-checklist-item /> 401 redirects to login with a clear reason</label><br />
+            <label><input type=”checkbox” data-checklist-item /> Removed access is handled gracefully instead of leaving stale UI</label>
+          </article>
+
+          <article class=”card”>
+            <h2 class=”card-title”>What Never to Do</h2>
+            <label><input type=”checkbox” data-checklist-item /> Never leave errors only in the console</label><br />
+            <label><input type=”checkbox” data-checklist-item /> Never show raw backend codes or stack traces to the user</label><br />
+            <label><input type=”checkbox” data-checklist-item /> Never clear the form after a failed submission</label><br />
+            <label><input type=”checkbox” data-checklist-item /> Never render a blank page when load fails</label>
+          </article>
+        </div>
+      </section>
+
+    </div>
+  </main>
+  <footer class="footer"><div class="footer-inner"><div><div class="footer-brand">Development Standards</div><p class="footer-text">Every error should help the user recover instead of making them guess.</p></div><div class="footer-links"><a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a><a href="../../standards/frontend-error-feedback.html" class="footer-link">Error &amp; Feedback Standard</a></div></div></footer>
+  <script type="module" src="../../../js/main.js"></script>
+  <script type="module" src="../../../js/pages/error-handling-demo.js"></script>
+</body>
+</html>

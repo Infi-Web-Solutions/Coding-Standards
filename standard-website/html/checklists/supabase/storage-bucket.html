@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase — Storage Bucket Checklist | Development Standards</title>
+  <meta name="description" content="Bucket visibility, MIME type restrictions, file size limits, RLS on storage.objects, path pattern, signed URLs." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Supabase — Storage Bucket Checklist</h1>
+        <p class="page-subtitle">Bucket visibility, MIME type restrictions, file size limits, RLS on storage.objects, path pattern, signed URLs.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-checklist.html" class="btn btn-secondary">Back to Supabase Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <blockquote>Run this checklist every time you create a new Storage bucket or add file upload functionality.</blockquote>
+<p><strong>Standard:</strong> <a href="../../standards/supabase/05-validation-multitenant-storage.md">Supabase Standards — Multi-Tenant & Storage</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-bucket-configuration" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Bucket Configuration</h2>
+          <label><input type="checkbox" data-checklist-item /> Bucket created with a clear kebab-case name: avatars, project-files, invoices</label><br />
+<label><input type="checkbox" data-checklist-item /> Bucket visibility decided:</label><br />
+<p class="checklist-note">[ ] Public bucket: files accessible via URL without auth (only for truly public assets)</p>
+<p class="checklist-note">[ ] Private bucket: all access goes through RLS policies or signed URLs</p>
+<label><input type="checkbox" data-checklist-item /> Allowed MIME types restricted in bucket config where possible</label><br />
+<label><input type="checkbox" data-checklist-item /> Max file size limit set in bucket config (or enforced in RLS / frontend)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="2-rls-policies-on-storage" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. RLS Policies on Storage</h2>
+          <p>Supabase Storage uses RLS on the <code>storage.objects</code> table.</p>
+<pre><code class="language-text">[ ] RLS policies defined for storage.objects
+[ ] Separate policies for: SELECT (read), INSERT (upload), UPDATE (replace), DELETE (delete)
+
+COMMON PATTERNS:
+[ ] User can upload to their own folder: storage.foldername(name) = auth.uid()::text
+[ ] Workspace members can access workspace files: ownership verified via workspace_members lookup
+[ ] Public read: allow SELECT with no auth check (for public buckets only)
+[ ] Owner-only delete: auth.uid() matches uploader&#x27;s user_id stored in metadata or path</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="3-file-path-convention" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. File Path Convention</h2>
+          <label><input type="checkbox" data-checklist-item /> Paths follow a consistent structure:</label><br />
+<p class="checklist-note">— User files:      {user_id}/{filename}</p>
+<p class="checklist-note">— Workspace files: {workspace_id}/{entity_type}/{entity_id}/{filename}</p>
+<p class="checklist-note">— Public assets:   public/{filename}</p>
+<label><input type="checkbox" data-checklist-item /> Filenames sanitized: no spaces, no special characters (use UUID or slugified name)</label><br />
+<label><input type="checkbox" data-checklist-item /> Original filename stored separately (in a database column) for display purposes</label><br />
+<label><input type="checkbox" data-checklist-item /> Never use predictable sequential IDs in paths (use UUIDs to prevent enumeration)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="4-upload-validation-frontend" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Upload Validation (Frontend)</h2>
+          <label><input type="checkbox" data-checklist-item /> Accepted file types shown to user: "JPG, PNG, or PDF up to 5 MB"</label><br />
+<label><input type="checkbox" data-checklist-item /> File type validated by MIME type — not just file extension</label><br />
+<label><input type="checkbox" data-checklist-item /> File size validated before upload begins</label><br />
+<label><input type="checkbox" data-checklist-item /> Progress bar shown for uploads > 1 second</label><br />
+<label><input type="checkbox" data-checklist-item /> Upload can be cancelled</label><br />
+<label><input type="checkbox" data-checklist-item /> On success: URL stored in the relevant database record</label><br />
+<label><input type="checkbox" data-checklist-item /> On failure: error shown to user, no partial record saved</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="5-upload-validation-backend-rls" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Upload Validation (Backend / RLS)</h2>
+          <label><input type="checkbox" data-checklist-item /> RLS INSERT policy checks: authenticated, correct workspace/user context</label><br />
+<label><input type="checkbox" data-checklist-item /> File size enforced by Supabase bucket config or by an Edge Function</label><br />
+<label><input type="checkbox" data-checklist-item /> MIME type enforced by Supabase bucket config (allowedMimeTypes)</label><br />
+<label><input type="checkbox" data-checklist-item /> Virus scan considered for user-uploaded documents (Edge Function with external scanner)</label><br />
+<label><input type="checkbox" data-checklist-item /> EXIF metadata stripped from images where user privacy matters</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="6-serving-files" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Serving Files</h2>
+          <label><input type="checkbox" data-checklist-item /> Private files: served via signed URL with expiry — not stored as a public URL</label><br />
+<label><input type="checkbox" data-checklist-item /> Signed URL expiry appropriate for use case:</label><br />
+<p class="checklist-note">— Temporary download: 60 seconds</p>
+<p class="checklist-note">— Short-lived preview: 5 minutes</p>
+<p class="checklist-note">— Long-lived link (e.g., invoice): 7 days</p>
+<label><input type="checkbox" data-checklist-item /> Signed URL generated at request time — not stored in the database</label><br />
+<label><input type="checkbox" data-checklist-item /> Public files: permanent public URL stored in DB is acceptable only if truly public</label><br />
+<label><input type="checkbox" data-checklist-item /> CDN caching considered for frequently accessed public assets</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="7-file-deletion" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. File Deletion</h2>
+          <label><input type="checkbox" data-checklist-item /> File deleted from Storage when the owning record is deleted</label><br />
+<label><input type="checkbox" data-checklist-item /> Not relying on CASCADE alone — Storage does not cascade with DB deletes</label><br />
+<label><input type="checkbox" data-checklist-item /> Delete handled in a transaction or Edge Function: delete DB record → delete Storage file</label><br />
+<label><input type="checkbox" data-checklist-item /> Orphaned files: plan for how they are discovered and cleaned up</label><br />
+<label><input type="checkbox" data-checklist-item /> User "remove" action: deletes both the record reference and the Storage file</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="8-security-rules" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Security Rules</h2>
+          <label><input type="checkbox" data-checklist-item /> Service role key is NEVER in frontend code</label><br />
+<label><input type="checkbox" data-checklist-item /> All uploads from frontend use the anon key + RLS policies</label><br />
+<label><input type="checkbox" data-checklist-item /> Storage bucket not set to public unless the files are genuinely public</label><br />
+<label><input type="checkbox" data-checklist-item /> Path structure does not allow one user to access another user's files</label><br />
+<label><input type="checkbox" data-checklist-item /> Predictable file paths avoided (no /user/1/avatar.jpg — use /user/{uuid}/avatar.jpg)</label><br />
+<label><input type="checkbox" data-checklist-item /> No sensitive data in the file path (no SSNs, no email addresses in path)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="9-documentation" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Documentation</h2>
+          <label><input type="checkbox" data-checklist-item /> Bucket name and purpose documented</label><br />
+<label><input type="checkbox" data-checklist-item /> Allowed file types and max size documented</label><br />
+<label><input type="checkbox" data-checklist-item /> Path structure documented with examples</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS policies documented (who can read/write/delete)</label><br />
+<label><input type="checkbox" data-checklist-item /> Signed URL expiry values documented</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <label><input type="checkbox" data-checklist-item /> Bucket created with correct visibility (public/private)</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS policies cover all operations (SELECT, INSERT, DELETE)</label><br />
+<label><input type="checkbox" data-checklist-item /> File paths follow the defined structure</label><br />
+<label><input type="checkbox" data-checklist-item /> Frontend validates type + size before upload</label><br />
+<label><input type="checkbox" data-checklist-item /> Signed URLs used for private files (not stored public URLs)</label><br />
+<label><input type="checkbox" data-checklist-item /> File deletion cleans up Storage too (not just the DB record)</label><br />
+<label><input type="checkbox" data-checklist-item /> Security rules verified — no cross-user access possible</label><br />
+<label><input type="checkbox" data-checklist-item /> Bucket and policies documented</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="practice-task" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Practice Task</h2>
+          <p><strong>→ <a href="../../tasks/supabase/06-storage-setup-task.md">Storage Setup Task</a></strong> Create a storage bucket for project attachments, set RLS policies, and design the upload/download/delete flow with signed URLs.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-checklist.html" class="footer-link">Supabase Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Website — Migration Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Existing site reverse-engineering checklist, migration flow, WordPress audit, content migration standards, SEO preservation, forms and integrations."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Website — Migration Standard</h1>
+
+        <p class="page-subtitle">
+          Existing site reverse-engineering checklist, migration flow, WordPress audit, content migration standards, SEO preservation, forms and integrations.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="existing-website-to-react-weweb-bubble" class="section">
+        <div class="content-card">
+          <h2 class="section-title">12. Existing Website to React / WeWeb / Bubble Standard</h2>
+
+          <p>When client gives a deployed website, first create a reverse-engineering document.</p>
+
+          <h3>Reverse Engineering Checklist</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Questions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Pages</td><td>What pages exist?</td></tr>
+                <tr><td>URLs</td><td>Should old URLs remain same?</td></tr>
+                <tr><td>CMS</td><td>Is blog/content dynamic?</td></tr>
+                <tr><td>Forms</td><td>Where do forms submit?</td></tr>
+                <tr><td>Tracking</td><td>What analytics/pixels are installed?</td></tr>
+                <tr><td>SEO</td><td>What metadata/schema exists?</td></tr>
+                <tr><td>Assets</td><td>Where are original images/logos?</td></tr>
+                <tr><td>Integrations</td><td>CRM, email, chat, booking, payment?</td></tr>
+                <tr><td>Animations</td><td>Are they required?</td></tr>
+                <tr><td>Admin Editing</td><td>Does client need CMS/no-code editing?</td></tr>
+                <tr><td>Performance</td><td>What should be improved?</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Migration Flow</h3>
+          <pre><code>1. Crawl/list all existing pages.
+2. Identify static vs dynamic pages.
+3. Extract content and assets.
+4. Document existing SEO metadata.
+5. Document current forms and integrations.
+6. Decide new platform architecture.
+7. Rebuild UI page by page.
+8. Reconnect forms/integrations.
+9. Add redirects if URL changes.
+10. QA old vs new.
+11. Deploy staging.
+12. Client approval.
+13. Switch DNS/domain.
+14. Monitor after launch.</code></pre>
+        </div>
+      </section>
+
+      <section id="wordpress-migration-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">13. WordPress to React / WeWeb Migration Standard</h2>
+
+          <h3>WordPress Audit</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Check</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Theme</td><td>Custom theme or purchased theme?</td></tr>
+                <tr><td>Plugins</td><td>Forms, SEO, cache, security, builder.</td></tr>
+                <tr><td>Pages</td><td>Static pages.</td></tr>
+                <tr><td>Posts</td><td>Blog posts/categories/tags.</td></tr>
+                <tr><td>Media Library</td><td>Images/PDFs/videos.</td></tr>
+                <tr><td>Forms</td><td>Contact Form 7, WPForms, Gravity Forms, etc.</td></tr>
+                <tr><td>SEO Plugin</td><td>Yoast, RankMath, All in One SEO.</td></tr>
+                <tr><td>Custom Post Types</td><td>Services, projects, testimonials, products.</td></tr>
+                <tr><td>Users</td><td>Admin/editor accounts.</td></tr>
+                <tr><td>Redirects</td><td>Existing SEO redirects.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Migration Decision</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Existing WordPress Feature</th>
+                  <th>New Platform Equivalent</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Blog Posts</td><td>Headless CMS / Supabase / WordPress headless / Webflow CMS</td></tr>
+                <tr><td>Media Library</td><td>S3/R2/Supabase Storage</td></tr>
+                <tr><td>Contact Forms</td><td>API/Edge Function/CRM webhook</td></tr>
+                <tr><td>SEO Plugin Metadata</td><td>Next.js metadata / WeWeb SEO config</td></tr>
+                <tr><td>Custom Post Types</td><td>CMS collections/database tables</td></tr>
+                <tr><td>Plugins</td><td>Custom APIs/integrations</td></tr>
+                <tr><td>Shortcodes</td><td>Rebuilt components</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="content-migration-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">14. Content Migration Standard</h2>
+
+          <h3>Content Must Be Cleaned</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Content Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Headings</td><td>Proper H1/H2/H3 hierarchy.</td></tr>
+                <tr><td>Paragraphs</td><td>No broken copied formatting.</td></tr>
+                <tr><td>Images</td><td>Optimized and renamed.</td></tr>
+                <tr><td>Alt Text</td><td>Added for meaningful images.</td></tr>
+                <tr><td>Links</td><td>Internal links updated.</td></tr>
+                <tr><td>Buttons</td><td>Clear CTA text.</td></tr>
+                <tr><td>Blog Posts</td><td>Preserve author/date/category if needed.</td></tr>
+                <tr><td>Legal Pages</td><td>Confirm latest version with client.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Image Standard</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Rule</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Format</td><td>WebP preferred, SVG for logos/icons.</td></tr>
+                <tr><td>Size</td><td>Compress before upload.</td></tr>
+                <tr><td>Naming</td><td><code>service-name-hero.webp</code>, not <code>IMG_1234.png</code>.</td></tr>
+                <tr><td>Alt Text</td><td>Required for meaningful images.</td></tr>
+                <tr><td>Lazy Loading</td><td>Required below fold.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="seo-preservation-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">15. SEO Preservation Standard</h2>
+
+          <p>This is critical when replacing an existing site.</p>
+
+          <h3>Mandatory SEO Checklist</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Same URLs</td><td>Keep old URLs where possible.</td></tr>
+                <tr><td>Redirects</td><td>301 redirect old URLs to new URLs.</td></tr>
+                <tr><td>Page Titles</td><td>Preserve or improve.</td></tr>
+                <tr><td>Meta Descriptions</td><td>Preserve or improve.</td></tr>
+                <tr><td>H1 Tags</td><td>One primary H1 per page.</td></tr>
+                <tr><td>Canonical URLs</td><td>Set correctly.</td></tr>
+                <tr><td>Open Graph</td><td>Title, description, image.</td></tr>
+                <tr><td>Sitemap</td><td>Generate and submit.</td></tr>
+                <tr><td>Robots.txt</td><td>Configure properly.</td></tr>
+                <tr><td>Schema Markup</td><td>Preserve business/article/product schema if needed.</td></tr>
+                <tr><td>Image Alt Text</td><td>Add/retain.</td></tr>
+                <tr><td>Internal Links</td><td>Update broken links.</td></tr>
+                <tr><td>404 Check</td><td>No broken important pages.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>SEO Migration Anti-Patterns</h3>
+          <p>Avoid:</p>
+          <ul>
+            <li>Changing URLs without redirects.</li>
+            <li>Forgetting blog posts.</li>
+            <li>Losing metadata.</li>
+            <li>Blocking site with <code>noindex</code>.</li>
+            <li>Removing schema markup.</li>
+            <li>Replacing text content with images.</li>
+            <li>Launching without sitemap.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="forms-replication-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">16. Forms Replication Standard</h2>
+
+          <p>Forms are often where replicas fail.</p>
+
+          <h3>For Every Form, Document</h3>
+          <pre><code>Form Name:
+Page:
+Fields:
+Required Fields:
+Validation Rules:
+Submit Destination:
+Email Notification:
+CRM Integration:
+Success Message:
+Error Message:
+Spam Protection:
+File Upload:
+Frontend Behavior:
+Backend/API Used:</code></pre>
+
+          <h3>Field Validation Standard</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Validation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Name</td><td>Required, 2–100 chars.</td></tr>
+                <tr><td>Email</td><td>Required, valid email.</td></tr>
+                <tr><td>Phone</td><td>Country code + valid number length.</td></tr>
+                <tr><td>Message</td><td>Required if contact form, max length.</td></tr>
+                <tr><td>Company</td><td>Optional/required depending on B2B.</td></tr>
+                <tr><td>File</td><td>Type + size validation.</td></tr>
+                <tr><td>Dropdown</td><td>Must match allowed options.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Form UX Standards</h3>
+          <ul>
+            <li>Disable submit while sending.</li>
+            <li>Show loading state.</li>
+            <li>Preserve user input on error.</li>
+            <li>Show field-level errors.</li>
+            <li>Show success confirmation.</li>
+            <li>Send backend email/CRM notification.</li>
+            <li>Add spam protection.</li>
+            <li>Log failed submissions.</li>
+            <li>Never silently fail.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="integration-replication-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">17. Integration Replication Standard</h2>
+
+          <p>Existing site may have hidden integrations.</p>
+
+          <h3>Common Integrations to Check</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Integration</th>
+                  <th>What to Verify</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Google Analytics</td><td>Measurement ID.</td></tr>
+                <tr><td>Google Tag Manager</td><td>Container ID.</td></tr>
+                <tr><td>Meta Pixel</td><td>Pixel ID/events.</td></tr>
+                <tr><td>LinkedIn Insight Tag</td><td>B2B tracking.</td></tr>
+                <tr><td>HubSpot</td><td>Forms/chat/CRM.</td></tr>
+                <tr><td>Zoho CRM</td><td>Lead capture.</td></tr>
+                <tr><td>Mailchimp</td><td>Newsletter.</td></tr>
+                <tr><td>SendGrid</td><td>Transactional email.</td></tr>
+                <tr><td>Calendly</td><td>Booking.</td></tr>
+                <tr><td>Stripe/Razorpay</td><td>Payments.</td></tr>
+                <tr><td>Chat Widget</td><td>Intercom, Tawk, Crisp, custom bot.</td></tr>
+                <tr><td>Maps</td><td>Google Maps/Mapbox.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Integration Documentation</h3>
+          <pre><code>Integration Name:
+Purpose:
+Current Website Behavior:
+New Platform Implementation:
+Required API Keys:
+Frontend Changes:
+Backend Changes:
+Test Case:
+Failure Handling:
+Owner:</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Reverse-engineer before you build. Preserve SEO, forms, and integrations — not just the visual design.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

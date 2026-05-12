@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Website Practice Tasks | Development Standards</title>
+  <meta name="description" content="Website practice task for landing page replication and responsive delivery." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="tasks">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../index.html" class="navbar-link">Home</a><a href="../pages/standards.html" class="navbar-link">Standards</a><a href="../pages/checklists.html" class="navbar-link">Checklists</a><a href="../pages/tasks.html" class="navbar-link active">Tasks</a><a href="../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-info">Website Practice Tasks</span><h1 class="page-title">Website Practice Tasks</h1><p class="page-subtitle">Practice website replication with real design, semantic markup, responsive behavior, and delivery quality.</p></section>
+    <section class="section"><div class="content-card">
+      <div class="table-wrapper"><table class="table"><thead><tr><th>Task</th><th>What You Practice</th></tr></thead><tbody>
+        <tr><td><a href="./website/01-landing-page-section.html">01 — Replicate a Landing Page</a></td><td>Pixel-perfect replication (Hero + Features + CTA sections), design token extraction from Figma, reusable components (one FeatureCard mapped over data), responsive layout at 3 breakpoints, semantic HTML (h1/h2/h3/button/a), CTA form with loading state and error handling, image optimization and alt text</td></tr>
+      </tbody></table></div>
+      <div class="divider"></div>
+      <h2 class="section-title">Standards to Read First</h2>
+      <ul>
+        <li><a href="../standards/website-standards.html">Website Replication Standards</a></li>
+        <li><a href="../standards/website-scoping-and-design.html">01 — Scoping &amp; Design</a></li>
+        <li><a href="../standards/website-responsive-qa-performance.html">04 — Responsive, QA &amp; Performance</a></li>
+        <li><a href="../checklists/website-launch-checklist.html">Website Launch Checklist</a></li>
+      </ul>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

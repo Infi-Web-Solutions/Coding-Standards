@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Razorpay Integration Standard | Development Standards</title>
+  <meta name="description" content="Keys, Orders (server-side, paise amounts), Payment verification (HMAC SHA256), Checkout.js, Subscriptions, Webhooks, Notes, Refunds." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Razorpay Integration Standard</h1>
+        <p class="page-subtitle">Keys, Orders (server-side, paise amounts), Payment verification (HMAC SHA256), Checkout.js, Subscriptions, Webhooks, Notes, Refunds.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p>Covers Razorpay account setup, Orders, payment verification, Checkout.js, Subscriptions, Webhooks, Notes (metadata), and Refunds.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-account-setup-and-api-keys" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Account Setup and API Keys</h2>
+          <h3>Key Types</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Key</th>
+    <th>Where Used</th>
+    <th>Exposure</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>key_id</code> (<code>rzp_test_...</code> / <code>rzp_live_...</code>)</td>
+    <td>Frontend (Checkout.js) + Backend</td>
+    <td>Safe in frontend for Checkout only</td>
+  </tr>
+  <tr>
+    <td><code>key_secret</code></td>
+    <td>Backend only</td>
+    <td><strong>NEVER expose to browser</strong></td>
+  </tr>
+  <tr>
+    <td>Webhook secret</td>
+    <td>Backend webhook handler only</td>
+    <td><strong>NEVER expose</strong></td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Environment Variables</h3>
+<pre><code>RAZORPAY_KEY_ID=rzp_test_...       # or rzp_live_...
+RAZORPAY_KEY_SECRET=...            # NEVER in frontend
+RAZORPAY_WEBHOOK_SECRET=...</code></pre>
+<ul>
+  <li>Use <code>rzp_test_</code> locally and in staging</li>
+  <li>Use <code>rzp_live_</code> in production only</li>
+  <li>Never commit keys to version control</li>
+  <li>Rotate key_secret immediately if exposed</li>
+</ul>
+<h3>Client Initialization (Backend)</h3>
+<pre><code class="language-python">import razorpay
+
+client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="2-orders-always-create-server-side" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Orders — Always Create Server-Side</h2>
+          <p><strong>Never skip order creation.</strong> Every Razorpay payment must begin with a server-side Order. The Order ID ties the payment back to your system.</p>
+<h3>Creating an Order</h3>
+<pre><code class="language-python">order = client.order.create({
+    &#x27;amount&#x27;: 29000,           # in paise — ₹290 = 29000 paise
+    &#x27;currency&#x27;: &#x27;INR&#x27;,
+    &#x27;receipt&#x27;: f&#x27;order_{workspace.id}_{user.id}&#x27;,
+    &#x27;notes&#x27;: {
+        &#x27;workspace_id&#x27;: str(workspace.id),
+        &#x27;user_id&#x27;: str(user.id),
+        &#x27;purpose&#x27;: &#x27;pro_upgrade&#x27;,
+    },
+})
+# Store order[&#x27;id&#x27;] in DB before returning to client
+order_record = Order.objects.create(
+    razorpay_order_id=order[&#x27;id&#x27;],
+    workspace=workspace,
+    amount_paise=29000,
+    status=&#x27;created&#x27;,
+)
+return {&#x27;order_id&#x27;: order[&#x27;id&#x27;], &#x27;amount&#x27;: 29000, &#x27;currency&#x27;: &#x27;INR&#x27;}</code></pre>
+<h3>Amount Rules</h3>
+<ul>
+  <li>Amount is always in <strong>paise</strong> (smallest Indian currency unit): ₹1 = 100 paise</li>
+  <li>Never use floats — use integers only</li>
+  <li>₹290 → 29000 paise</li>
+  <li>Validate: minimum ₹1 (100 paise), maximum varies by Razorpay plan</li>
+</ul>
+<h3>Notes (Metadata)</h3>
+<p><code>notes</code> is Razorpay's equivalent of Stripe metadata. Add workspace and user identifiers:</p>
+<pre><code class="language-python">&#x27;notes&#x27;: {
+    &#x27;workspace_id&#x27;: str(workspace.id),
+    &#x27;user_id&#x27;: str(user.id),
+    &#x27;plan&#x27;: &#x27;pro&#x27;,
+    &#x27;purpose&#x27;: &#x27;subscription_initial&#x27;,
+}</code></pre>
+<p>Rules:</p>
+<ul>
+  <li>Maximum 15 key-value pairs</li>
+  <li>Maximum 256 characters per value</li>
+  <li>Use <code>snake_case</code> keys consistently</li>
+  <li>Convert all values to <code>str()</code> (no integers or UUIDs directly)</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="3-payment-verification-critical-server-side-step" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Payment Verification — Critical Server-Side Step</h2>
+          <h3>Why This Is Non-Negotiable</h3>
+<p>Razorpay's client-side <code>handler</code> callback fires when payment is complete, but <strong>it can be faked</strong>. Always verify server-side before activating anything.</p>
+<h3>Verification Logic</h3>
+<p>After the client sends the payment details to your server:</p>
+<pre><code class="language-python">import hmac
+import hashlib
+
+def verify_razorpay_signature(order_id, payment_id, signature, key_secret):
+    &quot;&quot;&quot;
+    Verify the Razorpay payment signature.
+    Returns True if valid, False if tampered.
+    &quot;&quot;&quot;
+    message = f&#x27;{order_id}|{payment_id}&#x27;.encode(&#x27;utf-8&#x27;)
+    expected = hmac.new(
+        key_secret.encode(&#x27;utf-8&#x27;),
+        message,
+        hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(expected, signature)</code></pre>
+<h3>Server Endpoint (after client callback)</h3>
+<pre><code class="language-python">def verify_payment(request):
+    data = request.data  # from POST body
+    order_id = data[&#x27;razorpay_order_id&#x27;]
+    payment_id = data[&#x27;razorpay_payment_id&#x27;]
+    signature = data[&#x27;razorpay_signature&#x27;]
+
+    if not verify_razorpay_signature(order_id, payment_id, signature, settings.RAZORPAY_KEY_SECRET):
+        return Response({&#x27;error&#x27;: &#x27;INVALID_SIGNATURE&#x27;, &#x27;message&#x27;: &#x27;Payment verification failed.&#x27;}, status=400)
+
+    # Signature valid — update order status
+    order = Order.objects.get(razorpay_order_id=order_id)
+    order.razorpay_payment_id = payment_id
+    order.status = &#x27;paid&#x27;
+    order.save()
+
+    activate_subscription(order)
+    return Response({&#x27;message&#x27;: &#x27;Payment verified.&#x27;})</code></pre>
+<h3>Rules</h3>
+<ul>
+  <li>Never trust <code>razorpay_payment_id</code> or <code>razorpay_order_id</code> from the client without verifying the signature</li>
+  <li>Use <code>hmac.compare_digest()</code> for timing-safe comparison — never <code>==</code></li>
+  <li>Activate subscriptions/orders ONLY after successful server-side verification</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="4-checkoutjs-integration-frontend" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Checkout.js Integration (Frontend)</h2>
+          <h3>Loading Razorpay</h3>
+<pre><code class="language-html">&lt;script src=&quot;https://checkout.razorpay.com/v1/checkout.js&quot;&gt;&lt;/script&gt;</code></pre>
+<h3>Opening the Checkout</h3>
+<pre><code class="language-js">async function initiatePayment() {
+    // Step 1: create order server-side
+    const res = await fetch(&#x27;/api/create-order/&#x27;, { method: &#x27;POST&#x27;, ... });
+    const { order_id, amount, currency } = await res.json();
+
+    // Step 2: open checkout
+    const options = {
+        key: RAZORPAY_KEY_ID,         // from env — publishable, safe for frontend
+        amount: amount,               // in paise
+        currency: currency,
+        order_id: order_id,
+        name: &#x27;Your App Name&#x27;,
+        description: &#x27;Pro Plan Subscription&#x27;,
+        handler: async function(response) {
+            // Step 3: send to server for verification — do NOT activate here
+            await fetch(&#x27;/api/verify-payment/&#x27;, {
+                method: &#x27;POST&#x27;,
+                body: JSON.stringify({
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature,
+                }),
+            });
+        },
+        prefill: {
+            name: user.name,
+            email: user.email,
+        },
+        theme: { color: &#x27;#3b82f6&#x27; },
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on(&#x27;payment.failed&#x27;, function(response) {
+        showError(&#x27;Payment failed: &#x27; + response.error.description);
+    });
+    rzp.open();
+}</code></pre>
+<h3>Rules</h3>
+<ul>
+  <li>Always pass <code>order_id</code> (from your server's Order creation) — never open checkout without it</li>
+  <li><code>handler</code> callback: send all three fields (<code>order_id</code>, <code>payment_id</code>, <code>signature</code>) to your server for verification — do NOT activate anything client-side</li>
+  <li>Handle <code>payment.failed</code> event — show error to user</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="5-subscriptions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Subscriptions</h2>
+          <h3>Plan Creation (one-time setup)</h3>
+<pre><code class="language-python">plan = client.plan.create({
+    &#x27;period&#x27;: &#x27;monthly&#x27;,
+    &#x27;interval&#x27;: 1,
+    &#x27;item&#x27;: {
+        &#x27;name&#x27;: &#x27;Pro Plan&#x27;,
+        &#x27;amount&#x27;: 29000,   # in paise
+        &#x27;unit_amount&#x27;: 29000,
+        &#x27;currency&#x27;: &#x27;INR&#x27;,
+    },
+    &#x27;notes&#x27;: {
+        &#x27;plan&#x27;: &#x27;pro&#x27;,
+    },
+})</code></pre>
+<p>Store <code>plan.id</code> in your config or DB — reference it when creating subscriptions.</p>
+<h3>Creating a Subscription</h3>
+<pre><code class="language-python">subscription = client.subscription.create({
+    &#x27;plan_id&#x27;: plan_id,
+    &#x27;customer_notify&#x27;: 1,
+    &#x27;total_count&#x27;: 12,        # number of billing cycles (12 = 1 year)
+    &#x27;quantity&#x27;: 1,
+    &#x27;notes&#x27;: {
+        &#x27;workspace_id&#x27;: str(workspace.id),
+        &#x27;user_id&#x27;: str(user.id),
+    },
+})</code></pre>
+<h3>Subscription States</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Status</th>
+    <th>Meaning</th>
+    <th>Action</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>created</code></td>
+    <td>Not yet authorized</td>
+    <td>Do not grant access</td>
+  </tr>
+  <tr>
+    <td><code>authenticated</code></td>
+    <td>Authorized, first payment pending</td>
+    <td>Do not grant access yet</td>
+  </tr>
+  <tr>
+    <td><code>active</code></td>
+    <td>Paying</td>
+    <td>Grant access</td>
+  </tr>
+  <tr>
+    <td><code>pending</code></td>
+    <td>Payment retrying</td>
+    <td>Warn user</td>
+  </tr>
+  <tr>
+    <td><code>halted</code></td>
+    <td>Retries exhausted</td>
+    <td>Restrict access</td>
+  </tr>
+  <tr>
+    <td><code>cancelled</code></td>
+    <td>Cancelled</td>
+    <td>Revoke access</td>
+  </tr>
+  <tr>
+    <td><code>completed</code></td>
+    <td>All billing cycles done</td>
+    <td>Revoke or renew</td>
+  </tr>
+  <tr>
+    <td><code>expired</code></td>
+    <td>Past end date</td>
+    <td>Revoke access</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Subscription Events to Handle via Webhook</h3>
+<pre><code class="language-text">subscription.activated     → grant access
+subscription.charged       → record billing
+subscription.cancelled     → revoke access
+subscription.halted        → restrict access, notify user
+subscription.completed     → handle renewal or expiry</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="6-webhooks" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Webhooks</h2>
+          <h3>Webhook Signature Verification</h3>
+<pre><code class="language-python">import hmac
+import hashlib
+
+def verify_razorpay_webhook(payload_body, razorpay_signature, webhook_secret):
+    expected = hmac.new(
+        webhook_secret.encode(&#x27;utf-8&#x27;),
+        payload_body,        # raw bytes — do NOT decode or parse first
+        hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(expected, razorpay_signature)
+
+
+def razorpay_webhook(request):
+    payload = request.body       # raw bytes
+    signature = request.META.get(&#x27;HTTP_X_RAZORPAY_SIGNATURE&#x27;, &#x27;&#x27;)
+
+    if not verify_razorpay_webhook(payload, signature, settings.RAZORPAY_WEBHOOK_SECRET):
+        return HttpResponse(status=400)
+
+    event = json.loads(payload)
+    handle_event(event)
+    return HttpResponse(status=200)</code></pre>
+<h3>Idempotency</h3>
+<pre><code class="language-python">def handle_event(event):
+    event_id = event.get(&#x27;id&#x27;) or event[&#x27;payload&#x27;][&#x27;payment&#x27;][&#x27;entity&#x27;][&#x27;id&#x27;]
+    if RazorpayEvent.objects.filter(event_id=event_id).exists():
+        return  # Already processed
+    RazorpayEvent.objects.create(event_id=event_id, event_type=event[&#x27;event&#x27;])
+    # process...</code></pre>
+<h3>Webhook Response Rules</h3>
+<ul>
+  <li>Always return <strong>200</strong> after receiving (even if skipping the event)</li>
+  <li>Never return 500 for business logic failures — log and return 200</li>
+  <li>Razorpay retries on non-200 responses — returning 500 causes duplicates</li>
+</ul>
+<h3>Events to Handle</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Event</th>
+    <th>Action</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>payment.authorized</code></td>
+    <td>Payment authorized — capture if auto-capture disabled</td>
+  </tr>
+  <tr>
+    <td><code>payment.captured</code></td>
+    <td>Payment captured — activate order</td>
+  </tr>
+  <tr>
+    <td><code>payment.failed</code></td>
+    <td>Notify user, mark order as failed</td>
+  </tr>
+  <tr>
+    <td><code>subscription.activated</code></td>
+    <td>Grant subscription access</td>
+  </tr>
+  <tr>
+    <td><code>subscription.charged</code></td>
+    <td>Record payment in billing history</td>
+  </tr>
+  <tr>
+    <td><code>subscription.cancelled</code></td>
+    <td>Mark as cancelled, revoke at period end</td>
+  </tr>
+  <tr>
+    <td><code>subscription.halted</code></td>
+    <td>Restrict access, send payment failure email</td>
+  </tr>
+  <tr>
+    <td><code>refund.created</code></td>
+    <td>Record refund in DB, update payment status</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="7-refunds" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Refunds</h2>
+          <pre><code class="language-python">refund = client.payment.refund(payment_id, {
+    &#x27;amount&#x27;: 15000,         # partial refund in paise; omit for full refund
+    &#x27;speed&#x27;: &#x27;normal&#x27;,       # or &#x27;optimum&#x27; for faster (higher cost)
+    &#x27;notes&#x27;: {
+        &#x27;reason&#x27;: &#x27;Customer request&#x27;,
+        &#x27;refunded_by&#x27;: str(admin_user.id),
+    },
+    &#x27;receipt&#x27;: f&#x27;refund_{payment_id}&#x27;,
+})</code></pre>
+<h3>Rules</h3>
+<ul>
+  <li>Store <code>refund.id</code> in your database</li>
+  <li>Confirm via webhook <code>refund.created</code> before marking fully refunded</li>
+  <li>Partial refund: provide <code>amount</code> in paise; omit for full refund</li>
+  <li>Speed options: <code>normal</code> (5-7 days), <code>optimum</code> (immediate if supported, higher cost)</li>
+  <li>Reason is required by Razorpay for some refund types</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="8-test-credentials" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Test Credentials</h2>
+          <p>Use Razorpay's test mode with these test cards:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Card</th>
+    <th>Result</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>4111 1111 1111 1111</td>
+    <td>Success</td>
+  </tr>
+  <tr>
+    <td>5104 0600 0000 0008</td>
+    <td>Success (Mastercard)</td>
+  </tr>
+  <tr>
+    <td>4111 1111 1111 1111 + CVV 123</td>
+    <td>3DS challenge</td>
+  </tr>
+  <tr>
+    <td>Any card with expiry in past</td>
+    <td>Decline</td>
+  </tr>
+  </tbody>
+</table></div>
+<p>UPI test IDs: <code>success@razorpay</code> (success), <code>failure@razorpay</code> (failure).</p>
+<p>Net Banking test: select any bank in test mode — all succeed.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Templates | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Copy-paste ready templates for work logs, bug reports, completion comments, API documentation, and form documentation."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="templates">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="./standards.html" class="navbar-link">Standards</a>
+        <a href="./checklists.html" class="navbar-link">Checklists</a>
+        <a href="./tasks.html" class="navbar-link">Tasks</a>
+        <a href="./templates.html" class="navbar-link active">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>
+        Dark Mode
+      </button>
+    </div>
+  </header>
+
+  <main class="page templates-library-page">
+    <div class="container">
+      <section class="section templates-hero">
+        <div class="templates-hero-copy page-header">
+          <span class="badge badge-warning">Templates</span>
+          <h1 class="page-title">Use the exact template instead of starting from scratch.</h1>
+          <p class="page-subtitle">
+            Copy these into tickets, PRs, and documentation. Fill in the placeholders and remove anything that does
+            not apply.
+          </p>
+
+          <div class="templates-hero-actions">
+            <a href="#templates-catalog" class="btn btn-primary">Browse Templates</a>
+            <a href="#templates-related" class="btn btn-secondary">Open Related Standards</a>
+          </div>
+        </div>
+
+        <aside class="templates-hero-aside">
+          <div class="templates-hero-panel">
+            <span class="templates-panel-label">How to Use</span>
+            <ol class="templates-usage-list">
+              <li>Open the template that matches what you need to document.</li>
+              <li>Copy the full content into your ticket, PR, or documentation file.</li>
+              <li>Replace every placeholder with the actual value.</li>
+              <li>Do not leave any unfilled placeholders behind.</li>
+            </ol>
+          </div>
+
+          <div class="templates-search-panel">
+            <div class="templates-search-copy">
+              <span class="badge badge-info">Quick Filter</span>
+              <h2 class="section-title">Find a Template</h2>
+              <p class="templates-search-note">
+                Search by use case: work log, bug, completion, API, or form documentation.
+              </p>
+            </div>
+
+            <div class="templates-search-field">
+              <label for="templates-search" class="form-label">Search templates</label>
+              <input
+                id="templates-search"
+                class="form-control"
+                type="search"
+                placeholder="Search work log, bug report, API doc, form..."
+                data-search-input
+              />
+              <p class="form-help">
+                Minimum 2 characters. Results filter automatically.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section templates-overview">
+        <div class="templates-overview-card">
+          <span class="templates-overview-label">Template Rule</span>
+          <h2>Use the shared structure reviewers already expect to see.</h2>
+          <p>
+            The catalog below follows `docs/templates/README.md` directly, including when to use each template and what
+            each one contains.
+          </p>
+        </div>
+
+        <div class="templates-overview-grid">
+          <a href="#templates-catalog" class="templates-overview-pill">All Templates</a>
+          <a href="#templates-how-to-use" class="templates-overview-pill">How to Use</a>
+          <a href="#templates-related" class="templates-overview-pill">Related Standards</a>
+        </div>
+      </section>
+
+      <section id="templates-catalog" class="section" data-search-scope>
+        <div class="page-header templates-catalog-header">
+          <div>
+            <span class="badge badge-info">Template Catalog</span>
+            <h2 class="section-title">Pick the exact writing format for the work you need to hand off.</h2>
+            <p class="section-description">Each card below is based on the Available Templates table in the templates README.</p>
+          </div>
+          <div class="templates-catalog-note">
+            <strong>Important</strong>
+            <span>Do not start from scratch when a shared template already exists for the same communication or documentation flow.</span>
+          </div>
+        </div>
+
+        <div class="templates-doc-list">
+          <a
+            href="../templates/work-log-template.html"
+            class="templates-doc-card card card-clickable"
+            data-search-item
+            data-search-text="Work Log Template logging time posting status updates in a ticket in progress completed blocked what was done current status next step"
+          >
+            <span class="templates-doc-meta">Work Update</span>
+            <h3 class="card-title">Work Log Template</h3>
+            <p class="card-description">Logging time and posting status updates in a ticket.</p>
+            <p class="templates-doc-detail">Three formats: In Progress, Completed, and Blocked updates with work done, time spent, status, and next step.</p>
+          </a>
+
+          <a
+            href="../templates/bug-report-template.html"
+            class="templates-doc-card card card-clickable"
+            data-search-item
+            data-search-text="Bug Report Template reporting any bug blocker steps to reproduce expected actual severity environment affected area"
+          >
+            <span class="templates-doc-meta">Bug</span>
+            <h3 class="card-title">Bug Report Template</h3>
+            <p class="card-description">Reporting any bug or blocker found during work.</p>
+            <p class="templates-doc-detail">Includes steps to reproduce, expected vs actual behavior, severity, environment details, and affected area.</p>
+          </a>
+
+          <a
+            href="../templates/completion-comment-template.html"
+            class="templates-doc-card card card-clickable"
+            data-search-item
+            data-search-text="Completion Comment Template marking task done proper evidence what was done what was tested how to verify links screenshots time spent known follow-ups"
+          >
+            <span class="templates-doc-meta">Completion</span>
+            <h3 class="card-title">Completion Comment Template</h3>
+            <p class="card-description">Marking a task done with proper evidence.</p>
+            <p class="templates-doc-detail">Covers what was done, what was tested, how to verify, links/screenshots, time spent, and follow-ups.</p>
+          </a>
+
+          <a
+            href="../templates/api-doc-template.html"
+            class="templates-doc-card card card-clickable"
+            data-search-item
+            data-search-text="API Documentation Template documenting backend API for frontend endpoint method URL auth request payload success response error cases frontend code example"
+          >
+            <span class="templates-doc-meta">API</span>
+            <h3 class="card-title">API Documentation Template</h3>
+            <p class="card-description">Documenting any backend API for the frontend team.</p>
+            <p class="templates-doc-detail">Includes endpoint name, method, URL, auth, full payload with types, success response, error cases, and frontend code example.</p>
+          </a>
+
+          <a
+            href="../templates/form-doc-template.html"
+            class="templates-doc-card card card-clickable"
+            data-search-item
+            data-search-text="Form Documentation Template documenting form fields validation rules submission behavior field list type required validation success error handling conditional logic"
+          >
+            <span class="templates-doc-meta">Form</span>
+            <h3 class="card-title">Form Documentation Template</h3>
+            <p class="card-description">Documenting a form's fields, validation rules, and submission behavior.</p>
+            <p class="templates-doc-detail">Includes field list with type/required/validation, submission endpoint, success/error handling, and conditional logic.</p>
+          </a>
+        </div>
+
+        <div class="content-card templates-empty-state" data-search-empty hidden>
+          <p>No matching template found.</p>
+        </div>
+      </section>
+
+      <section id="templates-how-to-use" class="section templates-process">
+        <div class="templates-process-card">
+          <span class="badge badge-success">How to Use</span>
+          <h2 class="section-title">Follow the same template workflow every time.</h2>
+          <ol class="templates-process-list">
+            <li>Open the template that matches what you need to document.</li>
+            <li>Copy the entire content into your ticket comment, PR description, or documentation file.</li>
+            <li>Replace every placeholder with the actual value.</li>
+            <li>Remove any sections that do not apply.</li>
+            <li>Do not leave unfilled placeholders — reviewers will assume missing sections were skipped.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="templates-related" class="section templates-related">
+        <div class="page-header templates-related-header">
+          <div>
+            <span class="badge badge-info">Related</span>
+            <h2 class="section-title">Open the standard behind the template when you need the full rule set.</h2>
+          </div>
+        </div>
+
+        <div class="templates-related-grid">
+          <a href="../standards/supabase-api-documentation.html" class="templates-related-card">
+            <strong>API Documentation Standard</strong>
+            <span>Full rules for documenting Supabase APIs.</span>
+          </a>
+
+          <a href="../standards/team-ownership.html" class="templates-related-card">
+            <strong>Team Ownership Standards</strong>
+            <span>Rules for work updates, ticket discipline, and completion comments.</span>
+          </a>
+
+          <a href="../standards/qa-delivery-standards.html" class="templates-related-card">
+            <strong>QA &amp; Delivery Standards</strong>
+            <span>What counts as done and what evidence is required.</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Use templates to keep tickets, PRs, and handoffs consistent.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="./standards.html" class="footer-link">Standards</a>
+        <a href="./checklists.html" class="footer-link">Checklists</a>
+        <a href="./tasks.html" class="footer-link">Tasks</a>
+        <a href="./templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

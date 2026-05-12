@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation — Leave Requests (Django + Templates) | Development Standards</title>
+  <meta name="description" content="Detailed evaluation checklist covering model, form, service, mixin, views, URL config, templates, CSS, JS, and standards." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-danger">Evaluation Checklist</span>
+        <h1 class="page-title">Evaluation — Leave Requests (Django + Templates)</h1>
+        <p class="page-subtitle">Detailed evaluation checklist covering model, form, service, mixin, views, URL config, templates, CSS, JS, and standards.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Project Spec:</strong> <a href="../django-templates/01-leave-requests.md">01-leave-requests.md</a></p>
+<p><strong>Stack:</strong> Django + Django Templates (HTML/CSS/JS)</p>
+<p><strong>Evaluator:</strong> ___________</p>
+<p><strong>Submission Date:</strong> ___________</p>
+<p><strong>Pass Threshold:</strong> 90%</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="how-to-mark" class="section">
+        <div class="content-card">
+          <h2 class="section-title">How to Mark</h2>
+          <ul>
+  <li><code>[✓]</code> Fully correct</li>
+  <li><code>[~]</code> Partial — note the gap below the item</li>
+  <li><code>[✗]</code> Missing or wrong</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-django-leaverequest-model" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Django — `LeaveRequest` Model</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>workspace</code> FK → Workspace, ON DELETE CASCADE, <code>related_name=&#x27;leave_requests&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>employee</code> FK → settings.AUTH_USER_MODEL, ON DELETE CASCADE, <code>related_name=&#x27;leave_requests&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>leave_type</code> CharField using <code>LeaveType</code> TextChoices: annual, sick, personal, unpaid</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>start_date</code> DateField</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>end_date</code> DateField</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>total_days</code> PositiveIntegerField</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reason</code> TextField, blank=True, default=''</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>status</code> CharField using <code>Status</code> TextChoices: submitted, approved, rejected, cancelled; default=submitted</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reviewed_by</code> FK → AUTH_USER_MODEL, null=True, blank=True, ON DELETE SET_NULL, <code>related_name=&#x27;reviewed_leaves&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reviewed_at</code> DateTimeField, null=True, blank=True</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>review_notes</code> TextField, blank=True, default=''</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>created_at</code> DateTimeField, auto_now_add=True</label><br />
+<label><input type="checkbox" data-checklist-item /> Meta ordering: <code>[&#x27;-created_at&#x27;]</code></label><br />
+<label><input type="checkbox" data-checklist-item /> CheckConstraint: <code>end_date &gt;= start_date</code></label><br />
+<label><input type="checkbox" data-checklist-item /> CheckConstraint: <code>total_days &gt; 0</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Composite index on <code>(workspace, employee, status)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Composite index on <code>(workspace, status, -created_at)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Migration generated and committed</label><br />
+        </div>
+      </section>
+
+      <section id="2-django-leaverequestform" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Django — `LeaveRequestForm`</h2>
+          <label><input type="checkbox" data-checklist-item /> Form extends <code>forms.ModelForm</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Meta <code>model = LeaveRequest</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Meta <code>fields = [&#x27;leave_type&#x27;, &#x27;start_date&#x27;, &#x27;end_date&#x27;, &#x27;reason&#x27;]</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>start_date</code> widget: <code>forms.DateInput(attrs={&#x27;type&#x27;: &#x27;date&#x27;})</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>end_date</code> widget: <code>forms.DateInput(attrs={&#x27;type&#x27;: &#x27;date&#x27;})</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>clean_start_date()</code>: raises ValidationError if start_date < today</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>clean()</code>: raises ValidationError on <code>end_date</code> field if end_date < start_date</label><br />
+<label><input type="checkbox" data-checklist-item /> No business logic (overlap check) in form — that belongs in LeaveService</label><br />
+        </div>
+      </section>
+
+      <section id="3-django-leaveservice" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Django — `LeaveService`</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>submit_request(workspace, employee, leave_type, start_date, end_date, reason=&#x27;&#x27;)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>submit_request</code>: validates start_date ≥ today</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>submit_request</code>: validates end_date ≥ start_date</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>submit_request</code>: computes <code>total_days = (end_date - start_date).days + 1</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>submit_request</code>: overlap check — queries for existing submitted/approved requests for the same employee that overlap the requested dates — raises ValidationError if found</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>approve_request(leave_request, reviewed_by, review_notes=&#x27;&#x27;)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>approve_request</code>: raises ValidationError if <code>status != &#x27;submitted&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>approve_request</code>: sets status='approved', reviewed_by, reviewed_at=now()</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reject_request(leave_request, reviewed_by, review_notes)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reject_request</code>: review_notes required — raises ValidationError if blank</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reject_request</code>: raises ValidationError if <code>status != &#x27;submitted&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reject_request</code>: sets status='rejected', reviewed_by, reviewed_at, review_notes</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>cancel_request(leave_request, actor)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>cancel_request</code>: raises PermissionDenied if <code>actor != leave_request.employee</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>cancel_request</code>: raises ValidationError if <code>status != &#x27;submitted&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>cancel_request</code>: sets status='cancelled'</label><br />
+<label><input type="checkbox" data-checklist-item /> All methods are <code>@staticmethod</code></label><br />
+        </div>
+      </section>
+
+      <section id="4-django-workspacemembermixin" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Django — `WorkspaceMemberMixin`</h2>
+          <label><input type="checkbox" data-checklist-item /> Mixin defined and used on all 5 views</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>dispatch()</code> sets <code>self.workspace</code> using <code>get_object_or_404(Workspace, id=kwargs[&#x27;workspace_id&#x27;])</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>dispatch()</code> sets <code>self.membership</code> using <code>get_object_or_404(WorkspaceMember, ...)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Extends <code>LoginRequiredMixin</code></label><br />
+        </div>
+      </section>
+
+      <section id="5-django-views" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Django — Views</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>MyLeavesView</code> at <code>GET /workspace/{id}/my-leaves/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Returns only request.user's leave requests — not all workspace leaves</label><br />
+<label><input type="checkbox" data-checklist-item /> Supports <code>?status=</code> filter — applied in DB queryset</label><br />
+<label><input type="checkbox" data-checklist-item /> Paginated: 10 per page</label><br />
+<label><input type="checkbox" data-checklist-item /> Template: <code>my_leaves.html</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>SubmitLeaveView</code> at <code>GET+POST /workspace/{id}/my-leaves/submit/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> GET: renders empty <code>LeaveRequestForm</code></label><br />
+<label><input type="checkbox" data-checklist-item /> POST: validates form → calls <code>LeaveService.submit_request()</code> → redirects to my-leaves (POST→redirect→GET)</label><br />
+<label><input type="checkbox" data-checklist-item /> Template: <code>submit_form.html</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>CancelLeaveView</code> at <code>POST /workspace/{id}/my-leaves/{leave_id}/cancel/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> POST only (no GET handler)</label><br />
+<label><input type="checkbox" data-checklist-item /> Calls <code>LeaveService.cancel_request()</code> with actor=request.user</label><br />
+<label><input type="checkbox" data-checklist-item /> Redirects to my-leaves on success with success message</label><br />
+<label><input type="checkbox" data-checklist-item /> On error: redirects with error message (does not raise 500)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>AdminLeavesView</code> at <code>GET /workspace/{id}/admin/leaves/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Returns 403 if caller is not admin/owner role — does NOT show an empty list to members</label><br />
+<label><input type="checkbox" data-checklist-item /> Returns all workspace leave requests — not just caller's</label><br />
+<label><input type="checkbox" data-checklist-item /> Supports <code>?status=</code> and <code>?employee_id=</code> filters</label><br />
+<label><input type="checkbox" data-checklist-item /> Paginated: 20 per page</label><br />
+<label><input type="checkbox" data-checklist-item /> Template: <code>admin_leaves.html</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ApproveLeaveView</code> at <code>POST /workspace/{id}/admin/leaves/{leave_id}/approve/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> 403 for non-admin/owner</label><br />
+<label><input type="checkbox" data-checklist-item /> Calls <code>LeaveService.approve_request()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Redirects to admin-leaves with success message</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>RejectLeaveView</code> at <code>POST /workspace/{id}/admin/leaves/{leave_id}/reject/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> 403 for non-admin/owner</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>review_notes</code> from POST body — shows error if blank</label><br />
+<label><input type="checkbox" data-checklist-item /> Calls <code>LeaveService.reject_request()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Redirects to admin-leaves with success/error message</label><br />
+        </div>
+      </section>
+
+      <section id="6-django-url-configuration" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Django — URL Configuration</h2>
+          <label><input type="checkbox" data-checklist-item /> All 6 URL patterns defined</label><br />
+<label><input type="checkbox" data-checklist-item /> URL names use kebab-case: <code>my-leaves</code>, <code>submit-leave</code>, <code>cancel-leave</code>, <code>admin-leaves</code>, <code>approve-leave</code>, <code>reject-leave</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>workspace_id</code> captured as <code>&lt;int:workspace_id&gt;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>leave_id</code> captured as <code>&lt;int:leave_id&gt;</code></label><br />
+        </div>
+      </section>
+
+      <section id="7-templates" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Templates</h2>
+          <p><strong>General — all templates:</strong></p>
+<label><input type="checkbox" data-checklist-item /> All templates extend <code>base.html</code></label><br />
+<label><input type="checkbox" data-checklist-item /> All templates use <code>{% load static %}</code> at the top</label><br />
+<label><input type="checkbox" data-checklist-item /> No <code>&lt;style&gt;</code> blocks in any template</label><br />
+<label><input type="checkbox" data-checklist-item /> No <code>&lt;script&gt;</code> blocks with logic in any template</label><br />
+<label><input type="checkbox" data-checklist-item /> CSS linked via <code>{% static &#x27;css/leaves.css&#x27; %}</code></label><br />
+<label><input type="checkbox" data-checklist-item /> JS linked via <code>{% static &#x27;js/leaves.js&#x27; %}</code></label><br />
+<p><strong><code>my_leaves.html</code>:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Status filter form uses GET method</label><br />
+<label><input type="checkbox" data-checklist-item /> Leave requests table rendered</label><br />
+<label><input type="checkbox" data-checklist-item /> Status badge uses correct CSS class per status (<code>.badge-submitted</code>, <code>.badge-approved</code>, etc.)</label><br />
+<label><input type="checkbox" data-checklist-item /> Cancel button is a POST form with <code>{% csrf_token %}</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Cancel form uses confirmation via <code>data-*</code> attributes (not inline JavaScript in template)</label><br />
+<label><input type="checkbox" data-checklist-item /> Pagination links rendered</label><br />
+<p><strong><code>submit_form.html</code>:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Each form field rendered individually (not <code>{{ form.as_p }}</code>)</label><br />
+<label><input type="checkbox" data-checklist-item /> Field errors shown below each field using <code>{{ form.field_name.errors }}</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Non-field errors shown at top of form</label><br />
+<label><input type="checkbox" data-checklist-item /> Submit button has loading state attributes via <code>data-*</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>{% csrf_token %}</code> present</label><br />
+<p><strong><code>admin_leaves.html</code>:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Filter form uses GET method</label><br />
+<label><input type="checkbox" data-checklist-item /> All requests table: Employee | Leave Type | Dates | Days | Status | Actions columns</label><br />
+<label><input type="checkbox" data-checklist-item /> Approve: POST form button with <code>{% csrf_token %}</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Reject: POST form with hidden input for review_notes — inline form shown via JS class toggle</label><br />
+<label><input type="checkbox" data-checklist-item /> Pagination links</label><br />
+        </div>
+      </section>
+
+      <section id="8-css-staticcssleavescss" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. CSS — `static/css/leaves.css`</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>.badge-submitted</code> defined with blue background (or uses <code>--color-*</code> variable)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>.badge-approved</code> defined with green background</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>.badge-rejected</code> defined with red background</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>.badge-cancelled</code> defined with grey background</label><br />
+<label><input type="checkbox" data-checklist-item /> CSS uses custom properties: <code>--color-success</code>, <code>--color-danger</code>, etc.</label><br />
+<label><input type="checkbox" data-checklist-item /> Table stripe/hover styles defined</label><br />
+<label><input type="checkbox" data-checklist-item /> Form field layout: label above field, error below</label><br />
+<label><input type="checkbox" data-checklist-item /> Filter bar styles defined</label><br />
+<label><input type="checkbox" data-checklist-item /> Pagination styles defined</label><br />
+<label><input type="checkbox" data-checklist-item /> Responsive: table scrolls horizontally on mobile (<code>overflow-x: auto</code> or equivalent)</label><br />
+<label><input type="checkbox" data-checklist-item /> No hardcoded hex colors in HTML — all in CSS</label><br />
+        </div>
+      </section>
+
+      <section id="9-js-staticjsleavesjs" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. JS — `static/js/leaves.js`</h2>
+          <label><input type="checkbox" data-checklist-item /> Cancel confirmation uses <code>data-leave-type</code> and <code>data-form-id</code> attributes — not string interpolation in JS</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>document.querySelectorAll(&#x27;.btn-cancel-leave&#x27;)</code> used to attach event listeners</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>confirm()</code> dialog message uses <code>btn.dataset.leaveType</code> — reads from DOM attribute</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>document.getElementById(btn.dataset.formId).submit()</code> used to submit the hidden form</label><br />
+<label><input type="checkbox" data-checklist-item /> Reject inline form: clicking "Reject" shows a hidden <code>&lt;div&gt;</code> containing the reason textarea</label><br />
+<label><input type="checkbox" data-checklist-item /> Show/hide done by toggling a CSS class (e.g. <code>.is-visible</code>) — not <code>element.style.display</code> manipulation</label><br />
+<label><input type="checkbox" data-checklist-item /> Rejection reason passed as a hidden <code>&lt;input&gt;</code> inside the reject POST form</label><br />
+        </div>
+      </section>
+
+      <section id="10-standards-compliance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Standards Compliance</h2>
+          <label><input type="checkbox" data-checklist-item /> Business logic (overlap check, status validation) entirely in LeaveService — none in views</label><br />
+<label><input type="checkbox" data-checklist-item /> All POST views use POST→redirect→GET pattern (no re-rendering the form on success)</label><br />
+<label><input type="checkbox" data-checklist-item /> Django messages framework used for success/error messages after redirect</label><br />
+<label><input type="checkbox" data-checklist-item /> No inline styles in templates</label><br />
+<label><input type="checkbox" data-checklist-item /> No inline scripts in templates</label><br />
+<label><input type="checkbox" data-checklist-item /> CSRF token present on every POST form</label><br />
+<label><input type="checkbox" data-checklist-item /> Admin views return 403 (not 404 or empty list) for unauthorized access</label><br />
+<label><input type="checkbox" data-checklist-item /> Cancel prevents actor ≠ employee (enforced in service, not just template hide)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="score-summary" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Score Summary</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Section</th>
+    <th>Total Items</th>
+    <th>✓ Pass</th>
+    <th>~ Partial</th>
+    <th>✗ Fail</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>1. Model</td>
+    <td>17</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2. Form</td>
+    <td>8</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>3. Service</td>
+    <td>16</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>4. Mixin</td>
+    <td>4</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>5. Views</td>
+    <td>19</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>6. URL Config</td>
+    <td>6</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>7. Templates</td>
+    <td>21</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>8. CSS</td>
+    <td>10</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>9. JS</td>
+    <td>7</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>10. Standards</td>
+    <td>8</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><strong>Total</strong></td>
+    <td><strong>116</strong></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  </tbody>
+</table></div>
+<p><strong>Score: ___ / 116 (___%)</strong> — Pass / Conditional / Fail</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="evaluator-notes" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Evaluator Notes</h2>
+          <p>_Record specific failures, partial items, or other observations here._</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

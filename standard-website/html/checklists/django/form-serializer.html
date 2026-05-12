@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Django — Form &amp; Serializer Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Field definitions, field-level vs cross-field validation, read_only/write_only fields."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Django — Form &amp; Serializer Checklist</h1>
+
+        <p class="page-subtitle">
+          Field definitions, field-level vs cross-field validation, read_only/write_only fields.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../django-checklist.html" class="btn btn-secondary">Back to Django Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#form-vs-serializer-decision" class="card card-clickable">Form vs Serializer Decision</a>
+            <a href="#fields" class="card card-clickable">Fields</a>
+            <a href="#validation" class="card card-clickable">Validation</a>
+            <a href="#error-handling" class="card card-clickable">Error Handling</a>
+            <a href="#drf-serializer-specific" class="card card-clickable">DRF Serializer Specific</a>
+            <a href="#django-form-meta" class="card card-clickable">Django Form Meta</a>
+            <a href="#testing" class="card card-clickable">Testing</a>
+            <a href="#done-when" class="card card-clickable">Done When</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="form-vs-serializer-decision" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Form vs Serializer Decision</h2>
+
+          <h3>USE A DJANGO FORM WHEN:</h3>
+          <label><input type="checkbox" data-checklist-item /> The endpoint renders an HTML template (not a JSON API)</label><br />
+          <label><input type="checkbox" data-checklist-item /> The form processes HTML form submissions (multipart/form-data or application/x-www-form-urlencoded)</label><br />
+
+          <div class="divider"></div>
+
+          <h3>USE A DRF SERIALIZER WHEN:</h3>
+          <label><input type="checkbox" data-checklist-item /> The endpoint returns JSON (REST API)</label><br />
+          <label><input type="checkbox" data-checklist-item /> The request body is JSON</label><br />
+          <label><input type="checkbox" data-checklist-item /> The response must include nested related data</label><br />
+          <label><input type="checkbox" data-checklist-item /> You need read/write control at the field level (<code>read_only_fields</code>)</label>
+        </div>
+      </section>
+
+      <section id="fields" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Fields</h2>
+
+          <label><input type="checkbox" data-checklist-item /> All required fields are listed explicitly — do not rely on model defaults for validation</label><br />
+          <label><input type="checkbox" data-checklist-item /> Field types match the data: <code>CharField</code>, <code>IntegerField</code>, <code>EmailField</code>, <code>DateField</code>, etc.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Optional fields marked with <code>required=False</code> (or <code>allow_null=True</code>, <code>allow_blank=True</code> for DRF)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Choices: validated against a choices list — not accepting free text for enum fields</label><br />
+          <label><input type="checkbox" data-checklist-item /> Email fields: use <code>EmailField</code> (validates format automatically)</label><br />
+          <label><input type="checkbox" data-checklist-item /> URL fields: use <code>URLField</code> (validates format automatically)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Integer fields: use <code>IntegerField</code> with <code>min_value</code>/<code>max_value</code> where appropriate</label><br />
+          <label><input type="checkbox" data-checklist-item /> File fields: validate MIME type — not just extension</label>
+        </div>
+      </section>
+
+      <section id="validation" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Validation</h2>
+
+          <h3>FIELD-LEVEL VALIDATION</h3>
+          <label><input type="checkbox" data-checklist-item /> Specific <code>validate_&lt;field&gt;</code> methods for custom field rules</label><br />
+          <label><input type="checkbox" data-checklist-item /> E.g., <code>def validate_name(self, value):</code> check length, format, allowed characters</label><br />
+          <label><input type="checkbox" data-checklist-item /> Returns cleaned value — not the raw input</label><br />
+          <label><input type="checkbox" data-checklist-item /> Raises <code>ValidationError</code> with a specific message (not a generic "Invalid.")</label><br />
+
+          <div class="divider"></div>
+
+          <h3>FORM/OBJECT-LEVEL VALIDATION</h3>
+          <label><input type="checkbox" data-checklist-item /> Cross-field rules in <code>clean()</code> (Django Form) or <code>validate()</code> (DRF Serializer)</label><br />
+          <label><input type="checkbox" data-checklist-item /> E.g., <code>end_date</code> must be after <code>start_date</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Uniqueness checks that involve multiple fields done here or in the service</label><br />
+          <label><input type="checkbox" data-checklist-item /> Raises <code>ValidationError</code> with a non-field error key</label><br />
+
+          <div class="divider"></div>
+
+          <h3>WHAT NOT TO DO</h3>
+          <label><input type="checkbox" data-checklist-item /> Do not put business logic in the form/serializer (e.g., creating related records)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Do not query the database inside <code>validate_&lt;field&gt;</code> unless necessary for uniqueness</label><br />
+          <label><input type="checkbox" data-checklist-item /> Do not call external APIs inside validation methods</label><br />
+          <label><input type="checkbox" data-checklist-item /> Validation purpose: ensure data is structurally correct — business logic goes in <code>services.py</code></label>
+        </div>
+      </section>
+
+      <section id="error-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Error Handling</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>ValidationError</code> raised with a specific, user-readable message</label><br />
+          <label><input type="checkbox" data-checklist-item /> No generic "Invalid value." messages — always say what is wrong</label><br />
+          <label><input type="checkbox" data-checklist-item /> Field errors attached to the correct field key (not all in <code>non_field_errors</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> DRF: <code>serializer.errors</code> returns a dict matching field names — used directly in the response</label><br />
+          <label><input type="checkbox" data-checklist-item /> Django Form: <code>form.errors</code> rendered in the template next to each field</label>
+        </div>
+      </section>
+
+      <section id="drf-serializer-specific" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. DRF Serializer Specific</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>read_only_fields</code> set for fields that should never be written from the API: <code>id</code>, <code>created_at</code>, <code>updated_at</code>, <code>created_by</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>write_only_fields</code> (or <code>write_only=True</code> per field) set for fields never returned: <code>password</code>, <code>token</code>, <code>secret</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Nested serializers: <code>source</code> field set correctly</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>SerializerMethodField</code> used for computed fields that are not model fields</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>Meta.model</code> and <code>Meta.fields</code> defined explicitly</label><br />
+          <label><input type="checkbox" data-checklist-item /> NEVER use <code>fields = '__all__'</code> in production (exposes all model fields — security risk)</label>
+        </div>
+      </section>
+
+      <section id="django-form-meta" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Django Form Meta</h2>
+
+          <label><input type="checkbox" data-checklist-item /> ModelForm: <code>class Meta.model</code> and <code>class Meta.fields</code> defined</label><br />
+          <label><input type="checkbox" data-checklist-item /> Never use <code>fields = '__all__'</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>widgets</code> defined for fields that need a custom widget (date picker, etc.)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>labels</code> overridden if Django's auto-generated label is not user-friendly</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>help_texts</code> added for fields that need explanation</label>
+        </div>
+      </section>
+
+      <section id="testing" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Testing</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Valid data: form/serializer <code>is_valid()</code> → True, cleaned data is correct</label><br />
+          <label><input type="checkbox" data-checklist-item /> Missing required field: <code>is_valid()</code> → False, correct field error</label><br />
+          <label><input type="checkbox" data-checklist-item /> Invalid format (bad email, wrong type): <code>is_valid()</code> → False, correct field error</label><br />
+          <label><input type="checkbox" data-checklist-item /> Cross-field error: <code>is_valid()</code> → False, error on the correct non-field key</label><br />
+          <label><input type="checkbox" data-checklist-item /> Boundary values: max_length - 1 (valid), max_length + 1 (invalid)</label><br />
+          <label><input type="checkbox" data-checklist-item /> DRF: response data shape tested — correct fields included/excluded</label>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Before Marking Done</span>
+          <h2 class="section-title">Done When</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">Fields</h3>
+              <label><input type="checkbox" data-checklist-item /> All required fields defined with correct types</label><br />
+              <label><input type="checkbox" data-checklist-item /> All optional fields marked as optional</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Validation</h3>
+              <label><input type="checkbox" data-checklist-item /> Custom <code>validate_&lt;field&gt;</code> methods for each field requiring custom rules</label><br />
+              <label><input type="checkbox" data-checklist-item /> Cross-field validation in <code>clean()</code> / <code>validate()</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Specific error messages for all failure cases</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">DRF Specific</h3>
+              <label><input type="checkbox" data-checklist-item /> <code>read_only</code> and <code>write_only</code> fields set correctly</label><br />
+              <label><input type="checkbox" data-checklist-item /> Never uses <code>fields = '__all__'</code></label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Tests</h3>
+              <label><input type="checkbox" data-checklist-item /> All validation cases tested</label>
+            </article>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Forms and serializers validate structure only — business logic belongs in services.py. Never use fields = '__all__' in production.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../django-checklist.html" class="footer-link">Django Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Task — Invite Edge Function | Development Standards</title>
+  <meta name="description" content="Build the send-workspace-invite Edge Function with JWT validation, member check, invite creation, and email send." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Supabase Task — Invite Edge Function</h1>
+        <p class="page-subtitle">Build the send-workspace-invite Edge Function with JWT validation, member check, invite creation, and email send.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-tasks.html" class="btn btn-secondary">Back to Supabase Tasks</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Platform:</strong> Supabase Edge Functions</p>
+<p><strong>Covers:</strong> <a href="../../checklists/supabase/edge-function.md">Edge Function Checklist</a> · <a href="../../standards/supabase/04-edge-functions.md">Edge Function Standards</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>Workspace admins and owners can invite users to a project by email. When an invite is sent, the system must:</p>
+<ol>
+  <li>Validate the caller is an admin or owner of the workspace</li>
+  <li>Check if the invitee is already a project member</li>
+  <li>Store the invite record in the database</li>
+  <li>Send an invitation email via <a href="https://resend.com">Resend</a> (a third-party email service)</li>
+</ol>
+<p>Because this requires a secret API key (Resend), it must be an <strong>Edge Function</strong> — not an RPC or direct table query.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <p>A Supabase Edge Function named <code>send-project-invite</code>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="function-specification" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Function Specification</h2>
+          <h3>Endpoint</h3>
+<pre><code>POST /functions/v1/send-project-invite
+Authorization: Bearer &lt;user_jwt&gt;
+Content-Type: application/json</code></pre>
+<h3>Request Body</h3>
+<pre><code class="language-json">{
+  &quot;project_id&quot;: &quot;uuid&quot;,
+  &quot;invitee_email&quot;: &quot;user@example.com&quot;,
+  &quot;role&quot;: &quot;member&quot;
+}</code></pre>
+<h3>Required Logic (in this order)</h3>
+<ol>
+  <li><strong>Handle CORS preflight</strong> (<code>OPTIONS</code> request → return 200 immediately)</li>
+  <li><strong>Validate auth token</strong> — extract and verify the user's JWT; return 401 if missing or invalid</li>
+  <li><strong>Parse request body</strong> — return 400 if JSON is invalid</li>
+  <li><strong>Validate inputs:</strong></li>
+  <li><code>project_id</code> — required, valid UUID format</li>
+  <li><code>invitee_email</code> — required, valid email format</li>
+  <li><code>role</code> — required, must be <code>&quot;member&quot;</code> or <code>&quot;viewer&quot;</code> (cannot invite as admin)</li>
+  <li><strong>Load project</strong> — verify the project exists and get its <code>workspace_id</code>; return 404 if not found</li>
+  <li><strong>Check caller permission</strong> — caller must be admin or owner of the workspace; return 403 if not</li>
+  <li><strong>Check duplicate</strong> — if the invitee is already a project member, return 409 DUPLICATE</li>
+  <li><strong>Create invite record</strong> — insert into <code>project_invites</code> table (see schema below)</li>
+  <li><strong>Send email via Resend</strong> — send the invite email with the invite link</li>
+  <li><strong>Return success response</strong></li>
+</ol>
+<h3>project_invites Table (assume it exists)</h3>
+<pre><code class="language-sql">project_invites (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id   uuid NOT NULL REFERENCES projects(id),
+  workspace_id uuid NOT NULL,
+  invited_by   uuid NOT NULL REFERENCES auth.users(id),
+  email        text NOT NULL,
+  role         text NOT NULL CHECK (role IN (&#x27;member&#x27;, &#x27;viewer&#x27;)),
+  token        text NOT NULL UNIQUE,  -- secure random token for the invite link
+  expires_at   timestamptz NOT NULL DEFAULT (now() + interval &#x27;7 days&#x27;),
+  accepted_at  timestamptz,
+  created_at   timestamptz NOT NULL DEFAULT now()
+)</code></pre>
+<h3>Email Content</h3>
+<p>The invitation email should include:</p>
+<ul>
+  <li>Who invited them and to which project</li>
+  <li>An invite link: <code>https://app.workflow.com/invites/accept?token=&lt;token&gt;</code></li>
+  <li>Token expiry notice: "This invite expires in 7 days."</li>
+</ul>
+<h3>Success Response</h3>
+<pre><code class="language-json">{
+  &quot;data&quot;: {
+    &quot;invite_id&quot;: &quot;uuid&quot;,
+    &quot;invitee_email&quot;: &quot;user@example.com&quot;,
+    &quot;expires_at&quot;: &quot;2024-01-22T10:00:00Z&quot;
+  },
+  &quot;message&quot;: &quot;Invitation sent successfully.&quot;
+}</code></pre>
+<h3>Error Responses</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Scenario</th>
+    <th>Code</th>
+    <th>HTTP Status</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Missing or invalid token</td>
+    <td><code>AUTH_REQUIRED</code></td>
+    <td>401</td>
+  </tr>
+  <tr>
+    <td>Invalid JSON body</td>
+    <td><code>VALIDATION_ERROR</code></td>
+    <td>400</td>
+  </tr>
+  <tr>
+    <td>Invalid project_id format</td>
+    <td><code>VALIDATION_ERROR</code></td>
+    <td>400</td>
+  </tr>
+  <tr>
+    <td>Invalid email format</td>
+    <td><code>VALIDATION_ERROR</code></td>
+    <td>400</td>
+  </tr>
+  <tr>
+    <td>Invalid role value</td>
+    <td><code>VALIDATION_ERROR</code></td>
+    <td>400</td>
+  </tr>
+  <tr>
+    <td>Project not found</td>
+    <td><code>NOT_FOUND</code></td>
+    <td>404</td>
+  </tr>
+  <tr>
+    <td>Caller not admin/owner</td>
+    <td><code>FORBIDDEN</code></td>
+    <td>403</td>
+  </tr>
+  <tr>
+    <td>Invitee already a member</td>
+    <td><code>DUPLICATE</code></td>
+    <td>409</td>
+  </tr>
+  <tr>
+    <td>Resend API failure</td>
+    <td><code>SERVER_ERROR</code></td>
+    <td>500</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="environment-variables-required" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Environment Variables Required</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Variable</th>
+    <th>What It Is</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>SUPABASE_URL</code></td>
+    <td>Your Supabase project URL</td>
+  </tr>
+  <tr>
+    <td><code>SUPABASE_ANON_KEY</code></td>
+    <td>Supabase anon key (for user-scoped client)</td>
+  </tr>
+  <tr>
+    <td><code>SUPABASE_SERVICE_ROLE_KEY</code></td>
+    <td>Service role key (for inserting the invite record — bypasses RLS)</td>
+  </tr>
+  <tr>
+    <td><code>RESEND_API_KEY</code></td>
+    <td>Resend API key for sending emails</td>
+  </tr>
+  <tr>
+    <td><code>APP_BASE_URL</code></td>
+    <td>Base URL of the app (for building the invite link)</td>
+  </tr>
+  </tbody>
+</table></div>
+<blockquote>Service role key is used only inside the Edge Function (server-side) to insert the invite record. It is never sent to the frontend.</blockquote>
+<hr />
+        </div>
+      </section>
+
+      <section id="logging-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Logging Requirements</h2>
+          <p>Log these events (include the function name prefix <code>[send-project-invite]</code>):</p>
+<ul>
+  <li>Invite created: <code>console.log(&#x27;[send-project-invite] Invite created: invite_id=xxx, project_id=xxx&#x27;)</code></li>
+  <li>Email sent: <code>console.log(&#x27;[send-project-invite] Email sent to: masked@email or user ID&#x27;)</code></li>
+  <li>Validation failure: <code>console.warn(&#x27;[send-project-invite] Validation failed: ...&#x27;)</code></li>
+  <li>Resend failure: <code>console.error(&#x27;[send-project-invite] Resend error: status=xxx, message=xxx&#x27;)</code></li>
+</ul>
+<p>Do NOT log:</p>
+<ul>
+  <li>The full email address in production (use partial masking or just log the invite ID)</li>
+  <li>The invite token</li>
+  <li>The Resend API key</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <ul>
+  <li>Do not hardcode the Resend API key in the function code — use <code>Deno.env.get(&#x27;RESEND_API_KEY&#x27;)</code></li>
+  <li>Do not use the service role key for the auth check — use the user's JWT so RLS applies where it should</li>
+  <li>Do not skip the permission check — any authenticated user could call this endpoint without it</li>
+  <li>Do not send the email before inserting the invite record — if the DB insert fails, no email should go out</li>
+  <li>Do not expose internal error details (stack traces, DB errors) in the response</li>
+  <li>Do not return 200 for every response — use correct HTTP status codes</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="checklist-to-run-when-done" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run When Done</h2>
+          <p>Use the <a href="../../checklists/supabase/edge-function.md#9-edge-function-checklist--before-marking-done">Edge Function Checklist</a>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <pre><code class="language-text">STRUCTURE
+[ ] CORS OPTIONS handler at top
+[ ] Try/catch wraps all logic
+[ ] All responses include CORS headers and Content-Type: application/json
+
+AUTH
+[ ] Authorization header extracted and validated
+[ ] Missing/invalid token returns 401 immediately
+[ ] Caller&#x27;s user ID from validated JWT — not from request body
+
+INPUT VALIDATION
+[ ] req.json() in try/catch — invalid JSON returns 400
+[ ] project_id: required, valid UUID format
+[ ] invitee_email: required, valid email format
+[ ] role: required, must be &#x27;member&#x27; or &#x27;viewer&#x27;
+[ ] Field-level errors returned for validation failures
+
+BUSINESS LOGIC
+[ ] Project existence checked → 404 if not found
+[ ] Caller permission checked (admin or owner) → 403 if not
+[ ] Duplicate invite/membership checked → 409 if already member
+[ ] invite_token generated securely (crypto.randomUUID() or similar)
+[ ] project_invites record inserted using service role client
+[ ] Email sent via Resend AFTER successful DB insert
+
+SECRETS
+[ ] RESEND_API_KEY via Deno.env.get()
+[ ] SUPABASE_SERVICE_ROLE_KEY via Deno.env.get()
+[ ] No secrets hardcoded
+[ ] Secrets added to Supabase Dashboard → Edge Functions → Secrets
+
+RESPONSE FORMAT
+[ ] Success: { data: { invite_id, invitee_email, expires_at }, message } — 200
+[ ] Each error case returns correct HTTP status + { error, message }
+[ ] No stack traces in response
+
+LOGGING
+[ ] Function name prefix in all logs
+[ ] Invite created and email sent logged
+[ ] Errors logged with context
+[ ] No sensitive data (token, API key, full email) in logs
+
+TESTING
+[ ] Success case: invite created + email sent
+[ ] Missing auth token → 401
+[ ] Invalid email → 400 with field error
+[ ] Invalid role → 400 with field error
+[ ] Non-existent project → 404
+[ ] Member calling (not admin) → 403
+[ ] Already a member → 409
+[ ] Resend failure handled gracefully → 500</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-tasks.html" class="footer-link">Supabase Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

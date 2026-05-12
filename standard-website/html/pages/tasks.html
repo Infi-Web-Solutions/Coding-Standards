@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Practice Tasks | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Practice tasks and project tracks for frontend, Supabase, Xano, Django, websites, and full-stack delivery."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="./standards.html" class="navbar-link">Standards</a>
+        <a href="./checklists.html" class="navbar-link">Checklists</a>
+        <a href="./tasks.html" class="navbar-link active">Tasks</a>
+        <a href="./templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>
+        Dark Mode
+      </button>
+    </div>
+  </header>
+
+  <main class="page tasks-library-page">
+    <div class="container">
+      <section class="section tasks-hero">
+        <div class="tasks-hero-copy page-header">
+          <span class="badge badge-info">Practice Tasks</span>
+          <h1 class="page-title">Practice the standards through real delivery work.</h1>
+          <p class="page-subtitle">
+            Each task gives you a realistic scenario and specific requirements to build. Complete the task, then run
+            the linked checklist to verify your work meets the team's standards.
+          </p>
+
+          <div class="tasks-hero-actions">
+            <a href="#tasks-catalog" class="btn btn-primary">Browse Practice Tasks</a>
+            <a href="#project-tracks" class="btn btn-secondary">Open Project Tracks</a>
+          </div>
+
+          <div class="tasks-hero-strip">
+            <div class="tasks-hero-stat">
+              <strong>16</strong>
+              <span>Practice tasks</span>
+            </div>
+            <div class="tasks-hero-stat">
+              <strong>10</strong>
+              <span>Project briefs</span>
+            </div>
+            <div class="tasks-hero-stat">
+              <strong>10</strong>
+              <span>Evaluation checklists</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="tasks-hero-aside">
+          <div class="tasks-hero-panel">
+            <span class="tasks-panel-label">How to Use</span>
+            <ol class="tasks-usage-list">
+              <li>Pick the task that matches what you are learning or building.</li>
+              <li>Read the Scenario, What to Build, and Requirements before starting.</li>
+              <li>Follow the What You Should NOT Do section to avoid common mistakes.</li>
+              <li>Run the linked checklist before marking the task or project done.</li>
+            </ol>
+          </div>
+
+          <div class="tasks-search-panel">
+            <div class="tasks-search-copy">
+              <span class="badge badge-success">Quick Filter</span>
+              <h2 class="section-title">Find a Task</h2>
+              <p class="tasks-search-note">
+                Search by platform, feature, workflow, validation pattern, or project track.
+              </p>
+            </div>
+
+            <div class="tasks-search-field">
+              <label for="tasks-search" class="form-label">Search tasks and projects</label>
+              <input
+                id="tasks-search"
+                class="form-control"
+                type="search"
+                placeholder="Search React, Supabase, RLS, invite, template, project..."
+                data-search-input
+              />
+              <p class="form-help">
+                Minimum 2 characters. Results filter automatically.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section tasks-overview">
+        <div class="tasks-overview-card">
+          <span class="tasks-overview-label">Learning Paths</span>
+          <h2>Move from focused feature practice to full-stack mini applications.</h2>
+          <p>
+            The task library now includes both the standard practice tracks from `docs/tasks/README.md` and the
+            project-track content from `docs/tasks/projects/`.
+          </p>
+        </div>
+
+        <div class="tasks-overview-grid">
+          <a href="#tasks-catalog" class="tasks-overview-pill">Practice Tasks</a>
+          <a href="#frontend-tasks" class="tasks-overview-pill">Frontend</a>
+          <a href="#supabase-tasks" class="tasks-overview-pill">Supabase</a>
+          <a href="#xano-tasks" class="tasks-overview-pill">Xano</a>
+          <a href="#django-tasks" class="tasks-overview-pill">Django</a>
+          <a href="#website-tasks" class="tasks-overview-pill">Website</a>
+          <a href="#project-tracks" class="tasks-overview-pill">Project Tracks</a>
+          <a href="#evaluation-tracks" class="tasks-overview-pill">Evaluation</a>
+        </div>
+      </section>
+
+      <section id="tasks-catalog" class="section" data-search-scope>
+        <div class="page-header tasks-catalog-header">
+          <div>
+            <span class="badge badge-info">Practice Catalog</span>
+            <h2 class="section-title">Use focused tasks to drill the exact standard you need next.</h2>
+            <p class="section-description">All categories below come from the main tasks README, with project-track content added from the projects folder.</p>
+          </div>
+          <div class="tasks-catalog-note">
+            <strong>Completion Rule</strong>
+            <span>A task is not complete until every item in the linked checklist and the task’s Done When section is checked.</span>
+          </div>
+        </div>
+
+        <section id="frontend-tasks" class="tasks-group">
+          <div class="tasks-group-header">
+            <div>
+              <span class="badge badge-success">Frontend Tasks</span>
+              <h3>Build forms and UI behavior the same way the team expects in production.</h3>
+            </div>
+            <p>Form validation, auth flow, and Add/Edit consistency.</p>
+          </div>
+
+          <div class="tasks-doc-list tasks-doc-list-compact">
+            <a href="../tasks/frontend/01-registration-form.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Frontend Registration Form field validation email password strength confirm password phone E.164 terms checkbox loading states error messages">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">01 — Registration Form</h3>
+              <p class="card-description">Form field validation: email, password strength, confirm password, phone (E.164), terms checkbox, loading states, error messages.</p>
+            </a>
+
+            <a href="../tasks/frontend/02-login-form.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Frontend Login Form forgot reset password email enumeration prevention token validation session states">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">02 — Login Form with Forgot &amp; Reset Password</h3>
+              <p class="card-description">Full auth flow: login, forgot password (email enumeration prevention), reset password (token validation on load), session states.</p>
+            </a>
+
+            <a href="../tasks/frontend/03-add-edit-project-form.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Frontend Shared Add Edit Project Form one shared component one validation schema pre-fill behavior identical states and error messages">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">03 — Shared Add / Edit Project Form</h3>
+              <p class="card-description">Add/Edit consistency: one shared component, one validation schema, pre-fill behavior, identical states and error messages in both modes.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="supabase-tasks" class="tasks-group">
+          <div class="tasks-group-header">
+            <div>
+              <span class="badge badge-success">Supabase Tasks</span>
+              <h3>Work through schema, RLS, RPC, Edge Functions, and storage in sequence.</h3>
+            </div>
+            <p>These tasks build on each other in order, exactly as described in the README.</p>
+          </div>
+
+          <div class="tasks-doc-list">
+            <a href="../tasks/supabase/01-create-projects-table.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Supabase Create Projects Table schema required columns constraints CHECK indexes soft delete updated_at trigger migration file">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">01 — Create the Projects Table</h3>
+              <p class="card-description">Table schema, required columns, constraints, CHECK constraints, indexes, soft delete, <code>updated_at</code> trigger, migration file.</p>
+            </a>
+
+            <a href="../tasks/supabase/02-rls-policies.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Supabase Write RLS Policies SELECT INSERT UPDATE DELETE workspace membership subquery role-based access WITH CHECK testing across all roles">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">02 — Write RLS Policies</h3>
+              <p class="card-description">All four policy types (SELECT/INSERT/UPDATE/DELETE), workspace membership subquery, role-based access, WITH CHECK, testing across all roles.</p>
+            </a>
+
+            <a href="../tasks/supabase/03-create-project-api.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Supabase Create Project API RPC function design atomic multi-step operations validation in SQL standard error codes RAISE EXCEPTION API documentation">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">03 — Create Project API (RPC)</h3>
+              <p class="card-description">RPC function design, atomic multi-step operations, validation in SQL, standard error codes via RAISE EXCEPTION, API documentation.</p>
+            </a>
+
+            <a href="../tasks/supabase/04-invite-edge-function.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Supabase Project Invite Edge Function CORS JWT auth secrets management third-party email Resend webhook-safe logging error cases">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">04 — Project Invite Edge Function</h3>
+              <p class="card-description">Edge Function structure, CORS, JWT auth, secrets management, third-party email (Resend), webhook-safe logging, all error cases.</p>
+            </a>
+
+            <a href="../tasks/supabase/05-rpc-function-task.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Supabase Archive Project RPC advanced SECURITY INVOKER seven-step validation multi-table atomic update BUSINESS_RULE_VIOLATION EXCEPTION WHEN OTHERS">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">05 — Archive Project RPC Function</h3>
+              <p class="card-description">Advanced RPC: SECURITY INVOKER, 7-step validation order, multi-table atomic update, BUSINESS_RULE_VIOLATION check, EXCEPTION WHEN OTHERS.</p>
+            </a>
+
+            <a href="../tasks/supabase/06-storage-setup-task.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Supabase Storage Bucket project attachments RLS storage.objects file path structure signed URLs upload download delete flow">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">06 — Storage Bucket: Project Attachments</h3>
+              <p class="card-description">Storage bucket setup, RLS on <code>storage.objects</code>, file path structure, signed URLs (not public URLs), upload/download/delete flow.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="xano-tasks" class="tasks-group">
+          <div class="tasks-group-header">
+            <div>
+              <span class="badge badge-success">Xano Tasks</span>
+              <h3>Learn the auth-first, reusable-function-first Xano delivery pattern.</h3>
+            </div>
+            <p>Endpoint implementation and shared permission logic.</p>
+          </div>
+
+          <div class="tasks-doc-list tasks-doc-list-compact">
+            <a href="../tasks/xano/01-create-project-endpoint.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Xano Create Project Endpoint auth-first pattern reusable check_workspace_permission three-layer validation standard error format role check from DB">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">01 — Create Project Endpoint</h3>
+              <p class="card-description">Auth-first pattern, reusable <code>check_workspace_permission</code> function, three-layer validation, standard error format, role check from DB.</p>
+            </a>
+
+            <a href="../tasks/xano/02-reusable-function.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Xano Reusable Function check_workspace_permission extracting shared logic role hierarchy single responsibility error raising updating calling endpoints">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">02 — Reusable Function: check_workspace_permission</h3>
+              <p class="card-description">Extracting shared logic, role hierarchy (not just equality), single responsibility, error raising, updating all calling endpoints.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="django-tasks" class="tasks-group">
+          <div class="tasks-group-header">
+            <div>
+              <span class="badge badge-success">Django Tasks</span>
+              <h3>Build the full Django feature chain from views and templates to models and DRF APIs.</h3>
+            </div>
+            <p>These tasks build on each other and should be completed in order.</p>
+          </div>
+
+          <div class="tasks-doc-list">
+            <a href="../tasks/django/01-project-list-create-view.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Django Project List Create View LoginRequiredMixin WorkspaceMemberMixin form validation services.py separation POST redirect GET PermissionDenied">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">01 — Project List &amp; Create View</h3>
+              <p class="card-description">LoginRequiredMixin, WorkspaceMemberMixin, form validation, services.py separation, POST→redirect→GET pattern, PermissionDenied.</p>
+            </a>
+
+            <a href="../tasks/django/02-project-template.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Django Project Detail Template 3-folder structure base.html inheritance zero inline styles scripts data attributes responsive CSS with variables">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">02 — Project Detail Template</h3>
+              <p class="card-description">3-folder structure, base.html inheritance, zero inline styles/scripts, data-* attributes for JS, responsive CSS with variables.</p>
+            </a>
+
+            <a href="../tasks/django/03-model-and-service.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Django Project Model Service field types constraints UniqueConstraint CheckConstraint soft delete custom manager services.py business logic">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">03 — Project Model + Service</h3>
+              <p class="card-description">Model field types, constraints (UniqueConstraint, CheckConstraint), soft delete with custom manager, services.py with business logic.</p>
+            </a>
+
+            <a href="../tasks/django/04-drf-api-view.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Django DRF API Views Projects custom permission classes serializer wiring service delegation correct HTTP status codes pagination">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">04 — DRF API Views: Projects</h3>
+              <p class="card-description">DRF view types, custom permission classes (database-verified), serializer wiring, service delegation, correct HTTP status codes, pagination.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="website-tasks" class="tasks-group">
+          <div class="tasks-group-header">
+            <div>
+              <span class="badge badge-success">Website Tasks</span>
+              <h3>Practice shipping polished front-end pages with real responsiveness and structure.</h3>
+            </div>
+            <p>Landing-page implementation and page-build quality.</p>
+          </div>
+
+          <div class="tasks-doc-list tasks-doc-list-compact">
+            <a href="../tasks/website/01-landing-page-section.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Website Replicate Landing Page pixel-perfect replication design token extraction reusable components responsive layout semantic HTML performance">
+              <span class="tasks-doc-meta">What You Practice</span>
+              <h3 class="card-title">01 — Replicate a Landing Page</h3>
+              <p class="card-description">Pixel-perfect replication, design token extraction, reusable components, responsive layout (3 breakpoints), semantic HTML, performance.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="project-tracks" class="tasks-group">
+          <div class="tasks-group-header">
+            <div>
+              <span class="badge badge-success">Project Tasks</span>
+              <h3>Complete mini-applications scoped to about 8 hours, grouped by tech stack.</h3>
+            </div>
+            <p>These sections come from the `docs/tasks/projects/` folder that was missing from the earlier landing page view.</p>
+          </div>
+
+          <div class="tasks-project-grid">
+            <section class="tasks-project-stack">
+              <div class="tasks-project-stack-header">
+                <span class="tasks-project-kicker">WeWeb + Supabase</span>
+                <p>WeWeb frontend with Supabase for Postgres, RLS, Storage, and RPC/Edge Functions.</p>
+              </div>
+              <div class="tasks-doc-list tasks-doc-list-compact">
+                <a href="../tasks/projects/weweb-supabase-member-directory.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project WeWeb Supabase Team Member Directory table schema RLS storage avatars list detail form search filters loading empty error states">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">01 — Team Member Directory</h3>
+                  <p class="card-description">Table schema, RLS, Storage (avatars), WeWeb list + detail + form pages, search, filters, loading/empty/error states.</p>
+                </a>
+
+                <a href="../tasks/projects/weweb-supabase-task-board.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project WeWeb Supabase Task Board multi-table schema RPC functions RLS task list filters bulk actions add edit modal delete confirmation">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">02 — Task Board</h3>
+                  <p class="card-description">Multi-table schema, RPC functions, RLS, WeWeb task list + filters + bulk actions, add/edit modal, delete confirmation.</p>
+                </a>
+              </div>
+            </section>
+
+            <section class="tasks-project-stack">
+              <div class="tasks-project-stack-header">
+                <span class="tasks-project-kicker">WeWeb + Xano</span>
+                <p>WeWeb frontend with Xano API endpoints, reusable functions, and database-backed permissions.</p>
+              </div>
+              <div class="tasks-doc-list tasks-doc-list-compact">
+                <a href="../tasks/projects/weweb-xano-contact-book.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project WeWeb Xano Contact Book CRUD endpoints reusable permission function list form pages search filters pagination all states">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">01 — Contact Book</h3>
+                  <p class="card-description">Xano endpoints (CRUD), reusable permission function, WeWeb list + form pages, search, filters, pagination, all states.</p>
+                </a>
+
+                <a href="../tasks/projects/weweb-xano-leave-requests.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project WeWeb Xano Leave Request System multi-step status workflow multi-step form approval flow role-based views date validation">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">02 — Leave Request System</h3>
+                  <p class="card-description">Xano multi-step status workflow, WeWeb multi-step form, approval flow, role-based views, date validation.</p>
+                </a>
+              </div>
+            </section>
+
+            <section class="tasks-project-stack">
+              <div class="tasks-project-stack-header">
+                <span class="tasks-project-kicker">React + Django</span>
+                <p>React with TypeScript on the frontend and Django REST Framework on the backend.</p>
+              </div>
+              <div class="tasks-doc-list tasks-doc-list-compact">
+                <a href="../tasks/projects/react-django-announcement-board.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project React Django Announcement Board model DRF API service layer React pages forms permissions loading empty error states">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">01 — Announcement Board</h3>
+                  <p class="card-description">Django model + DRF API + service layer + React pages, forms, permissions, loading/empty/error states.</p>
+                </a>
+
+                <a href="../tasks/projects/react-django-expense-tracker.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project React Django Expense Tracker model file upload approval workflow DRF React list form admin views">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">02 — Expense Tracker</h3>
+                  <p class="card-description">Django model + file upload + approval workflow + DRF + React list/form/admin views.</p>
+                </a>
+              </div>
+            </section>
+
+            <section class="tasks-project-stack">
+              <div class="tasks-project-stack-header">
+                <span class="tasks-project-kicker">React + Supabase</span>
+                <p>React with TypeScript and Supabase across tables, RLS, Storage, RPC, and Edge Functions.</p>
+              </div>
+              <div class="tasks-doc-list tasks-doc-list-compact">
+                <a href="../tasks/projects/react-supabase-invite-system.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project React Supabase Workspace Invite System tables RLS Edge Function invite email RPC accept invite React invite management token-based invite acceptance">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">01 — Workspace Invite System</h3>
+                  <p class="card-description">Supabase tables, RLS, Edge Function (invite email), RPC (accept invite), React invite management, token-based invite acceptance.</p>
+                </a>
+
+                <a href="../tasks/projects/react-supabase-document-library.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project React Supabase Document Library storage RLS storage.objects RPC create folder file upload signed URL download folder navigation">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">02 — Document Library</h3>
+                  <p class="card-description">Supabase Storage, RLS on <code>storage.objects</code>, RPC (create folder), React file upload, signed URL download, folder navigation.</p>
+                </a>
+              </div>
+            </section>
+
+            <section class="tasks-project-stack">
+              <div class="tasks-project-stack-header">
+                <span class="tasks-project-kicker">Django + Templates</span>
+                <p>Pure Django server-rendered delivery with HTML, CSS, JS, forms, services, views, and templates.</p>
+              </div>
+              <div class="tasks-doc-list tasks-doc-list-compact">
+                <a href="../tasks/projects/django-leave-requests.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project Django Templates Leave Request System models forms services views templates 3-folder structure base.html data attributes status workflow">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">01 — Leave Request System</h3>
+                  <p class="card-description">Django models, forms, services, views, templates — 3-folder structure, base.html, data-* attributes, status workflow.</p>
+                </a>
+
+                <a href="../tasks/projects/django-knowledge-base.html" class="tasks-doc-card card card-clickable" data-search-item data-search-text="Project Django Templates Internal Knowledge Base models forms services views templates search categories permissions rich content slug routing">
+                  <span class="tasks-doc-meta">~8 Hours</span>
+                  <h3 class="card-title">02 — Internal Knowledge Base</h3>
+                  <p class="card-description">Django models, forms, services, views, templates — search, categories, permissions, rich content, slug routing.</p>
+                </a>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section id="evaluation-tracks" class="tasks-group">
+          <div class="tasks-group-header">
+            <div>
+              <span class="badge badge-success">Evaluation</span>
+              <h3>Every project also has a matching evaluator checklist for review.</h3>
+            </div>
+            <p>These evaluation links come from the same project-task README and map directly to each project brief.</p>
+          </div>
+
+          <div class="tasks-eval-grid">
+            <a href="../tasks/evaluation/weweb-supabase-01-member-directory.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation WeWeb Supabase Member Directory schema service logic UI states permissions security standards compliance">
+              <strong>WeWeb + Supabase: Member Directory</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+            <a href="../tasks/evaluation/weweb-supabase-02-task-board.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation WeWeb Supabase Task Board schema service logic UI states permissions security standards compliance">
+              <strong>WeWeb + Supabase: Task Board</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+            <a href="../tasks/evaluation/weweb-xano-01-contact-book.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation WeWeb Xano Contact Book schema service logic UI states permissions security standards compliance">
+              <strong>WeWeb + Xano: Contact Book</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+            <a href="../tasks/evaluation/weweb-xano-02-leave-requests.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation WeWeb Xano Leave Requests schema service logic UI states permissions security standards compliance">
+              <strong>WeWeb + Xano: Leave Requests</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+            <a href="../tasks/evaluation/react-django-01-announcement-board.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation React Django Announcement Board schema service logic UI states permissions security standards compliance">
+              <strong>React + Django: Announcement Board</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+            <a href="../tasks/evaluation/react-django-02-expense-tracker.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation React Django Expense Tracker schema service logic UI states permissions security standards compliance">
+              <strong>React + Django: Expense Tracker</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+            <a href="../tasks/evaluation/react-supabase-01-invite-system.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation React Supabase Invite System schema service logic UI states permissions security standards compliance">
+              <strong>React + Supabase: Invite System</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+            <a href="../tasks/evaluation/react-supabase-02-document-library.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation React Supabase Document Library schema service logic UI states permissions security standards compliance">
+              <strong>React + Supabase: Document Library</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+            <a href="../tasks/evaluation/django-templates-01-leave-requests.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation Django Templates Leave Requests schema service logic UI states permissions security standards compliance">
+              <strong>Django + Templates: Leave Requests</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+            <a href="../tasks/evaluation/django-templates-02-knowledge-base.html" class="tasks-eval-card" data-search-item data-search-text="Evaluation Django Templates Knowledge Base schema service logic UI states permissions security standards compliance">
+              <strong>Django + Templates: Knowledge Base</strong>
+              <span>Open evaluation checklist</span>
+            </a>
+          </div>
+        </section>
+
+        <div class="content-card tasks-empty-state" data-search-empty hidden>
+          <p>No matching task, project, or evaluation checklist found.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Practice standards through realistic feature work and complete project tracks.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="./standards.html" class="footer-link">Standards</a>
+        <a href="./checklists.html" class="footer-link">Checklists</a>
+        <a href="./tasks.html" class="footer-link">Tasks</a>
+        <a href="./templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

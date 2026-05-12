@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add / Edit Consistency Checklist | Development Standards</title>
+  <meta name="description" content="Checklist for keeping Add and Edit forms identical in behavior, validation, layout, state, and permissions." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Add / Edit Consistency Checklist</h1>
+        <p class="page-subtitle">Add and Edit for the same entity must be identical in behavior, validation, layout, and error handling. A user should not be able to do something in Edit that Add prevents, or vice versa.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <span class="badge badge-danger">Core Rule</span>
+          <h2 class="section-title">The Consistency Rule</h2>
+          <p class="section-description">A teammate comparing Add and Edit must see the same fields, same validation rules, same error messages, same layout, and same loading and success behavior.</p>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Difference</th>
+                  <th>Allowed</th>
+                  <th>Why</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Page or modal title</td><td>Yes</td><td>Context label only</td></tr>
+                <tr><td>Submit button label</td><td>Yes</td><td>Action wording only</td></tr>
+                <tr><td>Pre-filled values in Edit</td><td>Yes</td><td>Existing data is loaded</td></tr>
+                <tr><td>Some fields disabled in Edit</td><td>Only if intentional</td><td>Documented business rule required</td></tr>
+                <tr><td>Additional Edit-only fields</td><td>Only if they do not exist at creation time</td><td>Examples: created_at, post-creation status</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Live Add / Edit Example</h2>
+          <div class="ui-demo-grid">
+            <div class="ui-demo">
+              <div class="ui-demo-title">Add Project</div>
+              <form class="ui-demo-form">
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="add-name">Project Name <span class="ui-demo-required">*</span></label>
+                  <input id="add-name" class="form-control" type="text" placeholder="Enter project name" />
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="add-status">Status <span class="ui-demo-required">*</span></label>
+                  <select id="add-status" class="form-control">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="add-description">Description</label>
+                  <textarea id="add-description" class="form-control" rows="4" placeholder="Short project summary"></textarea>
+                </div>
+                <div class="ui-demo-actions">
+                  <button type="button" class="btn btn-secondary">Cancel</button>
+                  <button type="button" class="btn btn-primary">Create Project</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Edit Project</div>
+              <form class="ui-demo-form">
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="edit-name">Project Name <span class="ui-demo-required">*</span></label>
+                  <input id="edit-name" class="form-control" type="text" value="Marketing Website Refresh" />
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="edit-status">Status <span class="ui-demo-required">*</span></label>
+                  <select id="edit-status" class="form-control">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="edit-description">Description</label>
+                  <textarea id="edit-description" class="form-control" rows="4">Landing page, responsive QA, and analytics review.</textarea>
+                </div>
+                <div class="ui-demo-actions">
+                  <button type="button" class="btn btn-secondary">Cancel</button>
+                  <button type="button" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Behavior</th>
+                  <th>Add</th>
+                  <th>Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Fields</td><td>Name, Status, Description</td><td>Name, Status, Description</td></tr>
+                <tr><td>Validation schema</td><td>Shared</td><td>Shared</td></tr>
+                <tr><td>Field order</td><td>Same order</td><td>Same order</td></tr>
+                <tr><td>Spacing and layout</td><td>Shared component</td><td>Shared component</td></tr>
+                <tr><td>Button wording</td><td>Create Project</td><td>Save Changes</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">Shared Component Requirement</h2>
+            <label><input type="checkbox" data-checklist-item /> Add and Edit use the same form component</label><br />
+            <label><input type="checkbox" data-checklist-item /> Edit passes initial values rather than re-implementing the form</label><br />
+            <label><input type="checkbox" data-checklist-item /> Same validation schema object is used in both modes</label><br />
+            <label><input type="checkbox" data-checklist-item /> No duplicate AddForm and EditForm copies drifting over time</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Field Consistency</h2>
+            <label><input type="checkbox" data-checklist-item /> Required in Add means required in Edit</label><br />
+            <label><input type="checkbox" data-checklist-item /> Optional in Add means optional in Edit</label><br />
+            <label><input type="checkbox" data-checklist-item /> Every field shown in Add is shown in Edit unless documented</label><br />
+            <label><input type="checkbox" data-checklist-item /> Field order and grouping remain the same</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Validation Consistency</h2>
+            <label><input type="checkbox" data-checklist-item /> Min and max rules are identical in both modes</label><br />
+            <label><input type="checkbox" data-checklist-item /> Format rules for email, phone, URL, etc. are identical</label><br />
+            <label><input type="checkbox" data-checklist-item /> Cross-field validation is identical</label><br />
+            <label><input type="checkbox" data-checklist-item /> Backend validates updates as strictly as creates</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">UI and Layout Consistency</h2>
+            <label><input type="checkbox" data-checklist-item /> Same labels, placeholders, tooltips, and required markers</label><br />
+            <label><input type="checkbox" data-checklist-item /> Same button placement and spacing</label><br />
+            <label><input type="checkbox" data-checklist-item /> Same mobile layout and responsive behavior</label><br />
+            <label><input type="checkbox" data-checklist-item /> Same error position and styling</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Pre-Fill Behavior (Edit Only)</h2>
+            <div class="ui-demo ui-demo-muted-box">
+              <div class="ui-demo-title">Good Edit Loading State</div>
+              <div class="ui-demo-form">
+                <div class="ui-demo-skeleton-line" style="width: 32%;"></div>
+                <div class="ui-demo-skeleton-line" style="width: 100%; height: 44px;"></div>
+                <div class="ui-demo-skeleton-line" style="width: 100%; height: 44px;"></div>
+                <div class="ui-demo-skeleton-line" style="width: 100%; height: 96px;"></div>
+              </div>
+            </div>
+            <label><input type="checkbox" data-checklist-item /> Show skeleton or spinner while loading existing data</label><br />
+            <label><input type="checkbox" data-checklist-item /> Do not flash an empty form before values arrive</label><br />
+            <label><input type="checkbox" data-checklist-item /> Pre-fill all fields with existing values</label><br />
+            <label><input type="checkbox" data-checklist-item /> Preserve field types correctly during pre-fill</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Submit Behavior</h2>
+            <label><input type="checkbox" data-checklist-item /> Both Add and Edit show loading during submission</label><br />
+            <label><input type="checkbox" data-checklist-item /> Both disable submit while loading</label><br />
+            <label><input type="checkbox" data-checklist-item /> Both keep form values intact on failure</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success messages are intentional and mode-specific</label><br />
+            <label><input type="checkbox" data-checklist-item /> Network and API errors appear the same way in both modes</label>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">If Add and Edit feel like two different products, the implementation is drifting.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../tasks/frontend/03-add-edit-project-form.html" class="footer-link">Practice Task</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

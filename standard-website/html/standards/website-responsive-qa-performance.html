@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Website — Responsive, QA &amp; Performance Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Breakpoint standards, responsive checklist, pixel-perfect QA, performance rules (images, lazy loading, Core Web Vitals), accessibility, security."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Website — Responsive, QA &amp; Performance Standard</h1>
+
+        <p class="page-subtitle">
+          Breakpoint standards, responsive checklist, pixel-perfect QA, performance rules (images, lazy loading, Core Web Vitals), accessibility, security.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="responsive-replication-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">18. Responsive Replication Standard</h2>
+
+          <p>A replica must be tested across breakpoints.</p>
+
+          <h3>Breakpoints</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Device</th>
+                  <th>Width</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Small Mobile</td><td>360px</td></tr>
+                <tr><td>Mobile</td><td>390px / 414px</td></tr>
+                <tr><td>Tablet</td><td>768px</td></tr>
+                <tr><td>Small Laptop</td><td>1024px</td></tr>
+                <tr><td>Desktop</td><td>1280px</td></tr>
+                <tr><td>Large Desktop</td><td>1440px+</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Responsive Checklist</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Header</td><td>Mobile menu works.</td></tr>
+                <tr><td>Hero</td><td>Text/image stack correctly.</td></tr>
+                <tr><td>Cards</td><td>Grid becomes 1-column on mobile.</td></tr>
+                <tr><td>Forms</td><td>Inputs full width on mobile.</td></tr>
+                <tr><td>Tables</td><td>Scroll or card layout.</td></tr>
+                <tr><td>Images</td><td>No stretching/cropping issues.</td></tr>
+                <tr><td>Buttons</td><td>Touch-friendly size.</td></tr>
+                <tr><td>Footer</td><td>Columns stack cleanly.</td></tr>
+                <tr><td>Popups</td><td>Usable on mobile.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="pixel-perfect-qa-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">19. Pixel-Perfect QA Standard</h2>
+
+          <p>Use visual QA page by page.</p>
+
+          <h3>Compare</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Check</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Font</td><td>Family, weight, size, line-height.</td></tr>
+                <tr><td>Colors</td><td>Exact hex values.</td></tr>
+                <tr><td>Spacing</td><td>Section padding, gaps, margins.</td></tr>
+                <tr><td>Layout</td><td>Width, alignment, grid.</td></tr>
+                <tr><td>Images</td><td>Size, crop, quality.</td></tr>
+                <tr><td>Buttons</td><td>Radius, hover, padding.</td></tr>
+                <tr><td>Cards</td><td>Shadow, border, spacing.</td></tr>
+                <tr><td>Header</td><td>Height, logo, nav spacing.</td></tr>
+                <tr><td>Footer</td><td>Links, columns, typography.</td></tr>
+                <tr><td>Mobile</td><td>Same visual intent, not necessarily exact desktop layout.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Acceptable Difference</h3>
+          <p>Define upfront:</p>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Replica Type</th>
+                  <th>Tolerance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Pixel-perfect</td><td>Very low tolerance, almost exact.</td></tr>
+                <tr><td>Functional replica</td><td>Visual similarity acceptable.</td></tr>
+                <tr><td>Modernized replica</td><td>Improvements allowed.</td></tr>
+                <tr><td>Migration replica</td><td>Preserve UX/content/SEO more than exact pixels.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="performance-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">20. Performance Standard</h2>
+
+          <h3>Mandatory Performance Rules</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Images</td><td>Compress and lazy-load.</td></tr>
+                <tr><td>Fonts</td><td>Load only needed weights.</td></tr>
+                <tr><td>Scripts</td><td>Remove unused third-party scripts.</td></tr>
+                <tr><td>CSS</td><td>Avoid bloated styles.</td></tr>
+                <tr><td>Video</td><td>Use optimized embed/streaming.</td></tr>
+                <tr><td>Animations</td><td>Avoid heavy scroll/JS animations.</td></tr>
+                <tr><td>API Calls</td><td>Do not over-fetch.</td></tr>
+                <tr><td>Caching</td><td>Use CDN/static caching where possible.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Common Mistakes</h3>
+          <ul>
+            <li>Uploading 5MB hero images.</li>
+            <li>Loading 8 font weights.</li>
+            <li>Adding too many tracking scripts.</li>
+            <li>Rebuilding a fast static website into a slow no-code app.</li>
+            <li>Ignoring mobile performance.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="accessibility-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">21. Accessibility Standard</h2>
+
+          <p>A proper replica should improve accessibility, not copy bad accessibility.</p>
+
+          <h3>Must-Have</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Semantic HTML</td><td>Use correct headings/sections/buttons.</td></tr>
+                <tr><td>Alt Text</td><td>Meaningful images need alt text.</td></tr>
+                <tr><td>Color Contrast</td><td>Text must be readable.</td></tr>
+                <tr><td>Keyboard Navigation</td><td>Menus/forms/modals usable with keyboard.</td></tr>
+                <tr><td>Focus State</td><td>Visible.</td></tr>
+                <tr><td>Form Labels</td><td>Required.</td></tr>
+                <tr><td>Error Messages</td><td>Associated with fields.</td></tr>
+                <tr><td>Buttons</td><td>Real buttons, not clickable divs.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="security-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">22. Security Standard</h2>
+
+          <p>Even if it is "just a website," security matters.</p>
+
+          <h3>Website Security Checklist</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Forms</td><td>Validate and sanitize input.</td></tr>
+                <tr><td>Spam</td><td>CAPTCHA/honeypot/rate limit.</td></tr>
+                <tr><td>Admin Access</td><td>Strong passwords/2FA if CMS.</td></tr>
+                <tr><td>API Keys</td><td>Never expose private keys.</td></tr>
+                <tr><td>Uploads</td><td>Validate file type and size.</td></tr>
+                <tr><td>HTTPS</td><td>Required.</td></tr>
+                <tr><td>Headers</td><td>Security headers where possible.</td></tr>
+                <tr><td>Dependencies</td><td>Avoid abandoned plugins/packages.</td></tr>
+                <tr><td>No-Code Apps</td><td>Check privacy rules/API exposure.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="cms-decision-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">23. CMS Decision Standard</h2>
+
+          <p>Ask whether client needs to edit content after launch.</p>
+
+          <h3>Static vs CMS</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Requirement</th>
+                  <th>Solution</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Client rarely changes content</td><td>Static React/Next.js page.</td></tr>
+                <tr><td>Client updates blogs</td><td>CMS needed.</td></tr>
+                <tr><td>Client updates services/projects</td><td>CMS collection needed.</td></tr>
+                <tr><td>Client updates pricing</td><td>CMS or admin config.</td></tr>
+                <tr><td>Client updates images/text often</td><td>No-code/CMS preferred.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>CMS Options</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Platform</th>
+                  <th>Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>WordPress Headless</td><td>Existing WP blog/content.</td></tr>
+                <tr><td>Sanity</td><td>Structured content for React.</td></tr>
+                <tr><td>Strapi</td><td>Self-hosted/custom CMS.</td></tr>
+                <tr><td>Supabase</td><td>Simple CMS/data tables.</td></tr>
+                <tr><td>Webflow CMS</td><td>Marketing CMS.</td></tr>
+                <tr><td>WeWeb Collections</td><td>No-code frontend content.</td></tr>
+                <tr><td>Bubble DB</td><td>Bubble app-native content.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="no-code-specific-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">24. No-Code Specific Standards</h2>
+
+          <h3>WeWeb/Bubble Replica Must Still Have</h3>
+          <pre><code>1. Global styles
+2. Reusable components
+3. Clean naming
+4. Proper responsive layout
+5. API security
+6. Auth rules
+7. Database privacy rules
+8. Loading states
+9. Error states
+10. SEO settings
+11. Versioning/backup strategy
+12. Handoff documentation</code></pre>
+
+          <p>No-code does not mean no engineering standards.</p>
+        </div>
+      </section>
+
+      <section id="naming-standards-for-no-code-builds" class="section">
+        <div class="content-card">
+          <h2 class="section-title">25. Naming Standards for No-Code Builds</h2>
+
+          <h3>Pages</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Good</th>
+                  <th>Bad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>Home</code></td><td><code>Page 1</code></td></tr>
+                <tr><td><code>Contact</code></td><td><code>New Page Copy</code></td></tr>
+                <tr><td><code>Dashboard - Projects</code></td><td><code>dashboardtest</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Workflows/API Calls</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Good</th>
+                  <th>Bad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>Submit Contact Form</code></td><td><code>Workflow 1</code></td></tr>
+                <tr><td><code>Fetch Project List</code></td><td><code>API Call 3</code></td></tr>
+                <tr><td><code>Create Lead in CRM</code></td><td><code>Button clicked</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Components</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Good</th>
+                  <th>Bad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>Header - Public</code></td><td><code>Group 1</code></td></tr>
+                <tr><td><code>Card - Service</code></td><td><code>Reusable thing</code></td></tr>
+                <tr><td><code>Modal - Delete Confirmation</code></td><td><code>Popup A</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="animation-replication-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">26. Animation Replication Standard</h2>
+
+          <h3>Document Animation Behavior</h3>
+          <pre><code>Element:
+Animation Type:
+Trigger:
+Duration:
+Delay:
+Easing:
+Desktop:
+Mobile:
+Fallback:</code></pre>
+
+          <h3>Common Animations</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Animation</th>
+                  <th>Use Carefully</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Fade in</td><td>Safe.</td></tr>
+                <tr><td>Slide up</td><td>Safe.</td></tr>
+                <tr><td>Parallax</td><td>Can hurt performance.</td></tr>
+                <tr><td>Scroll-triggered animations</td><td>Test mobile.</td></tr>
+                <tr><td>Sliders/carousels</td><td>Avoid if not needed.</td></tr>
+                <tr><td>Hover animations</td><td>Must have mobile fallback.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Test every breakpoint, QA every page visually, and enforce performance and accessibility before launch.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

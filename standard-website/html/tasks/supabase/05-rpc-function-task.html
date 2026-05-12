@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Task — Archive Project RPC | Development Standards</title>
+  <meta name="description" content="Build the archive_project RPC with 6-step validation, atomic update of projects + tasks + audit log." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Supabase Task — Archive Project RPC</h1>
+        <p class="page-subtitle">Build the archive_project RPC with 6-step validation, atomic update of projects + tasks + audit log.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-tasks.html" class="btn btn-secondary">Back to Supabase Tasks</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Platform:</strong> Supabase (Postgres / PL/pgSQL)</p>
+<p><strong>Checklist to Run:</strong> <a href="../../checklists/supabase/rpc-function.md">RPC Function Checklist</a></p>
+<p><strong>Standard:</strong> <a href="../../standards/supabase/07-rpc-functions.md">RPC & Postgres Function Standards</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>You are building the "archive project" feature. When a project is archived:</p>
+<ol>
+  <li>The project's <code>status</code> is set to <code>&#x27;archived&#x27;</code> and <code>archived_at</code> is set to <code>now()</code>.</li>
+  <li>All open tasks in the project are set to <code>status = &#x27;on-hold&#x27;</code>.</li>
+  <li>An audit log entry is written.</li>
+  <li>The operation must be atomic — if any step fails, all steps are rolled back.</li>
+</ol>
+<p>This is a multi-step operation that touches 3 tables and must be atomic. It belongs in an RPC function.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <p>A Postgres function named <code>archive_project</code> exposed via Supabase RPC.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Requirements</h2>
+          <h3>Function Signature</h3>
+<pre><code class="language-sql">CREATE OR REPLACE FUNCTION archive_project(
+  p_project_id  uuid,
+  p_reason      text DEFAULT NULL
+)
+RETURNS json
+LANGUAGE plpgsql
+SECURITY INVOKER
+AS $$ ... $$;</code></pre>
+<h3>Validation (in this order)</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>#</th>
+    <th>Check</th>
+    <th>Error Code</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>1</td>
+    <td>Caller is authenticated (auth.uid() not null)</td>
+    <td><code>AUTH_REQUIRED</code></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>p_project_id is not null</td>
+    <td><code>VALIDATION_ERROR</code></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Project exists</td>
+    <td><code>NOT_FOUND</code></td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Caller is a member of the project's workspace</td>
+    <td><code>FORBIDDEN</code></td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>Caller is admin or owner of the workspace</td>
+    <td><code>FORBIDDEN</code></td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Project is not already archived</td>
+    <td><code>BUSINESS_RULE_VIOLATION</code></td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Logic (after all validation passes)</h3>
+<ol>
+  <li>Update <code>projects</code>: set <code>status = &#x27;archived&#x27;</code>, <code>archived_at = now()</code>, <code>archived_by = auth.uid()</code></li>
+  <li>Update <code>tasks</code>: set <code>status = &#x27;on-hold&#x27;</code> where <code>project_id = p_project_id AND status = &#x27;open&#x27;</code></li>
+  <li>Insert into <code>audit_logs</code>: <code>action = &#x27;project.archived&#x27;</code>, <code>entity_type = &#x27;project&#x27;</code>, <code>entity_id = p_project_id</code>, <code>actor_id = auth.uid()</code>, <code>notes = p_reason</code></li>
+</ol>
+<h3>Return Shape (on success)</h3>
+<pre><code class="language-json">{
+  &quot;data&quot;: {
+    &quot;id&quot;: &quot;uuid&quot;,
+    &quot;name&quot;: &quot;Project Name&quot;,
+    &quot;status&quot;: &quot;archived&quot;,
+    &quot;archived_at&quot;: &quot;2024-01-15T10:00:00Z&quot;
+  },
+  &quot;message&quot;: &quot;Project archived successfully.&quot;
+}</code></pre>
+<h3>Error Format</h3>
+<p>All errors must follow: <code>&#x27;ERROR_CODE: description&#x27;</code></p>
+<p>Examples:</p>
+<ul>
+  <li><code>&#x27;AUTH_REQUIRED: authentication required&#x27;</code></li>
+  <li><code>&#x27;NOT_FOUND: project not found&#x27;</code></li>
+  <li><code>&#x27;FORBIDDEN: only admins can archive projects&#x27;</code></li>
+  <li><code>&#x27;BUSINESS_RULE_VIOLATION: project is already archived&#x27;</code></li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <pre><code class="language-text">× Split this into 3 separate RPC calls from the frontend
+× Use SECURITY DEFINER without documentation and a second reviewer
+× Use SELECT * anywhere inside the function
+× Skip the auth check (auth.uid() validation)
+× Return the error inside the JSON data — use RAISE EXCEPTION
+× Use COMMIT or ROLLBACK manually inside the function
+× Skip the &quot;already archived&quot; check (idempotency guard)</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="frontend-call-example" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Frontend Call Example</h2>
+          <pre><code class="language-ts">const { data, error } = await supabase.rpc(&#x27;archive_project&#x27;, {
+  p_project_id: projectId,
+  p_reason: &#x27;Project completed — archiving for record keeping.&#x27;
+});
+
+if (error) {
+  const code = error.message.split(&#x27;:&#x27;)[0].trim();
+  switch (code) {
+    case &#x27;FORBIDDEN&#x27;:               return showError(&#x27;Admin access required.&#x27;);
+    case &#x27;NOT_FOUND&#x27;:               return showError(&#x27;Project not found.&#x27;);
+    case &#x27;BUSINESS_RULE_VIOLATION&#x27;: return showError(&#x27;Project is already archived.&#x27;);
+    default:                        return showError(&#x27;Something went wrong. Please try again.&#x27;);
+  }
+}</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="checklist-to-run" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run</h2>
+          <p>Before marking this done, run: <a href="../../checklists/supabase/rpc-function.md">RPC Function Checklist</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <label><input type="checkbox" data-checklist-item /> Function signature matches the specification exactly</label><br />
+<label><input type="checkbox" data-checklist-item /> All 6 validation steps implemented in the correct order</label><br />
+<label><input type="checkbox" data-checklist-item /> All 3 business logic steps execute correctly</label><br />
+<label><input type="checkbox" data-checklist-item /> All steps are in one transaction (single function — no manual COMMIT)</label><br />
+<label><input type="checkbox" data-checklist-item /> Return shape matches the specification</label><br />
+<label><input type="checkbox" data-checklist-item /> All errors follow the 'ERROR_CODE: description' format</label><br />
+<label><input type="checkbox" data-checklist-item /> EXCEPTION WHEN OTHERS block at the end re-raises as SERVER_ERROR</label><br />
+<label><input type="checkbox" data-checklist-item /> Function tested: all success and failure cases pass</label><br />
+<label><input type="checkbox" data-checklist-item /> Frontend call example works with the real Supabase client</label><br />
+<label><input type="checkbox" data-checklist-item /> Documented using the API Documentation Template</label><br />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-tasks.html" class="footer-link">Supabase Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

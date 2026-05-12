@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Supabase — API Design Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Choosing between direct query/RPC/Edge Function, 15-step core build flow, response format standard, error codes, frontend contract rules."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Supabase — API Design Standard</h1>
+
+        <p class="page-subtitle">
+          Choosing between direct query/RPC/Edge Function, 15-step core build flow, response format standard, error codes, frontend contract rules.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="api-type-decision" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Supabase API Types</h2>
+
+          <p>A Supabase developer must choose the correct API pattern.</p>
+
+          <h3>API Type Decision Table</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>API Type</th>
+                  <th>Use When</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Direct Supabase Client Query</td>
+                  <td>Simple CRUD where RLS is enough.</td>
+                  <td>Add project, list user projects.</td>
+                </tr>
+                <tr>
+                  <td>RPC / Postgres Function</td>
+                  <td>Transactional DB logic or complex query.</td>
+                  <td>Create project + owner membership in one transaction.</td>
+                </tr>
+                <tr>
+                  <td>Edge Function</td>
+                  <td>Business logic, external APIs, webhooks, secret-based work.</td>
+                  <td>Stripe webhook, SendGrid email, AI processing.</td>
+                </tr>
+                <tr>
+                  <td>Database Trigger</td>
+                  <td>Automatic database-side event.</td>
+                  <td>Create profile after auth user creation.</td>
+                </tr>
+                <tr>
+                  <td>Database Webhook</td>
+                  <td>Notify external service after insert/update/delete.</td>
+                  <td>Send event to automation system.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Supabase Edge Functions are server-side TypeScript functions running on Supabase's Edge Runtime and are commonly used for webhooks, third-party integrations, and secure server-side logic.</p>
+        </div>
+      </section>
+
+      <section id="core-rule" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Core Rule: Never Build APIs Randomly</h2>
+
+          <p>Every API must follow this flow:</p>
+
+          <pre><code class="language-text">1. Define business requirement.
+2. Define database tables needed.
+3. Define user roles and permissions.
+4. Create migration.
+5. Add constraints and indexes.
+6. Enable RLS.
+7. Add RLS policies.
+8. Create API / RPC / Edge Function.
+9. Add payload validation.
+10. Add structured error handling.
+11. Add logs/audit logs.
+12. Test all success and failure cases.
+13. Write frontend API documentation.
+14. Give frontend sample request/response.
+15. Mention exact auth/session requirement.</code></pre>
+        </div>
+      </section>
+
+      <section id="api-response-format" class="section">
+        <div class="content-card">
+          <h2 class="section-title">14. API Response Format Standard</h2>
+
+          <p>Use a consistent response shape.</p>
+
+          <h3>Success Response</h3>
+          <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "name": "Website Redesign"
+  },
+  "message": "Project created successfully"
+}</code></pre>
+
+          <h3>Error Response</h3>
+          <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Project name is required.",
+    "field": "name",
+    "details": null
+  }
+}</code></pre>
+
+          <p>Supabase/PostgREST database errors are returned as JSON objects containing fields like <code>code</code>, <code>details</code>, <code>hint</code>, and <code>message</code>; for example, uniqueness violations map to <code>23505</code>, foreign key violations to <code>23503</code>, and insufficient privileges to <code>42501</code>.</p>
+        </div>
+      </section>
+
+      <section id="standard-error-codes" class="section">
+        <div class="content-card">
+          <h2 class="section-title">15. Standard Error Codes</h2>
+
+          <p>Use your own application-level error codes on top of Supabase errors.</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>HTTP</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>UNAUTHENTICATED</code></td>
+                  <td>401</td>
+                  <td>User is not logged in.</td>
+                </tr>
+                <tr>
+                  <td><code>FORBIDDEN</code></td>
+                  <td>403</td>
+                  <td>User is logged in but lacks permission.</td>
+                </tr>
+                <tr>
+                  <td><code>VALIDATION_ERROR</code></td>
+                  <td>422</td>
+                  <td>Payload is invalid.</td>
+                </tr>
+                <tr>
+                  <td><code>NOT_FOUND</code></td>
+                  <td>404</td>
+                  <td>Record does not exist or user cannot access it.</td>
+                </tr>
+                <tr>
+                  <td><code>CONFLICT</code></td>
+                  <td>409</td>
+                  <td>Duplicate or conflicting data.</td>
+                </tr>
+                <tr>
+                  <td><code>RATE_LIMITED</code></td>
+                  <td>429</td>
+                  <td>Too many requests.</td>
+                </tr>
+                <tr>
+                  <td><code>INTERNAL_ERROR</code></td>
+                  <td>500</td>
+                  <td>Unexpected server error.</td>
+                </tr>
+                <tr>
+                  <td><code>EXTERNAL_SERVICE_ERROR</code></td>
+                  <td>502</td>
+                  <td>Third-party service failed.</td>
+                </tr>
+                <tr>
+                  <td><code>DATABASE_ERROR</code></td>
+                  <td>500</td>
+                  <td>Database operation failed.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="frontend-contract" class="section">
+        <div class="content-card">
+          <h2 class="section-title">16. Frontend Must Never Guess API Behavior</h2>
+
+          <p>For every API, backend documentation must answer:</p>
+
+          <pre><code class="language-text">Does this API need login?
+Which token is required?
+Which user role can call it?
+Which fields are required?
+Which fields are optional?
+What exact payload should frontend send?
+What exact response will frontend receive?
+What errors can happen?
+What should frontend show for each error?
+Does RLS affect this request?
+Does this API require workspace_id/project_id?
+Can user retry safely?
+Is the API idempotent?</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Every API must be predictable, documented, and follow the correct type — direct query, RPC, or Edge Function.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

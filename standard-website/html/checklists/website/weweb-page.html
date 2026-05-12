@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>WeWeb Page Build Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Global layout, data binding (all 4 states), Xano calls, forms, reusable components, mobile."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">WeWeb Page Build Checklist</h1>
+
+        <p class="page-subtitle">
+          Global layout, data binding (all 4 states), Xano calls, forms, reusable components, mobile.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../../pages/checklists.html" class="btn btn-secondary">Back to Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#before-you-start" class="card card-clickable">Before You Start</a>
+            <a href="#page-structure" class="card card-clickable">Page Structure</a>
+            <a href="#data-binding" class="card card-clickable">Data Binding</a>
+            <a href="#xano-api-backend-calls" class="card card-clickable">Xano API / Backend Calls</a>
+            <a href="#forms-in-weweb" class="card card-clickable">Forms in WeWeb</a>
+            <a href="#reusable-components" class="card card-clickable">Reusable Components</a>
+            <a href="#navigation-routing" class="card card-clickable">Navigation &amp; Routing</a>
+            <a href="#mobile-responsive" class="card card-clickable">Mobile &amp; Responsive</a>
+            <a href="#performance" class="card card-clickable">Performance</a>
+            <a href="#done-when" class="card card-clickable">Done When</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="before-you-start" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Before You Start</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Figma design reviewed — all states identified (empty, loading, error, populated)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Xano (or other backend) API endpoint confirmed and documented before building</label><br />
+          <label><input type="checkbox" data-checklist-item /> API response structure known — not building against a guess</label><br />
+          <label><input type="checkbox" data-checklist-item /> Reusable components checked — does this page need an existing component?</label><br />
+          <label><input type="checkbox" data-checklist-item /> Global styles / design tokens confirmed (colors, font sizes, spacing variables)</label>
+        </div>
+      </section>
+
+      <section id="page-structure" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Page Structure</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Page extends the global layout (header, sidebar, footer) — not rebuilt per page</label><br />
+          <label><input type="checkbox" data-checklist-item /> Page sections use the correct layout components (rows, columns, containers)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Spacing uses WeWeb global variables — not hardcoded pixel values</label><br />
+          <label><input type="checkbox" data-checklist-item /> Colors use WeWeb global color tokens — not hardcoded hex</label><br />
+          <label><input type="checkbox" data-checklist-item /> Font sizes and weights use the global typography scale</label><br />
+          <label><input type="checkbox" data-checklist-item /> No inline styles added unless a global variable doesn't exist</label>
+        </div>
+      </section>
+
+      <section id="data-binding" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Data Binding</h2>
+
+          <label><input type="checkbox" data-checklist-item /> All data comes from a WeWeb collection (bound to an API or Xano)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Collections prefetched at the page level — not triggered from inside a component</label><br />
+          <label><input type="checkbox" data-checklist-item /> Data bound correctly: list → repeat element, single record → bound properties</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state: collection's isFetching state used to show skeleton or spinner</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error state: collection's error state used to show error message</label><br />
+          <label><input type="checkbox" data-checklist-item /> Empty state: checked with v-if on the empty state element when data.length === 0</label><br />
+          <label><input type="checkbox" data-checklist-item /> All four states tested: loading, empty, error, populated</label>
+        </div>
+      </section>
+
+      <section id="xano-api-backend-calls" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Xano API / Backend Calls</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Auth token sent with every authenticated request (via WeWeb auth plugin — not manually)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error from Xano parsed and shown to user — not swallowed</label><br />
+          <label><input type="checkbox" data-checklist-item /> Success actions trigger a collection refresh or update the bound data</label><br />
+          <label><input type="checkbox" data-checklist-item /> No duplicate API calls (not calling the same endpoint from multiple places on one page)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Workflow step 1: Disable button / show loading</label><br />
+          <label><input type="checkbox" data-checklist-item /> Workflow step 2: Call Xano action</label><br />
+          <label><input type="checkbox" data-checklist-item /> Workflow step 3: On success: show toast + refresh data</label><br />
+          <label><input type="checkbox" data-checklist-item /> Workflow step 4: On error: show error message, re-enable button</label>
+        </div>
+      </section>
+
+      <section id="forms-in-weweb" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Forms in WeWeb</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Each form field bound to a variable (not hardcoded)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form variables reset after successful submit</label><br />
+          <label><input type="checkbox" data-checklist-item /> Validation: required fields checked before submitting to Xano</label><br />
+          <label><input type="checkbox" data-checklist-item /> Validation: format checked (email, phone) before submitting to Xano</label><br />
+          <label><input type="checkbox" data-checklist-item /> Validation: WeWeb's built-in validation or custom workflow condition used</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error messages shown per field — not just a generic toast</label><br />
+          <label><input type="checkbox" data-checklist-item /> Submit button disabled and shows loading text during submission</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form not re-submittable while in loading state</label>
+        </div>
+      </section>
+
+      <section id="reusable-components" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Reusable Components</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Repeated UI sections converted to WeWeb components — not duplicated</label><br />
+          <label><input type="checkbox" data-checklist-item /> Component props defined for all variable content (title, status, actions)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Components do not make their own API calls — data passed in as props</label><br />
+          <label><input type="checkbox" data-checklist-item /> Components emit events upward — do not write directly to a global collection</label><br />
+          <label><input type="checkbox" data-checklist-item /> Naming: component names are descriptive: ProjectCard, StatusBadge, MemberRow</label>
+        </div>
+      </section>
+
+      <section id="navigation-routing" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Navigation &amp; Routing</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Page-level permissions checked via a workflow on page load</label><br />
+          <label><input type="checkbox" data-checklist-item /> If user lacks access: redirect to login or show 403 message — not a blank page</label><br />
+          <label><input type="checkbox" data-checklist-item /> Navigation links use WeWeb's router — not hardcoded anchor tags</label><br />
+          <label><input type="checkbox" data-checklist-item /> Dynamic routes use path parameters correctly: /projects/:id</label><br />
+          <label><input type="checkbox" data-checklist-item /> Back button works as expected (browser history)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Redirects after actions use the router — not window.location.href</label>
+        </div>
+      </section>
+
+      <section id="mobile-responsive" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Mobile &amp; Responsive</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Page tested at 375px (mobile), 768px (tablet), 1280px (desktop)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No horizontal scroll on mobile</label><br />
+          <label><input type="checkbox" data-checklist-item /> Font sizes readable on mobile — not scaled down from desktop</label><br />
+          <label><input type="checkbox" data-checklist-item /> Touch targets minimum 44×44px</label><br />
+          <label><input type="checkbox" data-checklist-item /> Flex columns switch to column layout on mobile (not side-by-side)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tables: column-stacking or card layout on mobile</label><br />
+          <label><input type="checkbox" data-checklist-item /> Dropdowns and modals usable on mobile</label>
+        </div>
+      </section>
+
+      <section id="performance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Performance</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Images have defined width and height (no layout shift)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Images from the backend have CDN URLs — not raw storage paths</label><br />
+          <label><input type="checkbox" data-checklist-item /> Collections not fetching more data than needed (pagination used)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No collection fetch inside a repeat loop (N+1 problem)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Heavy components: consider lazy loading if not above the fold</label>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Done When</span>
+          <h2 class="section-title">10. Done When</h2>
+
+          <label><input type="checkbox" data-checklist-item /> All four data states work: loading, empty, error, populated</label><br />
+          <label><input type="checkbox" data-checklist-item /> All forms validate, submit, show loading, show success/error</label><br />
+          <label><input type="checkbox" data-checklist-item /> Reusable components extracted for repeated UI</label><br />
+          <label><input type="checkbox" data-checklist-item /> Mobile tested at 375px and 768px</label><br />
+          <label><input type="checkbox" data-checklist-item /> No hardcoded colors, sizes, or spacing (global tokens used)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Permissions checked on page load</label><br />
+          <label><input type="checkbox" data-checklist-item /> All Xano errors shown to user — no silent failures</label>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Run this checklist every time you build a new page or significant section in WeWeb.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>
