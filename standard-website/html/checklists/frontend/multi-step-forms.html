@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Multi-Step Forms & Wizards Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Checklist for multi-step forms and wizards: step structure, validation, navigation, progress, data preservation, final submission, drafts, and mobile behavior."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+  <style>
+    /* Multi-step demo — step indicator */
+    .ms-step-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: default;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .ms-step-item:not([disabled]) {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .ms-step-item.is-current {
+      color: var(--color-primary, #0c5adb);
+      font-weight: 700;
+    }
+    .ms-step-item.is-completed {
+      color: var(--color-success, #22a06b);
+    }
+    .ms-step-dot {
+      font-size: 1rem;
+    }
+    .ms-step-connector {
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--color-border);
+      vertical-align: middle;
+      margin: 0 2px;
+    }
+
+    /* Multi-step demo — review card */
+    .ms-review-section {
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .ms-review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .ms-review-row {
+      display: flex;
+      gap: 12px;
+      font-size: 0.875rem;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .ms-review-row:last-child {
+      border-bottom: none;
+    }
+    .ms-review-key {
+      min-width: 100px;
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+    }
+    .ms-review-val {
+      color: var(--color-text);
+    }
+  </style>
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Multi-Step Forms &amp; Wizards Checklist</h1>
+
+        <p class="page-subtitle">
+          Each step validates before advancing. The user can always go back without
+          losing their data. Progress is visible. The final step — and only the final
+          step — submits to the backend.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           LIVE MULTI-STEP FORM DEMO
+           ================================================================ -->
+      <section class="section" data-multi-step-demo>
+        <div class="content-card">
+          <h2 class="section-title">Live Multi-Step Form Demo</h2>
+          <p class="ui-demo-note" style="margin-bottom: 16px;">Interact with the form below. Data is preserved when going back. Step 3 shows a live summary of everything entered.</p>
+
+          <!-- Progress bar -->
+          <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 12px;">
+            <div class="ui-demo-progress" style="flex: 1;">
+              <div class="ui-demo-progress-bar" data-ms-progress-bar style="width: 0%; transition: width 0.3s ease;"></div>
+            </div>
+            <span class="ui-demo-note" data-ms-progress-label style="white-space: nowrap;">Step 1 of 3</span>
+          </div>
+
+          <!-- Step indicator -->
+          <div data-ms-step-indicator style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 24px;"></div>
+
+          <!-- ---- Step 1: Project Details ---- -->
+          <div data-ms-step="1">
+            <div class="ui-demo" style="margin-bottom: 0;">
+              <div class="ui-demo-title">Step 1 — Project Details</div>
+              <div class="ui-demo-field">
+                <label class="ui-demo-label" for="ms-project-name">Project Name <span class="ui-demo-required">*</span></label>
+                <input
+                  id="ms-project-name"
+                  data-ms-project-name
+                  class="form-control"
+                  type="text"
+                  placeholder="Enter project name (min 3 characters)"
+                  autocomplete="off"
+                />
+                <div class="ui-demo-error ui-demo-hidden" data-ms-project-name-error></div>
+              </div>
+
+              <div class="ui-demo-field">
+                <label class="ui-demo-label" for="ms-description">Description <span style="font-weight:400;color:var(--color-text-muted);">(optional)</span></label>
+                <textarea
+                  id="ms-description"
+                  data-ms-description
+                  class="form-control"
+                  rows="3"
+                  placeholder="Describe the project..."
+                  style="resize: vertical;"
+                ></textarea>
+              </div>
+
+              <div class="ui-demo-field">
+                <label class="ui-demo-label" for="ms-status">Status</label>
+                <select id="ms-status" data-ms-status class="form-control">
+                  <option value="active">Active</option>
+                  <option value="draft">Draft</option>
+                  <option value="paused">Paused</option>
+                </select>
+              </div>
+
+              <div class="ui-demo-actions">
+                <button type="button" class="btn btn-primary" data-ms-next-1>Next: Team Members</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ---- Step 2: Team Members ---- -->
+          <div data-ms-step="2" class="ui-demo-hidden">
+            <div class="ui-demo" style="margin-bottom: 0;">
+              <div class="ui-demo-title">Step 2 — Team Members</div>
+
+              <div class="ui-demo-field">
+                <label class="ui-demo-label" for="ms-member-search">Search Members</label>
+                <input
+                  id="ms-member-search"
+                  data-ms-member-search
+                  class="form-control"
+                  type="search"
+                  placeholder="Type to filter members..."
+                  autocomplete="off"
+                />
+              </div>
+
+              <div class="ui-demo-note" style="margin-bottom: 8px;">Available members (click to add):</div>
+              <div data-ms-member-results style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;"></div>
+
+              <div class="ui-demo-note" style="margin-bottom: 8px;">Added members (click × to remove):</div>
+              <div data-ms-member-chips style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 36px; margin-bottom: 16px;"></div>
+
+              <div class="ui-demo-actions">
+                <button type="button" class="btn btn-secondary" data-ms-back-2>Back</button>
+                <button type="button" class="btn btn-primary" data-ms-next-2>Next: Review</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ---- Step 3: Review & Submit ---- -->
+          <div data-ms-step="3" class="ui-demo-hidden">
+            <div class="ui-demo" style="margin-bottom: 0;">
+              <div class="ui-demo-title">Step 3 — Review &amp; Submit</div>
+              <p class="ui-demo-note" style="margin-bottom: 16px;">Review your entries. Use Edit to go back and change anything.</p>
+
+              <div data-ms-review-content style="margin-bottom: 20px;"></div>
+
+              <div data-ms-submit-success class="alert alert-success ui-demo-hidden" style="margin-bottom: 16px;">
+                <div class="alert-title">Project created!</div>
+                Your project has been successfully created.
+              </div>
+
+              <div class="ui-demo-actions">
+                <button type="button" class="btn btn-secondary" data-ms-back-3>Back</button>
+                <button type="button" class="btn btn-primary" data-ms-submit>Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">Step Structure</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Total number of steps is fixed and known upfront</label><br />
+            <label><input type="checkbox" data-checklist-item /> Each step has a clear title and short description</label><br />
+            <label><input type="checkbox" data-checklist-item /> Each step contains logically grouped fields</label><br />
+            <label><input type="checkbox" data-checklist-item /> No step is overloaded with too many fields</label><br />
+            <label><input type="checkbox" data-checklist-item /> Final step is a Review &amp; Submit step for longer flows</label><br />
+            <label><input type="checkbox" data-checklist-item /> Review step shows all entered data</label><br />
+            <label><input type="checkbox" data-checklist-item /> Review step allows user to go back and edit any step</label><br />
+            <label><input type="checkbox" data-checklist-item /> Step order is logical</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Navigation Between Steps</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Next button advances to the next step</label><br />
+            <label><input type="checkbox" data-checklist-item /> Back button returns to previous step after step 1</label><br />
+            <label><input type="checkbox" data-checklist-item /> Back does not submit or save data</label><br />
+            <label><input type="checkbox" data-checklist-item /> Back does not lose current step data</label><br />
+            <label><input type="checkbox" data-checklist-item /> Completed steps can be clicked directly if already visited</label><br />
+            <label><input type="checkbox" data-checklist-item /> User cannot advance until current step validation passes</label><br />
+            <label><input type="checkbox" data-checklist-item /> Current step number and total are visible</label><br />
+            <label><input type="checkbox" data-checklist-item /> Cancel or Exit link is available</label><br />
+            <label><input type="checkbox" data-checklist-item /> Exit shows Discard progress confirmation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Refresh/page reload warns user if progress would be lost</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Validation Per Step</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Validation runs only for fields in the current step</label><br />
+            <label><input type="checkbox" data-checklist-item /> Next button triggers current step validation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Validation errors are shown inline</label><br />
+            <label><input type="checkbox" data-checklist-item /> User cannot advance with invalid fields</label><br />
+            <label><input type="checkbox" data-checklist-item /> Returning to previous step preserves data and prior errors</label><br />
+            <label><input type="checkbox" data-checklist-item /> Review step validates each section before final submit</label><br />
+            <label><input type="checkbox" data-checklist-item /> Cross-step validation is handled where dependent field exists or on review</label><br />
+            <label><input type="checkbox" data-checklist-item /> Step schemas are derived from one full form schema, not duplicated</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Progress Indicator</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Progress indicator is visible throughout the flow</label><br />
+            <label><input type="checkbox" data-checklist-item /> Completed steps, current step, and future steps are visually distinct</label><br />
+            <label><input type="checkbox" data-checklist-item /> Step labels are shown</label><br />
+            <label><input type="checkbox" data-checklist-item /> Mobile has compact progress indicator</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clicking completed step navigates back if editing is allowed</label><br />
+            <label><input type="checkbox" data-checklist-item /> Future steps are not clickable</label><br />
+            <label><input type="checkbox" data-checklist-item /> Progress indicator layout does not jump between steps</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Data Preservation</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Going back preserves all previous data</label><br />
+            <label><input type="checkbox" data-checklist-item /> Advancing and returning preserves data</label><br />
+            <label><input type="checkbox" data-checklist-item /> Refresh prompts user or preserves non-sensitive data safely</label><br />
+            <label><input type="checkbox" data-checklist-item /> Browser back button is handled if supported</label><br />
+            <label><input type="checkbox" data-checklist-item /> Data from earlier steps updates later steps dynamically</label><br />
+            <label><input type="checkbox" data-checklist-item /> Sensitive data is not stored in localStorage or URL</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Final Step &amp; Submission</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Only final step triggers backend API call</label><br />
+            <label><input type="checkbox" data-checklist-item /> Submit button shows loading state</label><br />
+            <label><input type="checkbox" data-checklist-item /> Submit button disabled during loading</label><br />
+            <label><input type="checkbox" data-checklist-item /> Failed submission keeps user on final step</label><br />
+            <label><input type="checkbox" data-checklist-item /> Submission failure shows error and allows retry</label><br />
+            <label><input type="checkbox" data-checklist-item /> Field error from earlier step navigates back to that step</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success navigates to success page or created entity</label><br />
+            <label><input type="checkbox" data-checklist-item /> Form data cleared after successful submission</label><br />
+            <label><input type="checkbox" data-checklist-item /> No re-submission if user presses back after success</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Saving Progress &amp; Draft</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Draft saved to backend when feature supports it</label><br />
+            <label><input type="checkbox" data-checklist-item /> Draft save indicator is shown</label><br />
+            <label><input type="checkbox" data-checklist-item /> User can resume where they left off</label><br />
+            <label><input type="checkbox" data-checklist-item /> Drafts have expiry</label><br />
+            <label><input type="checkbox" data-checklist-item /> Draft data treated as unverified and re-validated on final submit</label><br />
+            <label><input type="checkbox" data-checklist-item /> If no draft support, cancellation confirms progress loss</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Mobile</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Progress indicator is compact on mobile</label><br />
+            <label><input type="checkbox" data-checklist-item /> Each step is full-screen on mobile</label><br />
+            <label><input type="checkbox" data-checklist-item /> No horizontal scroll</label><br />
+            <label><input type="checkbox" data-checklist-item /> Back and Next buttons are bottom-positioned and full width</label><br />
+            <label><input type="checkbox" data-checklist-item /> Form fields are full width and touch-friendly</label><br />
+            <label><input type="checkbox" data-checklist-item /> Keyboard does not cover active input</label><br />
+            <label><input type="checkbox" data-checklist-item /> Review step is scrollable on mobile</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Final Checklist</span>
+          <h2 class="section-title">Before Marking Done</h2>
+
+          <div class="grid grid-3">
+            <div>
+              <h3>Structure</h3>
+              <ul>
+                <li>Fixed number of steps</li>
+                <li>Each step has title and description</li>
+                <li>Fields grouped logically</li>
+                <li>Review step for 3+ steps</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>Navigation</h3>
+              <ul>
+                <li>Next validates current step</li>
+                <li>Back does not lose data</li>
+                <li>Cancel confirms discard</li>
+                <li>Step counter visible</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>Validation</h3>
+              <ul>
+                <li>Current-step-only validation</li>
+                <li>Inline errors</li>
+                <li>Shared schema</li>
+                <li>Cannot skip invalid step</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>Progress</h3>
+              <ul>
+                <li>Completed/current/future distinct</li>
+                <li>Labels shown</li>
+                <li>Completed steps clickable</li>
+                <li>Future steps locked</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>Submission</h3>
+              <ul>
+                <li>API called only on final step</li>
+                <li>Loading state</li>
+                <li>No double submit</li>
+                <li>Success clears data</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>Mobile</h3>
+              <ul>
+                <li>Compact progress</li>
+                <li>Large tap targets</li>
+                <li>No horizontal scroll</li>
+                <li>Keyboard does not cover inputs</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Multi-step forms must preserve data, validate step-by-step, and submit only at the final step.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../standards/frontend-standards.html" class="footer-link">Frontend Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+  <script type="module" src="../../../js/pages/multi-step-demo.js"></script>
+</body>
+</html>

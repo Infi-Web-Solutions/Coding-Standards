@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>SendGrid Integration Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Domain auth, API key, template decision, code-rendered vs dynamic templates, error handling, bounce management."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">SendGrid Integration Checklist</h1>
+
+        <p class="page-subtitle">
+          Domain auth, API key, template decision, code-rendered vs dynamic templates, error handling, bounce management.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../third-party-checklist.html" class="btn btn-secondary">Back to Third-Party Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#account-setup" class="card card-clickable">Account Setup</a>
+            <a href="#api-key" class="card card-clickable">API Key</a>
+            <a href="#environment-variables" class="card card-clickable">Environment Variables</a>
+            <a href="#template-decision" class="card card-clickable">Template Decision Made</a>
+            <a href="#code-rendered-templates" class="card card-clickable">Code-Rendered Templates</a>
+            <a href="#dynamic-templates" class="card card-clickable">Dynamic Templates</a>
+            <a href="#sending-implementation" class="card card-clickable">Sending Implementation</a>
+            <a href="#email-standards" class="card card-clickable">Email Standards</a>
+            <a href="#error-handling" class="card card-clickable">Error Handling</a>
+            <a href="#bounce-and-suppression" class="card card-clickable">Bounce and Suppression</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="account-setup" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Account Setup</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Domain authentication completed (SPF, DKIM, DMARC DNS records added) — not single sender only</label><br />
+          <label><input type="checkbox" data-checklist-item /> From email is from your authenticated domain — not <code>@gmail.com</code> or <code>@hotmail.com</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> From name set to your app/company name — not a personal name</label><br />
+          <label><input type="checkbox" data-checklist-item /> Reply-to set to a monitored inbox (<code>support@yourdomain.com</code>)</label>
+        </div>
+      </section>
+
+      <section id="api-key" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. API Key</h2>
+
+          <label><input type="checkbox" data-checklist-item /> API key created with <strong>Restricted Access</strong> — <code>Mail Send</code> permission only (minimum required)</label><br />
+          <label><input type="checkbox" data-checklist-item /> API key stored in environment variable: <code>SENDGRID_API_KEY</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> API key never committed to version control</label><br />
+          <label><input type="checkbox" data-checklist-item /> API key not exposed in frontend code</label>
+        </div>
+      </section>
+
+      <section id="environment-variables" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Environment Variables</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>SENDGRID_API_KEY</code> set in all environments (staging, production)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>SENDGRID_FROM_EMAIL</code> set</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>SENDGRID_FROM_NAME</code> set</label><br />
+          <label><input type="checkbox" data-checklist-item /> Dynamic template IDs stored as env vars (e.g. <code>SENDGRID_TEMPLATE_INVITE=d-xxx</code>)</label>
+        </div>
+      </section>
+
+      <section id="template-decision" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Template Decision Made</h2>
+
+          <label><input type="checkbox" data-checklist-item /> For each email type, a decision has been made: code-rendered vs SendGrid Dynamic Template</label><br />
+          <label><input type="checkbox" data-checklist-item /> Code-rendered: used for developer-controlled, security-sensitive, or rarely-changing emails</label><br />
+          <label><input type="checkbox" data-checklist-item /> Dynamic template: used for marketing content, A/B tests, or non-technical editors</label><br />
+          <label><input type="checkbox" data-checklist-item /> NOT maintaining both a code template and a dynamic template for the same email</label>
+        </div>
+      </section>
+
+      <section id="code-rendered-templates" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Code-Rendered Templates (if used)</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Templates stored in <code>templates/email/</code> directory</label><br />
+          <label><input type="checkbox" data-checklist-item /> Base email template created: <code>base_email.html</code> and <code>base_email.txt</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Both HTML and plaintext versions exist for every email type</label><br />
+          <label><input type="checkbox" data-checklist-item /> Subject line passed via context — not hardcoded inside the template file</label><br />
+          <label><input type="checkbox" data-checklist-item /> Templates tested by sending to a test account (not just visual preview)</label>
+        </div>
+      </section>
+
+      <section id="dynamic-templates" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. SendGrid Dynamic Templates (if used)</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Template created in SendGrid Dashboard and named clearly</label><br />
+          <label><input type="checkbox" data-checklist-item /> Template tested using "Send Test" in the Dashboard before going live</label><br />
+          <label><input type="checkbox" data-checklist-item /> Template ID stored in environment variable — not hardcoded in code</label><br />
+          <label><input type="checkbox" data-checklist-item /> All variables used in the template are documented</label><br />
+          <label><input type="checkbox" data-checklist-item /> Handlebars syntax used correctly: <code>{{variable_name}}</code></label>
+        </div>
+      </section>
+
+      <section id="sending-implementation" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Sending Implementation</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Django EMAIL_BACKEND configured to use SendGrid SMTP or the sendgrid-python SDK</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>fail_silently=False</code> for critical emails (password reset, verification)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>fail_silently=True</code> or exception caught gracefully for non-critical (welcome, notification)</label><br />
+          <label><input type="checkbox" data-checklist-item /> EmailMultiAlternatives used for HTML + plaintext (not HTML-only)</label>
+        </div>
+      </section>
+
+      <section id="email-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Email Standards</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Subject lines are specific and descriptive — no "Action Required", "URGENT", or spam-trigger words</label><br />
+          <label><input type="checkbox" data-checklist-item /> Subject max ~50 characters — tested on mobile width</label><br />
+          <label><input type="checkbox" data-checklist-item /> Unsubscribe link included for any marketing or promotional emails</label><br />
+          <label><input type="checkbox" data-checklist-item /> Transactional emails do not require unsubscribe but include contact info in footer</label><br />
+          <label><input type="checkbox" data-checklist-item /> Password reset links: 1-hour expiry, invalidated after single use</label><br />
+          <label><input type="checkbox" data-checklist-item /> Invite links: 7-day expiry, marked used after acceptance</label>
+        </div>
+      </section>
+
+      <section id="error-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Error Handling</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Email failures logged to DB or logging service (not silently dropped)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Retry logic implemented for transient failures (max 3 attempts, exponential backoff)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Critical email failures surface an error to the user (password reset fails → show error)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Non-critical failures logged only (welcome email, notification)</label>
+        </div>
+      </section>
+
+      <section id="bounce-and-suppression" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Bounce and Suppression</h2>
+
+          <label><input type="checkbox" data-checklist-item /> App does NOT retry sends to known-bounced addresses</label><br />
+          <label><input type="checkbox" data-checklist-item /> SendGrid bounce/spam dashboard monitored</label><br />
+          <label><input type="checkbox" data-checklist-item /> Bounce rate checked — below 2% target</label><br />
+          <label><input type="checkbox" data-checklist-item /> Suppression list not bypassed manually</label>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Run this checklist when setting up SendGrid for the first time or adding a new email type.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../third-party-checklist.html" class="footer-link">Third-Party Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

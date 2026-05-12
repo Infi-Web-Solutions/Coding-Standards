@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cross-Platform Standards | Development Standards</title>
+  <meta name="description" content="Cross-platform standards for backend-first logic, code reusability, team ownership, and QA delivery." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Cross-Platform Standards</span>
+        <h1 class="page-title">Cross-Platform Standards</h1>
+        <p class="page-subtitle">Read the relevant standard before you start building. These define how the team works — not suggestions, but rules everyone is expected to know and apply.</p>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Standards</h2>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Document</th>
+                  <th>What It Covers</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="backend-first-logic">
+                  <td><a href="./backend-first-logic.html">Backend-First Logic</a></td>
+                  <td>The fundamental rule: auth, roles, validation, prices, business rules, and file validation are always enforced on the backend. Frontend validates for UX only — it never enforces. Covers anti-patterns to avoid and platform-specific rules for Supabase, Xano, Django, WeWeb, and React.</td>
+                </tr>
+                <tr id="code-reusability">
+                  <td><a href="./code-reusability-standards.html">Code Reusability Standards</a></td>
+                  <td>Before you build anything — check if it already exists. When to extract to a shared component, hook, service, or function. Decision rules (3+ identical uses = extract), platform-specific guides for React, WeWeb, Xano, Django, and Supabase, naming conventions, and when NOT to over-abstract.</td>
+                </tr>
+                <tr id="team-ownership">
+                  <td><a href="./team-ownership.html">Team Ownership Standards</a></td>
+                  <td>How the team works — work update format (In Progress / Completed / Blocked), issue raising, ticket discipline, PR standards, communication rules, escalation process, and accountability for bugs.</td>
+                </tr>
+                <tr id="qa-delivery">
+                  <td><a href="./qa-delivery-standards.html">QA &amp; Delivery Standards</a></td>
+                  <td>What "done" actually means — self-testing checklist, definition of done per role, required test cases, RLS testing matrix, QA handoff checklist, and a summary table across all roles.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

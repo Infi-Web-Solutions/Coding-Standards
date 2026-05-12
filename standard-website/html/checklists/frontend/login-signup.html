@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Login & Signup Standards Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Auth standards checklist for login, signup, forgot password, reset password, email verification, OAuth, session handling, and security."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Login &amp; Signup Standards Checklist</h1>
+
+        <p class="page-subtitle">
+          Auth flows are the first thing users see. Every error must be shown.
+          Every field must be validated. Every state must be handled. No silent failures.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Actual Auth UI Examples</h2>
+          <div class="ui-demo-grid">
+            <div class="ui-demo">
+              <div class="ui-demo-title">Login Form</div>
+              <div class="ui-demo-form" data-demo-login-form>
+                <div class="ui-demo-note">Try `user@example.com` with `SecretPass1!`, `suspended@example.com`, or `locked@example.com`.</div>
+                <div class="ui-demo-error ui-demo-hidden" data-demo-login-banner></div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="login-email">Email <span class="ui-demo-required">*</span></label>
+                  <input id="login-email" class="form-control" data-demo-login-email type="email" autocomplete="email" value="user@example.com" />
+                  <div class="ui-demo-error ui-demo-hidden" data-demo-login-email-error></div>
+                </div>
+                <div class="ui-demo-field">
+                  <div class="ui-demo-toolbar">
+                    <label class="ui-demo-label" for="login-password">Password <span class="ui-demo-required">*</span></label>
+                    <button type="button" class="ui-demo-link-button" data-demo-open-forgot>Forgot password?</button>
+                  </div>
+                  <div class="ui-demo-inline">
+                    <input id="login-password" class="form-control" data-demo-login-password type="password" autocomplete="current-password" value="SecretPass1!" />
+                    <button type="button" class="btn btn-secondary btn-sm" data-demo-toggle-password="login-password">Show</button>
+                  </div>
+                  <div class="ui-demo-error ui-demo-hidden" data-demo-login-password-error></div>
+                </div>
+                <label class="ui-demo-check"><input type="checkbox" data-demo-login-remember checked /> Remember me for 30 days</label>
+                <button type="button" class="btn btn-primary" data-demo-login-submit>Log In</button>
+                <div class="ui-demo-divider"><span>or continue with</span></div>
+                <div class="ui-demo-inline">
+                  <button type="button" class="btn btn-secondary" data-demo-google-login>Continue with Google</button>
+                  <button type="button" class="btn btn-secondary" data-demo-microsoft-login>Continue with Microsoft</button>
+                </div>
+                <div class="ui-demo-note">OAuth buttons should show provider-specific loading and fallback messages.</div>
+              </div>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Signup Form</div>
+              <div class="ui-demo-form" data-demo-signup-form>
+                <div class="ui-demo-error ui-demo-hidden" data-demo-signup-banner></div>
+                <div class="ui-demo-grid ui-demo-auth-grid">
+                  <div class="ui-demo-field">
+                    <label class="ui-demo-label" for="signup-first-name">First Name <span class="ui-demo-required">*</span></label>
+                    <input id="signup-first-name" class="form-control" data-demo-signup-first-name type="text" autocomplete="given-name" value="John" />
+                    <div class="ui-demo-error ui-demo-hidden" data-demo-signup-first-name-error></div>
+                  </div>
+                  <div class="ui-demo-field">
+                    <label class="ui-demo-label" for="signup-last-name">Last Name <span class="ui-demo-required">*</span></label>
+                    <input id="signup-last-name" class="form-control" data-demo-signup-last-name type="text" autocomplete="family-name" value="Smith" />
+                    <div class="ui-demo-error ui-demo-hidden" data-demo-signup-last-name-error></div>
+                  </div>
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="signup-email">Email <span class="ui-demo-required">*</span></label>
+                  <input id="signup-email" class="form-control" data-demo-signup-email type="email" autocomplete="email" value="john.smith@example.com" />
+                  <div class="ui-demo-error ui-demo-hidden" data-demo-signup-email-error></div>
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="signup-password">Password <span class="ui-demo-required">*</span></label>
+                  <div class="ui-demo-inline">
+                    <input id="signup-password" class="form-control" data-demo-signup-password type="password" autocomplete="new-password" value="SecretPass1!" />
+                    <button type="button" class="btn btn-secondary btn-sm" data-demo-toggle-password="signup-password">Show</button>
+                  </div>
+                  <div class="ui-demo-strength">
+                    <div class="ui-demo-progress" style="flex: 1;">
+                      <div class="ui-demo-progress-bar" data-demo-signup-password-meter style="width: 0%;"></div>
+                    </div>
+                    <span class="ui-demo-status" data-demo-signup-password-status>Strength: Strong</span>
+                  </div>
+                  <div class="ui-demo-error ui-demo-hidden" data-demo-signup-password-error></div>
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label" for="signup-confirm-password">Confirm Password <span class="ui-demo-required">*</span></label>
+                  <div class="ui-demo-inline">
+                    <input id="signup-confirm-password" class="form-control" data-demo-signup-confirm-password type="password" autocomplete="new-password" value="SecretPass1!" />
+                    <button type="button" class="btn btn-secondary btn-sm" data-demo-toggle-password="signup-confirm-password">Show</button>
+                  </div>
+                  <div class="ui-demo-error ui-demo-hidden" data-demo-signup-confirm-password-error></div>
+                </div>
+                <div class="ui-demo-field">
+                  <label class="ui-demo-label">Phone Number</label>
+                  <div class="ui-demo-split ui-demo-phone-row">
+                    <div class="ui-demo-select-wrap ui-demo-code-select-wrap">
+                      <select class="form-control ui-demo-code-select" data-demo-signup-phone-code aria-label="Signup country code">
+                        <option>+91</option>
+                        <option>+1</option>
+                        <option>+44</option>
+                      </select>
+                    </div>
+                    <input class="form-control" data-demo-signup-phone type="tel" autocomplete="tel" value="9876543210" />
+                  </div>
+                  <div class="ui-demo-error ui-demo-hidden" data-demo-signup-phone-error></div>
+                </div>
+                <label class="ui-demo-check"><input type="checkbox" data-demo-signup-terms checked /> I accept the <a href="#" target="_blank" rel="noreferrer">Terms &amp; Conditions</a> <span class="ui-demo-required">*</span></label>
+                <div class="ui-demo-error ui-demo-hidden" data-demo-signup-terms-error></div>
+                <label class="ui-demo-check"><input type="checkbox" data-demo-signup-marketing /> Send me product updates</label>
+                <button type="button" class="btn btn-primary" data-demo-signup-submit>Create Account</button>
+                <div class="ui-demo-note">Try `existing@example.com` to see the duplicate-email state.</div>
+              </div>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Forgot Password</div>
+              <div class="ui-demo-form" data-demo-forgot-form>
+                <div class="ui-demo-auth-state ui-demo-hidden" data-demo-forgot-panel="success">
+                  <div class="alert alert-success">
+                    <div class="alert-title">Check your inbox</div>
+                    <p data-demo-forgot-success-text>If an account exists with that email, you'll receive a password reset link shortly.</p>
+                  </div>
+                  <div class="ui-demo-inline ui-demo-auth-actions">
+                    <button type="button" class="btn btn-secondary btn-sm" data-demo-forgot-resend>Resend Link</button>
+                    <span class="ui-demo-note" data-demo-forgot-countdown>Please wait 60s before requesting another email.</span>
+                  </div>
+                </div>
+                <div data-demo-forgot-panel="form">
+                  <div class="ui-demo-field">
+                    <label class="ui-demo-label" for="forgot-email">Email <span class="ui-demo-required">*</span></label>
+                    <input id="forgot-email" class="form-control" data-demo-forgot-email type="email" autocomplete="email" value="user@example.com" />
+                    <div class="ui-demo-error ui-demo-hidden" data-demo-forgot-email-error></div>
+                  </div>
+                  <div class="ui-demo-error ui-demo-hidden" data-demo-forgot-banner></div>
+                  <div class="ui-demo-inline ui-demo-auth-inline-actions">
+                    <button type="button" class="btn btn-primary" data-demo-forgot-submit>Send Reset Link</button>
+                    <button type="button" class="ui-demo-link-button" data-demo-open-login>Back to login</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Reset Password</div>
+              <div class="ui-demo-form">
+                <div class="ui-demo-inline">
+                  <button type="button" class="btn btn-secondary btn-sm" data-demo-reset-valid>Valid Token</button>
+                  <button type="button" class="btn btn-secondary btn-sm" data-demo-reset-expired>Expired Token</button>
+                </div>
+                <div class="ui-demo-auth-state ui-demo-hidden" data-demo-reset-panel="invalid">
+                  <div class="alert alert-danger">
+                    <div class="alert-title">This reset link is invalid or has expired.</div>
+                    <p>Request a new one to continue.</p>
+                  </div>
+                </div>
+                <div data-demo-reset-panel="form">
+                  <div class="ui-demo-field">
+                    <label class="ui-demo-label" for="reset-password">New Password <span class="ui-demo-required">*</span></label>
+                    <div class="ui-demo-inline">
+                      <input id="reset-password" class="form-control" data-demo-reset-password type="password" autocomplete="new-password" value="FreshPass1!" />
+                      <button type="button" class="btn btn-secondary btn-sm" data-demo-toggle-password="reset-password">Show</button>
+                    </div>
+                    <div class="ui-demo-strength">
+                      <div class="ui-demo-progress" style="flex: 1;">
+                        <div class="ui-demo-progress-bar" data-demo-reset-password-meter style="width: 0%;"></div>
+                      </div>
+                      <span class="ui-demo-status" data-demo-reset-password-status>Strength: Strong</span>
+                    </div>
+                    <div class="ui-demo-error ui-demo-hidden" data-demo-reset-password-error></div>
+                  </div>
+                  <div class="ui-demo-field">
+                    <label class="ui-demo-label" for="reset-confirm-password">Confirm New Password <span class="ui-demo-required">*</span></label>
+                    <div class="ui-demo-inline">
+                      <input id="reset-confirm-password" class="form-control" data-demo-reset-confirm-password type="password" autocomplete="new-password" value="FreshPass1!" />
+                      <button type="button" class="btn btn-secondary btn-sm" data-demo-toggle-password="reset-confirm-password">Show</button>
+                    </div>
+                    <div class="ui-demo-error ui-demo-hidden" data-demo-reset-confirm-password-error></div>
+                  </div>
+                  <div class="ui-demo-error ui-demo-hidden" data-demo-reset-banner></div>
+                  <button type="button" class="btn btn-primary" data-demo-reset-submit>Update Password</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Email Verification</div>
+              <div class="ui-demo-form">
+                <div class="ui-demo-auth-state">
+                  <div class="alert alert-info">
+                  <div class="alert-title">Check your email</div>
+                  <p>We sent a verification link to <strong data-demo-verify-email>john.smith@example.com</strong>.</p>
+                  </div>
+                </div>
+                <div class="ui-demo-inline ui-demo-auth-actions">
+                  <button type="button" class="btn btn-secondary btn-sm" data-demo-verify-resend>Resend Verification</button>
+                  <span class="ui-demo-note" data-demo-verify-countdown>Resend available now.</span>
+                </div>
+                <div class="ui-demo-error ui-demo-hidden" data-demo-verify-banner></div>
+              </div>
+            </div>
+
+            <div class="ui-demo">
+              <div class="ui-demo-title">Social Login States</div>
+              <div class="ui-demo-form">
+                <div class="ui-demo-divider"><span>Social sign-in</span></div>
+                <div class="ui-demo-inline ui-demo-social-actions">
+                  <button type="button" class="btn btn-secondary" data-demo-oauth-provider="google">Google</button>
+                  <button type="button" class="btn btn-secondary" data-demo-oauth-provider="apple">Apple</button>
+                  <button type="button" class="btn btn-secondary" data-demo-oauth-provider="github">GitHub</button>
+                </div>
+                <div class="ui-demo-note">Google succeeds, Apple cancels, GitHub simulates a provider error.</div>
+                <div class="ui-demo-error ui-demo-hidden" data-demo-oauth-banner></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">1. Login Form</h2>
+
+            <h3>Fields</h3>
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Email</td><td>Email input</td><td>Yes</td></tr>
+                  <tr><td>Password</td><td>Password input masked</td><td>Yes</td></tr>
+                  <tr><td>Remember Me</td><td>Checkbox</td><td>No</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Validation Rules</h3>
+            <label><input type="checkbox" data-checklist-item /> Email — required, valid email format, trimmed, lowercase before submission</label><br />
+            <label><input type="checkbox" data-checklist-item /> Password — required, minimum 1 character</label><br />
+            <label><input type="checkbox" data-checklist-item /> No client-side password complexity check on login</label><br />
+            <label><input type="checkbox" data-checklist-item /> Trim whitespace from email before submitting</label><br />
+            <label><input type="checkbox" data-checklist-item /> Do NOT trim password — spaces in passwords are valid</label>
+
+            <h3>Error Messages</h3>
+            <pre>Empty email: "Email is required."
+Invalid email format: "Enter a valid email address."
+Empty password: "Password is required."
+Wrong email or password: "Incorrect email or password."
+Account not found: "Incorrect email or password."
+Account disabled/locked: "Your account has been suspended. Contact support."
+Too many failed attempts: "Too many failed attempts. Try again in X minutes."
+Network/API error: "Something went wrong. Please try again."</pre>
+
+            <div class="alert alert-danger">
+              <div class="alert-title">Security Rule</div>
+              Never reveal whether the email exists. Use the same message for wrong password and account not found.
+            </div>
+
+            <h3>States</h3>
+            <label><input type="checkbox" data-checklist-item /> Default state — form visible, submit enabled</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state — submit button shows spinner, disabled, no double submit</label><br />
+            <label><input type="checkbox" data-checklist-item /> Error state — inline field errors or banner error shown</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success state — redirect to dashboard or intended page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Rate-limited state — submit disabled with countdown or message</label>
+
+            <h3>UI Requirements</h3>
+            <label><input type="checkbox" data-checklist-item /> Password field has show/hide toggle</label><br />
+            <label><input type="checkbox" data-checklist-item /> Forgot password link visible near password field</label><br />
+            <label><input type="checkbox" data-checklist-item /> Submit button full-width or prominently placed</label><br />
+            <label><input type="checkbox" data-checklist-item /> Enter key submits the form</label><br />
+            <label><input type="checkbox" data-checklist-item /> No <code>autocomplete="off"</code> on email</label><br />
+            <label><input type="checkbox" data-checklist-item /> Password field has <code>autocomplete="current-password"</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Form does not reset on error</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">2. Signup / Registration Form</h2>
+
+            <h3>Fields</h3>
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>First Name</td><td>Text</td><td>Yes</td><td>Min 1 char</td></tr>
+                  <tr><td>Last Name</td><td>Text</td><td>Yes</td><td>Min 1 char</td></tr>
+                  <tr><td>Email</td><td>Email</td><td>Yes</td><td>Unique check on backend</td></tr>
+                  <tr><td>Password</td><td>Password</td><td>Yes</td><td>Complexity enforced</td></tr>
+                  <tr><td>Confirm Password</td><td>Password</td><td>Yes</td><td>Must match</td></tr>
+                  <tr><td>Phone Number</td><td>Tel</td><td>Depends on app</td><td>E.164 format</td></tr>
+                  <tr><td>Terms &amp; Conditions</td><td>Checkbox</td><td>Yes</td><td>Must be checked</td></tr>
+                  <tr><td>Marketing Emails</td><td>Checkbox</td><td>No</td><td>Optional opt-in</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Validation Rules</h3>
+            <label><input type="checkbox" data-checklist-item /> First name — required, min 1 char, max 100 chars, no special chars except hyphens and apostrophes</label><br />
+            <label><input type="checkbox" data-checklist-item /> Last name — required, min 1 char, max 100 chars</label><br />
+            <label><input type="checkbox" data-checklist-item /> Email — required, valid format, trimmed, lowercased before submission</label><br />
+            <label><input type="checkbox" data-checklist-item /> Password — required, minimum 8 chars, at least 1 uppercase, 1 lowercase, 1 number, 1 special char</label><br />
+            <label><input type="checkbox" data-checklist-item /> Confirm Password — required, must exactly match password field</label><br />
+            <label><input type="checkbox" data-checklist-item /> Phone — if required, E.164 format, country code included, validated on backend</label><br />
+            <label><input type="checkbox" data-checklist-item /> Terms checkbox — must be checked before submission allowed</label><br />
+            <label><input type="checkbox" data-checklist-item /> Show password strength indicator as user types</label>
+
+            <h3>Password Strength Indicator</h3>
+            <pre>Weak: Less than 8 chars OR only one character type
+Fair: 8+ chars, 2 character types
+Strong: 8+ chars, 3+ character types</pre>
+
+            <p>
+              Show strength as a progress bar or label. Do NOT block submission with a custom strength rating.
+              Only enforce the rules in the validation list above.
+            </p>
+
+            <h3>Error Messages</h3>
+            <pre>Empty first name: "First name is required."
+Empty last name: "Last name is required."
+Empty email: "Email is required."
+Invalid email: "Enter a valid email address."
+Email already registered: "An account with this email already exists. Log in instead?"
+Weak password: "Password must be at least 8 characters with uppercase, lowercase, number, and special character."
+Passwords don't match: "Passwords do not match."
+Terms not checked: "You must accept the Terms & Conditions to continue."
+API error: "Something went wrong. Please try again."</pre>
+
+            <h3>States</h3>
+            <label><input type="checkbox" data-checklist-item /> Default — form empty, submit disabled until required fields valid</label><br />
+            <label><input type="checkbox" data-checklist-item /> Typing — inline validation shows after field is blurred</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading — submit spinner, button disabled</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success — redirect to email verification page or dashboard</label><br />
+            <label><input type="checkbox" data-checklist-item /> Duplicate email — show error with Log in instead link</label>
+
+            <h3>UI Requirements</h3>
+            <label><input type="checkbox" data-checklist-item /> Password field has show/hide toggle</label><br />
+            <label><input type="checkbox" data-checklist-item /> Confirm Password field has show/hide toggle</label><br />
+            <label><input type="checkbox" data-checklist-item /> Password strength indicator visible while typing</label><br />
+            <label><input type="checkbox" data-checklist-item /> Terms & Conditions link opens in new tab</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clear visual indicator for required fields</label><br />
+            <label><input type="checkbox" data-checklist-item /> Already have an account? Log in link visible</label><br />
+            <label><input type="checkbox" data-checklist-item /> Enter key does NOT submit if confirm password is not filled</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>autocomplete="new-password"</code> on both password fields</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>autocomplete="email"</code> on email field</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">3. Forgot Password Flow</h2>
+
+            <h3>Steps</h3>
+            <pre>1. User clicks "Forgot password?" on login page
+2. User is shown a single email input field
+3. User submits email
+4. Backend sends reset email if account exists
+5. User sees confirmation message
+6. User receives email → clicks link → lands on Reset Password form</pre>
+
+            <h3>Validation Rules</h3>
+            <label><input type="checkbox" data-checklist-item /> Email — required, valid email format, trimmed, lowercased</label><br />
+            <label><input type="checkbox" data-checklist-item /> No indication of whether account exists with that email</label>
+
+            <h3>Messages</h3>
+            <pre>Valid submission: "If an account exists with that email, you'll receive a password reset link shortly."
+Empty email: "Email is required."
+Invalid email format: "Enter a valid email address."
+API error: "Something went wrong. Please try again."
+Already sent recently: "A reset link was already sent. Check your inbox or try again in a few minutes."</pre>
+
+            <h3>States</h3>
+            <label><input type="checkbox" data-checklist-item /> Default — email input, submit button</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading — spinner, button disabled</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success — confirmation message shown, form hidden</label><br />
+            <label><input type="checkbox" data-checklist-item /> Error — appropriate error message</label>
+
+            <h3>UI Requirements</h3>
+            <label><input type="checkbox" data-checklist-item /> Back to login link visible</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success state clearly shows next step</label><br />
+            <label><input type="checkbox" data-checklist-item /> Resend link available on success state with rate limit</label><br />
+            <label><input type="checkbox" data-checklist-item /> Email link expires on backend</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">4. Reset Password Form</h2>
+            <p><strong>Accessed via:</strong> Link in email containing token.</p>
+
+            <h3>Validation Rules</h3>
+            <label><input type="checkbox" data-checklist-item /> New password — same complexity as signup</label><br />
+            <label><input type="checkbox" data-checklist-item /> Confirm password — must exactly match new password</label><br />
+            <label><input type="checkbox" data-checklist-item /> Token from URL validated on backend before allowing submission</label><br />
+            <label><input type="checkbox" data-checklist-item /> Invalid/expired token shows error before displaying form</label><br />
+            <label><input type="checkbox" data-checklist-item /> Password cannot be same as previous password — enforced on backend</label>
+
+            <h3>Error Messages</h3>
+            <pre>Token invalid or expired: "This reset link is invalid or has expired. Request a new one."
+Token already used: "This reset link has already been used. Request a new one."
+Empty new password: "New password is required."
+Weak password: "Password must be at least 8 characters with uppercase, lowercase, number, and special character."
+Passwords don't match: "Passwords do not match."
+Same as old password: "Your new password must be different from your previous password."
+API error: "Something went wrong. Please try again."</pre>
+
+            <h3>States</h3>
+            <label><input type="checkbox" data-checklist-item /> Loading while validating token before rendering form</label><br />
+            <label><input type="checkbox" data-checklist-item /> Invalid token — error message and link to forgot password page, form not shown</label><br />
+            <label><input type="checkbox" data-checklist-item /> Form visible — ready to enter new password</label><br />
+            <label><input type="checkbox" data-checklist-item /> Submitting — spinner, button disabled</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success — password updated, redirect to login with success message</label>
+
+            <h3>UI Requirements</h3>
+            <label><input type="checkbox" data-checklist-item /> Token validated immediately on page load before rendering form</label><br />
+            <label><input type="checkbox" data-checklist-item /> Both password fields have show/hide toggles</label><br />
+            <label><input type="checkbox" data-checklist-item /> Show same password strength indicator as signup</label><br />
+            <label><input type="checkbox" data-checklist-item /> Back to login link</label><br />
+            <label><input type="checkbox" data-checklist-item /> On success: auto-redirect after 3 seconds or show Go to login button</label><br />
+            <label><input type="checkbox" data-checklist-item /> Do NOT auto-login after password reset</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">5. Email Verification</h2>
+
+            <h3>When Required</h3>
+            <ul>
+              <li>After signup if email verification is required before dashboard access</li>
+              <li>After changing email address</li>
+            </ul>
+
+            <h3>Flow</h3>
+            <pre>1. After signup → show "Check your email" page
+2. User clicks link in email
+3. Backend validates token
+4. User redirected to dashboard or login with success message</pre>
+
+            <h3>States</h3>
+            <label><input type="checkbox" data-checklist-item /> Check your email page clearly tells user to check email and shows which email was used</label><br />
+            <label><input type="checkbox" data-checklist-item /> Verifying — token validated on page load with spinner</label><br />
+            <label><input type="checkbox" data-checklist-item /> Success — Email verified successfully or redirect</label><br />
+            <label><input type="checkbox" data-checklist-item /> Invalid/expired token — show error and resend button</label><br />
+            <label><input type="checkbox" data-checklist-item /> Resend triggered — success confirmation and rate limit enforced</label>
+
+            <h3>Messages</h3>
+            <pre>Initial page: "We sent a verification link to [email]. Check your inbox."
+Token valid: "Email verified successfully."
+Token expired: "This verification link has expired. Click below to resend."
+Token invalid: "This verification link is invalid. Try requesting a new one."
+Resend success: "Verification email resent. Check your inbox."
+Resend rate limited: "Please wait before requesting another verification email."</pre>
+
+            <h3>UI Requirements</h3>
+            <label><input type="checkbox" data-checklist-item /> Show the email address the link was sent to</label><br />
+            <label><input type="checkbox" data-checklist-item /> Resend email button visible</label><br />
+            <label><input type="checkbox" data-checklist-item /> Wrong email? Sign up again link visible</label><br />
+            <label><input type="checkbox" data-checklist-item /> Resend button disabled for 60 seconds after sending</label><br />
+            <label><input type="checkbox" data-checklist-item /> Backend tokens expire after configurable time</label><br />
+            <label><input type="checkbox" data-checklist-item /> Backend tokens are single-use</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">6. Social / OAuth Login</h2>
+
+            <h3>Common Providers</h3>
+            <ul>
+              <li>Google</li>
+              <li>Apple — required for iOS apps that offer social login</li>
+              <li>Microsoft</li>
+              <li>GitHub — developer apps</li>
+            </ul>
+
+            <h3>Standards</h3>
+            <label><input type="checkbox" data-checklist-item /> OAuth handled entirely on backend — frontend only initiates redirect</label><br />
+            <label><input type="checkbox" data-checklist-item /> Backend creates or updates user record on first login</label><br />
+            <label><input type="checkbox" data-checklist-item /> Role assigned on backend from database — never from OAuth payload</label><br />
+            <label><input type="checkbox" data-checklist-item /> If account exists with email, link accounts or show correct provider message</label><br />
+            <label><input type="checkbox" data-checklist-item /> If account disabled, block login even via OAuth</label><br />
+            <label><input type="checkbox" data-checklist-item /> Store OAuth provider and user ID on backend</label><br />
+            <label><input type="checkbox" data-checklist-item /> Never store OAuth access token in localStorage</label>
+
+            <h3>Error Handling</h3>
+            <pre>OAuth cancelled by user: Return to login page silently or show "Login cancelled"
+OAuth provider error: "Could not connect to [Provider]. Try again or use email."
+Email already registered: "An account with this email exists. Log in with [original method] instead."
+Account disabled: "Your account has been suspended. Contact support."</pre>
+
+            <h3>UI Requirements</h3>
+            <label><input type="checkbox" data-checklist-item /> Social login buttons show provider logo and name</label><br />
+            <label><input type="checkbox" data-checklist-item /> Social buttons styled per provider brand guidelines</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clear visual divider between social login and email/password</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading spinner shown while OAuth redirect is processing</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">7. Session &amp; Token Handling</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Auth tokens stored in HTTP-only cookies OR memory — NOT localStorage</label><br />
+            <label><input type="checkbox" data-checklist-item /> Refresh token rotation: issue new refresh token each time it is used</label><br />
+            <label><input type="checkbox" data-checklist-item /> Access token short expiry — 15 minutes recommended</label><br />
+            <label><input type="checkbox" data-checklist-item /> Refresh token longer expiry — 7–30 days</label><br />
+            <label><input type="checkbox" data-checklist-item /> On logout: invalidate token on backend</label><br />
+            <label><input type="checkbox" data-checklist-item /> On session expiry: redirect to login page with session expired message</label><br />
+            <label><input type="checkbox" data-checklist-item /> On 401 from API: trigger refresh token flow before showing error</label><br />
+            <label><input type="checkbox" data-checklist-item /> On refresh token failure: log out user and redirect to login</label><br />
+            <label><input type="checkbox" data-checklist-item /> Remember Me extends refresh token expiry</label><br />
+            <label><input type="checkbox" data-checklist-item /> Concurrent session handling defined</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">8. Security Rules</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Passwords are NEVER logged — not in console, not in API logs</label><br />
+            <label><input type="checkbox" data-checklist-item /> Passwords are NEVER sent in query string</label><br />
+            <label><input type="checkbox" data-checklist-item /> Reset/verification tokens are never exposed beyond intended use</label><br />
+            <label><input type="checkbox" data-checklist-item /> Auth endpoint has rate limiting</label><br />
+            <label><input type="checkbox" data-checklist-item /> Lockout after too many failures with clear user feedback</label><br />
+            <label><input type="checkbox" data-checklist-item /> HTTPS required — no auth flow over HTTP</label><br />
+            <label><input type="checkbox" data-checklist-item /> CSRF protection enabled on all auth endpoints</label><br />
+            <label><input type="checkbox" data-checklist-item /> Service role key NEVER in frontend code</label><br />
+            <label><input type="checkbox" data-checklist-item /> JWT secret NEVER in frontend code</label><br />
+            <label><input type="checkbox" data-checklist-item /> Email enumeration prevented</label><br />
+            <label><input type="checkbox" data-checklist-item /> Frontend validation is UX only — backend validates and enforces everything</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">9. UX Standards</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Loading state on every auth button</label><br />
+            <label><input type="checkbox" data-checklist-item /> Enter key submits the focused form</label><br />
+            <label><input type="checkbox" data-checklist-item /> Tab order is logical</label><br />
+            <label><input type="checkbox" data-checklist-item /> Error messages shown inline next to relevant field</label><br />
+            <label><input type="checkbox" data-checklist-item /> General/API errors shown as a banner</label><br />
+            <label><input type="checkbox" data-checklist-item /> Form does NOT reset on submission error</label><br />
+            <label><input type="checkbox" data-checklist-item /> Redirect after login goes to intended page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Back link always available</label><br />
+            <label><input type="checkbox" data-checklist-item /> Already have an account and Don't have an account links are mutually visible</label><br />
+            <label><input type="checkbox" data-checklist-item /> Mobile keyboard does not cover submit button</label><br />
+            <label><input type="checkbox" data-checklist-item /> Mobile input types show correct keyboard</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Before Marking Done</span>
+          <h2 class="section-title">10. Auth Checklist</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">Login Form</h3>
+              <label><input type="checkbox" data-checklist-item /> Email and password validated</label><br />
+              <label><input type="checkbox" data-checklist-item /> Loading state on submit</label><br />
+              <label><input type="checkbox" data-checklist-item /> Error shown in UI</label><br />
+              <label><input type="checkbox" data-checklist-item /> Same message for wrong password and unknown email</label><br />
+              <label><input type="checkbox" data-checklist-item /> Password show/hide toggle works</label><br />
+              <label><input type="checkbox" data-checklist-item /> Forgot password link visible and functional</label><br />
+              <label><input type="checkbox" data-checklist-item /> Redirect to intended page after login</label><br />
+              <label><input type="checkbox" data-checklist-item /> Mobile tested</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Signup Form</h3>
+              <label><input type="checkbox" data-checklist-item /> All required fields validated</label><br />
+              <label><input type="checkbox" data-checklist-item /> Password complexity rules enforced and communicated</label><br />
+              <label><input type="checkbox" data-checklist-item /> Confirm password match checked on client</label><br />
+              <label><input type="checkbox" data-checklist-item /> Terms & Conditions checkbox required</label><br />
+              <label><input type="checkbox" data-checklist-item /> Duplicate email error shown with Log in instead link</label><br />
+              <label><input type="checkbox" data-checklist-item /> Loading state on submit</label><br />
+              <label><input type="checkbox" data-checklist-item /> Success redirect or email verification flow initiated</label><br />
+              <label><input type="checkbox" data-checklist-item /> Mobile tested</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Forgot Password</h3>
+              <label><input type="checkbox" data-checklist-item /> Email validated</label><br />
+              <label><input type="checkbox" data-checklist-item /> Same message regardless of whether email exists</label><br />
+              <label><input type="checkbox" data-checklist-item /> Success state shown clearly</label><br />
+              <label><input type="checkbox" data-checklist-item /> Backend sends email if account exists</label><br />
+              <label><input type="checkbox" data-checklist-item /> Backend reset link expires</label><br />
+              <label><input type="checkbox" data-checklist-item /> Backend rate limit on requests</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Reset Password</h3>
+              <label><input type="checkbox" data-checklist-item /> Token validated on page load before rendering form</label><br />
+              <label><input type="checkbox" data-checklist-item /> Invalid/expired token shows error</label><br />
+              <label><input type="checkbox" data-checklist-item /> New password complexity enforced</label><br />
+              <label><input type="checkbox" data-checklist-item /> Confirm password match checked</label><br />
+              <label><input type="checkbox" data-checklist-item /> Same password as old blocked on backend and shown to user</label><br />
+              <label><input type="checkbox" data-checklist-item /> Success redirects to login, not auto-login</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Session &amp; Security</h3>
+              <label><input type="checkbox" data-checklist-item /> Tokens not in localStorage</label><br />
+              <label><input type="checkbox" data-checklist-item /> Logout invalidates token on backend</label><br />
+              <label><input type="checkbox" data-checklist-item /> Session expiry handled gracefully</label><br />
+              <label><input type="checkbox" data-checklist-item /> Rate limiting on login and forgot password</label><br />
+              <label><input type="checkbox" data-checklist-item /> No password or token in logs</label><br />
+              <label><input type="checkbox" data-checklist-item /> Backend enforces all auth rules — frontend only displays</label>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-info">
+          <div class="alert-title">Practice Task</div>
+          <p>
+            Apply what you learned by building the full auth flow:
+            login, forgot password, and reset password.
+          </p>
+          <a href="../../tasks/frontend/02-login-form.html" class="btn btn-primary btn-sm">
+            Open Task 02
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Auth flows must handle every field, state, error, token, and security rule.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../standards/frontend-standards.html" class="footer-link">Frontend Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+  <script type="module" src="../../../js/pages/login-signup-demo.js"></script>
+</body>
+</html>

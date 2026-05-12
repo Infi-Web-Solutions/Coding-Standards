@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Supabase Checklists | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Supabase checklist index for tables, RLS policies, API endpoints, Edge Functions, RPC functions, storage buckets, and database triggers."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Supabase</span>
+        <h1 class="page-title">Supabase Checklists</h1>
+        <p class="page-subtitle">Use these before marking any Supabase backend task done.</p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/checklists.html" class="btn btn-secondary">Back to Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-3">
+          <a href="./supabase/new-table.html" class="card card-clickable">
+            <h2 class="card-title">New Table</h2>
+            <p class="card-description">Creating any new database table — schema, constraints, indexes, RLS, migration</p>
+          </a>
+
+          <a href="./supabase/rls-policies.html" class="card card-clickable">
+            <h2 class="card-title">RLS Policies</h2>
+            <p class="card-description">Writing or reviewing Row Level Security policies — patterns, role matrix, testing</p>
+          </a>
+
+          <a href="./supabase/new-api-endpoint.html" class="card card-clickable">
+            <h2 class="card-title">New API Endpoint</h2>
+            <p class="card-description">Building any new endpoint — choosing API type, auth, validation, error format, documentation</p>
+          </a>
+
+          <a href="./supabase/edge-function.html" class="card card-clickable">
+            <h2 class="card-title">Edge Function</h2>
+            <p class="card-description">Building an Edge Function — structure, auth, validation, secrets, webhooks, logging</p>
+          </a>
+
+          <a href="./supabase/rpc-function.html" class="card card-clickable">
+            <h2 class="card-title">RPC Function</h2>
+            <p class="card-description">Writing any Postgres RPC function — SECURITY mode, parameter types, validation order, error format, transaction safety, documentation</p>
+          </a>
+
+          <a href="./supabase/storage-bucket.html" class="card card-clickable">
+            <h2 class="card-title">Storage Bucket</h2>
+            <p class="card-description">Creating a storage bucket — visibility, RLS policies, file path structure, signed URLs, upload/delete flow</p>
+          </a>
+
+          <a href="./supabase/database-trigger.html" class="card card-clickable">
+            <h2 class="card-title">Database Trigger</h2>
+            <p class="card-description">Writing a database trigger — BEFORE vs AFTER, trigger function standards, timestamps pattern, audit log pattern</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Quick Reference — Core Supabase Rules</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Every exposed table has RLS enabled</label><br />
+          <label><input type="checkbox" data-checklist-item /> No table accessible without a matching RLS policy</label><br />
+          <label><input type="checkbox" data-checklist-item /> Service role key never appears in frontend code</label><br />
+          <label><input type="checkbox" data-checklist-item /> Role always read from the database — never from request payload</label><br />
+          <label><input type="checkbox" data-checklist-item /> workspace_id verified via membership subquery, not just matched against payload</label><br />
+          <label><input type="checkbox" data-checklist-item /> created_by set in RLS INSERT policy WITH CHECK — not from request body</label><br />
+          <label><input type="checkbox" data-checklist-item /> Every API endpoint has documentation before frontend handoff</label><br />
+          <label><input type="checkbox" data-checklist-item /> Every endpoint tested for success, unauthorized, forbidden, not found, duplicate, validation error</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Related Standards</h2>
+
+          <div class="grid grid-3">
+            <a href="../standards/supabase-standards.html" class="card card-clickable">Supabase Standards</a>
+            <a href="../standards/backend-first-logic.html" class="card card-clickable">Backend-First Logic</a>
+            <a href="../standards/code-reusability-standards.html" class="card card-clickable">Code Reusability Standards</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Supabase work requires RLS, database-backed permissions, documentation, and role-based tests.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/checklists.html" class="footer-link">All Checklists</a>
+        <a href="../standards/supabase-standards.html" class="footer-link">Supabase Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

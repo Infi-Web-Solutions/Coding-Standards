@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Stripe Integration Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Keys, customers, Payment Intents, Checkout, subscriptions, webhooks, metadata, error handling, refunds."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Stripe Integration Checklist</h1>
+
+        <p class="page-subtitle">
+          Keys, customers, Payment Intents, Checkout, subscriptions, webhooks, metadata, error handling, refunds.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../third-party-checklist.html" class="btn btn-secondary">Back to Third-Party Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#account-and-keys" class="card card-clickable">Account and Keys</a>
+            <a href="#stripe-customer" class="card card-clickable">Stripe Customer</a>
+            <a href="#products-and-prices" class="card card-clickable">Products and Prices</a>
+            <a href="#payment-intents" class="card card-clickable">Payment Intents</a>
+            <a href="#checkout-sessions" class="card card-clickable">Checkout Sessions</a>
+            <a href="#subscriptions" class="card card-clickable">Subscriptions</a>
+            <a href="#webhooks" class="card card-clickable">Webhooks</a>
+            <a href="#metadata" class="card card-clickable">Metadata</a>
+            <a href="#error-handling" class="card card-clickable">Error Handling</a>
+            <a href="#refunds" class="card card-clickable">Refunds</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="account-and-keys" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Account and Keys</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>STRIPE_PUBLISHABLE_KEY</code> stored in environment variable — not hardcoded</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>STRIPE_SECRET_KEY</code> stored in environment variable — never exposed to browser/client</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>STRIPE_WEBHOOK_SECRET</code> stored in environment variable</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test keys (<code>pk_test_</code>, <code>sk_test_</code>) used in local and staging</label><br />
+          <label><input type="checkbox" data-checklist-item /> Live keys (<code>pk_live_</code>, <code>sk_live_</code>) used in production only</label><br />
+          <label><input type="checkbox" data-checklist-item /> No Stripe key committed to version control</label><br />
+          <label><input type="checkbox" data-checklist-item /> Stripe CLI set up locally for webhook forwarding (<code>stripe listen --forward-to ...</code>)</label>
+        </div>
+      </section>
+
+      <section id="stripe-customer" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Stripe Customer</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>stripe_customer_id</code> stored in your database users/billing table</label><br />
+          <label><input type="checkbox" data-checklist-item /> Customer created with <code>metadata.user_id</code> and <code>metadata.workspace_id</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Customer email matches the authenticated user's email</label><br />
+          <label><input type="checkbox" data-checklist-item /> Customer created server-side — never via frontend</label>
+        </div>
+      </section>
+
+      <section id="products-and-prices" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Products and Prices</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Products and prices created in Stripe Dashboard (or via API if dynamic)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Price lookup keys used where possible — not hardcoded price IDs</label><br />
+          <label><input type="checkbox" data-checklist-item /> Price lookup keys stored in environment variables if used in code</label>
+        </div>
+      </section>
+
+      <section id="payment-intents" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Payment Intents (One-Time Payments)</h2>
+
+          <label><input type="checkbox" data-checklist-item /> PaymentIntent created server-side with secret key</label><br />
+          <label><input type="checkbox" data-checklist-item /> Amount in smallest currency unit (cents, paise) — integer, not float</label><br />
+          <label><input type="checkbox" data-checklist-item /> Metadata set: <code>workspace_id</code>, <code>user_id</code>, <code>purpose</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Idempotency key used to prevent duplicate charges</label><br />
+          <label><input type="checkbox" data-checklist-item /> Only <code>client_secret</code> returned to frontend — not the secret key</label><br />
+          <label><input type="checkbox" data-checklist-item /> Stripe.js / Elements used on frontend to collect card details</label><br />
+          <label><input type="checkbox" data-checklist-item /> Payment activated via webhook <code>payment_intent.succeeded</code> — NOT the client-side callback</label>
+        </div>
+      </section>
+
+      <section id="checkout-sessions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Checkout Sessions (if used)</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Session created server-side</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>success_url</code> includes <code>{CHECKOUT_SESSION_ID}</code> parameter</label><br />
+          <label><input type="checkbox" data-checklist-item /> Metadata set on session: <code>workspace_id</code>, <code>user_id</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Activation done via webhook <code>checkout.session.completed</code> — not the success_url redirect</label>
+        </div>
+      </section>
+
+      <section id="subscriptions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Subscriptions (if used)</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Subscription created with correct <code>customer</code> and <code>price_id</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Metadata set: <code>workspace_id</code>, <code>plan</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Trial period set if applicable (<code>trial_period_days</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> All 8 subscription states handled (active, trialing, past_due, canceled, unpaid, incomplete, etc.)</label>
+        </div>
+      </section>
+
+      <section id="webhooks" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Webhooks</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Webhook endpoint registered in Stripe Dashboard (or Stripe CLI for local)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Signature verified using <code>stripe.Webhook.construct_event()</code> before processing</label><br />
+          <label><input type="checkbox" data-checklist-item /> Raw request body used for signature verification — NOT parsed JSON</label><br />
+          <label><input type="checkbox" data-checklist-item /> Returns 200 on success, 400 on invalid signature</label><br />
+          <label><input type="checkbox" data-checklist-item /> Returns 200 even for skipped/ignored events (not 404 or 400)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Idempotency: event ID stored in DB — duplicate events skipped</label><br />
+          <label><input type="checkbox" data-checklist-item /> Business logic failures logged and return 200 (not 500) to prevent Stripe retries</label><br />
+          <label><input type="checkbox" data-checklist-item /> Handles: <code>payment_intent.succeeded</code>, <code>payment_intent.payment_failed</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Handles: <code>customer.subscription.created</code>, <code>updated</code>, <code>deleted</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Handles: <code>invoice.payment_succeeded</code>, <code>invoice.payment_failed</code></label>
+        </div>
+      </section>
+
+      <section id="metadata" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Metadata</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Customer metadata: <code>user_id</code>, <code>workspace_id</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> PaymentIntent metadata: <code>workspace_id</code>, <code>user_id</code>, <code>purpose</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Subscription metadata: <code>workspace_id</code>, <code>plan</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> All metadata values are strings (<code>str()</code> applied to UUIDs and integers)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No sensitive data in metadata (passwords, secrets)</label>
+        </div>
+      </section>
+
+      <section id="error-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Error Handling</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Decline codes mapped to user-friendly messages (never raw Stripe error shown to user)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>stripe.error.CardError</code> caught and user shown card decline message</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>stripe.error.StripeError</code> caught — generic "payment error" shown to user, error logged</label><br />
+          <label><input type="checkbox" data-checklist-item /> SCA/3DS handled via <code>stripe.confirmCardPayment()</code> in Stripe.js</label>
+        </div>
+      </section>
+
+      <section id="refunds" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Refunds</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Refund created via API — not via Dashboard manually</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>refund_id</code> stored in database</label><br />
+          <label><input type="checkbox" data-checklist-item /> Refund confirmed via webhook <code>charge.refunded</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Partial refund uses <code>amount</code> field in paise/cents</label>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Run this checklist every time you add or change a Stripe payment flow.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../third-party-checklist.html" class="footer-link">Third-Party Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

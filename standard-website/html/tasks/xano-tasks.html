@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xano Practice Tasks | Development Standards</title>
+  <meta name="description" content="Xano practice task for protected endpoint creation." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="tasks">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../index.html" class="navbar-link">Home</a><a href="../pages/standards.html" class="navbar-link">Standards</a><a href="../pages/checklists.html" class="navbar-link">Checklists</a><a href="../pages/tasks.html" class="navbar-link active">Tasks</a><a href="../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-info">Xano Practice Tasks</span><h1 class="page-title">Xano Practice Tasks</h1><p class="page-subtitle">Practice protected Xano endpoint patterns with real auth, permissions, and validation rules.</p></section>
+    <section class="section"><div class="content-card">
+      <div class="table-wrapper"><table class="table"><thead><tr><th>Task</th><th>What You Practice</th></tr></thead><tbody>
+        <tr><td><a href="./xano/01-create-project-endpoint.html">01 — Create Project Endpoint</a></td><td>Auth Token as first precondition, workspace permission check from the database (reusable function), three-layer validation with field-level errors, standard error format, role read from workspace_members table</td></tr>
+      </tbody></table></div>
+      <div class="divider"></div>
+      <h2 class="section-title">Standards to Read First</h2>
+      <ul>
+        <li><a href="../standards/xano-standards.html">Xano Standards</a></li>
+        <li><a href="../standards/backend-first-logic.html">Backend-First Logic</a></li>
+        <li><a href="../checklists/xano/new-endpoint.html">New Endpoint Checklist</a></li>
+      </ul>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

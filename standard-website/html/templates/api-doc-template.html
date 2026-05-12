@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>API Documentation Template | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Template for documenting backend APIs before frontend integration."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="templates">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link active">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-info">API Documentation</span>
+        <h1 class="page-title">API Documentation Template</h1>
+        <p class="page-subtitle">
+          Use this for every backend API. Backend must complete this before frontend starts integration.
+        </p>
+
+        <div class="alert alert-danger" style="margin-top: 24px;">
+          <div class="alert-title">Rule</div>
+          Frontend must never guess API behavior. Every field, error, and edge case must be documented.
+        </div>
+
+        <div class="alert alert-info" style="margin-top: 12px;">
+          <div class="alert-title">How to Use</div>
+          Copy everything below into a new file named <code>api-[name].md</code> and replace all placeholders.
+        </div>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/templates.html" class="btn btn-secondary">Back to Templates</a>
+          <button class="btn btn-primary" data-copy-template="api-doc-copy">Copy API Template</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">API: [API Name]</h2>
+
+          <div class="grid grid-2">
+            <div>
+              <h3>Status</h3>
+              <p><code>Draft</code> / <code>Ready for Integration</code> / <code>Testing</code> / <code>Deprecated</code></p>
+            </div>
+
+            <div>
+              <h3>Owner</h3>
+              <p>[Backend Developer Name]</p>
+            </div>
+
+            <div>
+              <h3>Last Updated</h3>
+              <p>[YYYY-MM-DD]</p>
+            </div>
+
+            <div>
+              <h3>1. Purpose</h3>
+              <p>[One sentence — what this API does and why it exists.]</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">2. API Type</h2>
+            <p>[Choose one]</p>
+            <ul>
+              <li>Direct Supabase Table Insert / Select / Update / Delete</li>
+              <li>Supabase RPC Function</li>
+              <li>Supabase Edge Function</li>
+              <li>Xano Endpoint</li>
+              <li>Django REST Endpoint</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">3. Endpoint / Table / Function</h2>
+            <pre>Table: public.[table_name]
+Function: [function_name]
+Endpoint: POST /functions/v1/[function-name]</pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">4. Auth Required</h2>
+            <p><strong>Yes</strong> / No</p>
+            <p>If yes — frontend must pass the logged-in user's access token:</p>
+            <pre>Authorization: Bearer &lt;access_token&gt;</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">6. Request Payload</h2>
+            <pre><code class="language-json">{
+  "field_name": "string",
+  "field_name": "uuid",
+  "field_name": "string (optional)"
+}</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Permission Required</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Who Can Call</th>
+                  <th>Allowed?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Owner</td><td>Yes</td></tr>
+                <tr><td>Admin</td><td>Yes</td></tr>
+                <tr><td>Manager</td><td>[Yes / No]</td></tr>
+                <tr><td>Member</td><td>[Yes / No]</td></tr>
+                <tr><td>Viewer</td><td>No</td></tr>
+                <tr><td>Anonymous</td><td>No</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Required Fields</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Required</th>
+                  <th>Validation Rules</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>field_name</code></td>
+                  <td><code>string</code></td>
+                  <td>Yes</td>
+                  <td>[e.g. 2–100 characters]</td>
+                </tr>
+                <tr>
+                  <td><code>field_name</code></td>
+                  <td><code>uuid</code></td>
+                  <td>Yes</td>
+                  <td>Must be accessible by the calling user</td>
+                </tr>
+                <tr>
+                  <td><code>field_name</code></td>
+                  <td><code>string</code></td>
+                  <td>No</td>
+                  <td>Max [N] characters</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">8. Success Response</h2>
+            <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "field_name": "value"
+  },
+  "message": "[Human-readable success message]"
+}</code></pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">10. RLS / Permission Policies Involved</h2>
+            <ul>
+              <li>[List the RLS policies or permission checks that affect this API]</li>
+              <li>[e.g. <code>workspace_members: only members of the workspace can insert</code>]</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Error Responses</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">401 — UNAUTHENTICATED</h3>
+              <p><strong>When:</strong> User is not logged in. Token is missing or expired.</p>
+              <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "UNAUTHENTICATED",
+    "message": "Your session has expired. Please log in again."
+  }
+}</code></pre>
+              <p><strong>Frontend action:</strong> Redirect to login. Clear local auth state if needed.</p>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">403 — FORBIDDEN</h3>
+              <p><strong>When:</strong> User is authenticated but does not have the required role or workspace access.</p>
+              <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "You do not have permission to perform this action."
+  }
+}</code></pre>
+              <p><strong>Frontend action:</strong> Show permission error. Hide or disable the action for unauthorized roles.</p>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">422 — VALIDATION_ERROR</h3>
+              <p><strong>When:</strong> A required field is missing or a field does not meet validation rules.</p>
+              <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Please fix the highlighted fields.",
+    "fields": {
+      "field_name": "Error message for this specific field."
+    }
+  }
+}</code></pre>
+              <p><strong>Frontend action:</strong> Show field-level error messages next to each invalid field.</p>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">409 — CONFLICT</h3>
+              <p><strong>When:</strong> [Describe when a conflict occurs — e.g., a record with this name already exists in the workspace.]</p>
+              <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "CONFLICT",
+    "message": "[Human-readable conflict message]"
+  }
+}</code></pre>
+              <p><strong>Frontend action:</strong> Show the conflict message near the relevant field.</p>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">404 — NOT_FOUND</h3>
+              <p><strong>When:</strong> The requested record does not exist or the user does not have access to it.</p>
+              <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "The requested resource was not found."
+  }
+}</code></pre>
+              <p><strong>Frontend action:</strong> Show a not-found state or redirect.</p>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">500 — INTERNAL_ERROR</h3>
+              <p><strong>When:</strong> Unexpected server or database error.</p>
+              <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "Something went wrong. Please try again."
+  }
+}</code></pre>
+              <p><strong>Frontend action:</strong> Show retry option. Do not clear form data.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">11. Frontend Implementation Notes</h2>
+            <ul>
+              <li>[What frontend must do before calling — e.g., must be logged in, must have workspace_id]</li>
+              <li>[Fields frontend should NOT send — e.g., <code>created_by</code> is set server-side from auth token]</li>
+              <li>[Loading state expected — disable button, show "Saving..."]</li>
+              <li>[On success — redirect to X / refresh list / show notification]</li>
+              <li>[On 401 — redirect to login]</li>
+              <li>[On 403 — show permission message, hide the action button]</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">12. Frontend Code Example</h2>
+            <p><strong>Supabase RPC:</strong></p>
+            <pre><code class="language-ts">const { data, error } = await supabase.rpc("function_name", {
+  p_field_name: value,
+  p_field_name: value,
+});
+
+if (error) {
+  // handle error
+}</code></pre>
+
+            <p><strong>Supabase Direct Table:</strong></p>
+            <pre><code class="language-ts">const { data, error } = await supabase
+  .from("table_name")
+  .insert({ field: value })
+  .select("id, field1, field2")
+  .single();</code></pre>
+
+            <p><strong>Xano / Django (fetch):</strong></p>
+            <pre><code class="language-ts">const response = await fetch("/api/endpoint", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${accessToken}`,
+  },
+  body: JSON.stringify({ field_name: value }),
+});
+
+const result = await response.json();</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">13. Test Cases</h2>
+
+          <div class="table-wrapper" style="margin-bottom: 20px;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Test Case</th>
+                  <th>Expected Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>[Allowed role] performs action successfully</td><td>200, returns data</td></tr>
+                <tr><td>2</td><td>Viewer role attempts action</td><td>403 FORBIDDEN</td></tr>
+                <tr><td>3</td><td>Non-member attempts action</td><td>403 FORBIDDEN</td></tr>
+                <tr><td>4</td><td>Anonymous user attempts action</td><td>401 UNAUTHENTICATED</td></tr>
+                <tr><td>5</td><td>Required field <code>[field]</code> is missing</td><td>422 VALIDATION_ERROR</td></tr>
+                <tr><td>6</td><td>Field <code>[field]</code> fails validation rules</td><td>422 VALIDATION_ERROR</td></tr>
+                <tr><td>7</td><td>Duplicate <code>[field]</code> in same workspace</td><td>409 CONFLICT</td></tr>
+                <tr><td>8</td><td>User attempts action on another workspace's data</td><td>403 FORBIDDEN or 404 NOT_FOUND</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="section-title">Standard Error Codes Reference</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>HTTP</th>
+                  <th>When to Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>UNAUTHENTICATED</code></td><td>401</td><td>User is not logged in or token is expired</td></tr>
+                <tr><td><code>FORBIDDEN</code></td><td>403</td><td>Authenticated but lacks permission</td></tr>
+                <tr><td><code>VALIDATION_ERROR</code></td><td>422</td><td>Input is missing or fails validation</td></tr>
+                <tr><td><code>NOT_FOUND</code></td><td>404</td><td>Record does not exist or user cannot access it</td></tr>
+                <tr><td><code>CONFLICT</code></td><td>409</td><td>Duplicate or conflicting data</td></tr>
+                <tr><td><code>RATE_LIMITED</code></td><td>429</td><td>Too many requests</td></tr>
+                <tr><td><code>INTERNAL_ERROR</code></td><td>500</td><td>Unexpected server error</td></tr>
+                <tr><td><code>EXTERNAL_SERVICE_ERROR</code></td><td>502</td><td>Third-party service call failed</td></tr>
+                <tr><td><code>DATABASE_ERROR</code></td><td>500</td><td>Database operation failed</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <pre id="api-doc-copy" hidden># API Documentation Template
+
+Use this for every backend API. Backend must complete this before frontend starts integration.
+
+**Rule:** Frontend must never guess API behavior. Every field, error, and edge case must be documented.
+
+**How to use:** Copy everything below the line, paste into a new file named `api-[name].md`, and replace all [placeholders].
+
+---
+---
+
+# API: [API Name]
+
+## Status
+`Draft` / `Ready for Integration` / `Testing` / `Deprecated`
+
+## Owner
+[Backend Developer Name]
+
+## Last Updated
+[YYYY-MM-DD]
+
+---
+
+## 1. Purpose
+[One sentence — what this API does and why it exists.]
+
+---
+
+## 2. API Type
+[Choose one]
+- Direct Supabase Table Insert / Select / Update / Delete
+- Supabase RPC Function
+- Supabase Edge Function
+- Xano Endpoint
+- Django REST Endpoint
+
+---
+
+## 3. Endpoint / Table / Function
+```
+Table: public.[table_name]
+Function: [function_name]
+Endpoint: POST /functions/v1/[function-name]
+```
+
+---
+
+## 4. Auth Required
+**Yes** / No
+
+If yes — frontend must pass the logged-in user's access token:
+
+```
+Authorization: Bearer &lt;access_token&gt;
+```
+
+---
+
+## 5. Permission Required
+
+| Who Can Call | Allowed? |
+|-------------|----------|
+| Owner | Yes |
+| Admin | Yes |
+| Manager | [Yes / No] |
+| Member | [Yes / No] |
+| Viewer | No |
+| Anonymous | No |
+
+---
+
+## 6. Request Payload
+
+```json
+{
+  "field_name": "string",
+  "field_name": "uuid",
+  "field_name": "string (optional)"
+}
+```
+
+---
+
+## 7. Required Fields
+
+| Field | Type | Required | Validation Rules |
+|-------|------|----------|-----------------|
+| `field_name` | `string` | Yes | [e.g. 2–100 characters] |
+| `field_name` | `uuid` | Yes | Must be accessible by the calling user |
+| `field_name` | `string` | No | Max [N] characters |
+
+---
+
+## 8. Success Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "field_name": "value"
+  },
+  "message": "[Human-readable success message]"
+}
+```
+
+---
+
+## 9. Error Responses
+
+### 401 — UNAUTHENTICATED
+
+**When:** User is not logged in. Token is missing or expired.
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "UNAUTHENTICATED",
+    "message": "Your session has expired. Please log in again."
+  }
+}
+```
+
+**Frontend action:** Redirect to login. Clear local auth state if needed.
+
+---
+
+### 403 — FORBIDDEN
+
+**When:** User is authenticated but does not have the required role or workspace access.
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "You do not have permission to perform this action."
+  }
+}
+```
+
+**Frontend action:** Show permission error. Hide or disable the action for unauthorized roles.
+
+---
+
+### 422 — VALIDATION_ERROR
+
+**When:** A required field is missing or a field does not meet validation rules.
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Please fix the highlighted fields.",
+    "fields": {
+      "field_name": "Error message for this specific field."
+    }
+  }
+}
+```
+
+**Frontend action:** Show field-level error messages next to each invalid field.
+
+---
+
+### 409 — CONFLICT
+
+**When:** [Describe when a conflict occurs — e.g., a record with this name already exists in the workspace.]
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "CONFLICT",
+    "message": "[Human-readable conflict message]"
+  }
+}
+```
+
+**Frontend action:** Show the conflict message near the relevant field.
+
+---
+
+### 404 — NOT_FOUND
+
+**When:** The requested record does not exist or the user does not have access to it.
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "The requested resource was not found."
+  }
+}
+```
+
+**Frontend action:** Show a not-found state or redirect.
+
+---
+
+### 500 — INTERNAL_ERROR
+
+**When:** Unexpected server or database error.
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "Something went wrong. Please try again."
+  }
+}
+```
+
+**Frontend action:** Show retry option. Do not clear form data.
+
+---
+
+## 10. RLS / Permission Policies Involved
+
+- [List the RLS policies or permission checks that affect this API]
+- [e.g. "workspace_members: only members of the workspace can insert"]
+
+---
+
+## 11. Frontend Implementation Notes
+
+- [What frontend must do before calling — e.g., must be logged in, must have workspace_id]
+- [Fields frontend should NOT send — e.g., `created_by` is set server-side from auth token]
+- [Loading state expected — disable button, show "Saving..."]
+- [On success — redirect to X / refresh list / show notification]
+- [On 401 — redirect to login]
+- [On 403 — show permission message, hide the action button]
+
+---
+
+## 12. Frontend Code Example
+
+**Supabase RPC:**
+
+```ts
+const { data, error } = await supabase.rpc("function_name", {
+  p_field_name: value,
+  p_field_name: value,
+});
+
+if (error) {
+  // handle error
+}
+```
+
+**Supabase Direct Table:**
+
+```ts
+const { data, error } = await supabase
+  .from("table_name")
+  .insert({ field: value })
+  .select("id, field1, field2")
+  .single();
+```
+
+**Xano / Django (fetch):**
+
+```ts
+const response = await fetch("/api/endpoint", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${accessToken}`,
+  },
+  body: JSON.stringify({ field_name: value }),
+});
+
+const result = await response.json();
+```
+
+---
+
+## 13. Test Cases
+
+| # | Test Case | Expected Result |
+|---|-----------|----------------|
+| 1 | [Allowed role] performs action successfully | 200, returns data |
+| 2 | Viewer role attempts action | 403 FORBIDDEN |
+| 3 | Non-member attempts action | 403 FORBIDDEN |
+| 4 | Anonymous user attempts action | 401 UNAUTHENTICATED |
+| 5 | Required field `[field]` is missing | 422 VALIDATION_ERROR |
+| 6 | Field `[field]` fails validation rules | 422 VALIDATION_ERROR |
+| 7 | Duplicate `[field]` in same workspace | 409 CONFLICT |
+| 8 | User attempts action on another workspace's data | 403 FORBIDDEN or 404 NOT_FOUND |
+
+---
+
+## Standard Error Codes Reference
+
+| Code | HTTP | When to Use |
+|------|------|------------|
+| `UNAUTHENTICATED` | 401 | User is not logged in or token is expired |
+| `FORBIDDEN` | 403 | Authenticated but lacks permission |
+| `VALIDATION_ERROR` | 422 | Input is missing or fails validation |
+| `NOT_FOUND` | 404 | Record does not exist or user cannot access it |
+| `CONFLICT` | 409 | Duplicate or conflicting data |
+| `RATE_LIMITED` | 429 | Too many requests |
+| `INTERNAL_ERROR` | 500 | Unexpected server error |
+| `EXTERNAL_SERVICE_ERROR` | 502 | Third-party service call failed |
+| `DATABASE_ERROR` | 500 | Database operation failed |</pre>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Document every API before frontend integration starts.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="../pages/templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

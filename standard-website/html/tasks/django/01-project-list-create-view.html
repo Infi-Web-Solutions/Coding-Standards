@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django Task — Project List &amp; Create View | Development Standards</title>
+  <meta name="description" content="Build a DRF ListCreateAPIView for Projects with workspace scoping, custom permission class, and paginated response." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Django Task — Project List &amp; Create View</h1>
+        <p class="page-subtitle">Build a DRF ListCreateAPIView for Projects with workspace scoping, custom permission class, and paginated response.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../django-tasks.html" class="btn btn-secondary">Back to Django Tasks</a>
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>You are building the Projects section for <strong>WorkFlow</strong> in Django. Workspace members need to see a list of their workspace's active projects and be able to create new ones. Business logic — uniqueness checking, slug generation, audit logging — must live in <code>services/project_service.py</code>, not in the view.</p>
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <p>Two views and their URLs:</p>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>View</th>
+                  <th>URL</th>
+                  <th>Method</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ProjectListView</code></td>
+                  <td><code>/workspaces/&lt;workspace_id&gt;/projects/</code></td>
+                  <td>GET</td>
+                </tr>
+                <tr>
+                  <td><code>ProjectCreateView</code></td>
+                  <td><code>/workspaces/&lt;workspace_id&gt;/projects/create/</code></td>
+                  <td>GET + POST</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="models-assume-already-exist" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Models (assume already exist)</h2>
+          <pre><code class="language-python"># projects/models.py
+class Project(models.Model):
+    workspace    = models.ForeignKey('workspaces.Workspace', on_delete=models.CASCADE)
+    created_by   = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT)
+    name         = models.CharField(max_length=100)
+    slug         = models.SlugField(max_length=120)
+    description  = models.TextField(blank=True)
+    status       = models.CharField(max_length=20, default='active')
+    start_date   = models.DateField(null=True, blank=True)
+    end_date     = models.DateField(null=True, blank=True)
+    created_at   = models.DateTimeField(auto_now_add=True)
+    updated_at   = models.DateTimeField(auto_now=True)
+    deleted_at   = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = [('workspace', 'slug')]</code></pre>
+        </div>
+      </section>
+
+      <section id="part-1-projectlistview" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Part 1 — ProjectListView</h2>
+          <h3>Requirements</h3>
+          <ul>
+            <li>Login required</li>
+            <li>User must be a member of the workspace (not just any logged-in user)</li>
+            <li>List only active projects (<code>deleted_at__isnull=True</code>) for the workspace</li>
+            <li>Ordered by <code>created_at</code> descending</li>
+            <li>Pass projects and workspace to the template context</li>
+          </ul>
+          <h3>Implementation Notes</h3>
+          <ul>
+            <li>Use <code>LoginRequiredMixin</code></li>
+            <li>Write a <code>WorkspaceMemberMixin</code> in <code>workspaces/mixins.py</code> that:
+              <ul>
+                <li>Gets the workspace from <code>workspace_id</code> URL kwarg</li>
+                <li>Checks the current user is a member</li>
+                <li>Raises <code>PermissionDenied</code> if not</li>
+                <li>Adds <code>self.workspace</code> for use in the view</li>
+              </ul>
+            </li>
+            <li>Use this mixin on both views</li>
+            <li>Query in <code>get_queryset()</code> — not in <code>get()</code> or <code>get_context_data()</code></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="part-2-projectcreateview" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Part 2 — ProjectCreateView</h2>
+
+          <h3>Form: <code>ProjectForm</code></h3>
+          <p>Create in <code>projects/forms.py</code>:</p>
+          <pre><code class="language-python">class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ['name', 'description', 'start_date', 'end_date']</code></pre>
+
+          <p>Validation rules to add:</p>
+          <ul>
+            <li><code>name</code>: required, min 3 chars, max 100 chars, stripped of whitespace</li>
+            <li><code>description</code>: optional, max 500 chars</li>
+            <li><code>end_date</code>: if both start and end provided, end must be after start (cross-field validation in <code>clean()</code>)</li>
+          </ul>
+
+          <h3>Service: <code>ProjectService.create_project()</code></h3>
+          <p>Create in <code>projects/services/project_service.py</code>:</p>
+          <pre><code class="language-python">class ProjectService:
+    @staticmethod
+    def create_project(workspace, name, created_by, description='', start_date=None, end_date=None):
+        # 1. Generate slug from name
+        # 2. Check uniqueness in this workspace (raise ConflictError if duplicate)
+        # 3. Create the Project record
+        # 4. Create a default TaskList named "General" for this project
+        # 5. Create an AuditLog entry: action='project.created'
+        # 6. Return the project
+        ...</code></pre>
+          <p>The view calls this service — it does NOT do these steps inline.</p>
+
+          <h3>View Requirements</h3>
+          <ul>
+            <li>GET: render empty <code>ProjectForm</code></li>
+            <li>POST: validate form → call service → redirect on success → re-render with errors on failure</li>
+            <li>On success: redirect to the project detail page with a success message (<code>messages.success</code>)</li>
+            <li>On failure: render the form with validation errors — form stays populated</li>
+            <li>Do NOT redirect on POST failure — user should see their errors without losing their input</li>
+            <li>Do NOT put slug generation, uniqueness checking, or audit logging in the view</li>
+          </ul>
+
+          <h3>URL Pattern</h3>
+          <pre><code class="language-python"># projects/urls.py
+app_name = 'projects'
+urlpatterns = [
+    path('', ProjectListView.as_view(), name='list'),
+    path('create/', ProjectCreateView.as_view(), name='create'),
+]
+
+# workspaces/urls.py
+path('workspaces/&lt;int:workspace_id&gt;/projects/', include('projects.urls')),</code></pre>
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <ul>
+            <li>Do not write slug generation in the view — put it in <code>ProjectService</code></li>
+            <li>Do not query the database directly in the view — use the service and model manager</li>
+            <li>Do not access <code>request.POST.get('name')</code> directly — always use <code>form.cleaned_data</code></li>
+            <li>Do not redirect after a failed POST — render the form with errors</li>
+            <li>Do not render a template response after a successful POST — always redirect (POST → redirect → GET)</li>
+            <li>Do not put the workspace membership check inline in each view — extract to <code>WorkspaceMemberMixin</code></li>
+            <li>Do not duplicate <code>WorkspaceMemberMixin</code> — it must be defined once and imported everywhere it's needed</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="checklist-to-run-when-done" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run When Done</h2>
+          <p>Use the <a href="../../checklists/django/new-view.html">New View Checklist</a>.</p>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <pre><code class="language-text">STRUCTURE
+[ ] WorkspaceMemberMixin in workspaces/mixins.py (not inline in views)
+[ ] ProjectForm in projects/forms.py
+[ ] ProjectService.create_project() in projects/services/project_service.py
+[ ] Both views use LoginRequiredMixin + WorkspaceMemberMixin
+[ ] URL patterns defined with app_name = 'projects'
+
+LIST VIEW
+[ ] Only active projects shown (deleted_at__isnull=True)
+[ ] Scoped to correct workspace
+[ ] Ordered by created_at descending
+[ ] Non-member gets PermissionDenied (403)
+
+CREATE VIEW
+[ ] GET: empty form rendered
+[ ] POST valid: calls ProjectService.create_project() → redirect to detail
+[ ] POST invalid: re-renders form with errors, form stays populated
+[ ] Success: messages.success with "Project created." message
+[ ] Form validation: name min 3, max 100; end &gt; start; description max 500
+[ ] created_by = request.user (not from POST data)
+[ ] Slug generated in service (not in view)
+[ ] Duplicate name → ConflictError caught → form error shown to user
+
+PERMISSIONS
+[ ] @login_required / LoginRequiredMixin on both views
+[ ] WorkspaceMemberMixin checks membership for both views
+[ ] Non-member trying to access → 403
+
+TESTING
+[ ] GET list: member sees projects, non-member gets 403
+[ ] GET create: member sees form, non-member gets 403
+[ ] POST create valid: project created, redirect to detail, success message
+[ ] POST create invalid (empty name): form re-rendered with error
+[ ] POST create duplicate name: form re-rendered with "name already exists" error
+[ ] POST create (unauthenticated): redirect to login</code></pre>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../django-tasks.html" class="footer-link">Django Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

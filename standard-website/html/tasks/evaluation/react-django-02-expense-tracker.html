@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation — Expense Tracker (React + Django) | Development Standards</title>
+  <meta name="description" content="Detailed evaluation checklist covering model, service, serializers, views, my expenses page, modal, and manager review." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-danger">Evaluation Checklist</span>
+        <h1 class="page-title">Evaluation — Expense Tracker (React + Django)</h1>
+        <p class="page-subtitle">Detailed evaluation checklist covering model, service, serializers, views, my expenses page, modal, and manager review.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Project Spec:</strong> <a href="../react-django/02-expense-tracker.md">02-expense-tracker.md</a></p>
+<p><strong>Stack:</strong> React (TypeScript) + Django REST Framework</p>
+<p><strong>Evaluator:</strong> ___________</p>
+<p><strong>Submission Date:</strong> ___________</p>
+<p><strong>Pass Threshold:</strong> 90%</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="how-to-mark" class="section">
+        <div class="content-card">
+          <h2 class="section-title">How to Mark</h2>
+          <ul>
+  <li><code>[✓]</code> Fully correct</li>
+  <li><code>[~]</code> Partial — note the gap below the item</li>
+  <li><code>[✗]</code> Missing or wrong</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-django-expense-model" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Django — `Expense` Model</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>workspace</code> FK → Workspace, ON DELETE CASCADE, <code>related_name=&#x27;expenses&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>submitted_by</code> FK → settings.AUTH_USER_MODEL, ON DELETE CASCADE, <code>related_name=&#x27;expenses&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>amount</code> is <code>DecimalField</code> with <code>max_digits</code> and <code>decimal_places</code> set — NOT FloatField</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>category</code> CharField using <code>TextChoices</code> (e.g. travel, meals, accommodation, supplies, other)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>description</code> TextField, blank=True, default=''</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>receipt</code> FileField or ImageField, nullable, upload_to uses a callable that generates unique paths (not static folder)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>status</code> CharField using <code>TextChoices</code>: submitted, approved, rejected</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reviewed_by</code> FK → AUTH_USER_MODEL, null=True, blank=True, ON DELETE SET_NULL</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reviewed_at</code> DateTimeField, null=True, blank=True</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>review_notes</code> TextField, blank=True, default=''</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>created_at</code> DateTimeField, auto_now_add=True</label><br />
+<label><input type="checkbox" data-checklist-item /> CheckConstraint: <code>amount &gt; 0</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Meta ordering: <code>[&#x27;-created_at&#x27;]</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Migration generated and committed</label><br />
+        </div>
+      </section>
+
+      <section id="2-django-expenseservice" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Django — `ExpenseService`</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>submit_expense(workspace, submitted_by, amount, category, description=&#x27;&#x27;, receipt=None)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>submit_expense</code>: validates amount > 0 — raises ValidationError if not</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>submit_expense</code>: validates category is a valid TextChoices value</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>submit_expense</code>: if receipt provided, validates MIME type server-side (not just extension)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>submit_expense</code>: does NOT trust file extension — reads actual content type</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>approve_expense(expense, reviewed_by, review_notes=&#x27;&#x27;)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>approve_expense</code>: raises ValidationError if <code>status != &#x27;submitted&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>approve_expense</code>: sets status='approved', reviewed_by, reviewed_at=now()</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reject_expense(expense, reviewed_by, review_notes)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reject_expense</code>: validates review_notes is not blank — required for rejection</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>reject_expense</code>: raises ValidationError if <code>status != &#x27;submitted&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>delete_expense(expense, actor)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>delete_expense</code>: raises PermissionDenied if expense status is not 'submitted' (cannot delete approved/rejected)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>delete_expense</code>: deletes associated receipt file from storage on deletion</label><br />
+<label><input type="checkbox" data-checklist-item /> All methods are <code>@staticmethod</code> — no ORM calls in view body</label><br />
+        </div>
+      </section>
+
+      <section id="3-django-serializers" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Django — Serializers</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>ExpenseReadSerializer</code>: includes all fields, <code>submitted_by</code> and <code>reviewed_by</code> as names (not just IDs)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ExpenseWriteSerializer</code>: separate serializer for create/update input</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ExpenseWriteSerializer</code>: <code>amount</code> validated as > 0</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ExpenseWriteSerializer</code>: <code>category</code> validated against valid choices</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ExpenseWriteSerializer</code>: MIME type of uploaded file validated (image/jpeg, image/png, application/pdf allowed; reject others)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>fields = &#x27;__all__&#x27;</code> is NOT used</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>read_only_fields</code>: id, status, reviewed_by, reviewed_at, created_at, submitted_by</label><br />
+        </div>
+      </section>
+
+      <section id="4-django-permission-class" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Django — Permission Class</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>IsWorkspaceMember</code> permission class in <code>permissions.py</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Queries DB for active workspace membership — not JWT-only check</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>IsWorkspaceAdmin</code> or role check for admin-only views</label><br />
+        </div>
+      </section>
+
+      <section id="5-django-views" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Django — Views</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>ExpenseListCreateView</code> at <code>GET+POST /workspace/{id}/expenses/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> List GET: returns only the authenticated user's own expenses (not all workspace expenses)</label><br />
+<label><input type="checkbox" data-checklist-item /> List supports <code>?status=</code> filter</label><br />
+<label><input type="checkbox" data-checklist-item /> Create POST: calls <code>ExpenseService.submit_expense()</code> — no ORM in view</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ExpenseDetailView</code> at <code>GET+DELETE /workspace/{id}/expenses/{id}/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> DELETE: only submitter can delete their own expense, and only if status='submitted'</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>AdminExpenseListView</code> at <code>GET /workspace/{id}/admin/expenses/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Admin list: returns 403 if caller is not admin/owner</label><br />
+<label><input type="checkbox" data-checklist-item /> Admin list: supports <code>?status=</code> and <code>?submitted_by=</code> filters</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ApproveExpenseView</code> at <code>POST /workspace/{id}/admin/expenses/{id}/approve/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Approve: 403 if not admin/owner</label><br />
+<label><input type="checkbox" data-checklist-item /> Approve: calls <code>ExpenseService.approve_expense()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>RejectExpenseView</code> at <code>POST /workspace/{id}/admin/expenses/{id}/reject/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Reject: 403 if not admin/owner</label><br />
+<label><input type="checkbox" data-checklist-item /> Reject: <code>review_notes</code> from POST body — error returned if blank</label><br />
+<label><input type="checkbox" data-checklist-item /> Reject: calls <code>ExpenseService.reject_expense()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> All views return correct HTTP status codes</label><br />
+<label><input type="checkbox" data-checklist-item /> Error responses follow format: <code>{ &quot;error&quot;: &quot;ERROR_CODE&quot;, &quot;message&quot;: &quot;...&quot; }</code></label><br />
+        </div>
+      </section>
+
+      <section id="6-react-my-expenses-page" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. React — My Expenses Page</h2>
+          <label><input type="checkbox" data-checklist-item /> Custom hook <code>useMyExpenses(workspaceId)</code> returns <code>{ data, isLoading, error, refetch }</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>Expense</code> TypeScript interface defined (no <code>any</code> types)</label><br />
+<label><input type="checkbox" data-checklist-item /> Status filter: <code>?status=</code> passed to API — not client-side filtered</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state: skeleton rows or cards</label><br />
+<label><input type="checkbox" data-checklist-item /> Empty state: "No expenses yet." message</label><br />
+<label><input type="checkbox" data-checklist-item /> Error state: error message + retry button</label><br />
+<label><input type="checkbox" data-checklist-item /> Submit Expense button: opens modal</label><br />
+<label><input type="checkbox" data-checklist-item /> Amount displayed with currency formatting (not raw number)</label><br />
+<label><input type="checkbox" data-checklist-item /> Receipt: download link or preview for submitted receipts</label><br />
+<label><input type="checkbox" data-checklist-item /> Delete button: visible only for <code>submitted</code> status expenses (not for approved/rejected)</label><br />
+<label><input type="checkbox" data-checklist-item /> Delete confirmation: "Delete this expense?" with loading state on confirm</label><br />
+<label><input type="checkbox" data-checklist-item /> On delete success: expense removed from list, "Expense deleted." toast</label><br />
+        </div>
+      </section>
+
+      <section id="7-react-submit-expense-modal" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. React — Submit Expense Modal</h2>
+          <label><input type="checkbox" data-checklist-item /> Single component used (not duplicated)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>amount</code> field: number input, shows error if ≤ 0</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>category</code> field: dropdown with all valid options</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>description</code> field: optional textarea</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>receipt</code> field: file input, MIME type validated <strong>before upload</strong> on client (image/jpeg, image/png, application/pdf)</label><br />
+<label><input type="checkbox" data-checklist-item /> Receipt MIME error shown immediately — not after submit attempt</label><br />
+<label><input type="checkbox" data-checklist-item /> Submit button shows loading state</label><br />
+<label><input type="checkbox" data-checklist-item /> On success: modal closes, expense list refreshes, "Expense submitted." toast</label><br />
+<label><input type="checkbox" data-checklist-item /> API validation errors shown per field</label><br />
+        </div>
+      </section>
+
+      <section id="8-react-manager-review-page" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. React — Manager Review Page</h2>
+          <label><input type="checkbox" data-checklist-item /> Page accessible by admin/owner — 403 state shown for member role</label><br />
+<label><input type="checkbox" data-checklist-item /> All workspace expenses shown (not just own)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>?status=</code> and <code>?submitted_by=</code> filters applied via API (server-side)</label><br />
+<label><input type="checkbox" data-checklist-item /> Status badge per expense row</label><br />
+<label><input type="checkbox" data-checklist-item /> Approve button: visible for <code>submitted</code> status expenses only</label><br />
+<label><input type="checkbox" data-checklist-item /> Approve: calls approve API, loading state on button, "Expense approved." toast on success</label><br />
+<label><input type="checkbox" data-checklist-item /> Reject button: visible for <code>submitted</code> status expenses only</label><br />
+<label><input type="checkbox" data-checklist-item /> Reject: opens inline form requiring <code>review_notes</code> text</label><br />
+<label><input type="checkbox" data-checklist-item /> Reject: cannot submit without <code>review_notes</code> — field error shown</label><br />
+<label><input type="checkbox" data-checklist-item /> After approve/reject: status badge updates, action buttons disappear</label><br />
+        </div>
+      </section>
+
+      <section id="9-standards-compliance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Standards Compliance</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>DecimalField</code> used for amounts — never <code>FloatField</code> for money</label><br />
+<label><input type="checkbox" data-checklist-item /> MIME type validated server-side (not trusting file extension)</label><br />
+<label><input type="checkbox" data-checklist-item /> Receipt file deleted from storage when expense is deleted</label><br />
+<label><input type="checkbox" data-checklist-item /> No business logic (ORM, conditionals) in view methods — all in service</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>serializer.is_valid(raise_exception=True)</code> used</label><br />
+<label><input type="checkbox" data-checklist-item /> No <code>any</code> TypeScript types</label><br />
+<label><input type="checkbox" data-checklist-item /> All errors shown in UI — no silent failures</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile responsive at 375px and 768px</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="score-summary" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Score Summary</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Section</th>
+    <th>Total Items</th>
+    <th>✓ Pass</th>
+    <th>~ Partial</th>
+    <th>✗ Fail</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>1. Model</td>
+    <td>13</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2. Service</td>
+    <td>14</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>3. Serializers</td>
+    <td>7</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>4. Permission Class</td>
+    <td>3</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>5. Views</td>
+    <td>18</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>6. My Expenses Page</td>
+    <td>12</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>7. Submit Modal</td>
+    <td>8</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>8. Manager Page</td>
+    <td>10</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>9. Standards</td>
+    <td>8</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><strong>Total</strong></td>
+    <td><strong>93</strong></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  </tbody>
+</table></div>
+<p><strong>Score: ___ / 93 (___%)</strong> — Pass / Conditional / Fail</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="evaluator-notes" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Evaluator Notes</h2>
+          <p>_Record specific failures, partial items, or other observations here._</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

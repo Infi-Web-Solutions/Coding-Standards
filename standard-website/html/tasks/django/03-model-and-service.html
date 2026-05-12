@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django Task — Model &amp; Service | Development Standards</title>
+  <meta name="description" content="Build the Project model with constraints and soft delete, plus ProjectService with create, archive, and audit log methods." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Django Task — Model &amp; Service</h1>
+        <p class="page-subtitle">Build the Project model with constraints and soft delete, plus ProjectService with create, archive, and audit log methods.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../django-tasks.html" class="btn btn-secondary">Back to Django Tasks</a>
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>You need to create the <code>Project</code> model for a workspace-based project management app. Projects belong to a workspace. Each project has a status, optional dates, and supports soft delete. Business logic for creating and archiving projects must live in a <code>ProjectService</code> class — not in the view.</p>
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <ol>
+            <li>The <code>Project</code> model in <code>models.py</code></li>
+            <li>A custom manager that excludes soft-deleted records by default</li>
+            <li>A <code>ProjectService</code> class in <code>services.py</code></li>
+            <li>A migration file</li>
+            <li>Unit tests for the model constraints and service methods</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Requirements</h2>
+
+          <h3>Project Model Fields</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Rules</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>id</td>
+                  <td>UUIDField</td>
+                  <td>PK, default=uuid4, editable=False</td>
+                </tr>
+                <tr>
+                  <td>workspace</td>
+                  <td>ForeignKey → Workspace</td>
+                  <td>ON DELETE CASCADE, related_name='projects'</td>
+                </tr>
+                <tr>
+                  <td>name</td>
+                  <td>CharField</td>
+                  <td>max_length=100, cannot be blank</td>
+                </tr>
+                <tr>
+                  <td>description</td>
+                  <td>TextField</td>
+                  <td>blank=True, default=''</td>
+                </tr>
+                <tr>
+                  <td>status</td>
+                  <td>CharField</td>
+                  <td>max_length=20, choices: active/on-hold/archived, default='active'</td>
+                </tr>
+                <tr>
+                  <td>start_date</td>
+                  <td>DateField</td>
+                  <td>null=True, blank=True</td>
+                </tr>
+                <tr>
+                  <td>end_date</td>
+                  <td>DateField</td>
+                  <td>null=True, blank=True</td>
+                </tr>
+                <tr>
+                  <td>created_by</td>
+                  <td>ForeignKey → User</td>
+                  <td>ON DELETE SET_NULL, null=True, related_name='created_projects'</td>
+                </tr>
+                <tr>
+                  <td>created_at</td>
+                  <td>DateTimeField</td>
+                  <td>auto_now_add=True</td>
+                </tr>
+                <tr>
+                  <td>updated_at</td>
+                  <td>DateTimeField</td>
+                  <td>auto_now=True</td>
+                </tr>
+                <tr>
+                  <td>deleted_at</td>
+                  <td>DateTimeField</td>
+                  <td>null=True, blank=True, default=None</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Model Constraints</h3>
+          <pre><code class="language-python">class Meta:
+    ordering = ['-created_at']
+    verbose_name = 'Project'
+    verbose_name_plural = 'Projects'
+    constraints = [
+        # A workspace cannot have two active projects with the same name
+        models.UniqueConstraint(
+            fields=['workspace', 'name'],
+            condition=models.Q(deleted_at__isnull=True),
+            name='unique_active_project_name_per_workspace'
+        ),
+        # end_date must be after start_date
+        models.CheckConstraint(
+            check=(
+                models.Q(end_date__isnull=True) |
+                models.Q(start_date__isnull=True) |
+                models.Q(end_date__gt=models.F('start_date'))
+            ),
+            name='project_end_date_after_start_date'
+        ),
+    ]</code></pre>
+
+          <h3>Custom Manager</h3>
+          <pre><code class="language-python">class ProjectManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted_at__isnull=True)
+
+class Project(models.Model):
+    objects = ProjectManager()        # default: excludes soft-deleted
+    all_objects = models.Manager()    # includes soft-deleted</code></pre>
+        </div>
+      </section>
+
+      <section id="projectservice-methods" class="section">
+        <div class="content-card">
+          <h2 class="section-title">ProjectService Methods</h2>
+
+          <h3>create_project(workspace, name, created_by, description='', start_date=None, end_date=None)</h3>
+          <p>Rules:</p>
+          <ul>
+            <li><code>name</code> cannot be blank or exceed 100 characters</li>
+            <li>If both <code>end_date</code> and <code>start_date</code> are provided: <code>end_date</code> must be after <code>start_date</code></li>
+            <li>A project with the same name cannot already exist in the workspace (active projects only)</li>
+            <li>On success: create the project AND create a default <code>TaskList</code> named "General" linked to it</li>
+            <li>On duplicate name: raise <code>ValidationError("A project with this name already exists in this workspace.")</code></li>
+          </ul>
+
+          <h3>archive_project(project, actor)</h3>
+          <p>Rules:</p>
+          <ul>
+            <li><code>project.status</code> must not already be <code>'archived'</code></li>
+            <li>On success: set <code>project.status = 'archived'</code>, save the project</li>
+            <li>Write an entry to <code>AuditLog</code>: <code>action='project.archived'</code>, <code>entity_id=project.id</code>, <code>actor=actor</code></li>
+            <li>Caller's role must be checked by the view/permission layer before calling this method</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <pre><code class="language-text">× Put create_project or archive_project logic in the model's save() method
+× Put business logic in the view (no Project.objects.create() in a view)
+× Call Project.objects.create() directly from inside a view
+× Use fields = '__all__' in any ModelForm or Serializer for this model
+× Raise a generic Exception — always raise ValidationError or a named custom exception
+× Skip the CheckConstraint and UniqueConstraint — they protect data at the DB level
+× Forget to create the default TaskList inside create_project</code></pre>
+        </div>
+      </section>
+
+      <section id="checklist-to-run" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run</h2>
+          <p>Before marking done, run the <a href="../../checklists/django/model.html">Django Model Checklist</a>.</p>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <pre><code class="language-text">[ ] Project model has all 11 fields with correct types and options
+[ ] ForeignKey relationships have correct on_delete and related_name
+[ ] UniqueConstraint for active projects with same name per workspace
+[ ] CheckConstraint for end_date &gt; start_date
+[ ] class Meta has ordering, verbose_name, verbose_name_plural, constraints
+[ ] Custom manager excludes soft-deleted records by default; all_objects includes them
+[ ] __str__ returns a useful human-readable string (e.g., "{workspace.name} / {name}")
+[ ] Migration generated, reviewed, and committed
+[ ] ProjectService.create_project: validates name, checks uniqueness, creates project + TaskList
+[ ] ProjectService.archive_project: validates not already archived, updates status, writes audit log
+[ ] Unit tests cover: valid create, duplicate name error, invalid date range, archive, double-archive error
+[ ] All tests pass</code></pre>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../django-tasks.html" class="footer-link">Django Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Supabase — New API Endpoint Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Supabase new API endpoint checklist for API type, auth, permission, validation, response format, error codes, RPC functions, documentation, and testing."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Supabase Checklist</span>
+        <h1 class="page-title">Supabase — New API Endpoint Checklist</h1>
+
+        <p class="page-subtitle">
+          No endpoint is complete until auth is checked, input is validated, errors are
+          standardized, it is tested across all roles and failure cases, and the frontend
+          has documentation.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-checklist.html" class="btn btn-secondary">Back to Supabase Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Before You Build</h2>
+
+          <label><input type="checkbox" data-checklist-item /> What does this endpoint do? Stated clearly in one sentence</label><br />
+          <label><input type="checkbox" data-checklist-item /> Who calls this? Frontend user role, another service, or webhook</label><br />
+          <label><input type="checkbox" data-checklist-item /> What data does it read or write?</label><br />
+          <label><input type="checkbox" data-checklist-item /> Is this a read, write, delete, or multi-step operation?</label><br />
+          <label><input type="checkbox" data-checklist-item /> Does this already exist as a direct table query, RPC, or Edge Function?</label><br />
+          <label><input type="checkbox" data-checklist-item /> Does this need a new table, or does it use existing tables?</label><br />
+          <label><input type="checkbox" data-checklist-item /> What are the failure scenarios? Missing data, unauthorized, duplicate, invalid input</label><br />
+          <label><input type="checkbox" data-checklist-item /> What should happen in each failure case?</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Choosing the Right API Type</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Use This</th>
+                  <th>When</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Direct table query: <code>supabase.from(...)</code></td>
+                  <td>Simple CRUD on one table with RLS</td>
+                </tr>
+                <tr>
+                  <td>RPC / Postgres Function</td>
+                  <td>Multi-step logic, atomic operations, cross-table writes, or complex business logic</td>
+                </tr>
+                <tr>
+                  <td>Edge Function</td>
+                  <td>Webhooks, third-party integrations, email sending, payment processing, logic requiring secrets</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <label><input type="checkbox" data-checklist-item /> API type chosen and justified</label><br />
+          <label><input type="checkbox" data-checklist-item /> Not using Edge Function when a simpler table query or RPC would suffice</label><br />
+          <label><input type="checkbox" data-checklist-item /> Not using direct table query when logic involves multiple tables — use RPC</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Auth &amp; Permission Requirements</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Is this endpoint protected or public?</label><br />
+          <label><input type="checkbox" data-checklist-item /> If protected: auth validated at the start — <code>auth.uid()</code> is not null</label><br />
+          <label><input type="checkbox" data-checklist-item /> Role/permission read from database — never from request payload</label><br />
+          <label><input type="checkbox" data-checklist-item /> Workspace membership verified if workspace-scoped</label><br />
+          <label><input type="checkbox" data-checklist-item /> If public: confirmed intentionally public</label><br />
+          <label><input type="checkbox" data-checklist-item /> If public: no sensitive data exposed</label><br />
+          <label><input type="checkbox" data-checklist-item /> RLS policies enforce data access — endpoint does not manually filter by user</label><br />
+          <label><input type="checkbox" data-checklist-item /> Service role key not used in this flow unless server-side admin task</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Input Validation</h2>
+
+          <p>Every input must be validated at three layers:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Layer</th>
+                  <th>What It Does</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Frontend</td>
+                  <td>UX feedback — required, format hints</td>
+                </tr>
+                <tr>
+                  <td>API / RPC</td>
+                  <td>Business rule enforcement — length, format, uniqueness</td>
+                </tr>
+                <tr>
+                  <td>Database</td>
+                  <td>Data integrity — NOT NULL, CHECK constraints, FK constraints</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <label><input type="checkbox" data-checklist-item /> Every required field validated as NOT NULL / NOT EMPTY at API level</label><br />
+          <label><input type="checkbox" data-checklist-item /> String fields: max length validated</label><br />
+          <label><input type="checkbox" data-checklist-item /> Email fields: format validated</label><br />
+          <label><input type="checkbox" data-checklist-item /> Phone fields: E.164 format validated if applicable</label><br />
+          <label><input type="checkbox" data-checklist-item /> Enum/status fields: allowed values validated</label><br />
+          <label><input type="checkbox" data-checklist-item /> Numeric fields: range validated</label><br />
+          <label><input type="checkbox" data-checklist-item /> Date/datetime: valid date format and range validated if applicable</label><br />
+          <label><input type="checkbox" data-checklist-item /> Foreign key IDs: existence validated + access check</label><br />
+          <label><input type="checkbox" data-checklist-item /> File uploads: size and MIME type validated in Edge Function</label><br />
+          <label><input type="checkbox" data-checklist-item /> UUID fields: format validated before querying</label>
+
+          <div class="divider"></div>
+
+          <h3>Validation Error Response</h3>
+          <pre>{
+  "error": "VALIDATION_ERROR",
+  "message": "Validation failed.",
+  "fields": {
+    "name": "Name is required.",
+    "email": "Enter a valid email address."
+  }
+}</pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">5. Success Response Format</h2>
+            <pre>{
+  "data": {
+    ...
+  },
+  "message": "Project created successfully."
+}</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Error Response Format</h2>
+            <pre>{
+  "error": "ERROR_CODE",
+  "message": "Human-readable description of the error."
+}</pre>
+          </article>
+        </div>
+
+        <div class="content-card" style="margin-top: 24px;">
+          <h3>Response Rules</h3>
+
+          <label><input type="checkbox" data-checklist-item /> Success response always includes <code>data</code> or null + message</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error response always includes error code + human-readable message</label><br />
+          <label><input type="checkbox" data-checklist-item /> HTTP status codes are correct</label><br />
+          <label><input type="checkbox" data-checklist-item /> Frontend never has to guess what happened — error code is always included</label><br />
+          <label><input type="checkbox" data-checklist-item /> No stack traces or internal error details in response — log them, do not return them</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Standard Error Codes</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Meaning</th>
+                  <th>HTTP Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>AUTH_REQUIRED</code></td><td>Not logged in</td><td>401</td></tr>
+                <tr><td><code>FORBIDDEN</code></td><td>Logged in but no permission</td><td>403</td></tr>
+                <tr><td><code>NOT_FOUND</code></td><td>Resource does not exist</td><td>404</td></tr>
+                <tr><td><code>DUPLICATE</code></td><td>Already exists — unique constraint</td><td>409</td></tr>
+                <tr><td><code>VALIDATION_ERROR</code></td><td>Invalid or missing input</td><td>400</td></tr>
+                <tr><td><code>BUSINESS_RULE_VIOLATION</code></td><td>Failed a business rule</td><td>422</td></tr>
+                <tr><td><code>SERVER_ERROR</code></td><td>Unexpected internal error</td><td>500</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. RPC Function Checklist</h2>
+          <p>Only applies when building a Postgres RPC function.</p>
+
+          <label><input type="checkbox" data-checklist-item /> Function uses SECURITY DEFINER if it needs to bypass RLS for controlled operations</label><br />
+          <label><input type="checkbox" data-checklist-item /> SECURITY DEFINER functions manually verify <code>auth.uid()</code> at the start</label><br />
+          <label><input type="checkbox" data-checklist-item /> Function is VOLATILE or STABLE — not incorrectly marked IMMUTABLE</label><br />
+          <label><input type="checkbox" data-checklist-item /> Function parameters are typed correctly: UUID, TEXT, INT — not generic anyelement</label><br />
+          <label><input type="checkbox" data-checklist-item /> Function returns a consistent structure — JSON or typed row</label><br />
+          <label><input type="checkbox" data-checklist-item /> Function handles all error paths with RAISE EXCEPTION</label><br />
+          <label><input type="checkbox" data-checklist-item /> Transaction wraps multi-step operations</label><br />
+          <label><input type="checkbox" data-checklist-item /> Function tested in isolation with valid and invalid inputs</label>
+
+          <div class="divider"></div>
+
+          <h3>Example RPC Pattern</h3>
+          <pre>CREATE OR REPLACE FUNCTION create_project(
+  p_workspace_id UUID,
+  p_name TEXT,
+  p_description TEXT DEFAULT NULL
+)
+RETURNS JSON
+LANGUAGE plpgsql
+SECURITY INVOKER
+AS $$
+DECLARE
+  v_project projects%ROWTYPE;
+BEGIN
+  IF p_name IS NULL OR trim(p_name) = '' THEN
+    RAISE EXCEPTION 'VALIDATION_ERROR: name is required';
+  END IF;
+
+  IF length(trim(p_name)) &gt; 100 THEN
+    RAISE EXCEPTION 'VALIDATION_ERROR: name must be 100 characters or fewer';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1
+    FROM projects
+    WHERE workspace_id = p_workspace_id
+      AND name = trim(p_name)
+  ) THEN
+    RAISE EXCEPTION 'DUPLICATE: a project with this name already exists';
+  END IF;
+
+  INSERT INTO projects (workspace_id, name, description, created_by)
+  VALUES (p_workspace_id, trim(p_name), p_description, auth.uid())
+  RETURNING * INTO v_project;
+
+  RETURN json_build_object('data', row_to_json(v_project));
+END;
+$$;</pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Documentation Requirements</h2>
+          <p>Every API endpoint needs documentation before it is handed off to the frontend team.</p>
+
+          <label><input type="checkbox" data-checklist-item /> Endpoint name / function name documented</label><br />
+          <label><input type="checkbox" data-checklist-item /> HTTP method and URL or RPC call format documented</label><br />
+          <label><input type="checkbox" data-checklist-item /> Auth requirement stated — public / authenticated / role required</label><br />
+          <label><input type="checkbox" data-checklist-item /> Request payload documented — every field: name, type, required/optional, constraints</label><br />
+          <label><input type="checkbox" data-checklist-item /> Success response documented with full JSON example</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error responses documented — all possible error codes + example response</label><br />
+          <label><input type="checkbox" data-checklist-item /> Frontend code example provided — Supabase client call</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test cases listed — success, missing required field, unauthorized, not found, duplicate</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Testing Requirements</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Success case: correct data in → correct response out</label><br />
+          <label><input type="checkbox" data-checklist-item /> Missing required field: correct error returned</label><br />
+          <label><input type="checkbox" data-checklist-item /> Invalid format: validation error returned</label><br />
+          <label><input type="checkbox" data-checklist-item /> Unauthorized: <code>AUTH_REQUIRED</code> returned</label><br />
+          <label><input type="checkbox" data-checklist-item /> Forbidden: wrong workspace or wrong role returns <code>FORBIDDEN</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Duplicate record: <code>DUPLICATE</code> returned</label><br />
+          <label><input type="checkbox" data-checklist-item /> Not found: wrong ID returns <code>NOT_FOUND</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Edge cases specific to this endpoint tested</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tested as each role: anonymous, member, admin, non-member</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tested with empty strings, null values, oversized strings</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tested with invalid UUID formats</label><br />
+          <label><input type="checkbox" data-checklist-item /> RLS prevents cross-workspace data access</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Before Marking Done</span>
+          <h2 class="section-title">10. API Endpoint Checklist</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">API Type</h3>
+              <label><input type="checkbox" data-checklist-item /> Correct type chosen: table query / RPC / Edge Function</label><br />
+              <label><input type="checkbox" data-checklist-item /> Justified by complexity and requirements</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Auth &amp; Permissions</h3>
+              <label><input type="checkbox" data-checklist-item /> Auth required or intentionally public and documented</label><br />
+              <label><input type="checkbox" data-checklist-item /> Role verified from database — not request payload</label><br />
+              <label><input type="checkbox" data-checklist-item /> Workspace membership verified if multi-tenant</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Input Validation</h3>
+              <label><input type="checkbox" data-checklist-item /> Required fields checked</label><br />
+              <label><input type="checkbox" data-checklist-item /> String lengths validated</label><br />
+              <label><input type="checkbox" data-checklist-item /> Format rules enforced: email, phone, UUID, enum</label><br />
+              <label><input type="checkbox" data-checklist-item /> Numeric ranges validated</label><br />
+              <label><input type="checkbox" data-checklist-item /> Foreign key IDs checked for existence and access</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Response Format</h3>
+              <label><input type="checkbox" data-checklist-item /> Success: <code>{ data, message }</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Error: <code>{ error, message }</code> with correct HTTP status</label><br />
+              <label><input type="checkbox" data-checklist-item /> Field-level errors: <code>{ error, message, fields }</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> No stack traces or internal details in response</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Error Cases Handled</h3>
+              <label><input type="checkbox" data-checklist-item /> <code>VALIDATION_ERROR</code> — 400</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>AUTH_REQUIRED</code> — 401</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>FORBIDDEN</code> — 403</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>NOT_FOUND</code> — 404</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>DUPLICATE</code> — 409</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>SERVER_ERROR</code> — 500</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Testing &amp; Documentation</h3>
+              <label><input type="checkbox" data-checklist-item /> Success case tested</label><br />
+              <label><input type="checkbox" data-checklist-item /> All error cases tested</label><br />
+              <label><input type="checkbox" data-checklist-item /> All roles tested: anonymous, member, admin, non-member</label><br />
+              <label><input type="checkbox" data-checklist-item /> Cross-workspace access confirmed blocked</label><br />
+              <label><input type="checkbox" data-checklist-item /> Request payload documented</label><br />
+              <label><input type="checkbox" data-checklist-item /> All error codes documented</label><br />
+              <label><input type="checkbox" data-checklist-item /> Frontend code example provided</label><br />
+              <label><input type="checkbox" data-checklist-item /> Handed off to frontend team</label>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-info">
+          <div class="alert-title">Practice Task</div>
+          <p>
+            Apply what you learned by building a real multi-step RPC function with atomic
+            operations, validation, and full API documentation.
+          </p>
+          <a href="../../tasks/supabase/03-create-project-api.html" class="btn btn-primary btn-sm">
+            Open Task 03: Build a Create Project API
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Supabase APIs must be documented, role-tested, validation-safe, and frontend-ready.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../supabase-checklist.html" class="footer-link">Supabase Checklist</a>
+        <a href="../../standards/supabase-standards.html" class="footer-link">Supabase Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

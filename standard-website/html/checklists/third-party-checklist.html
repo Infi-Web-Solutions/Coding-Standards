@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Third-Party Implementation Checklists | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Third-party implementation checklists for Stripe, Razorpay, SendGrid, and Gmail integrations."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Third-Party</span>
+        <h1 class="page-title">Third-Party Implementation Checklists</h1>
+        <p class="page-subtitle">
+          Run these checklists when integrating a payment gateway or email service.
+          Each checklist maps directly to the corresponding standard.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/checklists.html" class="btn btn-secondary">Back to Checklists</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <a href="./third-parties-implementation/stripe-integration.html" class="card card-clickable">
+            <span class="badge badge-primary">Stripe</span>
+            <h2 class="card-title">stripe-integration.html</h2>
+            <p class="card-description">Adding any Stripe payment flow</p>
+          </a>
+
+          <a href="./third-parties-implementation/razorpay-integration.html" class="card card-clickable">
+            <span class="badge badge-primary">Razorpay</span>
+            <h2 class="card-title">razorpay-integration.html</h2>
+            <p class="card-description">Adding any Razorpay payment flow</p>
+          </a>
+
+          <a href="./third-parties-implementation/sendgrid-integration.html" class="card card-clickable">
+            <span class="badge badge-primary">SendGrid</span>
+            <h2 class="card-title">sendgrid-integration.html</h2>
+            <p class="card-description">Setting up SendGrid for transactional or marketing email</p>
+          </a>
+
+          <a href="./third-parties-implementation/gmail-integration.html" class="card card-clickable">
+            <span class="badge badge-primary">Gmail</span>
+            <h2 class="card-title">gmail-integration.html</h2>
+            <p class="card-description">Using Gmail SMTP for dev/internal tools</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Related Standards</h2>
+
+          <div class="grid grid-2">
+            <a href="../standards/third-party-standards.html" class="card card-clickable">
+              <h3 class="card-title">Third-Party Standards</h3>
+              <p class="card-description">Main third-party implementation standards page</p>
+            </a>
+
+            <a href="../standards/backend-first-logic.html" class="card card-clickable">
+              <h3 class="card-title">Backend-First Logic</h3>
+              <p class="card-description">Use backend as the enforcement layer for payment and email workflows</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-danger">
+          <div class="alert-title">Integration Rule</div>
+          <p>
+            Never expose private API keys in frontend code. Payment, email, webhook,
+            and provider-secret logic must stay server-side.
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Third-party integrations must be secure, documented, testable, and webhook-safe.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/checklists.html" class="footer-link">All Checklists</a>
+        <a href="../standards/third-party-standards.html" class="footer-link">Third-Party Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

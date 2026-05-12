@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Bug Report Template | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Template for reporting bugs, blockers, and related issues found during work."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="templates">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link active">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-danger">Bug / Blocker</span>
+        <h1 class="page-title">Bug Report Template</h1>
+        <p class="page-subtitle">
+          Use this when reporting a bug, blocker, or unexpected behavior found during work.
+          Post it as a comment in the ticket — do not keep it only in chat.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/templates.html" class="btn btn-secondary">Back to Templates</a>
+          <button class="btn btn-primary" data-copy-template="bug-report-copy">Copy Bug Template</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">Bug Found During Work</h2>
+            <pre>Issue Found:
+[Describe the bug clearly — what is happening vs what should happen]
+
+Impact:
+[Who is affected? What breaks? What is the risk?]
+
+Steps to Reproduce:
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+Expected Behavior:
+[What should happen]
+
+Actual Behavior:
+[What is actually happening]
+
+Suggested Fix:
+[Optional — your best guess at what caused it and how to fix it]
+
+Screenshot/Video:
+[Attach if UI-related]</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Blocker Report</h2>
+            <pre>Status: Blocked
+
+Blocked On:
+[What is blocking progress]
+
+What I Checked:
+- [Step or thing checked]
+- [Step or thing checked]
+
+Possible Cause:
+[Your best assessment]
+
+What I Need:
+[What is required to unblock — API response, design clarification, access, etc.]</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Related Issue Found</h2>
+            <pre>Related Issue Found:
+[Describe the issue found while working on another task]
+
+Affects:
+[Which page/module/component]
+
+Impact:
+[What could break or fail]
+
+Suggested Action:
+[Create separate ticket / needs discussion / can be fixed in same PR]</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Example — Bug Found</h2>
+            <pre>Issue Found:
+The Edit Project form does not validate the phone number field, but the Add Project form does.
+Users can save any text in the phone field through the edit flow.
+
+Impact:
+Invalid phone numbers are stored in the database. This could break SMS/notification features downstream.
+
+Steps to Reproduce:
+1. Open any project.
+2. Click Edit.
+3. Enter "abc123" in the phone number field.
+4. Click Save — it saves successfully with no validation error.
+
+Expected Behavior:
+Phone field should validate the country code and number format, same as Add Project.
+
+Actual Behavior:
+No validation on Edit — any text is accepted.
+
+Suggested Fix:
+Use the same shared validation schema for both Add and Edit forms.</pre>
+          </article>
+        </div>
+      </section>
+
+      <pre id="bug-report-copy" hidden>Issue Found:
+[Describe the bug clearly — what is happening vs what should happen]
+
+Impact:
+[Who is affected? What breaks? What is the risk?]
+
+Steps to Reproduce:
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+Expected Behavior:
+[What should happen]
+
+Actual Behavior:
+[What is actually happening]
+
+Suggested Fix:
+[Optional — your best guess at what caused it and how to fix it]
+
+Screenshot/Video:
+[Attach if UI-related]</pre>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Report issues with enough context to reproduce and fix them.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="../pages/templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

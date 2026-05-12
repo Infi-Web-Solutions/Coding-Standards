@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django Task — Project Detail Template | Development Standards</title>
+  <meta name="description" content="Build a Django HTML template for project detail — extends base.html, no inline styles or scripts, data-* attributes for JS." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Django Task — Project Detail Template</h1>
+        <p class="page-subtitle">Build a Django HTML template for project detail — extends base.html, no inline styles or scripts, data-* attributes for JS.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../django-tasks.html" class="btn btn-secondary">Back to Django Tasks</a>
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>Continuing from Task 01, you will build the HTML templates for the Project List page and the Project Detail page. Every template must follow the 3-folder rule (CSS in <code>static/css/</code>, JS in <code>static/js/</code>, HTML in <code>templates/</code>), extend <code>base.html</code>, use zero inline styles or scripts, and pass any Django data to JavaScript only via <code>data-*</code> attributes.</p>
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <p>Three template files and their supporting static files:</p>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Template</th>
+                  <th>Path</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Project list page</td>
+                  <td><code>templates/projects/list.html</code></td>
+                </tr>
+                <tr>
+                  <td>Project create form page</td>
+                  <td><code>templates/projects/form.html</code></td>
+                </tr>
+                <tr>
+                  <td>Project detail page</td>
+                  <td><code>templates/projects/detail.html</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Plus supporting static files:</p>
+          <ul>
+            <li><code>static/css/pages/projects.css</code></li>
+            <li><code>static/js/pages/project-detail.js</code></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="part-1-list-html" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Part 1 — templates/projects/list.html</h2>
+          <h3>Requirements</h3>
+          <ul>
+            <li>Extends <code>base.html</code></li>
+            <li>Sets <code>{% block title %}Projects — WorkFlow{% endblock %}</code></li>
+            <li>Lists all projects passed in context as a grid of cards</li>
+            <li>Each card shows: project name, status badge (color-coded), start date, number of tasks (if available)</li>
+            <li>Cards link to the project detail page using <code>{% url 'projects:detail' workspace_id=workspace.id pk=project.id %}</code></li>
+            <li>An "Add Project" button links to the create page</li>
+            <li>If no projects: show an empty state message ("No projects yet. Create your first project.")</li>
+            <li>Status badges use CSS classes only — no inline <code>style="color: ..."</code> or <code>style="background: ..."</code></li>
+          </ul>
+          <h3>Status Badge Classes (defined in CSS, not inline)</h3>
+          <pre><code class="language-css">/* static/css/components/badge.css */
+.badge-active   { background-color: var(--color-success); color: white; }
+.badge-on-hold  { background-color: var(--color-warning); color: black; }
+.badge-archived { background-color: var(--color-neutral); color: white; }</code></pre>
+          <p>Use <code>{{ project.status|lower|slugify }}</code> to generate the class name dynamically.</p>
+        </div>
+      </section>
+
+      <section id="part-2-form-html" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Part 2 — templates/projects/form.html</h2>
+          <h3>Requirements</h3>
+          <ul>
+            <li>Extends <code>base.html</code></li>
+            <li>Title block: "Add Project — WorkFlow" (or "Edit Project" in edit mode)</li>
+            <li>Renders the <code>ProjectForm</code> passed in context</li>
+            <li>Shows field-level errors below each field using <code>{{ form.field_name.errors }}</code></li>
+            <li>Shows non-field errors (from <code>form.non_field_errors()</code>) as a banner above the form</li>
+            <li>Required fields show an asterisk (<code>*</code>) next to their label</li>
+            <li>Submit button label: "Create Project"</li>
+            <li>"Cancel" link goes back to the project list</li>
+            <li>CSRF token included: <code>{% csrf_token %}</code></li>
+            <li>No <code>&lt;style&gt;</code> blocks — all styles in <code>static/css/pages/projects.css</code></li>
+            <li>No <code>&lt;script&gt;</code> blocks — JS in <code>static/js/pages/project-form.js</code> if needed</li>
+          </ul>
+          <h3>Form Field Layout</h3>
+          <pre><code class="language-html">&lt;div class="form-field {% if form.name.errors %}has-error{% endif %}"&gt;
+  &lt;label for="{{ form.name.id_for_label }}"&gt;
+    Project Name &lt;span class="required-star"&gt;*&lt;/span&gt;
+  &lt;/label&gt;
+  {{ form.name }}
+  {% if form.name.errors %}
+    &lt;p class="field-error"&gt;{{ form.name.errors.0 }}&lt;/p&gt;
+  {% endif %}
+&lt;/div&gt;</code></pre>
+        </div>
+      </section>
+
+      <section id="part-3-detail-html" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Part 3 — templates/projects/detail.html</h2>
+          <h3>Requirements</h3>
+          <ul>
+            <li>Extends <code>base.html</code></li>
+            <li>Title block: <code>{{ project.name }} — WorkFlow</code></li>
+            <li>Shows all project fields: name, description, status, dates, created by, created at</li>
+            <li>An "Edit Project" button — shown only to the project creator and workspace admins</li>
+            <li>A "Archive Project" button — only for admins, triggers a JavaScript confirmation modal before submitting</li>
+            <li>Project task list (if tasks are passed in context)</li>
+          </ul>
+          <h3>JavaScript Interaction — Archive Confirmation</h3>
+          <p>The Archive button must trigger a confirmation dialog before the form is submitted. The project name must be passed to the JavaScript — via a <code>data-*</code> attribute, NOT via string interpolation in a <code>&lt;script&gt;</code> block.</p>
+          <p><strong>Correct pattern:</strong></p>
+          <pre><code class="language-html">&lt;!-- In the template --&gt;
+&lt;div
+  id="project-actions"
+  data-project-name="{{ project.name|escapejs }}"
+  data-archive-url="{% url 'projects:archive' workspace_id=workspace.id pk=project.id %}"
+&gt;
+  &lt;button id="archive-btn" class="btn btn-danger"&gt;Archive Project&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+          <pre><code class="language-js">// static/js/pages/project-detail.js
+const actions = document.getElementById('project-actions');
+const projectName = actions.dataset.projectName;
+const archiveUrl = actions.dataset.archiveUrl;
+
+document.getElementById('archive-btn').addEventListener('click', () => {
+  const confirmed = confirm(`Archive "${projectName}"? This cannot be undone.`);
+  if (confirmed) {
+    // Submit archive form or redirect
+    window.location.href = archiveUrl;
+  }
+});</code></pre>
+        </div>
+      </section>
+
+      <section id="static-files-to-create" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Static Files to Create</h2>
+
+          <h3>static/css/pages/projects.css</h3>
+          <p>Must define styles for:</p>
+          <ul>
+            <li>Project card grid layout (responsive — 1 column mobile, 2 tablet, 3 desktop)</li>
+            <li>Status badges (use CSS variables from <code>base.css</code>, not hardcoded colors)</li>
+            <li>Empty state styling</li>
+            <li>Form field layout (<code>form-field</code>, <code>has-error</code>, <code>field-error</code>, <code>required-star</code>)</li>
+            <li>Detail page layout</li>
+          </ul>
+          <p><strong>Must use CSS variables from <code>base.css</code> — no hardcoded colors or spacing values.</strong></p>
+
+          <h3>static/js/pages/project-detail.js</h3>
+          <p>Must contain:</p>
+          <ul>
+            <li>Archive confirmation logic (reads <code>data-project-name</code> from the DOM)</li>
+            <li>No global variables</li>
+            <li>No inline event handlers in the HTML</li>
+            <li>All DOM lookups after <code>DOMContentLoaded</code></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <ul>
+            <li>Do not use <code>&lt;style&gt;</code> blocks anywhere in templates</li>
+            <li>Do not use <code>&lt;script&gt;</code> blocks with logic in templates</li>
+            <li>Do not use <code>onclick="..."</code> or any inline event handlers</li>
+            <li>Do not interpolate Django data into <code>&lt;script&gt;</code> tags: NOT <code>&lt;script&gt;var name = "{{ project.name }}";&lt;/script&gt;</code></li>
+            <li>Do not hardcode colors in CSS — use CSS variables</li>
+            <li>Do not duplicate the navbar or footer — use <code>{% include "components/navbar.html" %}</code></li>
+            <li>Do not use <code>/static/</code> hardcoded paths — always use <code>{% static 'path' %}</code></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="checklist-to-run-when-done" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run When Done</h2>
+          <p>Use the <a href="../../checklists/django/template.html">Django Template Checklist</a>.</p>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <pre><code class="language-text">FOLDER STRUCTURE
+[ ] Templates in templates/projects/
+[ ] CSS in static/css/pages/projects.css
+[ ] JS in static/js/pages/project-detail.js
+
+TEMPLATE INHERITANCE
+[ ] All templates start with {% extends "base.html" %}
+[ ] {% load static %} at top of each template
+[ ] Each template sets {% block title %}
+[ ] No duplicate &lt;html&gt;, &lt;head&gt;, or &lt;body&gt; tags
+
+CSS
+[ ] Zero &lt;style&gt; blocks in any template
+[ ] All styles in static/css/ files
+[ ] CSS uses variables from base.css (no hardcoded colors)
+[ ] Status badges styled with CSS classes (not inline style attributes)
+[ ] Grid layout is responsive (1 col mobile, 2 tablet, 3 desktop)
+
+JAVASCRIPT
+[ ] Zero &lt;script&gt; blocks with logic in any template
+[ ] No inline event handlers (onclick, etc.)
+[ ] Archive button reads project name from data-project-name attribute
+[ ] Confirmation fires before any destructive action
+
+STATIC FILES
+[ ] {% load static %} before any {% static %} usage
+[ ] All static file paths use {% static 'path' %}
+[ ] No hardcoded /static/ paths
+
+FORMS
+[ ] {% csrf_token %} inside every &lt;form&gt;
+[ ] Field errors displayed below each field
+[ ] Non-field errors shown as banner
+[ ] Required fields have asterisk indicator
+
+MOBILE
+[ ] List page tested: cards stack on mobile
+[ ] Form page tested: inputs usable on mobile, no overflow
+[ ] Detail page tested: layout readable on mobile</code></pre>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../django-tasks.html" class="footer-link">Django Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

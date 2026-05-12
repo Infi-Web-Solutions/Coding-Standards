@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Tasks | Development Standards</title>
+  <meta name="description" content="Project tasks by stack with evaluation checklists." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="tasks">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../index.html" class="navbar-link">Home</a><a href="../pages/standards.html" class="navbar-link">Standards</a><a href="../pages/checklists.html" class="navbar-link">Checklists</a><a href="../pages/tasks.html" class="navbar-link active">Tasks</a><a href="../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-info">Project Tasks</span><h1 class="page-title">Project Tasks</h1><p class="page-subtitle">Each project is a complete mini-application scoped to ~8 hours. Every project is designed to exercise every relevant standard and checklist for its tech stack. Complete the project, run every linked checklist, and tick every item in "Done When" before marking it done.</p></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">How to Use</h2>
+      <ol>
+        <li>Pick the project matching your tech stack</li>
+        <li>Read the full project brief before writing any code</li>
+        <li>Plan your approach — identify which checklists apply before starting</li>
+        <li>Build each feature, running the relevant checklist as you complete it</li>
+        <li>A project is not done until every "Done When" item is checked</li>
+      </ol>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Projects by Stack</h2>
+      <div class="table-wrapper"><table class="table"><thead><tr><th>Stack</th><th>Project 1</th><th>Project 2</th></tr></thead><tbody>
+        <tr><td>WeWeb + Supabase</td><td><a href="./projects/weweb-supabase-member-directory.html">Team Member Directory</a></td><td><a href="./projects/weweb-supabase-task-board.html">Task Board</a></td></tr>
+        <tr><td>WeWeb + Xano</td><td><a href="./projects/weweb-xano-contact-book.html">Contact Book</a></td><td><a href="./projects/weweb-xano-leave-requests.html">Leave Request System</a></td></tr>
+        <tr><td>React + Django</td><td><a href="./projects/react-django-announcement-board.html">Announcement Board</a></td><td><a href="./projects/react-django-expense-tracker.html">Expense Tracker</a></td></tr>
+        <tr><td>React + Supabase</td><td><a href="./projects/react-supabase-invite-system.html">Workspace Invite System</a></td><td><a href="./projects/react-supabase-document-library.html">Document Library</a></td></tr>
+        <tr><td>Django + Templates</td><td><a href="./projects/django-leave-requests.html">Leave Request System</a></td><td><a href="./projects/django-knowledge-base.html">Internal Knowledge Base</a></td></tr>
+      </tbody></table></div>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">What Each Project Covers</h2>
+      <ul>
+        <li>Designing and creating the database schema</li>
+        <li>Writing all required backend logic (RLS / endpoints / services)</li>
+        <li>Building all frontend pages with loading, empty, and error states</li>
+        <li>Handling forms with proper validation and Add/Edit consistency</li>
+        <li>Showing all async feedback: loading states, toasts, error banners</li>
+        <li>Applying role-based permissions at every level</li>
+        <li>Running the full checklist for every feature before calling it done</li>
+      </ul>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Evaluation</h2>
+      <p>When a project is submitted for review, evaluators use the checklists in the <code>evaluation/</code> folder. Each evaluation checklist maps directly to a project and covers every requirement — schema, service logic, UI states, permissions, security, and standards compliance.</p>
+      <div class="table-wrapper"><table class="table"><thead><tr><th>Project</th><th>Evaluation Checklist</th></tr></thead><tbody>
+        <tr><td>WeWeb + Supabase: Member Directory</td><td><a href="./evaluation/weweb-supabase-01-member-directory.html">evaluation/weweb-supabase-01-member-directory.md</a></td></tr>
+        <tr><td>WeWeb + Supabase: Task Board</td><td><a href="./evaluation/weweb-supabase-02-task-board.html">evaluation/weweb-supabase-02-task-board.md</a></td></tr>
+        <tr><td>WeWeb + Xano: Contact Book</td><td><a href="./evaluation/weweb-xano-01-contact-book.html">evaluation/weweb-xano-01-contact-book.md</a></td></tr>
+        <tr><td>WeWeb + Xano: Leave Requests</td><td><a href="./evaluation/weweb-xano-02-leave-requests.html">evaluation/weweb-xano-02-leave-requests.md</a></td></tr>
+        <tr><td>React + Django: Announcement Board</td><td><a href="./evaluation/react-django-01-announcement-board.html">evaluation/react-django-01-announcement-board.md</a></td></tr>
+        <tr><td>React + Django: Expense Tracker</td><td><a href="./evaluation/react-django-02-expense-tracker.html">evaluation/react-django-02-expense-tracker.md</a></td></tr>
+        <tr><td>React + Supabase: Invite System</td><td><a href="./evaluation/react-supabase-01-invite-system.html">evaluation/react-supabase-01-invite-system.md</a></td></tr>
+        <tr><td>React + Supabase: Document Library</td><td><a href="./evaluation/react-supabase-02-document-library.html">evaluation/react-supabase-02-document-library.md</a></td></tr>
+        <tr><td>Django + Templates: Leave Requests</td><td><a href="./evaluation/django-templates-01-leave-requests.html">evaluation/django-templates-01-leave-requests.md</a></td></tr>
+        <tr><td>Django + Templates: Knowledge Base</td><td><a href="./evaluation/django-templates-02-knowledge-base.html">evaluation/django-templates-02-knowledge-base.md</a></td></tr>
+      </tbody></table></div>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

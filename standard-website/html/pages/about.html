@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>About | Development Standards</title>
+
+  <meta
+    name="description"
+    content="About the Development Standards system: team rules, non-negotiables, delivery expectations, and definition of done."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="about">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="./standards.html" class="navbar-link">Standards</a>
+        <a href="./checklists.html" class="navbar-link">Checklists</a>
+        <a href="./tasks.html" class="navbar-link">Tasks</a>
+        <a href="./templates.html" class="navbar-link">Templates</a>
+        <a href="./about.html" class="navbar-link active">About</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>
+        Dark Mode
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">About</span>
+
+        <h1 class="page-title">Development Standards</h1>
+
+        <p class="page-subtitle">
+          This is the team's single source of truth for how we build.
+          Every team member is expected to know these standards and apply them before marking anything done.
+        </p>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <div class="card-header">
+            <span class="badge badge-danger">Core Rule</span>
+            <h2 class="section-title">
+              Own the work, think beyond the ticket, communicate clearly, test before handoff, and make every change traceable.
+            </h2>
+          </div>
+
+          <p>
+            The goal of this standards system is to make delivery consistent across backend,
+            frontend, Supabase, Xano, Django, websites, third-party integrations, and team communication.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="page-header">
+          <span class="badge badge-danger">Everyone, Every Task</span>
+          <h2 class="section-title">Non-Negotiables</h2>
+          <p class="section-description">
+            These apply regardless of role, platform, or task type.
+          </p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card">
+            <h3 class="card-title">1. No Silent Failures</h3>
+            <p class="card-description">
+              Every error must be visible in the UI.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">2. No Unclear "Done"</h3>
+            <p class="card-description">
+              Every completion needs evidence in the ticket.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">3. No Untested Handoff</h3>
+            <p class="card-description">
+              Test your own work before marking complete.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">4. No Inconsistent Forms</h3>
+            <p class="card-description">
+              Add and Edit for the same entity must behave identically.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">5. No API Error Only in Console</h3>
+            <p class="card-description">
+              Show it to the user.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">6. No Missing Loading State</h3>
+            <p class="card-description">
+              Every async action shows loading.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">7. No Destructive Action Without Confirmation</h3>
+            <p class="card-description">
+              Delete, archive, and irreversible actions need confirmation.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">8. No Important Issue Only in Chat</h3>
+            <p class="card-description">
+              It must be in the ticket.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">9. No Shared Logic Changed Without Impact Check</h3>
+            <p class="card-description">
+              Check all places that use shared logic before changing it.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">10. No Mobile Skipped</h3>
+            <p class="card-description">
+              Every UI must be checked on mobile before done.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">11. Backend Is the Source of Truth</h3>
+            <p class="card-description">
+              Never enforce rules only on frontend.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">12. Check Before You Build</h3>
+            <p class="card-description">
+              If it exists or will be reused, extract it first.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <div class="card-header">
+            <span class="badge badge-info">Team Flow</span>
+            <h2 class="section-title">How Every Team Member Should Work</h2>
+          </div>
+
+          <div class="alert alert-info">
+            <div class="alert-title">Flow</div>
+            Understand → Clarify → Plan → Build → Test → Update → Raise Issues → Complete with Evidence
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">Before Starting</h3>
+              <ul>
+                <li>Read the task fully before starting.</li>
+                <li>Ask questions before building unclear requirements.</li>
+                <li>Check whether related standards or reusable patterns already exist.</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">While Working</h3>
+              <ul>
+                <li>All updates go in the ticket — not just in chat.</li>
+                <li>Every update must state: what was done, time spent, current status, next step.</li>
+                <li>Own your bugs. If your change caused an issue, raise and fix it.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="page-header">
+          <span class="badge badge-success">Definition of Done</span>
+          <h2 class="section-title">Done Means Proven</h2>
+          <p class="section-description">
+            A task is not done because code was written. It is done when the requirement is met,
+            tested, documented, and traceable.
+          </p>
+        </div>
+
+        <div class="grid grid-2">
+          <article class="card">
+            <h3 class="card-title">Backend API — Supabase</h3>
+            <p class="card-description">
+              Schema → Constraints → Indexes → RLS enabled → RLS policies → Auth check →
+              Validation → Error responses → Logs → Tests → Frontend API documentation are all complete.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">Backend API — Xano</h3>
+            <p class="card-description">
+              Auth token check → Permission check → Input validation → Business logic →
+              Standard error format → Reusable functions extracted → API documented →
+              Tested for success + all failure cases.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">Django View / Feature</h3>
+            <p class="card-description">
+              Permission enforced → Validation in form/serializer → Logic in service →
+              Template has no inline styles/scripts → Tests pass →
+              Business logic not duplicated elsewhere.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">Django Template Task</h3>
+            <p class="card-description">
+              Extends base.html → No inline style → No inline script logic →
+              CSS in static/css → JS in static/js → Repeated sections use include →
+              Mobile checked.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">Frontend Task</h3>
+            <p class="card-description">
+              Main flow works → Validation works → Loading state works →
+              Error shown in UI → Mobile checked → Add/Edit consistent →
+              Self-tested → Ticket updated.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">Website Replica</h3>
+            <p class="card-description">
+              All pages built → Forms tested → Mobile responsive → SEO metadata →
+              Redirects → Analytics → Client approved staging.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card text-center">
+          <span class="badge badge-primary">Next Step</span>
+          <h2 class="section-title">Start With the Right Standard</h2>
+          <p class="section-description" style="margin-inline: auto;">
+            Pick your platform or task type, read the standard, run the checklist,
+            and finish with evidence.
+          </p>
+
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="./standards.html" class="btn btn-primary">View Standards</a>
+            <a href="./checklists.html" class="btn btn-secondary">View Checklists</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Own the work. Test before handoff. Make every change traceable.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="./standards.html" class="footer-link">Standards</a>
+        <a href="./checklists.html" class="footer-link">Checklists</a>
+        <a href="./tasks.html" class="footer-link">Tasks</a>
+        <a href="./templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gmail Integration Checklist | Development Standards</title>
+  <meta name="description" content="App Passwords, Django config per environment, daily limits, when to switch to SendGrid." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Gmail Integration Checklist</h1>
+        <p class="page-subtitle">App Passwords, Django config per environment, daily limits, when to switch to SendGrid.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../third-party-checklist.html" class="btn btn-secondary">Back to Third-Party Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p>Run this checklist when using Gmail SMTP for sending email (dev/internal/low-volume tools).</p>
+<p><strong>Standard:</strong> <a href="../../standards/third-parties-implementation/gmail.md">Gmail Standard</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-decision-is-gmail-appropriate" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Decision — Is Gmail Appropriate?</h2>
+          <p>[ ] Confirmed this is NOT a production app sending to real users at scale [ ] Confirmed daily volume is well within Gmail limits (< 500/day personal, < 2000/day Workspace) [ ] Confirmed this is for: development, internal tool, admin notifications, or staging only [ ] If any of the above are not true — switch to SendGrid before proceeding</p>
+        </div>
+      </section>
+
+      <section id="2-gmail-account" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Gmail Account</h2>
+          <p>[ ] Using a dedicated Gmail/Workspace account for the app — not a personal email [ ] 2-Step Verification is enabled on the account (required for App Passwords)</p>
+        </div>
+      </section>
+
+      <section id="3-authentication" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Authentication</h2>
+          <p>[ ] App Password generated (if using SMTP): 16-character password from Google Security settings [ ] App Password stored in environment variable: <code>GMAIL_APP_PASSWORD</code> [ ] App Password NOT committed to version control [ ] Main account password NOT used as EMAIL_HOST_PASSWORD anywhere in code</p>
+        </div>
+      </section>
+
+      <section id="4-django-configuration" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Django Configuration</h2>
+          <p>[ ] <code>EMAIL_BACKEND</code> set correctly per environment:</p>
+<ul>
+  <li>Local: <code>console.EmailBackend</code> or <code>filebased.EmailBackend</code> (no real sending)</li>
+  <li>Staging: MailHog/MailPit (catches emails without sending)</li>
+  <li>Internal production: <code>smtp.EmailBackend</code> with Gmail SMTP credentials</li>
+</ul>
+<p>[ ] <code>EMAIL_HOST = &#x27;smtp.gmail.com&#x27;</code> [ ] <code>EMAIL_PORT = 587</code> [ ] <code>EMAIL_USE_TLS = True</code> [ ] <code>EMAIL_HOST_USER</code> set from environment variable [ ] <code>EMAIL_HOST_PASSWORD</code> set from environment variable (App Password, not main password)</p>
+        </div>
+      </section>
+
+      <section id="5-environment-variables" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Environment Variables</h2>
+          <p>[ ] <code>GMAIL_USER</code> set in environment [ ] <code>GMAIL_APP_PASSWORD</code> set in environment [ ] No credentials in settings files, config files, or source code</p>
+        </div>
+      </section>
+
+      <section id="6-limits-and-monitoring" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Limits and Monitoring</h2>
+          <p>[ ] Current daily email volume tracked (stay under limit) [ ] If volume grows close to limit: SendGrid migration planned</p>
+        </div>
+      </section>
+
+      <section id="7-when-to-switch" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. When to Switch</h2>
+          <p>[ ] Team knows the trigger to switch to SendGrid:</p>
+<ul>
+  <li>Approaching 500/day limit</li>
+  <li>Sending to external/real users</li>
+  <li>Need email analytics or deliverability tracking</li>
+  <li>Emails landing in spam</li>
+</ul>
+<hr />
+<p><strong>Standard:</strong> <a href="../../standards/third-parties-implementation/gmail.md">Gmail Standard</a></p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../third-party-checklist.html" class="footer-link">Third-Party Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

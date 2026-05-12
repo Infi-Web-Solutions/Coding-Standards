@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Permissions & Role-Based UI Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Checklist for frontend role-based UI, backend permission enforcement, hide vs disable behavior, page access, partial access, and role changes."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Permissions &amp; Role-Based UI Checklist</h1>
+
+        <p class="page-subtitle">
+          The backend enforces all permissions. The frontend only adjusts the UI to
+          reflect them. Never rely on hiding a button as a security measure.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div data-permissions-demo></div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">1. Fundamental Rule</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Backend validates permissions on every API call</label><br />
+            <label><input type="checkbox" data-checklist-item /> Hiding a button is UX only — not security</label><br />
+            <label><input type="checkbox" data-checklist-item /> User who knows API endpoint is still blocked by backend</label><br />
+            <label><input type="checkbox" data-checklist-item /> Frontend never enforces permissions alone</label><br />
+            <label><input type="checkbox" data-checklist-item /> Frontend only reflects backend permissions</label><br />
+            <label><input type="checkbox" data-checklist-item /> Supabase permissions live in RLS policies</label><br />
+            <label><input type="checkbox" data-checklist-item /> Xano permissions live in check_workspace_permission function</label><br />
+            <label><input type="checkbox" data-checklist-item /> Django permissions live in LoginRequiredMixin and DB-backed view checks</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">2. Hide vs Disable</h2>
+
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Approach</th>
+                    <th>When to Use</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Hide</td>
+                    <td>User role has no access at all and seeing option would confuse them</td>
+                  </tr>
+                  <tr>
+                    <td>Disable</td>
+                    <td>User might have access in some contexts or needs to know feature exists</td>
+                  </tr>
+                  <tr>
+                    <td>Show with explanation</td>
+                    <td>Upgrade or role change would grant access</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="divider"></div>
+
+            <label><input type="checkbox" data-checklist-item /> Disabled elements have tooltip explaining why</label><br />
+            <label><input type="checkbox" data-checklist-item /> Tooltip says Admin access required, Owner access required, etc.</label><br />
+            <label><input type="checkbox" data-checklist-item /> Disabled elements visually distinct from active elements</label><br />
+            <label><input type="checkbox" data-checklist-item /> Disabled elements not completely hidden when user should know feature exists</label><br />
+            <label><input type="checkbox" data-checklist-item /> Hidden elements only when completely irrelevant to the role</label><br />
+            <label><input type="checkbox" data-checklist-item /> Navigation items user can see but not use are disabled with tooltip</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">3. Reading the User's Role</h2>
+
+            <label><input type="checkbox" data-checklist-item /> User role read from authenticated session/token</label><br />
+            <label><input type="checkbox" data-checklist-item /> Role is not read from URL param, query string, or localStorage setting</label><br />
+            <label><input type="checkbox" data-checklist-item /> Role read fresh from backend on each page load</label><br />
+            <label><input type="checkbox" data-checklist-item /> Supabase role read from workspace_members table via RLS or dedicated query</label><br />
+            <label><input type="checkbox" data-checklist-item /> Xano role read in check_workspace_permission function</label><br />
+            <label><input type="checkbox" data-checklist-item /> Django role read from database in view or mixin</label><br />
+            <label><input type="checkbox" data-checklist-item /> Frontend stores role in auth context/state, not localStorage</label><br />
+            <label><input type="checkbox" data-checklist-item /> Role never accepted from user-controlled source</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">4. Buttons</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Add Project visible to members, admin, owner; hidden from viewers</label><br />
+            <label><input type="checkbox" data-checklist-item /> Edit visible to record owner and admins; disabled for others</label><br />
+            <label><input type="checkbox" data-checklist-item /> Delete visible only to admins/owners</label><br />
+            <label><input type="checkbox" data-checklist-item /> Delete hidden from members and viewers</label><br />
+            <label><input type="checkbox" data-checklist-item /> Invite Member visible only to admins/owners</label><br />
+            <label><input type="checkbox" data-checklist-item /> Export visible only if user has export permission</label><br />
+            <label><input type="checkbox" data-checklist-item /> Export disabled with tooltip when not allowed</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">5. Form Fields</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Fields user cannot edit shown as read-only or disabled</label><br />
+            <label><input type="checkbox" data-checklist-item /> Read-only fields are not removed from the page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Read-only fields have tooltip explaining why</label><br />
+            <label><input type="checkbox" data-checklist-item /> Entire form shown as read-only if user has view-only access</label><br />
+            <label><input type="checkbox" data-checklist-item /> Save button hidden if entire form is read-only</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">6. Navigation</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Navigation items user cannot access are hidden or disabled with tooltip</label><br />
+            <label><input type="checkbox" data-checklist-item /> Hide nav items completely outside the user's role</label><br />
+            <label><input type="checkbox" data-checklist-item /> Disable nav items that could be accessible with upgrade</label><br />
+            <label><input type="checkbox" data-checklist-item /> Admin panel/settings link hidden for non-admin roles</label><br />
+            <label><input type="checkbox" data-checklist-item /> Billing section hidden for non-owner roles</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">7. Tables / Lists</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Action column adjusted per row based on user's permission for that row</label><br />
+            <label><input type="checkbox" data-checklist-item /> Member can edit own rows but not others' rows</label><br />
+            <label><input type="checkbox" data-checklist-item /> Admin can edit all rows</label><br />
+            <label><input type="checkbox" data-checklist-item /> Do not show active Edit button on row user cannot edit</label><br />
+            <label><input type="checkbox" data-checklist-item /> Disabled row action includes tooltip</label><br />
+            <label><input type="checkbox" data-checklist-item /> Bulk delete hidden or disabled if user lacks delete permission</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">8. Page-Level Access</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Unauthorized page shows: You don't have permission to view this</label><br />
+            <label><input type="checkbox" data-checklist-item /> Unauthorized page does not redirect to 404</label><br />
+            <label><input type="checkbox" data-checklist-item /> Unauthorized page never renders blank</label><br />
+            <label><input type="checkbox" data-checklist-item /> Unauthorized page provides link back to accessible page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Locked feature shows locked/upgrade state, not 404</label><br />
+            <label><input type="checkbox" data-checklist-item /> Protected routes redirect unauthenticated users to login</label><br />
+            <label><input type="checkbox" data-checklist-item /> Intended URL restored after login</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">9. Partial Access</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Show accessible parts fully</label><br />
+            <label><input type="checkbox" data-checklist-item /> Restricted parts shown locked/blurred/disabled with clear explanation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Viewer on project settings sees general info but Danger Zone hidden or Admin only</label><br />
+            <label><input type="checkbox" data-checklist-item /> Member on billing sees plan but Manage billing disabled with Owner access required</label><br />
+            <label><input type="checkbox" data-checklist-item /> Backend restricts data and actions; frontend only displays state</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">10. Role Changes</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Backend enforces new role on next API call after role change</label><br />
+            <label><input type="checkbox" data-checklist-item /> Role-change rejection shows: You no longer have permission to do this</label><br />
+            <label><input type="checkbox" data-checklist-item /> Removed workspace user redirected with explanation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Token refresh re-reads current role from database</label><br />
+            <label><input type="checkbox" data-checklist-item /> User role is not cached indefinitely</label><br />
+            <label><input type="checkbox" data-checklist-item /> Role refresh happens on login and token refresh</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-danger">
+          <div class="alert-title">Security Rule</div>
+          Frontend role-based UI is not security. Backend permissions must block unauthorized API calls even if the user manually triggers the endpoint.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Frontend reflects permissions. Backend enforces permissions.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../standards/frontend-standards.html" class="footer-link">Frontend Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+  <script type="module" src="../../../js/pages/permissions-demo.js"></script>
+</body>
+</html>

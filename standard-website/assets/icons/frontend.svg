@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Frontend icon">
+  <rect x="8" y="12" width="48" height="40" rx="6" fill="#0f172a"/>
+  <rect x="14" y="18" width="36" height="24" rx="3" fill="#e2e8f0"/>
+  <path d="M25 30l-5 5 5 5M39 30l5 5-5 5" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

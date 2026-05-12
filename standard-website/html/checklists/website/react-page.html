@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>React Page Build Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Component structure, data fetching hooks, shared Add/Edit forms, TypeScript interfaces, accessibility, mobile."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">React Page Build Checklist</h1>
+
+        <p class="page-subtitle">
+          Component structure, data fetching hooks, shared Add/Edit forms, TypeScript interfaces, accessibility, mobile.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../../pages/checklists.html" class="btn btn-secondary">Back to Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#before-you-start" class="card card-clickable">Before You Start</a>
+            <a href="#component-structure" class="card card-clickable">Component Structure</a>
+            <a href="#data-fetching" class="card card-clickable">Data Fetching</a>
+            <a href="#forms" class="card card-clickable">Forms</a>
+            <a href="#state-management" class="card card-clickable">State Management</a>
+            <a href="#error-handling" class="card card-clickable">Error Handling</a>
+            <a href="#typescript" class="card card-clickable">TypeScript</a>
+            <a href="#accessibility" class="card card-clickable">Accessibility</a>
+            <a href="#performance" class="card card-clickable">Performance</a>
+            <a href="#mobile" class="card card-clickable">Mobile</a>
+            <a href="#done-when" class="card card-clickable">Done When</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="before-you-start" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Before You Start</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Figma design reviewed — all states identified (loading, empty, error, populated)</label><br />
+          <label><input type="checkbox" data-checklist-item /> API endpoint confirmed and response shape known before building</label><br />
+          <label><input type="checkbox" data-checklist-item /> Reusability checked — does a component for this already exist?</label><br />
+          <label><input type="checkbox" data-checklist-item /> Folder structure correct: pages/ for pages, components/ for shared components</label><br />
+          <label><input type="checkbox" data-checklist-item /> TypeScript types defined for all API response shapes before building</label>
+        </div>
+      </section>
+
+      <section id="component-structure" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Component Structure</h2>
+
+          <label><input type="checkbox" data-checklist-item /> One component per file</label><br />
+          <label><input type="checkbox" data-checklist-item /> Props interface defined with TypeScript (not any)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No prop drilling more than 2 levels — use context or state management instead</label><br />
+          <label><input type="checkbox" data-checklist-item /> Component does one thing — extract sub-components if it grows too large</label><br />
+          <label><input type="checkbox" data-checklist-item /> All side effects in useEffect with correct dependency arrays</label><br />
+          <label><input type="checkbox" data-checklist-item /> No direct DOM manipulation — use React state and refs</label><br />
+          <label><input type="checkbox" data-checklist-item /> No business logic in JSX — extract to hooks or utility functions</label>
+        </div>
+      </section>
+
+      <section id="data-fetching" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Data Fetching</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Custom hook for each data fetch (useProjects, useWorkspaceMembers)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Hook returns: { data, isLoading, error, refetch }</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state shown while isLoading is true (skeleton or spinner)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error state shown when error is not null — with retry button</label><br />
+          <label><input type="checkbox" data-checklist-item /> Empty state shown when data is an empty array</label><br />
+          <label><input type="checkbox" data-checklist-item /> All four states tested: loading, empty, error, populated</label><br />
+          <label><input type="checkbox" data-checklist-item /> Data fetching triggered in useEffect or on user action — not on every render</label><br />
+          <label><input type="checkbox" data-checklist-item /> Cleanup: abort controller or return cleanup function in useEffect</label>
+        </div>
+      </section>
+
+      <section id="forms" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Forms</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Form state managed with react-hook-form or equivalent</label><br />
+          <label><input type="checkbox" data-checklist-item /> Validation schema defined with Zod or Yup — shared between Add and Edit</label><br />
+          <label><input type="checkbox" data-checklist-item /> Same component used for Add and Edit — only props differ</label><br />
+          <label><input type="checkbox" data-checklist-item /> Errors displayed below each field (from form state — not manual state)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Submit button disabled during submission</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form not re-submittable while loading</label><br />
+          <label><input type="checkbox" data-checklist-item /> Success: show toast, navigate or close modal</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error: show API error in a form banner — do not clear the form</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form fields reset only after successful submission</label>
+        </div>
+      </section>
+
+      <section id="state-management" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. State Management</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Local state (useState) for UI state: modal open/closed, selected items</label><br />
+          <label><input type="checkbox" data-checklist-item /> Server state (React Query, SWR, or custom hook) for fetched data</label><br />
+          <label><input type="checkbox" data-checklist-item /> Global state (Context, Zustand, Redux) only when truly global: auth, theme</label><br />
+          <label><input type="checkbox" data-checklist-item /> No business logic in the store — only data and simple computed values</label><br />
+          <label><input type="checkbox" data-checklist-item /> Optimistic updates considered for common actions (toggle, archive)</label>
+        </div>
+      </section>
+
+      <section id="error-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Error Handling</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Every async call has an error handler</label><br />
+          <label><input type="checkbox" data-checklist-item /> Errors shown in the UI — never only in console.log</label><br />
+          <label><input type="checkbox" data-checklist-item /> API error codes parsed and mapped to user-friendly messages</label><br />
+          <label><input type="checkbox" data-checklist-item /> Network errors caught and shown: "Connection lost. Please try again."</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error boundary used at page level to catch unexpected rendering errors</label><br />
+          <label><input type="checkbox" data-checklist-item /> No swallowed catch blocks: catch (e) {} (always show something)</label>
+        </div>
+      </section>
+
+      <section id="typescript" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. TypeScript</h2>
+
+          <label><input type="checkbox" data-checklist-item /> No any types — use explicit types or unknown</label><br />
+          <label><input type="checkbox" data-checklist-item /> API response types defined in a types/ or types.ts file</label><br />
+          <label><input type="checkbox" data-checklist-item /> Props interfaces defined for all components</label><br />
+          <label><input type="checkbox" data-checklist-item /> Event handler types correct: React.ChangeEvent&lt;HTMLInputElement&gt;</label><br />
+          <label><input type="checkbox" data-checklist-item /> Avoid type assertions (as Type) unless unavoidable — prefer type guards</label><br />
+          <label><input type="checkbox" data-checklist-item /> All hook return types explicitly typed</label>
+        </div>
+      </section>
+
+      <section id="accessibility" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Accessibility</h2>
+
+          <label><input type="checkbox" data-checklist-item /> All interactive elements are keyboard accessible</label><br />
+          <label><input type="checkbox" data-checklist-item /> Buttons use &lt;button&gt;, links use &lt;a href&gt;</label><br />
+          <label><input type="checkbox" data-checklist-item /> Images have alt text</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form labels linked to inputs with htmlFor / id</label><br />
+          <label><input type="checkbox" data-checklist-item /> Focus management in modals and dialogs (focus trap)</label><br />
+          <label><input type="checkbox" data-checklist-item /> ARIA attributes used correctly — not overused</label><br />
+          <label><input type="checkbox" data-checklist-item /> Color is not the only differentiator (status badges also have text labels)</label>
+        </div>
+      </section>
+
+      <section id="performance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Performance</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Components wrapped in React.memo only if they actually cause performance issues</label><br />
+          <label><input type="checkbox" data-checklist-item /> useCallback and useMemo only for expensive computations or stable references</label><br />
+          <label><input type="checkbox" data-checklist-item /> Images: width and height defined to prevent layout shift</label><br />
+          <label><input type="checkbox" data-checklist-item /> Lazy loading used for pages and heavy components (React.lazy + Suspense)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No unnecessary re-renders: check dependencies in useEffect and useCallback</label><br />
+          <label><input type="checkbox" data-checklist-item /> Large lists: virtualization considered if list &gt; 100 items</label>
+        </div>
+      </section>
+
+      <section id="mobile" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Mobile</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Tested at 375px, 768px, and 1280px</label><br />
+          <label><input type="checkbox" data-checklist-item /> No horizontal scroll on any breakpoint</label><br />
+          <label><input type="checkbox" data-checklist-item /> Touch targets minimum 44×44px</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tap targets not too close together (minimum 8px gap)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Input focus does not zoom the page on mobile (use font-size: 16px on inputs)</label>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Done When</span>
+          <h2 class="section-title">11. Done When</h2>
+
+          <label><input type="checkbox" data-checklist-item /> All four data states work: loading, empty, error, populated</label><br />
+          <label><input type="checkbox" data-checklist-item /> All forms validate, show loading, show success/error, share Add/Edit component</label><br />
+          <label><input type="checkbox" data-checklist-item /> No any TypeScript types</label><br />
+          <label><input type="checkbox" data-checklist-item /> All errors shown in UI — no silent failures</label><br />
+          <label><input type="checkbox" data-checklist-item /> Mobile tested at 375px and 768px</label><br />
+          <label><input type="checkbox" data-checklist-item /> Accessibility: keyboard navigation and ARIA labels checked</label><br />
+          <label><input type="checkbox" data-checklist-item /> No hardcoded styles — design tokens / Tailwind classes used</label>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Run this checklist every time you build a new React page or significant component.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

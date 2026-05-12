@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation — Knowledge Base (Django + Templates) | Development Standards</title>
+  <meta name="description" content="Detailed evaluation checklist covering Category/Article models, forms, service, views, URL config, templates, CSS, and JS." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-danger">Evaluation Checklist</span>
+        <h1 class="page-title">Evaluation — Knowledge Base (Django + Templates)</h1>
+        <p class="page-subtitle">Detailed evaluation checklist covering Category/Article models, forms, service, views, URL config, templates, CSS, and JS.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Project Spec:</strong> <a href="../django-templates/02-knowledge-base.md">02-knowledge-base.md</a></p>
+<p><strong>Stack:</strong> Django + Django Templates (HTML/CSS/JS)</p>
+<p><strong>Evaluator:</strong> ___________</p>
+<p><strong>Submission Date:</strong> ___________</p>
+<p><strong>Pass Threshold:</strong> 90%</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="how-to-mark" class="section">
+        <div class="content-card">
+          <h2 class="section-title">How to Mark</h2>
+          <ul>
+  <li><code>[✓]</code> Fully correct</li>
+  <li><code>[~]</code> Partial — note the gap below the item</li>
+  <li><code>[✗]</code> Missing or wrong</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-django-category-model" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Django — `Category` Model</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>workspace</code> FK → Workspace, ON DELETE CASCADE, <code>related_name=&#x27;categories&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>name</code> CharField, max_length=100</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>slug</code> SlugField, max_length=110</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>description</code> TextField, blank=True, default=''</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>created_at</code> DateTimeField, auto_now_add=True</label><br />
+<label><input type="checkbox" data-checklist-item /> Meta ordering: <code>[&#x27;name&#x27;]</code></label><br />
+<label><input type="checkbox" data-checklist-item /> UniqueConstraint on <code>(workspace, slug)</code> with a constraint name</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>save()</code> overridden to auto-generate slug from name if not set</label><br />
+<label><input type="checkbox" data-checklist-item /> Migration generated and committed</label><br />
+        </div>
+      </section>
+
+      <section id="2-django-article-model" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Django — `Article` Model</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>workspace</code> FK → Workspace, ON DELETE CASCADE, <code>related_name=&#x27;articles&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>category</code> FK → Category, ON DELETE SET_NULL, null=True, blank=True, <code>related_name=&#x27;articles&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>author</code> FK → settings.AUTH_USER_MODEL, ON DELETE SET_NULL, null=True, <code>related_name=&#x27;authored_articles&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>title</code> CharField, max_length=200</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>slug</code> SlugField, max_length=220</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>excerpt</code> CharField, max_length=300, blank=True, default=''</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>body</code> TextField</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>status</code> CharField using <code>Status</code> TextChoices: draft, published; default=draft</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>created_at</code> DateTimeField, auto_now_add=True</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>updated_at</code> DateTimeField, auto_now=True</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>published_at</code> DateTimeField, null=True, blank=True</label><br />
+<label><input type="checkbox" data-checklist-item /> Meta ordering: <code>[&#x27;-created_at&#x27;]</code></label><br />
+<label><input type="checkbox" data-checklist-item /> UniqueConstraint on <code>(workspace, slug)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Index on <code>(workspace, status, -created_at)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Index on <code>(workspace, category, status)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Migration generated and committed</label><br />
+        </div>
+      </section>
+
+      <section id="3-django-articleform-and-categoryform" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Django — `ArticleForm` and `CategoryForm`</h2>
+          <p><strong>ArticleForm:</strong></p>
+<label><input type="checkbox" data-checklist-item /> <code>fields = [&#x27;title&#x27;, &#x27;category&#x27;, &#x27;excerpt&#x27;, &#x27;body&#x27;, &#x27;status&#x27;]</code> — not <code>&#x27;__all__&#x27;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>excerpt</code> widget: Textarea with <code>rows=3</code> and <code>maxlength=300</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>body</code> widget: Textarea with larger rows</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>__init__</code> accepts <code>workspace</code> kwarg and filters category queryset to that workspace</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>category</code> field: <code>required=False</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>clean_title()</code>: raises ValidationError if title is blank</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>clean_body()</code>: raises ValidationError if body is blank</label><br />
+<p><strong>CategoryForm:</strong></p>
+<label><input type="checkbox" data-checklist-item /> <code>fields = [&#x27;name&#x27;, &#x27;description&#x27;]</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>clean_name()</code>: strips whitespace, raises ValidationError if blank after strip</label><br />
+        </div>
+      </section>
+
+      <section id="4-django-articleservice" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Django — `ArticleService`</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>create_article(workspace, author, title, body, category=None, excerpt=&#x27;&#x27;, status=&#x27;draft&#x27;)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>create_article</code>: validates title and body are not empty</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>create_article</code>: generates slug from title using slugify</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>create_article</code>: calls <code>_unique_slug()</code> helper to ensure slug uniqueness — appends <code>-2</code>, <code>-3</code>, etc. on collision</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>create_article</code>: sets <code>published_at = now()</code> if status is 'published'</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>update_article(article, editor, title, body, ...)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>update_article</code>: re-generates slug only if title changed AND new slug would collide with another article (not always re-slugs)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>update_article</code>: sets <code>published_at = now()</code> when status changes to 'published' and was previously not published</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>delete_article(article, actor)</code> method</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>delete_article</code>: raises PermissionDenied if actor does not have admin/owner role</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>_unique_slug(workspace, base_slug, exclude_id=None)</code> static method exists and works correctly</label><br />
+<label><input type="checkbox" data-checklist-item /> All methods are <code>@staticmethod</code></label><br />
+        </div>
+      </section>
+
+      <section id="5-django-views" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Django — Views</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>ArticleListView</code> at <code>GET /workspace/{id}/kb/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Members see published articles only; editors/admins see published + their own drafts (filter in queryset — not template)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>?search=</code> param filters title OR excerpt contains — DB query, not client-side</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>?category=</code> param filters by category slug</label><br />
+<label><input type="checkbox" data-checklist-item /> Paginated: 12 per page</label><br />
+<label><input type="checkbox" data-checklist-item /> Template: <code>article_list.html</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ArticleDetailView</code> at <code>GET /workspace/{id}/kb/&lt;slug:slug&gt;/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Returns 404 if article is a draft AND requester is a member who is not the author</label><br />
+<label><input type="checkbox" data-checklist-item /> Template: <code>article_detail.html</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ArticleCreateView</code> at <code>GET+POST /workspace/{id}/kb/new/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Returns 403 if user has member role</label><br />
+<label><input type="checkbox" data-checklist-item /> GET: renders empty <code>ArticleForm(workspace=self.workspace)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> POST: validates form → calls <code>ArticleService.create_article()</code> → redirects to article detail</label><br />
+<label><input type="checkbox" data-checklist-item /> Template: <code>article_form.html</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ArticleEditView</code> at <code>GET+POST /workspace/{id}/kb/&lt;slug:slug&gt;/edit/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Returns 403 if user has member role</label><br />
+<label><input type="checkbox" data-checklist-item /> GET: renders <code>ArticleForm</code> prefilled with article values</label><br />
+<label><input type="checkbox" data-checklist-item /> POST: validates form → calls <code>ArticleService.update_article()</code> → redirects to article detail</label><br />
+<label><input type="checkbox" data-checklist-item /> Template: <code>article_form.html</code> (same template as create)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>ArticleDeleteView</code> at <code>POST /workspace/{id}/kb/&lt;slug:slug&gt;/delete/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Returns 403 if user has editor or member role (admin/owner only)</label><br />
+<label><input type="checkbox" data-checklist-item /> Calls <code>ArticleService.delete_article()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Redirects to article list with success message</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>CategoryListView</code> at <code>GET /workspace/{id}/kb/categories/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Returns 403 for non-admin/owner</label><br />
+<label><input type="checkbox" data-checklist-item /> Supports <code>?search=</code> filter</label><br />
+<label><input type="checkbox" data-checklist-item /> Template: <code>category_list.html</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>CategoryCreateView</code> at <code>GET+POST /workspace/{id}/kb/categories/new/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Returns 403 for non-admin/owner</label><br />
+<label><input type="checkbox" data-checklist-item /> Duplicate slug handled gracefully — shown as form error, not a 500</label><br />
+<label><input type="checkbox" data-checklist-item /> Template: <code>category_form.html</code></label><br />
+        </div>
+      </section>
+
+      <section id="6-django-url-configuration" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Django — URL Configuration</h2>
+          <label><input type="checkbox" data-checklist-item /> URL patterns registered in correct order: <code>new/</code> and <code>categories/</code> BEFORE <code>&lt;slug:slug&gt;/</code></label><br />
+<label><input type="checkbox" data-checklist-item /> URL names use kebab-case: <code>article-list</code>, <code>article-detail</code>, <code>article-create</code>, <code>article-edit</code>, <code>article-delete</code>, <code>category-list</code>, <code>category-create</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>workspace_id</code> captured as <code>&lt;int:workspace_id&gt;</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Article slug captured as <code>&lt;slug:slug&gt;</code></label><br />
+        </div>
+      </section>
+
+      <section id="7-templates" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Templates</h2>
+          <p><strong>General — all templates:</strong></p>
+<label><input type="checkbox" data-checklist-item /> All templates extend <code>base.html</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>{% load static %}</code> present in all templates</label><br />
+<label><input type="checkbox" data-checklist-item /> No <code>&lt;style&gt;</code> blocks in any template</label><br />
+<label><input type="checkbox" data-checklist-item /> No <code>&lt;script&gt;</code> blocks with logic in any template</label><br />
+<label><input type="checkbox" data-checklist-item /> CSS linked via <code>{% static &#x27;css/kb.css&#x27; %}</code></label><br />
+<label><input type="checkbox" data-checklist-item /> JS linked via <code>{% static &#x27;js/kb.js&#x27; %}</code></label><br />
+<p><strong><code>article_list.html</code>:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Search + category filter form uses GET method</label><br />
+<label><input type="checkbox" data-checklist-item /> Active filter chips shown when search or category filter is active</label><br />
+<label><input type="checkbox" data-checklist-item /> Filter chip removes filter on click</label><br />
+<label><input type="checkbox" data-checklist-item /> "New Article" button visible to editor/admin only — hidden from members</label><br />
+<label><input type="checkbox" data-checklist-item /> Article cards show: title, excerpt, category badge, status badge, author, date</label><br />
+<label><input type="checkbox" data-checklist-item /> Status badge uses correct CSS class (<code>.badge-draft</code>, <code>.badge-published</code>)</label><br />
+<label><input type="checkbox" data-checklist-item /> Empty state: "No articles found." message shown</label><br />
+<label><input type="checkbox" data-checklist-item /> Pagination links rendered</label><br />
+<p><strong><code>article_detail.html</code>:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Breadcrumb shown: Knowledge Base / Category / Title (or equivalent path)</label><br />
+<label><input type="checkbox" data-checklist-item /> Draft status warning shown to editors/admins when viewing a draft</label><br />
+<label><input type="checkbox" data-checklist-item /> Article body rendered (not escaped as plain text)</label><br />
+<label><input type="checkbox" data-checklist-item /> Edit button visible to editor/admin only</label><br />
+<label><input type="checkbox" data-checklist-item /> Delete button visible to admin/owner only — wrapped in POST form with CSRF</label><br />
+<p><strong><code>article_form.html</code>:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Heading changes between "New Article" and "Edit Article" based on context</label><br />
+<label><input type="checkbox" data-checklist-item /> Each field rendered individually (not <code>{{ form.as_p }}</code>)</label><br />
+<label><input type="checkbox" data-checklist-item /> Field errors shown below each field</label><br />
+<label><input type="checkbox" data-checklist-item /> Non-field errors shown at top of form</label><br />
+<label><input type="checkbox" data-checklist-item /> Excerpt field: character counter shown (via <code>data-*</code> attribute and JS)</label><br />
+<label><input type="checkbox" data-checklist-item /> Submit button has <code>data-loading-text</code> attribute for JS loading state</label><br />
+<label><input type="checkbox" data-checklist-item /> Cancel link present</label><br />
+<p><strong><code>category_list.html</code>:</strong></p>
+<label><input type="checkbox" data-checklist-item /> "New Category" button visible (admin/owner context)</label><br />
+<label><input type="checkbox" data-checklist-item /> Search bar form uses GET method</label><br />
+<label><input type="checkbox" data-checklist-item /> Table shows: Name | Description | Article Count | Actions</label><br />
+<label><input type="checkbox" data-checklist-item /> Delete button uses data-* attributes for confirmation — no inline JS</label><br />
+        </div>
+      </section>
+
+      <section id="8-css-staticcsskbcss" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. CSS — `static/css/kb.css`</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>.badge-draft</code> defined using <code>--color-warning</code> variable</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>.badge-published</code> defined using <code>--color-success</code> variable</label><br />
+<label><input type="checkbox" data-checklist-item /> Article card styles: grid layout, hover shadow</label><br />
+<label><input type="checkbox" data-checklist-item /> Search bar and filter chip styles</label><br />
+<label><input type="checkbox" data-checklist-item /> Article body typography: headings, paragraphs, lists, code blocks</label><br />
+<label><input type="checkbox" data-checklist-item /> Breadcrumb styles</label><br />
+<label><input type="checkbox" data-checklist-item /> Table styles for category list</label><br />
+<label><input type="checkbox" data-checklist-item /> Empty state styles</label><br />
+<label><input type="checkbox" data-checklist-item /> Responsive: card grid collapses to 1 column on mobile</label><br />
+<label><input type="checkbox" data-checklist-item /> CSS variables used (<code>--color-success</code>, <code>--color-warning</code>, <code>--color-danger</code>) — no hardcoded hex</label><br />
+        </div>
+      </section>
+
+      <section id="9-js-staticjskbjs" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. JS — `static/js/kb.js`</h2>
+          <label><input type="checkbox" data-checklist-item /> Delete confirmation uses <code>data-article-title</code> and <code>data-form-id</code> attributes — no string interpolation in JS</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>document.querySelectorAll(&#x27;.btn-delete-article&#x27;)</code> used for event delegation</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>confirm()</code> message reads from <code>btn.dataset.articleTitle</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Form submitted via <code>document.getElementById(btn.dataset.formId).submit()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Excerpt character counter reads <code>data-max-length</code> from HTML attribute — not hardcoded in JS</label><br />
+<label><input type="checkbox" data-checklist-item /> Counter updates on <code>input</code> event and on page load (to handle prefilled values in edit form)</label><br />
+<label><input type="checkbox" data-checklist-item /> Submit button loading state reads <code>data-loading-text</code> from HTML attribute — not hardcoded text in JS</label><br />
+        </div>
+      </section>
+
+      <section id="10-standards-compliance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. Standards Compliance</h2>
+          <label><input type="checkbox" data-checklist-item /> Draft visibility filtered in the queryset — not in the template using <code>{% if %}</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Business logic (slug generation, published_at, permission check) in ArticleService — not in views</label><br />
+<label><input type="checkbox" data-checklist-item /> All POST views use POST→redirect→GET pattern</label><br />
+<label><input type="checkbox" data-checklist-item /> Django messages framework used for success/error feedback after redirect</label><br />
+<label><input type="checkbox" data-checklist-item /> No inline styles in any template</label><br />
+<label><input type="checkbox" data-checklist-item /> No inline scripts in any template</label><br />
+<label><input type="checkbox" data-checklist-item /> CSRF token present on every POST form (delete, category create)</label><br />
+<label><input type="checkbox" data-checklist-item /> Admin/editor gating enforced server-side — not just hidden in template</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile responsive at 375px and 768px</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="score-summary" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Score Summary</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Section</th>
+    <th>Total Items</th>
+    <th>✓ Pass</th>
+    <th>~ Partial</th>
+    <th>✗ Fail</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>1. Category Model</td>
+    <td>9</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2. Article Model</td>
+    <td>14</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>3. Forms</td>
+    <td>10</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>4. Service</td>
+    <td>11</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>5. Views</td>
+    <td>21</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>6. URL Config</td>
+    <td>6</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>7. Templates</td>
+    <td>25</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>8. CSS</td>
+    <td>10</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>9. JS</td>
+    <td>7</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>10. Standards</td>
+    <td>9</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><strong>Total</strong></td>
+    <td><strong>122</strong></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  </tbody>
+</table></div>
+<p><strong>Score: ___ / 122 (___%)</strong> — Pass / Conditional / Fail</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="evaluator-notes" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Evaluator Notes</h2>
+          <p>_Record specific failures, partial items, or other observations here._</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SendGrid Integration Standard | Development Standards</title>
+  <meta name="description" content="When to use vs Gmail, Domain auth, API key, Template decision (code-rendered vs Dynamic), Subject/from standards, Error handling, Bounce management." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">SendGrid Integration Standard</h1>
+        <p class="page-subtitle">When to use vs Gmail, Domain auth, API key, Template decision (code-rendered vs Dynamic), Subject/from standards, Error handling, Bounce management.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p>Covers SendGrid account setup, API key management, when to use SendGrid vs other providers, the decision between code-rendered and SendGrid Dynamic Templates, transactional email standards, error handling, and bounce management.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-when-to-use-sendgrid" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. When to Use SendGrid</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Use Case</th>
+    <th>Use SendGrid?</th>
+    <th>Why</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Production transactional email (high volume)</td>
+    <td>Yes</td>
+    <td>Deliverability, analytics, bounce handling</td>
+  </tr>
+  <tr>
+    <td>Marketing and promotional emails</td>
+    <td>Yes</td>
+    <td>Campaign management, unsubscribe, tracking</td>
+  </tr>
+  <tr>
+    <td>A/B testing email content</td>
+    <td>Yes</td>
+    <td>Built-in testing tools</td>
+  </tr>
+  <tr>
+    <td>Non-technical team edits email copy</td>
+    <td>Yes</td>
+    <td>Dashboard template editor</td>
+  </tr>
+  <tr>
+    <td>Development / local testing</td>
+    <td>No</td>
+    <td>Use a local SMTP catcher (Mailhog, MailPit)</td>
+  </tr>
+  <tr>
+    <td>Small internal tool (< 50 emails/day)</td>
+    <td>Maybe</td>
+    <td>Gmail SMTP is simpler; see Gmail standard</td>
+  </tr>
+  <tr>
+    <td>System alerts to developers only</td>
+    <td>No</td>
+    <td>Gmail or internal Slack notification</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="2-account-setup" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Account Setup</h2>
+          <h3>Sender Authentication</h3>
+<p>Before sending any email, authenticate your sending domain:</p>
+<ol>
+  <li><strong>Domain Authentication</strong> (preferred for production): adds SPF, DKIM, and DMARC records via DNS. Emails arrive from <code>@yourdomain.com</code> — best deliverability.</li>
+  <li><strong>Single Sender Verification</strong> (acceptable for early development): verify a single email address. Less reliable for deliverability at scale.</li>
+</ol>
+<p>Always use Domain Authentication in production.</p>
+<h3>From Address Standards</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Setting</th>
+    <th>Rule</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>From email</td>
+    <td>Must be from your authenticated domain — never <code>@gmail.com</code> or <code>@hotmail.com</code></td>
+  </tr>
+  <tr>
+    <td>From name</td>
+    <td><code>&quot;Your App Name&quot;</code> or <code>&quot;Your App Name Team&quot;</code></td>
+  </tr>
+  <tr>
+    <td>Reply-to</td>
+    <td>Set to a <strong>monitored</strong> inbox (<code>support@yourdomain.com</code>) — not the same as no-reply</td>
+  </tr>
+  <tr>
+    <td>No-reply</td>
+    <td>Acceptable for purely transactional email; still set reply-to</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="3-api-key-management" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. API Key Management</h2>
+          <h3>Creating the API Key</h3>
+<ol>
+  <li>Go to Settings → API Keys → Create API Key</li>
+  <li>Use <strong>Restricted Access</strong> — grant only what's needed:</li>
+  <li>Transactional email service: <code>Mail Send</code> permission only</li>
+  <li>If using the Stats API: add <code>Stats</code> read permission</li>
+  <li>Never use a Full Access key in application code</li>
+</ol>
+<h3>Environment Variables</h3>
+<pre><code>SENDGRID_API_KEY=SG.xxxxx
+SENDGRID_FROM_EMAIL=no-reply@yourdomain.com
+SENDGRID_FROM_NAME=Your App Name</code></pre>
+<p>Never commit the API key to version control. Rotate immediately if exposed.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="4-template-decision-code-rendered-vs-sendgrid-dynamic-template" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Template Decision: Code-Rendered vs SendGrid Dynamic Template</h2>
+          <p>This is the most important decision in your email setup. Pick one per email type — never maintain both.</p>
+<h3>Use Code-Rendered Templates When</h3>
+<ul>
+  <li>Developers control all email content (no non-technical editors)</li>
+  <li>Template content changes rarely</li>
+  <li>Email is technical (error notifications, system alerts, developer digests)</li>
+  <li>You need complex programmatic logic in the template (loops, nested conditions)</li>
+  <li>You want email templates in version control with the rest of the code</li>
+</ul>
+<h3>Use SendGrid Dynamic Templates When</h3>
+<ul>
+  <li>Marketing or product team needs to update copy without a deployment</li>
+  <li>You need A/B testing between template variants</li>
+  <li>You need multi-language versions of the same email</li>
+  <li>The email is marketing/promotional (newsletter, onboarding drip)</li>
+  <li>You want email performance analytics (open rate, click rate) per template</li>
+</ul>
+<h3>Decision Table</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Email Type</th>
+    <th>Recommended Approach</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Password reset</td>
+    <td>Code-rendered (developer-controlled, security-sensitive)</td>
+  </tr>
+  <tr>
+    <td>Email verification</td>
+    <td>Code-rendered</td>
+  </tr>
+  <tr>
+    <td>Invoice/receipt</td>
+    <td>Code-rendered (complex data, line items)</td>
+  </tr>
+  <tr>
+    <td>Workspace invite</td>
+    <td>Code-rendered</td>
+  </tr>
+  <tr>
+    <td>Welcome email</td>
+    <td>Dynamic template (marketing may want to iterate copy)</td>
+  </tr>
+  <tr>
+    <td>Promotional offer</td>
+    <td>Dynamic template</td>
+  </tr>
+  <tr>
+    <td>Newsletter</td>
+    <td>Dynamic template</td>
+  </tr>
+  <tr>
+    <td>System error alert</td>
+    <td>Code-rendered (or Slack)</td>
+  </tr>
+  <tr>
+    <td>Onboarding sequence</td>
+    <td>Dynamic template</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="5-code-rendered-templates" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Code-Rendered Templates</h2>
+          <h3>File Structure</h3>
+<pre><code>templates/
+  email/
+    base_email.html         ← base layout with header/footer
+    base_email.txt          ← plaintext base
+    password_reset.html
+    password_reset.txt
+    workspace_invite.html
+    workspace_invite.txt
+    invoice.html
+    invoice.txt</code></pre>
+<p>Always create both HTML and plaintext versions. Some email clients only render plain text.</p>
+<h3>Base Email Template (HTML)</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;{{ subject }}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body style=&quot;font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;&quot;&gt;
+  &lt;header&gt;
+    &lt;img src=&quot;{{ LOGO_URL }}&quot; alt=&quot;{{ APP_NAME }}&quot; height=&quot;40&quot;&gt;
+  &lt;/header&gt;
+  &lt;main&gt;
+    {% block content %}{% endblock %}
+  &lt;/main&gt;
+  &lt;footer style=&quot;margin-top: 40px; font-size: 12px; color: #666;&quot;&gt;
+    &lt;p&gt;{{ APP_NAME }} · {{ APP_ADDRESS }}&lt;/p&gt;
+    &lt;p&gt;This email was sent to {{ recipient_email }}.&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h3>Sending a Code-Rendered Email (Django)</h3>
+<pre><code class="language-python">from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
+
+
+def send_invite_email(to_email, workspace_name, invite_link, inviter_name):
+    subject = f&#x27;{inviter_name} invited you to join {workspace_name}&#x27;
+    context = {
+        &#x27;workspace_name&#x27;: workspace_name,
+        &#x27;invite_link&#x27;: invite_link,
+        &#x27;inviter_name&#x27;: inviter_name,
+        &#x27;recipient_email&#x27;: to_email,
+        &#x27;APP_NAME&#x27;: settings.APP_NAME,
+    }
+    html_body = render_to_string(&#x27;email/workspace_invite.html&#x27;, context)
+    text_body = render_to_string(&#x27;email/workspace_invite.txt&#x27;, context)
+
+    msg = EmailMultiAlternatives(
+        subject=subject,
+        body=text_body,
+        from_email=f&#x27;{settings.SENDGRID_FROM_NAME} &lt;{settings.SENDGRID_FROM_EMAIL}&gt;&#x27;,
+        to=[to_email],
+    )
+    msg.attach_alternative(html_body, &#x27;text/html&#x27;)
+    msg.send()</code></pre>
+<h3>Django Email Backend (settings.py)</h3>
+<pre><code class="language-python">EMAIL_BACKEND = &#x27;django.core.mail.backends.smtp.EmailBackend&#x27;
+EMAIL_HOST = &#x27;smtp.sendgrid.net&#x27;
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = &#x27;apikey&#x27;                          # literal string &#x27;apikey&#x27;
+EMAIL_HOST_PASSWORD = env(&#x27;SENDGRID_API_KEY&#x27;)
+DEFAULT_FROM_EMAIL = env(&#x27;SENDGRID_FROM_EMAIL&#x27;)</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="6-sendgrid-dynamic-templates" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. SendGrid Dynamic Templates</h2>
+          <h3>Creating a Template</h3>
+<ol>
+  <li>Go to Email API → Dynamic Templates → Create Template</li>
+  <li>Name it clearly: <code>workspace-invite</code>, <code>password-reset</code>, <code>welcome-email</code></li>
+  <li>Create a version inside the template</li>
+  <li>Design using the editor or import HTML</li>
+  <li>Use Handlebars syntax for variables: <code>{{variable_name}}</code></li>
+  <li>Always click "Send Test" before saving to production</li>
+</ol>
+<h3>Template Variables (Handlebars)</h3>
+<pre><code class="language-html">&lt;h1&gt;Hi {{first_name}},&lt;/h1&gt;
+&lt;p&gt;{{inviter_name}} invited you to join &lt;strong&gt;{{workspace_name}}&lt;/strong&gt; as a {{role}}.&lt;/p&gt;
+&lt;a href=&quot;{{invite_link}}&quot;&gt;Accept Invite&lt;/a&gt;
+
+{{#if expires_in_hours}}
+&lt;p&gt;This invite expires in {{expires_in_hours}} hours.&lt;/p&gt;
+{{/if}}</code></pre>
+<h3>Storing Template IDs</h3>
+<p>Store template IDs in environment variables — never hardcode:</p>
+<pre><code>SENDGRID_TEMPLATE_INVITE=d-abc123def456...
+SENDGRID_TEMPLATE_PASSWORD_RESET=d-xyz789...
+SENDGRID_TEMPLATE_WELCOME=d-...</code></pre>
+<p>Keep a <code>sendgrid-templates.md</code> in your repo (not committed to production branches) or a shared doc mapping <code>template_id → purpose → variables</code> for reference.</p>
+<h3>Sending with a Dynamic Template (Python)</h3>
+<pre><code class="language-python">import sendgrid
+from sendgrid.helpers.mail import Mail, To
+
+def send_invite_email_dynamic(to_email, workspace_name, invite_link, inviter_name):
+    sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
+    
+    message = Mail(
+        from_email=(settings.SENDGRID_FROM_EMAIL, settings.SENDGRID_FROM_NAME),
+        to_emails=To(to_email),
+    )
+    message.template_id = settings.SENDGRID_TEMPLATE_INVITE
+    message.dynamic_template_data = {
+        &#x27;workspace_name&#x27;: workspace_name,
+        &#x27;invite_link&#x27;: invite_link,
+        &#x27;inviter_name&#x27;: inviter_name,
+        &#x27;first_name&#x27;: to_email.split(&#x27;@&#x27;)[0],  # fallback if no first name
+    }
+    
+    response = sg.send(message)
+    return response.status_code</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="7-transactional-email-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Transactional Email Standards</h2>
+          <h3>Subject Lines</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Rule</th>
+    <th>Example</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Be specific — say what the email is</td>
+    <td>"Your password reset link" not "Action required"</td>
+  </tr>
+  <tr>
+    <td>Include the app or workspace name</td>
+    <td>"[YourApp] Your invoice for March 2025"</td>
+  </tr>
+  <tr>
+    <td>No spammy words: FREE, URGENT, !!!, WINNER</td>
+    <td>Avoid — triggers spam filters</td>
+  </tr>
+  <tr>
+    <td>Max 50 characters for mobile</td>
+    <td>Test on mobile preview</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Email Link Standards</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Link Type</th>
+    <th>Expiry</th>
+    <th>Rules</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Password reset</td>
+    <td>1 hour</td>
+    <td>Invalidate after single use</td>
+  </tr>
+  <tr>
+    <td>Email verification</td>
+    <td>24 hours</td>
+    <td>Invalidate after single use</td>
+  </tr>
+  <tr>
+    <td>Workspace invite</td>
+    <td>7 days</td>
+    <td>Mark as used on accept</td>
+  </tr>
+  <tr>
+    <td>Unsubscribe link</td>
+    <td>Permanent</td>
+    <td>Required for marketing emails</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Transactional vs Marketing — Legal Difference</h3>
+<ul>
+  <li><strong>Transactional</strong> (password reset, invoice, order confirmation): no unsubscribe link required</li>
+  <li><strong>Marketing</strong> (newsletter, promotional offer, onboarding drip): unsubscribe link <strong>legally required</strong> in most regions (CAN-SPAM, GDPR)</li>
+  <li>When in doubt, add the unsubscribe link</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="8-error-handling-and-logging" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Error Handling and Logging</h2>
+          <h3>Log Every Send Attempt</h3>
+<pre><code class="language-python">class EmailLog(models.Model):
+    to_email = models.EmailField()
+    template_name = models.CharField(max_length=100)
+    subject = models.CharField(max_length=200, blank=True)
+    status = models.CharField(max_length=20)   # &#x27;sent&#x27;, &#x27;failed&#x27;
+    sendgrid_message_id = models.CharField(max_length=200, blank=True)
+    error_message = models.TextField(blank=True)
+    sent_at = models.DateTimeField(auto_now_add=True)</code></pre>
+<h3>Retry Logic</h3>
+<pre><code class="language-python">import time
+
+def send_email_with_retry(send_fn, max_attempts=3):
+    for attempt in range(max_attempts):
+        try:
+            send_fn()
+            return
+        except Exception as e:
+            if attempt == max_attempts - 1:
+                log_email_failure(e)
+                # Do NOT raise for non-critical emails (notifications)
+                # DO raise for critical emails (password reset)
+            time.sleep(2 ** attempt)  # exponential backoff: 1s, 2s, 4s</code></pre>
+<h3>Error Severity</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Email Type</th>
+    <th>On Failure</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Password reset</td>
+    <td>Raise — user cannot proceed</td>
+  </tr>
+  <tr>
+    <td>Email verification</td>
+    <td>Raise — user cannot verify</td>
+  </tr>
+  <tr>
+    <td>Workspace invite</td>
+    <td>Log + show error in UI — admin can resend</td>
+  </tr>
+  <tr>
+    <td>Welcome email</td>
+    <td>Log only — non-critical</td>
+  </tr>
+  <tr>
+    <td>System notification</td>
+    <td>Log only — non-critical</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="9-bounce-and-suppression-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Bounce and Suppression Handling</h2>
+          <p>SendGrid automatically maintains a suppression list for bounced addresses, spam reports, and unsubscribes.</p>
+<ul>
+  <li>Do NOT attempt to re-send to suppressed addresses — it damages your sender reputation</li>
+  <li>Check suppressions before sending bulk email campaigns</li>
+  <li>For important transactional emails (password reset) where the address bounced: show an error to the user asking them to check their email address</li>
+</ul>
+<h3>Viewing Suppressions (API)</h3>
+<pre><code class="language-python">sg = sendgrid.SendGridAPIClient(settings.SENDGRID_API_KEY)
+response = sg.client.suppression.bounces.get()</code></pre>
+<p>Monitor your bounce rate in the SendGrid dashboard — keep it below 2%.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Supabase — Operations &amp; Testing Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Audit log table, Edge Function logging, webhook idempotency, API key management, migration standards, 13 required test cases, RLS testing matrix."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Supabase — Operations &amp; Testing Standard</h1>
+
+        <p class="page-subtitle">
+          Audit log table, Edge Function logging, webhook idempotency, API key management, migration standards, 13 required test cases, RLS testing matrix.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="audit-log-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">32. Audit Log Standards</h2>
+
+          <p>Create audit logs for sensitive actions.</p>
+
+          <h3>Log These Actions</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Required?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>User invited</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>User removed</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Role changed</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Project deleted</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Billing changed</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>API key created/revoked</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Integration connected/disconnected</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Admin impersonation</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Data export</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Failed login/security event</td>
+                  <td>Yes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Audit Table</h3>
+          <pre><code class="language-sql">create table public.audit_logs (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid references public.workspaces(id),
+  actor_id uuid references auth.users(id),
+  action text not null,
+  entity_type text not null,
+  entity_id uuid,
+  old_value jsonb,
+  new_value jsonb,
+  ip_address text,
+  user_agent text,
+  created_at timestamptz not null default now()
+);</code></pre>
+        </div>
+      </section>
+
+      <section id="logging-standards-edge-functions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">33. Logging Standards for Edge Functions</h2>
+
+          <p>Every Edge Function should log:</p>
+          <pre><code class="language-text">request_id
+function_name
+user_id
+workspace_id
+action
+status
+duration_ms
+error_code</code></pre>
+
+          <p>Do not log:</p>
+          <pre><code class="language-text">passwords
+access tokens
+refresh tokens
+API keys
+payment card data
+full private documents
+sensitive PII unless required</code></pre>
+        </div>
+      </section>
+
+      <section id="webhook-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">34. Webhook Standards</h2>
+
+          <p>Use Edge Functions for webhooks from Stripe, Smartlead, Zoho, SendGrid, etc.</p>
+
+          <h3>P0 Webhook Requirements</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Requirement</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Signature Verification</td>
+                  <td>Mandatory if provider supports it.</td>
+                </tr>
+                <tr>
+                  <td>Idempotency</td>
+                  <td>Store event ID, do not process twice.</td>
+                </tr>
+                <tr>
+                  <td>Raw Body</td>
+                  <td>Required for Stripe-style signature verification.</td>
+                </tr>
+                <tr>
+                  <td>Retry Safe</td>
+                  <td>Duplicate webhook should not duplicate records.</td>
+                </tr>
+                <tr>
+                  <td>Logs</td>
+                  <td>Store event status.</td>
+                </tr>
+                <tr>
+                  <td>Error Handling</td>
+                  <td>Return proper status code.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Database Webhooks in Supabase can fire on <code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code> after row changes, and they use <code>pg_net</code> asynchronously so external calls do not block the database operation for long-running network requests.</p>
+        </div>
+      </section>
+
+      <section id="api-key-management" class="section">
+        <div class="content-card">
+          <h2 class="section-title">35. API Key Management Standards</h2>
+
+          <p>If platform gives API keys to users:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Create API Key</td>
+                  <td>Show key only once.</td>
+                </tr>
+                <tr>
+                  <td>Store Key</td>
+                  <td>Store hashed key, not plaintext.</td>
+                </tr>
+                <tr>
+                  <td>Revoke Key</td>
+                  <td>Immediate disable.</td>
+                </tr>
+                <tr>
+                  <td>Rotate Key</td>
+                  <td>Create new, expire old.</td>
+                </tr>
+                <tr>
+                  <td>Scope Key</td>
+                  <td>Read/write/admin scopes.</td>
+                </tr>
+                <tr>
+                  <td>Rate Limit</td>
+                  <td>Per API key.</td>
+                </tr>
+                <tr>
+                  <td>Audit</td>
+                  <td>Log creation/revocation.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="api-versioning-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">36. API Versioning Standards</h2>
+
+          <p>For Edge Functions:</p>
+          <pre><code class="language-text">/functions/v1/create-project
+/functions/v1/send-invite
+/functions/v1/stripe-webhook</code></pre>
+
+          <p>For internal API docs:</p>
+          <pre><code class="language-text">API Version: v1
+Status: Draft / Ready / Deprecated
+Last Updated: 2026-05-07
+Owner: Backend Developer Name</code></pre>
+
+          <p>Do not silently change API payloads after frontend starts.</p>
+        </div>
+      </section>
+
+      <section id="migration-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">37. Supabase Migration Standards</h2>
+
+          <h3>P0</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Rule</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>No dashboard-only production changes</td>
+                  <td>Use migrations.</td>
+                </tr>
+                <tr>
+                  <td>Every table/policy/function in migration</td>
+                  <td>Required.</td>
+                </tr>
+                <tr>
+                  <td>Migration reviewed before deploy</td>
+                  <td>Required.</td>
+                </tr>
+                <tr>
+                  <td>Staging before production</td>
+                  <td>Required.</td>
+                </tr>
+                <tr>
+                  <td>Rollback plan</td>
+                  <td>Required for risky changes.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Migration should include:</p>
+          <pre><code class="language-text">tables
+constraints
+indexes
+RLS enablement
+RLS policies
+functions
+triggers
+seed data if needed</code></pre>
+        </div>
+      </section>
+
+      <section id="testing-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">38. Testing Standards</h2>
+
+          <h3>Every API Must Test</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Test Case</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Authenticated success</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Anonymous request</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Expired token</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Wrong role</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Wrong workspace</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Missing required field</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Invalid field type</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Duplicate record</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Related record missing</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Database constraint failure</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>RLS denial</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>External service failure</td>
+                  <td>If applicable</td>
+                </tr>
+                <tr>
+                  <td>Retry/idempotency</td>
+                  <td>If applicable</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="rls-testing-matrix" class="section">
+        <div class="content-card">
+          <h2 class="section-title">39. RLS Testing Matrix</h2>
+
+          <p>For every table:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>User Type</th>
+                  <th>SELECT</th>
+                  <th>INSERT</th>
+                  <th>UPDATE</th>
+                  <th>DELETE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Anonymous</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Owner</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Admin</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Depends</td>
+                </tr>
+                <tr>
+                  <td>Manager</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Member</td>
+                  <td>Yes</td>
+                  <td>Depends</td>
+                  <td>Depends</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Viewer</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Non-member</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="backend-handoff-checklist" class="section">
+        <div class="content-card">
+          <h2 class="section-title">40. Backend Handoff Checklist for Frontend</h2>
+
+          <p>Before frontend starts using an API, backend must provide:</p>
+
+          <pre><code class="language-text">1. API name
+2. API status: ready/testing/deprecated
+3. Auth requirement
+4. Role requirement
+5. Endpoint/table/RPC/function
+6. Request payload
+7. Required fields
+8. Optional fields
+9. Validation rules
+10. Success response
+11. Error response examples
+12. Loading behavior expected
+13. Empty state behavior
+14. Permission-denied behavior
+15. RLS notes
+16. Test credentials/users if needed
+17. Sample frontend code
+18. Known limitations</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Log sensitive actions. Test every role. Follow migration standards. Complete the backend handoff checklist before frontend begins.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

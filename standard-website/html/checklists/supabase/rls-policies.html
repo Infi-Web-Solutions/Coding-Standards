@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Supabase — New Table Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Supabase new table checklist for schema, constraints, indexes, RLS, audit fields, migration file, documentation, and production readiness."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Supabase Checklist</span>
+        <h1 class="page-title">Supabase — New Table Checklist</h1>
+
+        <p class="page-subtitle">
+          Every table exposed through Supabase must have RLS enabled, proper constraints,
+          indexes, and be fully documented before it is used in production.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-checklist.html" class="btn btn-secondary">Back to Supabase Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#before-you-create-the-table" class="card card-clickable">Before You Create the Table</a>
+            <a href="#table-schema" class="card card-clickable">Table Schema</a>
+            <a href="#naming-standards" class="card card-clickable">Naming Standards</a>
+            <a href="#constraints" class="card card-clickable">Constraints</a>
+            <a href="#indexes" class="card card-clickable">Indexes</a>
+            <a href="#rls-setup" class="card card-clickable">RLS Setup</a>
+            <a href="#audit-fields" class="card card-clickable">Audit Fields</a>
+            <a href="#migration-file" class="card card-clickable">Migration File</a>
+            <a href="#documentation" class="card card-clickable">Documentation</a>
+            <a href="#before-marking-done" class="card card-clickable">Before Marking Done</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="before-you-create-the-table" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Before You Create the Table</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Requirements for this table are clear and documented</label><br />
+          <label><input type="checkbox" data-checklist-item /> Confirmed this table does not already exist under a different name</label><br />
+          <label><input type="checkbox" data-checklist-item /> Confirmed this is not better handled by extending an existing table</label><br />
+          <label><input type="checkbox" data-checklist-item /> Multi-tenant scope confirmed: is this workspace-scoped, user-scoped, or global?</label><br />
+          <label><input type="checkbox" data-checklist-item /> Soft delete or hard delete decision made and documented</label><br />
+          <label><input type="checkbox" data-checklist-item /> Who can access this table and in what ways: SELECT / INSERT / UPDATE / DELETE?</label>
+        </div>
+      </section>
+
+      <section id="table-schema" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Table Schema</h2>
+
+          <h3>Required Columns — Every Table</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Column</th>
+                  <th>Type</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>id</code></td>
+                  <td><code>uuid DEFAULT gen_random_uuid()</code></td>
+                  <td>Primary key</td>
+                </tr>
+                <tr>
+                  <td><code>created_at</code></td>
+                  <td><code>timestamptz DEFAULT now()</code></td>
+                  <td>Always included</td>
+                </tr>
+                <tr>
+                  <td><code>updated_at</code></td>
+                  <td><code>timestamptz DEFAULT now()</code></td>
+                  <td>Always included</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>Workspace-Scoped Tables — Multi-Tenant</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Column</th>
+                  <th>Type</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>workspace_id</code></td>
+                  <td><code>uuid NOT NULL REFERENCES workspaces(id)</code></td>
+                  <td>Required for any tenant-scoped table</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>User-Owned Records</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Column</th>
+                  <th>Type</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>created_by</code></td>
+                  <td><code>uuid NOT NULL REFERENCES auth.users(id)</code></td>
+                  <td>Track who created the record</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>Soft Delete — If Applicable</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Column</th>
+                  <th>Type</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>deleted_at</code></td>
+                  <td><code>timestamptz DEFAULT NULL</code></td>
+                  <td>NULL = not deleted, timestamp = deleted</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="naming-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Naming Standards</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Table name is plural snake_case: <code>projects</code>, <code>task_items</code>, <code>workspace_members</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Column names are singular snake_case: <code>project_id</code>, <code>created_at</code>, <code>user_email</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Foreign keys named: referenced_table_singular + <code>_id</code>: <code>workspace_id</code>, <code>project_id</code>, <code>user_id</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Boolean columns start with <code>is_</code> or <code>has_</code>: <code>is_active</code>, <code>is_verified</code>, <code>has_access</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Timestamp columns end with <code>_at</code>: <code>created_at</code>, <code>updated_at</code>, <code>deleted_at</code>, <code>verified_at</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> No reserved SQL keywords as column names</label>
+        </div>
+      </section>
+
+      <section id="constraints" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Constraints</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Primary key set: <code>id uuid PRIMARY KEY</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> NOT NULL on every required column</label><br />
+          <label><input type="checkbox" data-checklist-item /> FOREIGN KEY constraints with appropriate ON DELETE behavior</label><br />
+          <label><input type="checkbox" data-checklist-item /> UNIQUE constraints where needed: <code>workspace_id + slug</code>, <code>user_id + workspace_id</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> CHECK constraints for enums or restricted values</label><br />
+          <label><input type="checkbox" data-checklist-item /> CHECK constraints for numeric ranges</label><br />
+          <label><input type="checkbox" data-checklist-item /> CHECK constraint: <code>updated_at &gt;= created_at</code> if relevant</label><br />
+          <label><input type="checkbox" data-checklist-item /> No nullable foreign keys unless intentionally optional</label>
+
+          <div class="divider"></div>
+
+          <h3>Example CHECK Constraint</h3>
+          <pre>CHECK (status IN ('active', 'inactive', 'archived'))
+CHECK (percentage &gt;= 0 AND percentage &lt;= 100)</pre>
+
+          <h3>ON DELETE Decision Guide</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Scenario</th>
+                  <th>Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Child records have no meaning without parent</td>
+                  <td><code>CASCADE</code></td>
+                </tr>
+                <tr>
+                  <td>Child records should be preserved for audit</td>
+                  <td><code>RESTRICT</code> or <code>SET NULL</code></td>
+                </tr>
+                <tr>
+                  <td>Foreign key is optional reference</td>
+                  <td><code>SET NULL</code></td>
+                </tr>
+                <tr>
+                  <td>Default — block parent deletion</td>
+                  <td><code>RESTRICT</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="indexes" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Indexes</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Primary key already indexed automatically</label><br />
+          <label><input type="checkbox" data-checklist-item /> Foreign key columns indexed: <code>workspace_id</code>, <code>project_id</code>, <code>user_id</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Columns used in WHERE clauses indexed</label><br />
+          <label><input type="checkbox" data-checklist-item /> Columns used in ORDER BY indexed</label><br />
+          <label><input type="checkbox" data-checklist-item /> Soft delete: index on <code>deleted_at</code> if filtering by it</label><br />
+          <label><input type="checkbox" data-checklist-item /> Composite index if filtering on multiple columns together</label><br />
+          <label><input type="checkbox" data-checklist-item /> No over-indexing: only index what will be queried</label>
+
+          <div class="divider"></div>
+
+          <h3>Composite Index Example</h3>
+          <pre>CREATE INDEX ON projects (workspace_id, status);</pre>
+        </div>
+      </section>
+
+      <section id="rls-setup" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. RLS Setup</h2>
+
+          <label><input type="checkbox" data-checklist-item /> RLS enabled on table: <code>ALTER TABLE table_name ENABLE ROW LEVEL SECURITY;</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Default deny confirmed — no access unless explicitly granted by a policy</label><br />
+          <label><input type="checkbox" data-checklist-item /> SELECT policy added</label><br />
+          <label><input type="checkbox" data-checklist-item /> INSERT policy added</label><br />
+          <label><input type="checkbox" data-checklist-item /> UPDATE policy added</label><br />
+          <label><input type="checkbox" data-checklist-item /> DELETE policy added or intentionally blocked with no policy</label><br />
+          <label><input type="checkbox" data-checklist-item /> Each policy uses <code>auth.uid()</code> — not a hardcoded value</label><br />
+          <label><input type="checkbox" data-checklist-item /> Workspace-scoped policies verify workspace membership, not just workspace_id match</label><br />
+          <label><input type="checkbox" data-checklist-item /> Policies tested as owner, admin, member, viewer, non-member, anonymous</label><br />
+          <label><input type="checkbox" data-checklist-item /> Service role not relied on for normal operations</label>
+
+          <div class="divider"></div>
+
+          <h3>RLS Policy Patterns</h3>
+          <pre>-- SELECT: workspace members only
+CREATE POLICY "workspace_members_select"
+ON projects
+FOR SELECT
+USING (
+  workspace_id IN (
+    SELECT workspace_id
+    FROM workspace_members
+    WHERE user_id = auth.uid()
+  )
+);
+
+-- INSERT: workspace members only, sets created_by automatically
+CREATE POLICY "workspace_members_insert"
+ON projects
+FOR INSERT
+WITH CHECK (
+  workspace_id IN (
+    SELECT workspace_id
+    FROM workspace_members
+    WHERE user_id = auth.uid()
+  )
+  AND created_by = auth.uid()
+);
+
+-- UPDATE: only creator or admin
+CREATE POLICY "owner_or_admin_update"
+ON projects
+FOR UPDATE
+USING (
+  created_by = auth.uid()
+  OR EXISTS (
+    SELECT 1
+    FROM workspace_members
+    WHERE workspace_id = projects.workspace_id
+      AND user_id = auth.uid()
+      AND role = 'admin'
+  )
+);
+
+-- DELETE: only admin
+CREATE POLICY "admin_delete"
+ON projects
+FOR DELETE
+USING (
+  EXISTS (
+    SELECT 1
+    FROM workspace_members
+    WHERE workspace_id = projects.workspace_id
+      AND user_id = auth.uid()
+      AND role = 'admin'
+  )
+);</pre>
+        </div>
+      </section>
+
+      <section id="audit-fields" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Audit Fields</h2>
+
+          <label><input type="checkbox" data-checklist-item /> <code>created_at</code> is set automatically with <code>DEFAULT now()</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>updated_at</code> is updated automatically via trigger — not manually in application code</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>created_by</code> is set from <code>auth.uid()</code> in RLS INSERT policy — not from request payload</label><br />
+          <label><input type="checkbox" data-checklist-item /> If audit log table exists: insert log entry on significant changes</label>
+
+          <div class="divider"></div>
+
+          <h3>Auto-Update Trigger for <code>updated_at</code></h3>
+          <pre>CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_updated_at
+BEFORE UPDATE ON your_table_name
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at();</pre>
+        </div>
+      </section>
+
+      <section id="migration-file" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Migration File</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Migration created in Supabase migrations folder or via Supabase CLI</label><br />
+          <label><input type="checkbox" data-checklist-item /> Migration is reversible: includes both UP and DOWN migrations if needed</label><br />
+          <label><input type="checkbox" data-checklist-item /> Migration name is descriptive: <code>20240115_create_projects_table.sql</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Migration tested on local/staging before applying to production</label><br />
+          <label><input type="checkbox" data-checklist-item /> No data mutations in schema migrations — keep schema and data migrations separate</label><br />
+          <label><input type="checkbox" data-checklist-item /> Migration does not depend on data that may not exist</label>
+        </div>
+      </section>
+
+      <section id="documentation" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Documentation</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Table purpose documented — what it stores, what entity it represents</label><br />
+          <label><input type="checkbox" data-checklist-item /> Column list documented — all columns, types, nullable, purpose</label><br />
+          <label><input type="checkbox" data-checklist-item /> Foreign key relationships documented</label><br />
+          <label><input type="checkbox" data-checklist-item /> RLS access rules documented — who can do what</label><br />
+          <label><input type="checkbox" data-checklist-item /> Frontend team notified of new table and how to access it</label><br />
+          <label><input type="checkbox" data-checklist-item /> API documentation written if a new API endpoint was created for this table</label>
+        </div>
+      </section>
+
+      <section id="before-marking-done" class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Before Marking Done</span>
+          <h2 class="section-title">10. New Table Checklist</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">Schema</h3>
+              <label><input type="checkbox" data-checklist-item /> <code>id uuid primary key</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>created_at timestamptz default now()</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>updated_at timestamptz default now()</code> with trigger</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>workspace_id</code> if workspace-scoped</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>created_by</code> if user-owned</label><br />
+              <label><input type="checkbox" data-checklist-item /> All required columns are NOT NULL</label><br />
+              <label><input type="checkbox" data-checklist-item /> Enum/status columns have CHECK constraint</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Naming</h3>
+              <label><input type="checkbox" data-checklist-item /> Table name: plural snake_case</label><br />
+              <label><input type="checkbox" data-checklist-item /> Column names: singular snake_case</label><br />
+              <label><input type="checkbox" data-checklist-item /> Foreign keys: <code>referenced_table_id</code> pattern</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Constraints</h3>
+              <label><input type="checkbox" data-checklist-item /> Foreign keys defined with ON DELETE behavior</label><br />
+              <label><input type="checkbox" data-checklist-item /> UNIQUE constraints where needed</label><br />
+              <label><input type="checkbox" data-checklist-item /> CHECK constraints for restricted values</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Indexes</h3>
+              <label><input type="checkbox" data-checklist-item /> All foreign key columns indexed</label><br />
+              <label><input type="checkbox" data-checklist-item /> Columns in common WHERE clauses indexed</label><br />
+              <label><input type="checkbox" data-checklist-item /> Composite indexes if multiple columns filtered together</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">RLS</h3>
+              <label><input type="checkbox" data-checklist-item /> RLS enabled</label><br />
+              <label><input type="checkbox" data-checklist-item /> SELECT policy added</label><br />
+              <label><input type="checkbox" data-checklist-item /> INSERT policy added</label><br />
+              <label><input type="checkbox" data-checklist-item /> UPDATE policy added</label><br />
+              <label><input type="checkbox" data-checklist-item /> DELETE policy added or intentionally blocked</label><br />
+              <label><input type="checkbox" data-checklist-item /> Policies use <code>auth.uid()</code> — not hardcoded values</label><br />
+              <label><input type="checkbox" data-checklist-item /> Tested as owner, admin, member, non-member, anonymous</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Migration &amp; Documentation</h3>
+              <label><input type="checkbox" data-checklist-item /> Migration file created and named clearly</label><br />
+              <label><input type="checkbox" data-checklist-item /> Tested on staging before production</label><br />
+              <label><input type="checkbox" data-checklist-item /> Table documented</label><br />
+              <label><input type="checkbox" data-checklist-item /> API documentation written if endpoint created</label><br />
+              <label><input type="checkbox" data-checklist-item /> Frontend team notified</label>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-info">
+          <div class="alert-title">Practice Task</div>
+          <p>
+            Apply what you learned by creating a real table with the correct schema,
+            constraints, indexes, soft delete, and migration file.
+          </p>
+          <a href="../../tasks/supabase/01-create-projects-table.html" class="btn btn-primary btn-sm">
+            Open Task 01: Create the Projects Table
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          New Supabase tables must be secure, indexed, constrained, documented, and RLS-protected before production.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../supabase-checklist.html" class="footer-link">Supabase Checklist</a>
+        <a href="../../standards/supabase-standards.html" class="footer-link">Supabase Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

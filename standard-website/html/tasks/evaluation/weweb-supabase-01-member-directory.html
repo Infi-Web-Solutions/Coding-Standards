@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Evaluation — Member Directory (WeWeb + Supabase) | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Detailed evaluation checklist covering schema, RLS, list page, Add/Edit modal, delete, and standards compliance."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-danger">Evaluation Checklist</span>
+        <h1 class="page-title">Evaluation — Member Directory (WeWeb + Supabase)</h1>
+
+        <p class="page-subtitle">
+          Detailed evaluation checklist covering schema, RLS, list page, Add/Edit modal, delete, and standards compliance.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section id="database-schema" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Database Schema — <code>members</code> Table</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Table is named <code>members</code> (not <code>workspace_members</code> or another variation)</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>id</code> column: UUID type, default <code>gen_random_uuid()</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>workspace_id</code> column: UUID, FK → workspaces.id, ON DELETE CASCADE</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>user_id</code> column: UUID, FK → auth.users.id, ON DELETE CASCADE, nullable</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>full_name</code> column: text, NOT NULL</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>email</code> column: text, NOT NULL</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>role</code> column: text, NOT NULL, default <code>'member'</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>department</code> column: text, nullable</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>phone</code> column: text, nullable</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>status</code> column: text, NOT NULL, default <code>'active'</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>avatar_url</code> column: text, nullable</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>created_at</code> column: timestamptz, default <code>now()</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> CHECK constraint on <code>role</code>: values restricted to <code>'admin'</code>, <code>'member'</code>, <code>'owner'</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> CHECK constraint on <code>status</code>: values restricted to <code>'active'</code>, <code>'inactive'</code>, <code>'suspended'</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> UNIQUE constraint on <code>(workspace_id, email)</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Index on <code>(workspace_id, status)</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Index on <code>(workspace_id, role)</code></label>
+        </div>
+      </section>
+
+      <section id="storage-bucket" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Storage Bucket — <code>member-avatars</code></h2>
+
+          <label><input type="checkbox" data-checklist-item /> Bucket is named exactly <code>member-avatars</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Bucket visibility is set to <strong>private</strong> (not public)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Allowed MIME types restricted to: <code>image/jpeg</code>, <code>image/png</code>, <code>image/webp</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Max file size configured to 2 MB</label><br />
+          <label><input type="checkbox" data-checklist-item /> Storage path pattern followed: <code>{workspace_id}/{member_id}/avatar.{ext}</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> RLS: workspace members can upload avatars scoped to their own workspace_id in the path</label><br />
+          <label><input type="checkbox" data-checklist-item /> RLS: workspace members can read/view avatars within their workspace</label><br />
+          <label><input type="checkbox" data-checklist-item /> RLS: members can delete their own avatar; admin/owner can delete any member's avatar</label>
+        </div>
+      </section>
+
+      <section id="rls-policies" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. RLS Policies — <code>members</code> Table</h2>
+
+          <label><input type="checkbox" data-checklist-item /> RLS is enabled on the <code>members</code> table</label><br />
+          <label><input type="checkbox" data-checklist-item /> SELECT policy: workspace members can view all members within their workspace (not other workspaces)</label><br />
+          <label><input type="checkbox" data-checklist-item /> INSERT policy: only workspace admin/owner can create new members</label><br />
+          <label><input type="checkbox" data-checklist-item /> UPDATE policy: admin/owner can update any member; member can update their own record</label><br />
+          <label><input type="checkbox" data-checklist-item /> DELETE policy: admin/owner only</label><br />
+          <label><input type="checkbox" data-checklist-item /> Policies use <code>auth.uid()</code> — not hardcoded user IDs</label><br />
+          <label><input type="checkbox" data-checklist-item /> No policy grants <code>true</code> (unrestricted public access) unintentionally</label><br />
+          <label><input type="checkbox" data-checklist-item /> Verified: a member cannot query members from a workspace they do not belong to</label>
+        </div>
+      </section>
+
+      <section id="list-page" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. List Page</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Page URL matches spec: <code>/workspaces/{workspace_id}/members</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Page loads members from DB — not hardcoded or mocked data</label><br />
+          <label><input type="checkbox" data-checklist-item /> Search input: filters by <code>full_name</code> OR <code>email</code> contains — query executed server-side (DB), not client-side JavaScript</label><br />
+          <label><input type="checkbox" data-checklist-item /> Department filter: dropdown populated from actual department values; filters DB query</label><br />
+          <label><input type="checkbox" data-checklist-item /> Pagination: 12 members per page</label><br />
+          <label><input type="checkbox" data-checklist-item /> Pagination controls: previous/next (or numbered) links work correctly</label><br />
+          <label><input type="checkbox" data-checklist-item /> URL state: <code>?search=</code>, <code>?department=</code>, and <code>?page=</code> query params preserved on navigation and refresh</label><br />
+          <label><input type="checkbox" data-checklist-item /> Filter chips: shown when a search term or department filter is active</label><br />
+          <label><input type="checkbox" data-checklist-item /> Filter chip: clicking it removes that specific filter and reloads results</label><br />
+          <label><input type="checkbox" data-checklist-item /> Loading state: skeleton rows shown while data is fetching (not a spinner only)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Empty state: "No members found." message (or equivalent) shown when list is empty</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error state: error message shown with a retry button when the fetch fails</label><br />
+          <label><input type="checkbox" data-checklist-item /> Status badge: correct visual state per status (active / inactive / suspended)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Role badge: correct visual state per role (admin / member / owner)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Avatar displayed: signed URL used (not a direct public URL, since bucket is private)</label><br />
+          <label><input type="checkbox" data-checklist-item /> "Add Member" button: visible to admin/owner only — hidden for member role</label><br />
+          <label><input type="checkbox" data-checklist-item /> Edit / Delete actions: visible to admin/owner only — hidden for member role</label>
+        </div>
+      </section>
+
+      <section id="add-edit-modal" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Add/Edit Modal</h2>
+
+          <label><input type="checkbox" data-checklist-item /> A <strong>single shared</strong> modal component is used for both Add and Edit (not two separate modals)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Edit pre-fills all fields with the existing member's values</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>full_name</code> field: required, shows error if blank</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>email</code> field: required, validated as valid email format, shows error if invalid</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>role</code> field: dropdown — only valid options (admin, member, owner) selectable</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>department</code> field: optional — no error if left blank</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>phone</code> field: optional — if filled, validated as E.164 format (<code>+[country][number]</code>); shows field error if format is wrong</label><br />
+          <label><input type="checkbox" data-checklist-item /> Avatar upload: accepts only image/jpeg, image/png, image/webp — checked by MIME type (not just file extension)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Avatar upload: file size checked (≤ 2 MB) before upload attempt — error shown immediately if exceeded</label><br />
+          <label><input type="checkbox" data-checklist-item /> Avatar upload: preview shown after file is selected (before form submission)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Duplicate email error: shown as a <strong>field error</strong> below the email input, not as a toast</label><br />
+          <label><input type="checkbox" data-checklist-item /> Submit button: shows loading state ("Saving…" or spinner) while API call is in progress</label><br />
+          <label><input type="checkbox" data-checklist-item /> Submit button: disabled while loading (cannot double-submit)</label><br />
+          <label><input type="checkbox" data-checklist-item /> On success: modal closes automatically</label><br />
+          <label><input type="checkbox" data-checklist-item /> On success: member list refreshes to show new/updated member</label><br />
+          <label><input type="checkbox" data-checklist-item /> On success: "Member added." or "Member updated." toast notification shown</label><br />
+          <label><input type="checkbox" data-checklist-item /> Form errors are cleared when the modal is re-opened for a new add</label>
+        </div>
+      </section>
+
+      <section id="delete" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Delete</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Delete option: visible only to admin/owner — hidden from member role</label><br />
+          <label><input type="checkbox" data-checklist-item /> Confirmation dialog shown before deletion: message includes the member's name ("Remove [Full Name] from workspace?")</label><br />
+          <label><input type="checkbox" data-checklist-item /> Confirmation dialog does not say generic text like "Delete this item?"</label><br />
+          <label><input type="checkbox" data-checklist-item /> Confirm button shows loading state while the delete request is in progress</label><br />
+          <label><input type="checkbox" data-checklist-item /> Confirm button is disabled while loading (cannot double-confirm)</label><br />
+          <label><input type="checkbox" data-checklist-item /> On success: "Member removed." toast shown</label><br />
+          <label><input type="checkbox" data-checklist-item /> On success: member row disappears from the list without a full page reload</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error case: if deletion fails, error message shown; list unchanged</label>
+        </div>
+      </section>
+
+      <section id="standards-compliance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Standards Compliance</h2>
+
+          <label><input type="checkbox" data-checklist-item /> No hardcoded hex color values in WeWeb components — all from global color tokens</label><br />
+          <label><input type="checkbox" data-checklist-item /> No hardcoded pixel spacing values — all from global spacing tokens</label><br />
+          <label><input type="checkbox" data-checklist-item /> Collections fetched at page level — not inside individual sub-components</label><br />
+          <label><input type="checkbox" data-checklist-item /> Auth token accessed via the WeWeb auth plugin — not via manual <code>localStorage.getItem()</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Signed URLs used for all avatar displays (private bucket)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Every async action (add, edit, delete, avatar upload) shows a loading state</label><br />
+          <label><input type="checkbox" data-checklist-item /> No silent errors — every API error and storage error is surfaced in the UI</label><br />
+          <label><input type="checkbox" data-checklist-item /> Mobile layout tested and functional at 375px and 768px viewport widths</label>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Evaluation checklist for Member Directory (WeWeb + Supabase). Pass threshold: 90%.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

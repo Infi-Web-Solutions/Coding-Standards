@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Task — Create Projects Table | Development Standards</title>
+  <meta name="description" content="Create the projects table with all required columns, constraints, indexes, RLS, and migration." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Supabase Task — Create Projects Table</h1>
+        <p class="page-subtitle">Create the projects table with all required columns, constraints, indexes, RLS, and migration.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-tasks.html" class="btn btn-secondary">Back to Supabase Tasks</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Platform:</strong> Supabase</p>
+<p><strong>Covers:</strong> <a href="../../checklists/supabase/new-table.md">New Table Checklist</a> · <a href="../../standards/supabase/01-database-and-rls.md">Database & RLS Standards</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>You are setting up the database for <strong>WorkFlow</strong> — a multi-tenant project management app. Each workspace can have multiple projects. Projects are created by workspace members and belong to a specific workspace. Projects can be soft-deleted (not permanently removed).</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <p>A <code>projects</code> table in Supabase with the correct schema, constraints, indexes, soft delete support, and an <code>updated_at</code> auto-update trigger. You will write the complete migration SQL file.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="table-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Table Requirements</h2>
+          <h3>Columns</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Column</th>
+    <th>Type</th>
+    <th>Nullable</th>
+    <th>Default</th>
+    <th>Notes</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>id</code></td>
+    <td><code>uuid</code></td>
+    <td>No</td>
+    <td><code>gen_random_uuid()</code></td>
+    <td>Primary key</td>
+  </tr>
+  <tr>
+    <td><code>workspace_id</code></td>
+    <td><code>uuid</code></td>
+    <td>No</td>
+    <td>—</td>
+    <td>FK → <code>workspaces(id)</code> ON DELETE CASCADE</td>
+  </tr>
+  <tr>
+    <td><code>created_by</code></td>
+    <td><code>uuid</code></td>
+    <td>No</td>
+    <td>—</td>
+    <td>FK → <code>auth.users(id)</code> ON DELETE RESTRICT</td>
+  </tr>
+  <tr>
+    <td><code>name</code></td>
+    <td><code>text</code></td>
+    <td>No</td>
+    <td>—</td>
+    <td>Project name, max enforced at API layer</td>
+  </tr>
+  <tr>
+    <td><code>description</code></td>
+    <td><code>text</code></td>
+    <td>Yes</td>
+    <td><code>null</code></td>
+    <td>Optional, max 500 chars at API layer</td>
+  </tr>
+  <tr>
+    <td><code>status</code></td>
+    <td><code>text</code></td>
+    <td>No</td>
+    <td><code>&#x27;active&#x27;</code></td>
+    <td>Must be: active, on-hold, or archived</td>
+  </tr>
+  <tr>
+    <td><code>start_date</code></td>
+    <td><code>date</code></td>
+    <td>Yes</td>
+    <td><code>null</code></td>
+    <td>Project start date</td>
+  </tr>
+  <tr>
+    <td><code>end_date</code></td>
+    <td><code>date</code></td>
+    <td>Yes</td>
+    <td><code>null</code></td>
+    <td>Must be after start_date when set</td>
+  </tr>
+  <tr>
+    <td><code>created_at</code></td>
+    <td><code>timestamptz</code></td>
+    <td>No</td>
+    <td><code>now()</code></td>
+    <td>Auto-set on insert</td>
+  </tr>
+  <tr>
+    <td><code>updated_at</code></td>
+    <td><code>timestamptz</code></td>
+    <td>No</td>
+    <td><code>now()</code></td>
+    <td>Auto-updated on every change</td>
+  </tr>
+  <tr>
+    <td><code>deleted_at</code></td>
+    <td><code>timestamptz</code></td>
+    <td>Yes</td>
+    <td><code>null</code></td>
+    <td>NULL = active, timestamp = soft-deleted</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Constraints Required</h3>
+<ul>
+  <li>Primary key on <code>id</code></li>
+  <li><code>workspace_id</code> NOT NULL + FK to <code>workspaces(id)</code> ON DELETE CASCADE</li>
+  <li><code>created_by</code> NOT NULL + FK to <code>auth.users(id)</code> ON DELETE RESTRICT</li>
+  <li><code>name</code> NOT NULL</li>
+  <li><code>status</code> CHECK: must be <code>&#x27;active&#x27;</code>, <code>&#x27;on-hold&#x27;</code>, or <code>&#x27;archived&#x27;</code></li>
+  <li>Uniqueness: <code>(workspace_id, name)</code> — no two projects with the same name in the same workspace (active projects only — soft deleted can repeat)</li>
+  <li>CHECK: <code>end_date &gt; start_date</code> when both are set</li>
+</ul>
+<h3>Indexes Required</h3>
+<ul>
+  <li><code>workspace_id</code> — most queries filter by workspace</li>
+  <li><code>created_by</code> — for user's own projects view</li>
+  <li><code>status</code> — for filtering active/archived</li>
+  <li>Composite: <code>(workspace_id, deleted_at)</code> — for listing active projects per workspace</li>
+</ul>
+<h3>Trigger Required</h3>
+<p>An <code>updated_at</code> auto-update trigger using the shared <code>update_updated_at()</code> function (create the function if it does not exist).</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="migration-file" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Migration File</h2>
+          <p>Write a complete SQL migration file named:</p>
+<pre><code>20240115_create_projects_table.sql</code></pre>
+<p>It must include (in this order):</p>
+<ol>
+  <li>Create the <code>update_updated_at()</code> function (with <code>CREATE OR REPLACE</code>)</li>
+  <li>Create the <code>projects</code> table with all columns and constraints</li>
+  <li>Create the <code>set_updated_at</code> trigger on <code>projects</code></li>
+  <li>Create all required indexes</li>
+  <li>Enable RLS: <code>ALTER TABLE projects ENABLE ROW LEVEL SECURITY;</code></li>
+</ol>
+<blockquote>Leave RLS policies for the next task — this migration only enables RLS without policies yet.</blockquote>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <ul>
+  <li>Do not skip the <code>deleted_at</code> column and use hard deletes — soft delete is required</li>
+  <li>Do not use <code>serial</code> or <code>integer</code> for the primary key — use <code>uuid</code></li>
+  <li>Do not name columns with camelCase — use <code>snake_case</code></li>
+  <li>Do not use <code>VARCHAR(n)</code> — use <code>text</code> with CHECK constraints or application-layer validation</li>
+  <li>Do not create the trigger without the function — they must both be in the migration</li>
+  <li>Do not skip the uniqueness constraint — duplicate project names in the same workspace should be blocked at the DB level</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="checklist-to-run-when-done" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run When Done</h2>
+          <p>Use the <a href="../../checklists/supabase/new-table.md#10-new-table-checklist--before-marking-done">New Table Checklist</a>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <pre><code class="language-text">SCHEMA
+[ ] All 11 columns present with correct types and nullability
+[ ] id: uuid primary key, default gen_random_uuid()
+[ ] workspace_id: NOT NULL, FK to workspaces(id) ON DELETE CASCADE
+[ ] created_by: NOT NULL, FK to auth.users(id) ON DELETE RESTRICT
+[ ] status: NOT NULL, CHECK constraint with 3 allowed values
+[ ] Unique constraint on (workspace_id, name) for active projects
+[ ] CHECK constraint: end_date &gt; start_date when both set
+[ ] deleted_at: nullable, NULL = active
+
+TRIGGER
+[ ] update_updated_at() function created (or already exists)
+[ ] set_updated_at trigger created on projects table
+
+INDEXES
+[ ] workspace_id indexed
+[ ] created_by indexed
+[ ] status indexed
+[ ] Composite index on (workspace_id, deleted_at)
+
+RLS
+[ ] RLS enabled on table (ALTER TABLE projects ENABLE ROW LEVEL SECURITY)
+[ ] No policies yet (next task)
+
+MIGRATION
+[ ] File named with timestamp prefix
+[ ] Runs without errors on a clean database
+[ ] All objects created in correct dependency order (function before trigger, table before indexes)</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-tasks.html" class="footer-link">Supabase Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

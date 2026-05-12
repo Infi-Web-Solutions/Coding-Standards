@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Contact / Help | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Contact and help page for standards questions, unclear requirements, blockers, bugs, and improvement requests."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="contact">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="./standards.html" class="navbar-link">Standards</a>
+        <a href="./checklists.html" class="navbar-link">Checklists</a>
+        <a href="./tasks.html" class="navbar-link">Tasks</a>
+        <a href="./templates.html" class="navbar-link">Templates</a>
+        <a href="./contact.html" class="navbar-link active">Contact</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>
+        Dark Mode
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-info">Contact / Help</span>
+
+        <h1 class="page-title">Need Help With a Standard?</h1>
+
+        <p class="page-subtitle">
+          Use this page when a requirement is unclear, a standard is missing,
+          a checklist is confusing, or a blocker needs to be raised properly.
+        </p>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-3">
+          <article class="card">
+            <span class="badge badge-warning">Unclear Requirement</span>
+            <h3 class="card-title">Ask Before Building</h3>
+            <p class="card-description">
+              If the task requirement is unclear, do not guess silently.
+              Ask a clear question in the ticket before implementation.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="badge badge-danger">Bug / Blocker</span>
+            <h3 class="card-title">Raise It in the Ticket</h3>
+            <p class="card-description">
+              Important issues should not stay only in chat.
+              Add the problem, impact, and reproduction steps to the ticket.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="badge badge-success">Improvement</span>
+            <h3 class="card-title">Suggest Standard Updates</h3>
+            <p class="card-description">
+              If a pattern is repeated or missing from the standards,
+              propose an update so the team can reuse it.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <div class="card-header">
+            <h2 class="section-title">What to Include When Asking for Help</h2>
+            <p class="section-description">
+              A good help request should give enough context for someone else to respond without guessing.
+            </p>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Situation</th>
+                  <th>What to Include</th>
+                  <th>Recommended Template</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Requirement is unclear</td>
+                  <td>Task link, unclear point, options you considered, and your recommended approach</td>
+                  <td><a href="../templates/work-log-template.html">Work Log Template</a></td>
+                </tr>
+
+                <tr>
+                  <td>Bug found</td>
+                  <td>Steps to reproduce, expected result, actual result, screenshots/logs, affected area</td>
+                  <td><a href="../templates/bug-report-template.html">Bug Report Template</a></td>
+                </tr>
+
+                <tr>
+                  <td>API behavior unclear</td>
+                  <td>Endpoint, request payload, response received, expected response, user role tested</td>
+                  <td><a href="../templates/api-doc-template.html">API Documentation Template</a></td>
+                </tr>
+
+                <tr>
+                  <td>Form behavior unclear</td>
+                  <td>Fields, validation rules, required states, API dependency, Add/Edit difference</td>
+                  <td><a href="../templates/form-doc-template.html">Form Documentation Template</a></td>
+                </tr>
+
+                <tr>
+                  <td>Task is complete</td>
+                  <td>What changed, testing done, evidence, files touched, known limitations</td>
+                  <td><a href="../templates/completion-comment-template.html">Completion Comment Template</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <div class="card-header">
+            <span class="badge badge-primary">Help Request Format</span>
+            <h2 class="section-title">Copy This Into Your Ticket</h2>
+            <p class="section-description">
+              Use this when asking for clarification, reporting a blocker, or requesting a standards update.
+            </p>
+          </div>
+
+          <button class="btn btn-secondary btn-sm" data-copy-template="help-request-template">
+            Copy Template
+          </button>
+
+          <div class="divider"></div>
+
+          <pre id="help-request-template">Help Request
+
+Type:
+- Requirement clarification / Bug / Blocker / Standards improvement
+
+Task Link:
+-
+
+What I am working on:
+-
+
+What is unclear or blocked:
+-
+
+What I already checked:
+-
+
+Options I considered:
+1.
+2.
+
+My recommended approach:
+-
+
+Evidence:
+- Screenshot:
+- Error/log:
+- Related file/page/API:
+
+Impact:
+- Low / Medium / High
+
+Next step needed:
+-</pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <div class="card-header">
+            <span class="badge badge-danger">Do Not Do This</span>
+            <h2 class="section-title">Anti-Patterns</h2>
+          </div>
+
+          <div class="grid grid-2">
+            <div class="alert alert-danger">
+              <div class="alert-title">Do not say only "not working"</div>
+              Add exact steps, expected behavior, actual behavior, and evidence.
+            </div>
+
+            <div class="alert alert-danger">
+              <div class="alert-title">Do not keep blockers only in chat</div>
+              If it affects delivery, it must be visible in the ticket.
+            </div>
+
+            <div class="alert alert-danger">
+              <div class="alert-title">Do not mark complete without evidence</div>
+              Done requires self-testing and proof.
+            </div>
+
+            <div class="alert alert-danger">
+              <div class="alert-title">Do not guess permission or business rules</div>
+              Backend is the source of truth. Confirm before implementing.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card text-center">
+          <span class="badge badge-success">Before Asking</span>
+          <h2 class="section-title">Check the Existing Standards First</h2>
+          <p class="section-description" style="margin-inline: auto;">
+            Most answers should already exist in standards, checklists, tasks, or templates.
+            Ask for help only after checking the relevant page.
+          </p>
+
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="./standards.html" class="btn btn-primary">Search Standards</a>
+            <a href="./checklists.html" class="btn btn-secondary">Search Checklists</a>
+            <a href="./templates.html" class="btn btn-secondary">Use Templates</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Keep help requests clear, traceable, and attached to the ticket.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="./standards.html" class="footer-link">Standards</a>
+        <a href="./checklists.html" class="footer-link">Checklists</a>
+        <a href="./tasks.html" class="footer-link">Tasks</a>
+        <a href="./templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

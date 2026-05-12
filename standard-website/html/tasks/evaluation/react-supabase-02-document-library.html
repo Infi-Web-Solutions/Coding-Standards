@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation — Document Library (React + Supabase) | Development Standards</title>
+  <meta name="description" content="Detailed evaluation checklist covering tables, RLS, storage, create_folder RPC, library page, upload, download, delete, breadcrumb." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-danger">Evaluation Checklist</span>
+        <h1 class="page-title">Evaluation — Document Library (React + Supabase)</h1>
+        <p class="page-subtitle">Detailed evaluation checklist covering tables, RLS, storage, create_folder RPC, library page, upload, download, delete, breadcrumb.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Project Spec:</strong> <a href="../react-supabase/02-document-library.md">02-document-library.md</a></p>
+<p><strong>Stack:</strong> React (TypeScript) + Supabase</p>
+<p><strong>Evaluator:</strong> ___________</p>
+<p><strong>Submission Date:</strong> ___________</p>
+<p><strong>Pass Threshold:</strong> 90%</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="how-to-mark" class="section">
+        <div class="content-card">
+          <h2 class="section-title">How to Mark</h2>
+          <ul>
+  <li><code>[✓]</code> Fully correct</li>
+  <li><code>[~]</code> Partial — note the gap below the item</li>
+  <li><code>[✗]</code> Missing or wrong</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-database-folders-table" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Database — `folders` Table</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>id</code>: UUID, default <code>gen_random_uuid()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>workspace_id</code>: UUID, FK → workspaces.id, ON DELETE CASCADE</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>name</code>: text, NOT NULL</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>parent_id</code>: UUID, FK → folders.id, ON DELETE CASCADE, nullable (null = root level)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>created_by</code>: UUID, FK → auth.users.id</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>created_at</code>: timestamptz, default <code>now()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> UNIQUE constraint on <code>(workspace_id, parent_id, name)</code> — no duplicate folder names within same parent</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS enabled</label><br />
+        </div>
+      </section>
+
+      <section id="2-database-documents-table" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Database — `documents` Table</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>id</code>: UUID, default <code>gen_random_uuid()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>workspace_id</code>: UUID, FK → workspaces.id, ON DELETE CASCADE</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>folder_id</code>: UUID, FK → folders.id, ON DELETE CASCADE, nullable (null = root level)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>name</code>: text, NOT NULL (display filename)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>storage_path</code>: text, NOT NULL (full path in bucket)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>file_size_bytes</code>: integer, NOT NULL</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>mime_type</code>: text, NOT NULL</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>uploaded_by</code>: UUID, FK → auth.users.id</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>created_at</code>: timestamptz, default <code>now()</code></label><br />
+<label><input type="checkbox" data-checklist-item /> UNIQUE constraint on <code>(workspace_id, folder_id, name)</code></label><br />
+<label><input type="checkbox" data-checklist-item /> RLS enabled</label><br />
+        </div>
+      </section>
+
+      <section id="3-rls-policies" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. RLS Policies</h2>
+          <p><strong>folders table:</strong></p>
+<label><input type="checkbox" data-checklist-item /> SELECT: workspace members can view all folders in their workspace</label><br />
+<label><input type="checkbox" data-checklist-item /> INSERT: workspace members can create folders</label><br />
+<label><input type="checkbox" data-checklist-item /> DELETE: uploader (<code>created_by = auth.uid()</code>) OR workspace admin/owner can delete</label><br />
+<p><strong>documents table:</strong></p>
+<label><input type="checkbox" data-checklist-item /> SELECT: workspace members can view all documents in their workspace</label><br />
+<label><input type="checkbox" data-checklist-item /> INSERT: workspace members can insert document records</label><br />
+<label><input type="checkbox" data-checklist-item /> DELETE: uploader (<code>uploaded_by = auth.uid()</code>) OR workspace admin/owner can delete</label><br />
+<p><strong>storage.objects (<code>workspace-docs</code> bucket):</strong></p>
+<label><input type="checkbox" data-checklist-item /> SELECT: workspace member (validated against workspace_id in the storage path)</label><br />
+<label><input type="checkbox" data-checklist-item /> INSERT: workspace member, and path must start with a workspace_id they belong to</label><br />
+<label><input type="checkbox" data-checklist-item /> DELETE: uploader or workspace admin/owner</label><br />
+        </div>
+      </section>
+
+      <section id="4-storage-bucket-workspace-docs" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Storage Bucket — `workspace-docs`</h2>
+          <label><input type="checkbox" data-checklist-item /> Bucket named <code>workspace-docs</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Bucket visibility: <strong>private</strong> (not public)</label><br />
+<label><input type="checkbox" data-checklist-item /> Allowed MIME types: image/jpeg, image/png, image/gif, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, text/plain</label><br />
+<label><input type="checkbox" data-checklist-item /> Max file size set to 25 MB</label><br />
+<label><input type="checkbox" data-checklist-item /> Storage path follows pattern: <code>{workspace_id}/{folder_id_or_&#x27;root&#x27;}/{document_id}/{sanitized_filename}</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Document UUID used in path (not sequential ID, not just filename)</label><br />
+        </div>
+      </section>
+
+      <section id="5-rpc-createfolder" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. RPC — `create_folder`</h2>
+          <label><input type="checkbox" data-checklist-item /> Function named <code>create_folder</code></label><br />
+<label><input type="checkbox" data-checklist-item /> <code>SECURITY INVOKER</code> (not SECURITY DEFINER — user-level RLS is sufficient)</label><br />
+<label><input type="checkbox" data-checklist-item /> Step 1: auth check — raises <code>AUTH_REQUIRED</code> if not authenticated</label><br />
+<label><input type="checkbox" data-checklist-item /> Step 2: validates <code>p_name</code> is not blank</label><br />
+<label><input type="checkbox" data-checklist-item /> Step 2: validates <code>p_name</code> is ≤ 100 characters</label><br />
+<label><input type="checkbox" data-checklist-item /> Step 3: checks caller is a workspace member — raises <code>FORBIDDEN</code> if not</label><br />
+<label><input type="checkbox" data-checklist-item /> Step 4: if <code>p_parent_id</code> provided — validates parent folder exists and belongs to same workspace</label><br />
+<label><input type="checkbox" data-checklist-item /> Step 5: uniqueness check using <code>IS NOT DISTINCT FROM p_parent_id</code> (handles null parent correctly — not <code>= p_parent_id</code>)</label><br />
+<label><input type="checkbox" data-checklist-item /> Step 5: raises <code>DUPLICATE</code> if a folder with the same name already exists in the same parent</label><br />
+<label><input type="checkbox" data-checklist-item /> Inserts folder record and returns <code>json_build_object(&#x27;data&#x27;, row_to_json(v_folder))</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Exception format: <code>&#x27;ERROR_CODE: description&#x27;</code></label><br />
+        </div>
+      </section>
+
+      <section id="6-react-document-library-page" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. React — Document Library Page</h2>
+          <label><input type="checkbox" data-checklist-item /> Page URL: <code>/workspaces/{id}/docs</code> (or similar, per spec)</label><br />
+<label><input type="checkbox" data-checklist-item /> <code>?folder_id</code> URL query param used to track current folder — page is shareable/bookmarkable</label><br />
+<label><input type="checkbox" data-checklist-item /> Folder ID loaded from URL on page load (not just from component state)</label><br />
+<label><input type="checkbox" data-checklist-item /> Page displays <strong>folders first</strong>, then <strong>files</strong> — not mixed together</label><br />
+<label><input type="checkbox" data-checklist-item /> Folders section: icon, name, created by, date, delete action (uploader + admin only)</label><br />
+<label><input type="checkbox" data-checklist-item /> Files section: file type icon, name, size (human-readable), uploaded by, date, actions</label><br />
+<label><input type="checkbox" data-checklist-item /> "Create Folder" button visible to all members</label><br />
+<label><input type="checkbox" data-checklist-item /> "Upload File" button visible to all members</label><br />
+<label><input type="checkbox" data-checklist-item /> Delete (folder/file): visible to uploader or admin/owner only — hidden from other members</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state: skeleton rows for both folders and files sections shown simultaneously</label><br />
+<label><input type="checkbox" data-checklist-item /> Empty state: "This folder is empty." + Upload/Create buttons</label><br />
+<label><input type="checkbox" data-checklist-item /> Error state: "Could not load documents." + retry button</label><br />
+        </div>
+      </section>
+
+      <section id="7-react-upload-file-modal" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. React — Upload File Modal</h2>
+          <label><input type="checkbox" data-checklist-item /> Drag-and-drop zone implemented (not just click-to-browse)</label><br />
+<label><input type="checkbox" data-checklist-item /> Click-to-browse also works</label><br />
+<label><input type="checkbox" data-checklist-item /> Shows accepted file types and 25 MB limit to the user</label><br />
+<label><input type="checkbox" data-checklist-item /> MIME type validated <strong>before upload</strong> from the File object — not just file extension check</label><br />
+<label><input type="checkbox" data-checklist-item /> File size checked before upload: > 25 MB shows "File too large" immediately</label><br />
+<label><input type="checkbox" data-checklist-item /> Progress bar shown per file during upload (not just a spinner)</label><br />
+<label><input type="checkbox" data-checklist-item /> Upload flow: storage upload FIRST → then insert document record</label><br />
+<label><input type="checkbox" data-checklist-item /> If storage upload fails: error shown, no document record is inserted</label><br />
+<label><input type="checkbox" data-checklist-item /> If DB insert fails after successful storage upload: uploaded file is deleted from storage (cleanup)</label><br />
+<label><input type="checkbox" data-checklist-item /> On success: "File uploaded." toast, file appears in the list without full page reload</label><br />
+<label><input type="checkbox" data-checklist-item /> Cancel button works during upload — cancels the in-progress upload</label><br />
+<label><input type="checkbox" data-checklist-item /> Duplicate filename: "A file named '[name]' already exists here. Replace it?" confirmation before overwrite</label><br />
+        </div>
+      </section>
+
+      <section id="8-react-create-folder-modal" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. React — Create Folder Modal</h2>
+          <label><input type="checkbox" data-checklist-item /> Folder Name field: required, max 100 chars</label><br />
+<label><input type="checkbox" data-checklist-item /> Calls <code>create_folder</code> RPC (not a direct table INSERT)</label><br />
+<label><input type="checkbox" data-checklist-item /> Duplicate name error from RPC shown as <strong>field error</strong> below the name input — not a toast</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state on Create button</label><br />
+<label><input type="checkbox" data-checklist-item /> Submit button disabled while loading</label><br />
+<label><input type="checkbox" data-checklist-item /> On success: folder appears in list, "Folder created." toast shown</label><br />
+        </div>
+      </section>
+
+      <section id="9-react-download-file" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. React — Download File</h2>
+          <label><input type="checkbox" data-checklist-item /> "Download" button on each file row</label><br />
+<label><input type="checkbox" data-checklist-item /> Download calls <code>supabase.storage.from(&#x27;workspace-docs&#x27;).createSignedUrl(path, 60)</code> — generates at click time</label><br />
+<label><input type="checkbox" data-checklist-item /> Signed URL has 60-second expiry (short — for immediate download)</label><br />
+<label><input type="checkbox" data-checklist-item /> Signed URL is NOT stored anywhere (not in DB, not in state) — generated fresh each click</label><br />
+<label><input type="checkbox" data-checklist-item /> Opens signed URL in new tab or triggers browser download</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading indicator shown on the download button while URL is generating</label><br />
+<label><input type="checkbox" data-checklist-item /> On error: "Could not generate download link. Please try again." shown</label><br />
+        </div>
+      </section>
+
+      <section id="10-react-delete-file-delete-folder" class="section">
+        <div class="content-card">
+          <h2 class="section-title">10. React — Delete File / Delete Folder</h2>
+          <p><strong>Delete File:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Confirmation: "Delete '[filename]'? This cannot be undone." — filename shown</label><br />
+<label><input type="checkbox" data-checklist-item /> On confirm: deletes document record from DB first, then deletes from Storage</label><br />
+<label><input type="checkbox" data-checklist-item /> If storage delete fails: error shown (or orphan warning); DB record not silently ignored</label><br />
+<label><input type="checkbox" data-checklist-item /> On success: file removed from list, "File deleted." toast</label><br />
+<p><strong>Delete Folder:</strong></p>
+<label><input type="checkbox" data-checklist-item /> Only empty folders can be deleted — check enforced</label><br />
+<label><input type="checkbox" data-checklist-item /> If folder has subfolders or files: "This folder is not empty. Delete all files inside first." — cannot proceed</label><br />
+<label><input type="checkbox" data-checklist-item /> Confirmation: "Delete folder '[name]'? This cannot be undone." — folder name shown</label><br />
+<label><input type="checkbox" data-checklist-item /> On success: folder removed from list, "Folder deleted." toast</label><br />
+        </div>
+      </section>
+
+      <section id="11-react-breadcrumb-navigation" class="section">
+        <div class="content-card">
+          <h2 class="section-title">11. React — Breadcrumb Navigation</h2>
+          <label><input type="checkbox" data-checklist-item /> Full path shown from root: Home / Marketing / 2024 Q1</label><br />
+<label><input type="checkbox" data-checklist-item /> "Home" always present and always links to root (folder_id cleared)</label><br />
+<label><input type="checkbox" data-checklist-item /> Each intermediate segment is a clickable link — navigates to that folder</label><br />
+<label><input type="checkbox" data-checklist-item /> Current folder (last segment) is NOT a link — plain text only</label><br />
+<label><input type="checkbox" data-checklist-item /> Clicking a breadcrumb segment updates <code>?folder_id=</code> in the URL</label><br />
+<label><input type="checkbox" data-checklist-item /> Browser back button restores the previous folder (URL-based navigation)</label><br />
+<label><input type="checkbox" data-checklist-item /> Folder ID from URL used on initial page load to show correct content</label><br />
+        </div>
+      </section>
+
+      <section id="12-typescript-standards-compliance" class="section">
+        <div class="content-card">
+          <h2 class="section-title">12. TypeScript &amp; Standards Compliance</h2>
+          <label><input type="checkbox" data-checklist-item /> <code>Folder</code> and <code>Document</code> TypeScript interfaces defined with correct field types</label><br />
+<label><input type="checkbox" data-checklist-item /> No <code>any</code> types used</label><br />
+<label><input type="checkbox" data-checklist-item /> Custom hooks for data fetching: <code>useFolders</code>, <code>useDocuments</code> (or similar) returning <code>{ data, isLoading, error, refetch }</code></label><br />
+<label><input type="checkbox" data-checklist-item /> Signed URLs never stored in DB — generated at request time only</label><br />
+<label><input type="checkbox" data-checklist-item /> Bucket is private — no public URLs used for file access</label><br />
+<label><input type="checkbox" data-checklist-item /> All async actions have loading states</label><br />
+<label><input type="checkbox" data-checklist-item /> No silent failures</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile layout tested at 375px and 768px</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="score-summary" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Score Summary</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Section</th>
+    <th>Total Items</th>
+    <th>✓ Pass</th>
+    <th>~ Partial</th>
+    <th>✗ Fail</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>1. folders Table</td>
+    <td>8</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2. documents Table</td>
+    <td>10</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>3. RLS Policies</td>
+    <td>8</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>4. Storage Bucket</td>
+    <td>6</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>5. create_folder RPC</td>
+    <td>11</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>6. Library Page</td>
+    <td>12</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>7. Upload Modal</td>
+    <td>12</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>8. Create Folder Modal</td>
+    <td>6</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>9. Download</td>
+    <td>7</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>10. Delete</td>
+    <td>8</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>11. Breadcrumb</td>
+    <td>7</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>12. Standards</td>
+    <td>8</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><strong>Total</strong></td>
+    <td><strong>103</strong></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  </tbody>
+</table></div>
+<p><strong>Score: ___ / 103 (___%)</strong> — Pass / Conditional / Fail</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="evaluator-notes" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Evaluator Notes</h2>
+          <p>_Record specific failures, partial items, or other observations here._</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

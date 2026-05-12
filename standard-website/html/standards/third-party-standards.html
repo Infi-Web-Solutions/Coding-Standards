@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Third-Party Implementation Standards | Development Standards</title>
+  <meta name="description" content="Standards for integrating Stripe, Razorpay, SendGrid, and Gmail." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="standards">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../index.html" class="navbar-link">Home</a><a href="../pages/standards.html" class="navbar-link active">Standards</a><a href="../pages/checklists.html" class="navbar-link">Checklists</a><a href="../pages/tasks.html" class="navbar-link">Tasks</a><a href="../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-primary">Third-Party Implementation Standards</span><h1 class="page-title">Third-Party Implementation Standards</h1><p class="page-subtitle">Standards for integrating external services into our applications. Each standard covers full setup, configuration, usage patterns, metadata conventions, and error handling specific to that service.</p></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Standards in This Folder</h2>
+      <div class="table-wrapper"><table class="table"><thead><tr><th>File</th><th>Service</th><th>Covers</th></tr></thead><tbody>
+        <tr><td><a href="./thirdparty-stripe.html">stripe.md</a></td><td>Stripe</td><td>Payment Intents, Checkout, Subscriptions, Webhooks, Metadata, Refunds</td></tr>
+        <tr><td><a href="./thirdparty-razorpay.html">razorpay.md</a></td><td>Razorpay</td><td>Orders, Payment Verification, Subscriptions, Webhooks, Notes, Refunds</td></tr>
+        <tr><td><a href="./thirdparty-sendgrid.html">sendgrid.md</a></td><td>SendGrid</td><td>Setup, Template Decision, Dynamic Templates, Transactional Standards, Error Handling</td></tr>
+        <tr><td><a href="./thirdparty-gmail.html">gmail.md</a></td><td>Gmail</td><td>OAuth2, SMTP, Rate Limits, When to Use, When Not to Use</td></tr>
+      </tbody></table></div>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Core Principles</h2>
+      <ol>
+        <li><strong>API keys never in code</strong> — always in environment variables, never committed</li>
+        <li><strong>Secrets server-side only</strong> — Stripe secret key, Razorpay key_secret, SendGrid API key never exposed to the browser</li>
+        <li><strong>Webhook signatures always verified</strong> — before processing any payload</li>
+        <li><strong>Idempotency on webhooks</strong> — store event IDs, skip already-processed events</li>
+        <li><strong>Never 500 for business logic in webhooks</strong> — return 200 with a log entry instead</li>
+        <li><strong>Test mode before live</strong> — use test credentials locally and in staging, live keys only in production</li>
+      </ol>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Related Checklists</h2>
+      <ul>
+        <li><a href="../checklists/third-parties-implementation/stripe-integration.html">Stripe Integration</a></li>
+        <li><a href="../checklists/third-parties-implementation/razorpay-integration.html">Razorpay Integration</a></li>
+        <li><a href="../checklists/third-parties-implementation/sendgrid-integration.html">SendGrid Integration</a></li>
+        <li><a href="../checklists/third-parties-implementation/gmail-integration.html">Gmail Integration</a></li>
+      </ul>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

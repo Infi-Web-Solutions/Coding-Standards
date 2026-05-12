@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontend Task — Add/Edit Project Form | Development Standards</title>
+  <meta name="description" content="Build a shared Add/Edit modal for projects — one component, same validation schema, pre-fill for edit." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Frontend Task — Add/Edit Project Form</h1>
+        <p class="page-subtitle">Build a shared Add/Edit modal for projects — one component, same validation schema, pre-fill for edit.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-tasks.html" class="btn btn-secondary">Back to Frontend Tasks</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p><strong>Platform:</strong> React (or WeWeb)</p>
+<p><strong>Covers:</strong> <a href="../../checklists/frontend/add-edit-consistency.md">Add / Edit Consistency</a> · <a href="../../checklists/frontend/form-field-validation.md">Form Field Validation</a> · <a href="../../standards/code-reusability-standards.md">Code Reusability Standards</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+          <p>You are building the Project feature for <strong>WorkFlow</strong>. Projects can be created by workspace members (Add Project) and updated by the project creator or an admin (Edit Project). The Add and Edit flows must use the same form component and the same validation schema — no exceptions.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+          <h3>1. A shared form component: <code>ProjectForm</code></h3>
+<p>This single component is used in both Add and Edit modes. It accepts a <code>mode</code> prop (<code>&quot;add&quot;</code> or <code>&quot;edit&quot;</code>) and an optional <code>initialValues</code> prop for pre-filling in edit mode.</p>
+<h3>2. An Add Project modal</h3>
+<p>Uses <code>ProjectForm</code> in <code>mode=&quot;add&quot;</code>. Triggered by an "Add Project" button on the projects list page. Submits via <code>POST /projects</code> (or your backend equivalent).</p>
+<h3>3. An Edit Project page (or modal)</h3>
+<p>Uses <code>ProjectForm</code> in <code>mode=&quot;edit&quot;</code>. Loads existing project data, pre-fills all fields, then submits via <code>PATCH /projects/:id</code>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="form-fields" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Form Fields</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Required</th>
+    <th>Rules</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Project Name</td>
+    <td>Text</td>
+    <td>Yes</td>
+    <td>Min 3 chars, max 100 chars</td>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td>Textarea</td>
+    <td>No</td>
+    <td>Max 500 chars, show character counter</td>
+  </tr>
+  <tr>
+    <td>Status</td>
+    <td>Dropdown</td>
+    <td>Yes</td>
+    <td>Values: Active, On Hold, Archived</td>
+  </tr>
+  <tr>
+    <td>Start Date</td>
+    <td>Date picker</td>
+    <td>Yes</td>
+    <td>Cannot be in the past (Add only — validate on submit)</td>
+  </tr>
+  <tr>
+    <td>End Date</td>
+    <td>Date picker</td>
+    <td>No</td>
+    <td>If provided, must be after Start Date</td>
+  </tr>
+  <tr>
+    <td>Tags</td>
+    <td>Multi-select</td>
+    <td>No</td>
+    <td>Free-entry tags, max 10 tags</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Requirements</h2>
+          <h3>Shared Component (<code>ProjectForm</code>)</h3>
+<pre><code>props:
+  mode: &quot;add&quot; | &quot;edit&quot;
+  initialValues?: { name, description, status, startDate, endDate, tags }
+  onSubmit: (data) =&gt; Promise&lt;void&gt;</code></pre>
+<ul>
+  <li>Identical field layout in both modes</li>
+  <li>Same validation schema (Zod or Yup) imported and used in both modes</li>
+  <li>Only these things differ between modes:</li>
+  <li>Page/modal title: "Add Project" vs "Edit Project"</li>
+  <li>Submit button label: "Create Project" vs "Save Changes"</li>
+  <li>HTTP method: POST vs PATCH</li>
+  <li>Start date validation: "cannot be in past" applies only in Add mode</li>
+</ul>
+<h3>Validation Schema (same object — not duplicated)</h3>
+<pre><code class="language-text">name:        required, min 3, max 100 characters
+description: optional, max 500 characters
+status:      required, must be one of: active, on-hold, archived
+startDate:   required, valid date
+             — In add mode: must not be in the past
+             — In edit mode: can be any valid date (already started)
+endDate:     optional, if provided must be after startDate
+tags:        optional, max 10 items</code></pre>
+<h3>Error Messages</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Field</th>
+    <th>Message</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Name empty</td>
+    <td>"Project name is required."</td>
+  </tr>
+  <tr>
+    <td>Name too short</td>
+    <td>"Project name must be at least 3 characters."</td>
+  </tr>
+  <tr>
+    <td>Name too long</td>
+    <td>"Project name must be 100 characters or fewer."</td>
+  </tr>
+  <tr>
+    <td>Status not selected</td>
+    <td>"Status is required."</td>
+  </tr>
+  <tr>
+    <td>Start date empty</td>
+    <td>"Start date is required."</td>
+  </tr>
+  <tr>
+    <td>Start date in past (Add only)</td>
+    <td>"Start date cannot be in the past."</td>
+  </tr>
+  <tr>
+    <td>End date before start</td>
+    <td>"End date must be after the start date."</td>
+  </tr>
+  <tr>
+    <td>Too many tags</td>
+    <td>"You can add up to 10 tags."</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Edit Mode — Pre-Fill Behavior</h3>
+<ul>
+  <li>Show a skeleton loader while project data is loading — do NOT flash an empty form</li>
+  <li>If data fails to load: show an error state with a "Try again" button — do NOT show an empty form</li>
+  <li>All fields pre-filled with existing values when data loads</li>
+  <li>If a field is disabled in edit mode (none in this task, but in general): show it as read-only with a tooltip explaining why</li>
+</ul>
+<h3>States (Both Modes)</h3>
+<ul>
+  <li><strong>Default</strong> — form ready, submit enabled</li>
+  <li><strong>Loading (submit)</strong> — spinner on button, button disabled, no double submit</li>
+  <li><strong>Success (Add)</strong> — close modal, show "Project created successfully." toast, refresh project list</li>
+  <li><strong>Success (Edit)</strong> — show "Project saved." toast, stay on page</li>
+  <li><strong>Error</strong> — inline field errors, API errors in a banner above the form, form stays populated</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <ul>
+  <li>Do not create <code>AddProjectForm.tsx</code> and <code>EditProjectForm.tsx</code> as two separate components</li>
+  <li>Do not duplicate the validation schema — one schema file, imported in both</li>
+  <li>Do not make End Date required in Edit if it was optional in Add</li>
+  <li>Do not let the Edit form render empty while data is loading</li>
+  <li>Do not allow different error messages in Add vs Edit for the same field</li>
+  <li>Do not call different API routes without changing the HTTP method (PATCH vs POST) appropriately</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section id="reusability-check-before-you-start" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Reusability Check Before You Start</h2>
+          <label><input type="checkbox" data-checklist-item /> Does a ProjectForm component already exist? (if yes — extend it, do not create a new one)</label><br />
+<label><input type="checkbox" data-checklist-item /> Does a project validation schema already exist? (if yes — import it, do not duplicate)</label><br />
+<label><input type="checkbox" data-checklist-item /> Does a useProject hook already exist for loading project data? (if yes — use it)</label><br />
+<label><input type="checkbox" data-checklist-item /> Does a DeleteConfirmModal already exist? (you will need one for a delete button in Edit)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="checklist-to-run-when-done" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklist to Run When Done</h2>
+          <p>Use the <a href="../../checklists/frontend/add-edit-consistency.md#11-consistency-checklist--before-marking-done">Add / Edit Consistency Checklist</a> in full.</p>
+<p>Then run the <a href="../../checklists/frontend-checklist.md">Frontend Checklist</a>.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <pre><code class="language-text">STRUCTURE
+[ ] Single ProjectForm component used in both Add and Edit
+[ ] Same validation schema imported in both modes
+[ ] mode prop controls title, button label, and HTTP method only
+
+FIELDS
+[ ] All 6 fields present in both modes
+[ ] Same field order in Add and Edit
+[ ] Same labels, placeholders, and helper text
+
+VALIDATION
+[ ] name: required, min 3, max 100
+[ ] description: optional, max 500 with character counter
+[ ] status: required, only allowed values
+[ ] startDate: required; past dates blocked in Add only
+[ ] endDate: optional; if set, must be after startDate
+[ ] tags: optional, max 10 items
+[ ] Same error messages in both modes
+
+EDIT MODE
+[ ] Skeleton shown while loading data
+[ ] Error state shown if data load fails (not empty form)
+[ ] All fields pre-filled correctly
+[ ] Dates and numbers pre-fill as correct types (not strings)
+
+STATES
+[ ] Loading spinner on submit button in both modes
+[ ] No double submit possible in either mode
+[ ] Success toast shown in both modes
+[ ] Form stays populated on error in both modes
+[ ] API error shown as banner in both modes
+
+MOBILE
+[ ] Add modal tested on mobile
+[ ] Edit page tested on mobile
+[ ] Date pickers usable on mobile</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../frontend-tasks.html" class="footer-link">Frontend Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

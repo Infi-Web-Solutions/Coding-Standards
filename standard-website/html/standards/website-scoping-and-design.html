@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Website — Scoping &amp; Design Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Ownership and permission confirmation, client intake checklist, discovery audit, page inventory, design extraction from Figma and deployed sites."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Website — Scoping &amp; Design Standard</h1>
+
+        <p class="page-subtitle">
+          Ownership and permission confirmation, client intake checklist, discovery audit, page inventory, design extraction from Figma and deployed sites.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="confirm-ownership-permission" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. First Rule: Confirm Ownership &amp; Permission</h2>
+
+          <p>Before replicating any website, confirm the client has rights to the design/content/assets.</p>
+
+          <h3>Mandatory Questions</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Question</th>
+                  <th>Why</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Is this your own website?</td><td>Avoid copying third-party IP.</td></tr>
+                <tr><td>Do you own the Figma/design/assets?</td><td>Needed for legal usage.</td></tr>
+                <tr><td>Do you want exact visual replica or improved rebuild?</td><td>Defines scope.</td></tr>
+                <tr><td>Do you want same content or updated content?</td><td>Impacts migration.</td></tr>
+                <tr><td>Do you want same backend/CMS/forms/integrations?</td><td>Impacts architecture.</td></tr>
+                <tr><td>Do you want same URLs for SEO?</td><td>Important for migration.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Anti-Pattern</h3>
+          <p>Do not blindly replicate a competitor's website. You can use it as <strong>reference/inspiration</strong>, but not copy branding, content, images, unique illustrations, or proprietary UX patterns.</p>
+        </div>
+      </section>
+
+      <section id="define-type-of-replication" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Define Type of Replication</h2>
+
+          <p>Every project must be classified first.</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Pixel-Perfect Replica</strong></td><td>Same layout, spacing, colors, typography, responsiveness.</td></tr>
+                <tr><td><strong>Functional Replica</strong></td><td>Same user flows/features, but UI can be improved.</td></tr>
+                <tr><td><strong>Migration Replica</strong></td><td>Same website rebuilt on a new platform like React, WeWeb, Bubble.</td></tr>
+                <tr><td><strong>Modernized Replica</strong></td><td>Keep brand/content but improve UX, speed, SEO, accessibility.</td></tr>
+                <tr><td><strong>Backend Replica</strong></td><td>Same frontend but backend/CMS/API rebuilt.</td></tr>
+                <tr><td><strong>CMS Replica</strong></td><td>Same design but editable through CMS.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>The scope must clearly say which one is expected.</p>
+        </div>
+      </section>
+
+      <section id="initial-client-intake-checklist" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Initial Client Intake Checklist</h2>
+
+          <h3>Required Inputs From Client</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Required?</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Figma file</td><td>If design exists</td><td>Must have view/edit access.</td></tr>
+                <tr><td>Existing website URL</td><td>If deployed site exists</td><td>Needed for audit.</td></tr>
+                <tr><td>Admin access</td><td>If WordPress/Webflow/etc.</td><td>Needed for content/forms/plugins.</td></tr>
+                <tr><td>Hosting access</td><td>If migration needed</td><td>cPanel, Vercel, Netlify, Cloudflare, etc.</td></tr>
+                <tr><td>Domain/DNS access</td><td>If launching new version</td><td>Needed for go-live.</td></tr>
+                <tr><td>Brand assets</td><td>Yes</td><td>Logo, colors, fonts, images.</td></tr>
+                <tr><td>Content copy</td><td>Yes</td><td>Final text or permission to extract old content.</td></tr>
+                <tr><td>Analytics access</td><td>Scenario based</td><td>GA4, Meta Pixel, Hotjar, etc.</td></tr>
+                <tr><td>Form destination</td><td>Yes</td><td>Email, CRM, webhook, database.</td></tr>
+                <tr><td>SEO requirements</td><td>Yes</td><td>URLs, metadata, redirects.</td></tr>
+                <tr><td>CMS requirement</td><td>Scenario based</td><td>Static vs editable content.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="discovery-audit-before-building" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Discovery Audit Before Building</h2>
+
+          <p>Before writing code or building in no-code, audit the source.</p>
+
+          <h3>Website Audit Checklist</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>What to Check</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Pages</td><td>All public pages and hidden pages.</td></tr>
+                <tr><td>Navigation</td><td>Header, footer, dropdowns, mobile menu.</td></tr>
+                <tr><td>Forms</td><td>Contact, newsletter, booking, quote, login, lead forms.</td></tr>
+                <tr><td>CTAs</td><td>Buttons, links, modals, popups.</td></tr>
+                <tr><td>Dynamic Content</td><td>Blog, case studies, products, listings.</td></tr>
+                <tr><td>SEO</td><td>Page titles, meta descriptions, canonical URLs, schema.</td></tr>
+                <tr><td>Integrations</td><td>CRM, email, chat widget, analytics, payment, calendar.</td></tr>
+                <tr><td>Animations</td><td>Scroll effects, sliders, hover effects, transitions.</td></tr>
+                <tr><td>Responsiveness</td><td>Desktop, tablet, mobile layouts.</td></tr>
+                <tr><td>Performance</td><td>Image size, scripts, loading speed.</td></tr>
+                <tr><td>Accessibility</td><td>Contrast, keyboard navigation, alt text.</td></tr>
+                <tr><td>Tracking</td><td>GA4, GTM, Meta Pixel, LinkedIn Pixel.</td></tr>
+                <tr><td>Legal Pages</td><td>Privacy, terms, cookie policy.</td></tr>
+                <tr><td>Security</td><td>Forms spam protection, SSL, old plugins if WordPress.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-inventory-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Page Inventory Standard</h2>
+
+          <p>Create a page inventory before development.</p>
+
+          <pre><code>Page Name:
+URL:
+Page Type: Static / CMS / Dynamic / Form / Landing Page
+Source: Figma / Existing Website / Client Content
+Responsive Required: Yes
+SEO Required: Yes
+CMS Editable: Yes/No
+Forms: Yes/No
+Integrations: Yes/No
+Priority: P0/P1/P2</code></pre>
+
+          <p>Example:</p>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>URL</th>
+                  <th>Type</th>
+                  <th>CMS Needed</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Home</td><td><code>/</code></td><td>Static/Marketing</td><td>No</td><td>Main landing page.</td></tr>
+                <tr><td>About</td><td><code>/about</code></td><td>Static</td><td>No</td><td>Company content.</td></tr>
+                <tr><td>Services</td><td><code>/services</code></td><td>Static/CMS</td><td>Maybe</td><td>Service cards.</td></tr>
+                <tr><td>Blog</td><td><code>/blog</code></td><td>CMS</td><td>Yes</td><td>Dynamic posts.</td></tr>
+                <tr><td>Contact</td><td><code>/contact</code></td><td>Form</td><td>No</td><td>Sends to CRM/email.</td></tr>
+                <tr><td>Privacy Policy</td><td><code>/privacy-policy</code></td><td>Legal</td><td>Maybe</td><td>SEO noindex optional.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="design-extraction-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Design Extraction Standard</h2>
+
+          <h3>From Figma</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Typography</td><td>Font family, sizes, weights, line heights.</td></tr>
+                <tr><td>Colors</td><td>Primary, secondary, background, text, border, error.</td></tr>
+                <tr><td>Spacing</td><td>Section padding, grid gap, container width.</td></tr>
+                <tr><td>Components</td><td>Buttons, cards, inputs, modals, navbars.</td></tr>
+                <tr><td>Breakpoints</td><td>Desktop, tablet, mobile frames.</td></tr>
+                <tr><td>Assets</td><td>Export SVG where possible, WebP/PNG for images.</td></tr>
+                <tr><td>Icons</td><td>Use SVG/icon library consistently.</td></tr>
+                <tr><td>Interactions</td><td>Hover, focus, active, disabled states.</td></tr>
+                <tr><td>Variants</td><td>Button variants, card variants, form variants.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>From Deployed Website</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Screenshots</td><td>Capture desktop, tablet, mobile.</td></tr>
+                <tr><td>Fonts</td><td>Identify font family and fallback.</td></tr>
+                <tr><td>Colors</td><td>Extract actual hex values.</td></tr>
+                <tr><td>Spacing</td><td>Measure section padding and layout widths.</td></tr>
+                <tr><td>Images</td><td>Get original assets from client/admin when possible.</td></tr>
+                <tr><td>Icons</td><td>Use licensed/open-source replacement if original unavailable.</td></tr>
+                <tr><td>Content</td><td>Copy only with client permission.</td></tr>
+                <tr><td>Animations</td><td>Document expected behavior.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Do not rely only on visual guesswork. Create a design token sheet.</p>
+        </div>
+      </section>
+
+      <section id="design-token-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Design Token Standard</h2>
+
+          <p>Every replica should have design tokens.</p>
+
+          <pre><code>Colors:
+- Primary:
+- Secondary:
+- Text:
+- Muted Text:
+- Background:
+- Border:
+- Success:
+- Warning:
+- Error:
+
+Typography:
+- Font Family:
+- H1:
+- H2:
+- H3:
+- Body:
+- Small:
+- Button:
+
+Layout:
+- Max Container Width:
+- Desktop Padding:
+- Tablet Padding:
+- Mobile Padding:
+- Section Gap:
+
+Components:
+- Button Radius:
+- Card Radius:
+- Input Height:
+- Navbar Height:</code></pre>
+
+          <p>For React, this becomes Tailwind/theme variables.</p>
+          <p>For WeWeb/Bubble, this becomes global style variables/classes.</p>
+        </div>
+      </section>
+
+      <section id="technology-decision-standard" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Technology Decision Standard</h2>
+
+          <h3>React / Next.js Use When</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr><th>Use React/Next.js When</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>High performance is required.</td></tr>
+                <tr><td>SEO matters strongly.</td></tr>
+                <tr><td>Custom UI/animations are needed.</td></tr>
+                <tr><td>App has complex logic.</td></tr>
+                <tr><td>Backend/API integration is advanced.</td></tr>
+                <tr><td>Long-term scalability matters.</td></tr>
+                <tr><td>Client wants full code ownership.</td></tr>
+                <tr><td>Custom dashboard/SaaS is needed.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>WeWeb Use When</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr><th>Use WeWeb When</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Client wants no-code frontend with API/backend flexibility.</td></tr>
+                <tr><td>Backend is Supabase/Xano/custom API.</td></tr>
+                <tr><td>App is data-driven but frontend should be editable.</td></tr>
+                <tr><td>Fast iteration is important.</td></tr>
+                <tr><td>Client may manage screens later.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Bubble Use When</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr><th>Use Bubble When</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Client wants full no-code app with frontend + backend.</td></tr>
+                <tr><td>Internal tool/MVP is required fast.</td></tr>
+                <tr><td>Complex custom frontend performance is not the priority.</td></tr>
+                <tr><td>Workflows and database logic can live in Bubble.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>WordPress Use When</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr><th>Use WordPress When</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Client wants content-heavy marketing site.</td></tr>
+                <tr><td>Blog/editorial workflow is important.</td></tr>
+                <tr><td>Non-technical users need easy editing.</td></tr>
+                <tr><td>Existing SEO/blog migration is large.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Confirm ownership, define replication type, audit the source, and extract design tokens before building.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

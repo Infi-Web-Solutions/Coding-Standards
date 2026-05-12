@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Completion Comment Template | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Template for marking a task complete with work done, testing done, and notes."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="templates">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link active">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Completion</span>
+        <h1 class="page-title">Completion Comment Template</h1>
+        <p class="page-subtitle">
+          Use this when marking a task as done. Post it as a final comment in the ticket.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/templates.html" class="btn btn-secondary">Back to Templates</a>
+          <button class="btn btn-primary" data-copy-template="completion-copy">Copy Completion Template</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">Standard Completion Comment</h2>
+            <pre>Status: Completed
+
+Work Done:
+- [What was built]
+- [What was fixed]
+- [What was updated]
+
+Testing Done:
+- [What success flows were tested]
+- [What validation/error cases were tested]
+- [Mobile checked: Yes / No]
+
+Notes:
+- [Known issues, follow-up tickets, or "None"]</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Example — Feature Completion</h2>
+            <pre>Status: Completed
+
+Work Done:
+- Built shared Add/Edit Project form component.
+- Added required field validation (name, workspace, phone).
+- Added loading state on submit button.
+- Added success and error notifications.
+- Added delete confirmation modal.
+- Matched design system spacing and button styles.
+
+Testing Done:
+- Tested create project success flow.
+- Tested edit project success flow.
+- Tested missing name field validation.
+- Tested invalid phone number validation.
+- Tested API failure error message.
+- Verified Add and Edit UI are identical.
+- Checked mobile layout.
+
+Notes:
+- No known blockers.
+- Bulk delete is out of scope for this task — separate ticket needed.</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Example — Bug Fix Completion</h2>
+            <pre>Status: Completed
+
+Work Done:
+- Fixed phone number validation missing on Edit Project form.
+- Shared the same validation schema between Add and Edit forms.
+- Added E.164 format validation with country code selector.
+
+Testing Done:
+- Tested valid phone number saves correctly.
+- Tested invalid text input shows validation error.
+- Tested missing phone number shows required field error.
+- Confirmed Add and Edit now behave identically.
+- Checked mobile layout.
+
+Notes:
+- No known blockers.</pre>
+          </article>
+
+          <article class="card">
+            <span class="badge badge-danger">Rules</span>
+            <h2 class="card-title">Rules</h2>
+            <ul>
+              <li>Never write just "Done" — always include what was done and what was tested.</li>
+              <li>If there is a known issue that is out of scope, mention it with a note to create a separate ticket.</li>
+              <li>Always include whether mobile was checked.</li>
+              <li>If testing could not be completed for a specific case, mention why.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <pre id="completion-copy" hidden>Status: Completed
+
+Work Done:
+- [What was built]
+- [What was fixed]
+- [What was updated]
+
+Testing Done:
+- [What success flows were tested]
+- [What validation/error cases were tested]
+- [Mobile checked: Yes / No]
+
+Notes:
+- [Known issues, follow-up tickets, or "None"]</pre>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Done means tested, documented, and proven with evidence.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="../pages/templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

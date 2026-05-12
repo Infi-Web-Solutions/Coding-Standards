@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete &amp; Destructive Actions Checklist | Development Standards</title>
+  <meta name="description" content="Checklist for confirmation dialogs, risk levels, soft delete vs hard delete, bulk delete, and after-delete behavior." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+<body data-page="checklists">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../../index.html" class="navbar-link">Home</a><a href="../../pages/standards.html" class="navbar-link">Standards</a><a href="../../pages/checklists.html" class="navbar-link active">Checklists</a><a href="../../pages/tasks.html" class="navbar-link">Tasks</a><a href="../../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-primary">Frontend Checklist</span><h1 class="page-title">Delete &amp; Destructive Actions Checklist</h1><p class="page-subtitle">No destructive action executes without confirmation. No confirmation is vague. No deletion is silent. The user must always know what they are destroying and what the consequences are.</p><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;"><a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a><span class="badge badge-info" data-checklist-progress>0/0 completed</span></div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Actual Confirmation UI Example</h2>
+      <div class="ui-demo" style="max-width: 560px; margin: 0 auto;">
+        <div class="ui-demo-title">Medium-Risk Delete Modal</div>
+        <h3 style="margin-bottom: 8px;">Delete Project?</h3>
+        <p>This will permanently remove <strong>Marketing Q1</strong> and all 14 tasks inside it. This action cannot be undone.</p>
+        <div class="ui-demo-field">
+          <label class="ui-demo-label" for="delete-name">Type project name to confirm</label>
+          <input id="delete-name" class="form-control" type="text" value="Marketing Q1" />
+        </div>
+        <div class="ui-demo-actions">
+          <button type="button" class="btn btn-secondary">Cancel</button>
+          <button type="button" class="btn btn-danger">Delete Project</button>
+        </div>
+      </div>
+    </div></section>
+    <section class="section"><div class="grid grid-2">
+      <article class="card"><h2 class="card-title">Risk Levels</h2><div class="table-wrapper"><table class="table"><thead><tr><th>Risk Level</th><th>Examples</th><th>Confirmation Type</th></tr></thead><tbody><tr><td>Low</td><td>Archive a project, remove a tag</td><td>Simple confirm modal</td></tr><tr><td>Medium</td><td>Delete a recoverable record, remove a member</td><td>Named confirm modal</td></tr><tr><td>High</td><td>Delete account, delete all data, cancel subscription</td><td>Type-to-confirm modal</td></tr></tbody></table></div></article>
+      <article class="card"><h2 class="card-title">Confirmation Dialog Standards</h2><label><input type="checkbox" data-checklist-item /> Use a modal dialog — never browser <code>alert()</code> or <code>confirm()</code></label><br /><label><input type="checkbox" data-checklist-item /> Title states the exact action, not just “Are you sure?”</label><br /><label><input type="checkbox" data-checklist-item /> Body names the specific item and consequence</label><br /><label><input type="checkbox" data-checklist-item /> Destructive button is red and clearly labeled</label><br /><label><input type="checkbox" data-checklist-item /> Cancel is the safe default option</label><br /><label><input type="checkbox" data-checklist-item /> Loading state prevents double-delete</label></article>
+      <article class="card"><h2 class="card-title">Low / Medium / High Risk Rules</h2><label><input type="checkbox" data-checklist-item /> Low risk explains reversibility clearly</label><br /><label><input type="checkbox" data-checklist-item /> Medium risk names the record being deleted</label><br /><label><input type="checkbox" data-checklist-item /> High risk requires typed confirmation before enabling the delete button</label><br /><label><input type="checkbox" data-checklist-item /> When in doubt, choose the higher confirmation level</label></article>
+      <article class="card"><h2 class="card-title">Soft Delete vs Hard Delete</h2><label><input type="checkbox" data-checklist-item /> Use soft delete when recovery is expected</label><br /><label><input type="checkbox" data-checklist-item /> Use hard delete only when the business rule truly requires permanent removal</label><br /><label><input type="checkbox" data-checklist-item /> UI text makes reversibility explicit</label></article>
+      <article class="card"><h2 class="card-title">Bulk Delete</h2><label><input type="checkbox" data-checklist-item /> Dialog shows record count and what will be affected</label><br /><label><input type="checkbox" data-checklist-item /> High-volume or irreversible bulk delete requires type-to-confirm</label><br /><label><input type="checkbox" data-checklist-item /> Errors stay visible inside the dialog if deletion fails</label></article>
+      <article class="card"><h2 class="card-title">After Deletion</h2><label><input type="checkbox" data-checklist-item /> Dialog closes only after success</label><br /><label><input type="checkbox" data-checklist-item /> Success toast or inline confirmation shown</label><br /><label><input type="checkbox" data-checklist-item /> List refreshes or user redirects intentionally</label><br /><label><input type="checkbox" data-checklist-item /> Failed deletion preserves the dialog and allows retry</label></article>
+    </div></section>
+  </div></main>
+  <footer class="footer"><div class="footer-inner"><div><div class="footer-brand">Development Standards</div><p class="footer-text">If the user can permanently lose data, the UI must make that risk explicit.</p></div><div class="footer-links"><a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a><a href="../../standards/frontend-error-feedback.html" class="footer-link">Error &amp; Feedback Standard</a></div></div></footer>
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

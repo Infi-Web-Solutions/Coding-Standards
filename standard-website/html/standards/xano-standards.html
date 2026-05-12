@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xano Standards | Development Standards</title>
+  <meta name="description" content="Auth token as first step, permission check from database, three-layer input validation, error response format, reusable functions, webhooks." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Xano Standards</h1>
+        <p class="page-subtitle">Auth token as first step, permission check from database, three-layer input validation, error response format, reusable functions, webhooks.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p>Core rule:</p>
+<blockquote>Xano is the backend. All business logic, permission checks, validation, and data integrity rules live in Xano — never in WeWeb, React, or any frontend. The frontend only calls Xano APIs and renders the result.</blockquote>
+<hr />
+        </div>
+      </section>
+
+      <section id="contents" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>#</th>
+    <th>Section</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><a href="#1-xano-developer-responsibilities">1</a></td>
+    <td>Developer Responsibilities</td>
+  </tr>
+  <tr>
+    <td><a href="#2-api-group-workspace-organization">2</a></td>
+    <td>API Group Organization</td>
+  </tr>
+  <tr>
+    <td><a href="#3-endpoint-naming-standard">3</a></td>
+    <td>Endpoint Naming Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#4-authentication-standard">4</a></td>
+    <td>Authentication — First Step</td>
+  </tr>
+  <tr>
+    <td><a href="#5-permission-check-standard">5</a></td>
+    <td>Permission Check</td>
+  </tr>
+  <tr>
+    <td><a href="#6-input-validation-standard">6</a></td>
+    <td>Input Validation</td>
+  </tr>
+  <tr>
+    <td><a href="#7-error-response-standard">7</a></td>
+    <td>Error Response Format</td>
+  </tr>
+  <tr>
+    <td><a href="#8-reusable-functions-standard">8</a></td>
+    <td>Reusable Functions</td>
+  </tr>
+  <tr>
+    <td><a href="#9-database-table--field-naming-standard">9</a></td>
+    <td>Database Naming</td>
+  </tr>
+  <tr>
+    <td><a href="#10-webhook-endpoint-standard">10</a></td>
+    <td>Webhooks</td>
+  </tr>
+  <tr>
+    <td><a href="#11-environment-variables-standard">11</a></td>
+    <td>Environment Variables</td>
+  </tr>
+  <tr>
+    <td><a href="#12-api-documentation-standard">12</a></td>
+    <td>API Documentation</td>
+  </tr>
+  <tr>
+    <td><a href="#13-xano--definition-of-done">13</a></td>
+    <td>Definition of Done</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>1. Xano Developer Responsibilities</h1>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Area</th>
+    <th>Responsibility</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>API Design</td>
+    <td>Every endpoint is purposeful, named clearly, and documented.</td>
+  </tr>
+  <tr>
+    <td>Authentication</td>
+    <td>Every protected endpoint validates the auth token as the first step.</td>
+  </tr>
+  <tr>
+    <td>Validation</td>
+    <td>Every input is validated in Xano — do not trust frontend validation.</td>
+  </tr>
+  <tr>
+    <td>Business Logic</td>
+    <td>All rules, calculations, and workflows live in Xano.</td>
+  </tr>
+  <tr>
+    <td>Error Handling</td>
+    <td>Every endpoint returns a consistent, predictable error format.</td>
+  </tr>
+  <tr>
+    <td>Permissions</td>
+    <td>Role/ownership checks happen in Xano before any data operation.</td>
+  </tr>
+  <tr>
+    <td>Reusable Functions</td>
+    <td>Shared logic lives in Xano Functions, not duplicated across endpoints.</td>
+  </tr>
+  <tr>
+    <td>Documentation</td>
+    <td>Every API is documented before frontend integration starts.</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>2. API Group (Workspace) Organization</h1>
+<p>Organize Xano APIs into logical groups by feature or app area.</p>
+        </div>
+      </section>
+
+      <section id="good-group-structure" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Good Group Structure</h2>
+          <pre><code class="language-text">Auth
+  POST /auth/login
+  POST /auth/signup
+  POST /auth/forgot-password
+  POST /auth/reset-password
+  GET  /auth/me
+
+Projects
+  GET    /projects
+  POST   /projects
+  GET    /projects/:id
+  PATCH  /projects/:id
+  DELETE /projects/:id
+
+Workspace Members
+  GET    /workspace/:id/members
+  POST   /workspace/:id/members/invite
+  DELETE /workspace/:id/members/:member_id
+
+Files
+  POST   /files/upload
+  GET    /files/:id
+  DELETE /files/:id
+
+Webhooks
+  POST /webhooks/stripe
+  POST /webhooks/sendgrid</code></pre>
+        </div>
+      </section>
+
+      <section id="bad-structure" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Bad Structure</h2>
+          <pre><code class="language-text">Endpoints
+  POST /doStuff
+  POST /handleProject
+  GET /getData
+  POST /misc</code></pre>
+<hr />
+<h1>3. Endpoint Naming Standard</h1>
+        </div>
+      </section>
+
+      <section id="rules" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Rules</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Rule</th>
+    <th>Standard</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Format</td>
+    <td><code>kebab-case</code></td>
+  </tr>
+  <tr>
+    <td>Pattern</td>
+    <td><code>/resource</code> or <code>/resource/:id</code></td>
+  </tr>
+  <tr>
+    <td>Action naming</td>
+    <td>Use HTTP method, not verb in URL</td>
+  </tr>
+  <tr>
+    <td>Nested resources</td>
+    <td><code>/parent/:id/child</code></td>
+  </tr>
+  <tr>
+    <td>Webhooks</td>
+    <td><code>/webhooks/provider-name</code></td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="good-vs-bad" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Good vs Bad</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>GET /projects</code></td>
+    <td><code>GET /getProjects</code></td>
+  </tr>
+  <tr>
+    <td><code>POST /projects</code></td>
+    <td><code>POST /createProject</code></td>
+  </tr>
+  <tr>
+    <td><code>PATCH /projects/:id</code></td>
+    <td><code>POST /updateProject</code></td>
+  </tr>
+  <tr>
+    <td><code>DELETE /projects/:id</code></td>
+    <td><code>POST /deleteProjectById</code></td>
+  </tr>
+  <tr>
+    <td><code>POST /workspace/:id/members/invite</code></td>
+    <td><code>POST /inviteMember</code></td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="exception" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Exception</h2>
+          <p>For complex operations that don't map cleanly to CRUD, use an action noun:</p>
+<pre><code class="language-text">POST /projects/:id/archive
+POST /invitations/:id/accept
+POST /invitations/:id/decline
+POST /users/:id/suspend</code></pre>
+<hr />
+<h1>4. Authentication Standard</h1>
+        </div>
+      </section>
+
+      <section id="auth-token-validation-first-step-in-every-protected-endpoint" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Auth Token Validation — First Step in Every Protected Endpoint</h2>
+          <p>Every endpoint that requires a logged-in user must validate the token <strong>before</strong> doing anything else.</p>
+<h3>In Xano</h3>
+<pre><code>Step 1: Auth Token (built-in middleware)
+  → If invalid: stop, return 401
+  → If valid: continue, authUser variable is set
+
+Step 2: Permission check (if role required)
+  → Query user role from database
+  → If not allowed: stop, return 403
+
+Step 3: Business logic</code></pre>
+<p><strong>Never skip the auth token step on protected endpoints.</strong></p>
+        </div>
+      </section>
+
+      <section id="auth-requirements-by-endpoint-type" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Auth Requirements By Endpoint Type</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Endpoint Type</th>
+    <th>Auth Required</th>
+    <th>Role Check</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Public API (e.g. contact form)</td>
+    <td>No</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>User-specific data</td>
+    <td>Yes</td>
+    <td>Owner check</td>
+  </tr>
+  <tr>
+    <td>Workspace operation</td>
+    <td>Yes</td>
+    <td>Workspace membership + role</td>
+  </tr>
+  <tr>
+    <td>Admin operation</td>
+    <td>Yes</td>
+    <td>Admin role from database</td>
+  </tr>
+  <tr>
+    <td>Webhook</td>
+    <td>No auth token, but signature verification</td>
+    <td>—</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>5. Permission Check Standard</h1>
+<p>After auth token validation, check what the user is allowed to do.</p>
+        </div>
+      </section>
+
+      <section id="pattern" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Pattern</h2>
+          <pre><code class="language-text">1. Get auth user ID from token.
+2. Query workspace_members where user_id = auth.id AND workspace_id = input.workspace_id.
+3. If no record found: return 403 FORBIDDEN.
+4. Check role is allowed for this action.
+5. If role not allowed: return 403 FORBIDDEN.
+6. Proceed with operation.</code></pre>
+        </div>
+      </section>
+
+      <section id="role-hierarchy" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Role Hierarchy</h2>
+          <p>Define roles in a consistent order in every permission check:</p>
+<pre><code class="language-text">owner &gt; admin &gt; manager &gt; member &gt; viewer</code></pre>
+<p>Document which roles can perform which actions:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Action</th>
+    <th>Owner</th>
+    <th>Admin</th>
+    <th>Manager</th>
+    <th>Member</th>
+    <th>Viewer</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>View records</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Create record</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Edit record</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Own only</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Delete record</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>No</td>
+    <td>No</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Manage members</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>No</td>
+    <td>No</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>6. Input Validation Standard</h1>
+<p>Every endpoint must validate every input — even if the frontend also validates.</p>
+        </div>
+      </section>
+
+      <section id="validation-order-in-xano" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Validation Order in Xano</h2>
+          <pre><code class="language-text">1. Check required fields are present (not null, not empty string).
+2. Check field types (text, integer, email, UUID format).
+3. Check field lengths (min/max characters, min/max numbers).
+4. Check field values (valid enum option, valid date range, valid UUID that exists in DB).
+5. Check business rules (workspace ownership, uniqueness, status allowed).</code></pre>
+        </div>
+      </section>
+
+      <section id="required-fields-checklist" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Required Fields Checklist</h2>
+          <label><input type="checkbox" data-checklist-item /> All required inputs are checked for null/empty.</label><br />
+<label><input type="checkbox" data-checklist-item /> UUID fields are verified to exist in the database and be accessible by the user.</label><br />
+<label><input type="checkbox" data-checklist-item /> Email fields are validated for format.</label><br />
+<label><input type="checkbox" data-checklist-item /> Phone fields validated for format.</label><br />
+<label><input type="checkbox" data-checklist-item /> Enum fields validated against allowed values.</label><br />
+<label><input type="checkbox" data-checklist-item /> Text fields have min/max length enforced.</label><br />
+<label><input type="checkbox" data-checklist-item /> Number fields have min/max enforced where relevant.</label><br />
+<label><input type="checkbox" data-checklist-item /> File fields have type and size validation.</label><br />
+        </div>
+      </section>
+
+      <section id="validation-error-response" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Validation Error Response</h2>
+          <p>When validation fails, return structured errors:</p>
+<pre><code class="language-json">{
+  &quot;status&quot;: 422,
+  &quot;code&quot;: &quot;VALIDATION_ERROR&quot;,
+  &quot;message&quot;: &quot;Please fix the highlighted fields.&quot;,
+  &quot;fields&quot;: {
+    &quot;name&quot;: &quot;Project name is required.&quot;,
+    &quot;workspace_id&quot;: &quot;Invalid workspace.&quot;
+  }
+}</code></pre>
+<hr />
+<h1>7. Error Response Standard</h1>
+<p>Every endpoint must return a consistent error format.</p>
+        </div>
+      </section>
+
+      <section id="standard-error-format" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Standard Error Format</h2>
+          <pre><code class="language-json">{
+  &quot;status&quot;: 400,
+  &quot;code&quot;: &quot;ERROR_CODE&quot;,
+  &quot;message&quot;: &quot;Human-readable message for frontend to display.&quot;
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="error-codes" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Error Codes</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Code</th>
+    <th>HTTP Status</th>
+    <th>When to Use</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>UNAUTHENTICATED</code></td>
+    <td>401</td>
+    <td>Token missing, expired, or invalid.</td>
+  </tr>
+  <tr>
+    <td><code>FORBIDDEN</code></td>
+    <td>403</td>
+    <td>Authenticated but lacks permission.</td>
+  </tr>
+  <tr>
+    <td><code>VALIDATION_ERROR</code></td>
+    <td>422</td>
+    <td>Input is missing or invalid.</td>
+  </tr>
+  <tr>
+    <td><code>NOT_FOUND</code></td>
+    <td>404</td>
+    <td>Record does not exist or user cannot access it.</td>
+  </tr>
+  <tr>
+    <td><code>CONFLICT</code></td>
+    <td>409</td>
+    <td>Duplicate data or conflicting state.</td>
+  </tr>
+  <tr>
+    <td><code>RATE_LIMITED</code></td>
+    <td>429</td>
+    <td>Too many requests.</td>
+  </tr>
+  <tr>
+    <td><code>INTERNAL_ERROR</code></td>
+    <td>500</td>
+    <td>Unexpected server error.</td>
+  </tr>
+  <tr>
+    <td><code>EXTERNAL_SERVICE_ERROR</code></td>
+    <td>502</td>
+    <td>Third-party call failed (Stripe, email, etc.).</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="in-xano" class="section">
+        <div class="content-card">
+          <h2 class="section-title">In Xano</h2>
+          <p>Use a <strong>Precondition</strong> or <strong>Custom Response</strong> block to return errors:</p>
+<pre><code class="language-text">Precondition: Check field is not null
+  → Fail: return 422 with code VALIDATION_ERROR and message &quot;Field is required.&quot;</code></pre>
+<p>Return errors using the Create Variable + Return Response pattern with the standard structure above.</p>
+<hr />
+<h1>8. Reusable Functions Standard</h1>
+<p>If the same logic is used in 2 or more endpoints, it must be extracted to a Xano Function.</p>
+        </div>
+      </section>
+
+      <section id="when-to-create-a-reusable-function" class="section">
+        <div class="content-card">
+          <h2 class="section-title">When to Create a Reusable Function</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Scenario</th>
+    <th>Action</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Auth token check pattern</td>
+    <td>Built-in middleware (always use)</td>
+  </tr>
+  <tr>
+    <td>Permission/role check used in multiple APIs</td>
+    <td>Create Xano Function: <code>check_workspace_permission</code></td>
+  </tr>
+  <tr>
+    <td>Creating a slug from a name</td>
+    <td>Create Xano Function: <code>generate_slug</code></td>
+  </tr>
+  <tr>
+    <td>Sending an email via external API</td>
+    <td>Create Xano Function: <code>send_email</code></td>
+  </tr>
+  <tr>
+    <td>Uploading a file to storage</td>
+    <td>Create Xano Function: <code>upload_file</code></td>
+  </tr>
+  <tr>
+    <td>Formatting a date for display</td>
+    <td>Create Xano Function: <code>format_date</code></td>
+  </tr>
+  <tr>
+    <td>Calculating a value used in multiple places</td>
+    <td>Create Xano Function: <code>calculate_[name]</code></td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="naming-standard-for-xano-functions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Naming Standard for Xano Functions</h2>
+          <pre><code class="language-text">verb_noun</code></pre>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>check_workspace_permission</code></td>
+    <td><code>permissionCheck</code></td>
+  </tr>
+  <tr>
+    <td><code>send_email_notification</code></td>
+    <td><code>emailHelper</code></td>
+  </tr>
+  <tr>
+    <td><code>generate_slug</code></td>
+    <td><code>slugMaker</code></td>
+  </tr>
+  <tr>
+    <td><code>calculate_invoice_total</code></td>
+    <td><code>doCalc</code></td>
+  </tr>
+  <tr>
+    <td><code>validate_phone_number</code></td>
+    <td><code>phoneValidation</code></td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="function-group-organization" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Function Group Organization</h2>
+          <p>Keep functions in organized groups:</p>
+<pre><code class="language-text">Auth Functions
+  validate_token
+  get_auth_user
+
+Permission Functions
+  check_workspace_permission
+  check_record_ownership
+
+Notification Functions
+  send_email_notification
+  send_sms_notification
+
+Utility Functions
+  generate_slug
+  format_date
+  calculate_discount</code></pre>
+<hr />
+<h1>9. Database Table & Field Naming Standard</h1>
+<p>Follow the same naming conventions as Supabase.</p>
+        </div>
+      </section>
+
+      <section id="table-names" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Table Names</h2>
+          <pre><code class="language-text">snake_case
+plural</code></pre>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Good</th>
+    <th>Bad</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>projects</code></td>
+    <td><code>Project</code></td>
+  </tr>
+  <tr>
+    <td><code>project_members</code></td>
+    <td><code>projectMember</code></td>
+  </tr>
+  <tr>
+    <td><code>workspace_invitations</code></td>
+    <td><code>inviteData</code></td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="field-names" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Field Names</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Purpose</th>
+    <th>Standard</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Primary key</td>
+    <td><code>id</code> (integer auto-increment or UUID)</td>
+  </tr>
+  <tr>
+    <td>Timestamps</td>
+    <td><code>created_at</code>, <code>updated_at</code></td>
+  </tr>
+  <tr>
+    <td>Foreign key</td>
+    <td><code>user_id</code>, <code>project_id</code>, <code>workspace_id</code></td>
+  </tr>
+  <tr>
+    <td>Boolean</td>
+    <td><code>is_active</code>, <code>is_verified</code>, <code>has_access</code></td>
+  </tr>
+  <tr>
+    <td>Status</td>
+    <td><code>status</code> with defined allowed values</td>
+  </tr>
+  <tr>
+    <td>Soft delete</td>
+    <td><code>deleted_at</code> (nullable)</td>
+  </tr>
+  </tbody>
+</table></div>
+        </div>
+      </section>
+
+      <section id="every-table-should-have" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Every Table Should Have</h2>
+          <pre><code class="language-text">id          — Primary key
+created_at  — Auto timestamp on create
+updated_at  — Auto timestamp on update</code></pre>
+<p>For user/workspace-scoped tables:</p>
+<pre><code class="language-text">created_by_user_id   — Who created the record
+workspace_id         — Which workspace owns it</code></pre>
+<hr />
+<h1>10. Webhook Endpoint Standard</h1>
+<p>For webhooks from Stripe, SendGrid, Zoho, Smartlead, or any third party.</p>
+        </div>
+      </section>
+
+      <section id="webhook-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Webhook Requirements</h2>
+          <label><input type="checkbox" data-checklist-item /> Signature verification (if provider supports it — Stripe, SendGrid, etc.)</label><br />
+<label><input type="checkbox" data-checklist-item /> Idempotency check — store event ID, never process same event twice</label><br />
+<label><input type="checkbox" data-checklist-item /> Parse and validate webhook payload</label><br />
+<label><input type="checkbox" data-checklist-item /> Process business logic</label><br />
+<label><input type="checkbox" data-checklist-item /> Return 200 immediately to acknowledge (even if async processing)</label><br />
+<label><input type="checkbox" data-checklist-item /> Log the event (event type, status, timestamp)</label><br />
+<label><input type="checkbox" data-checklist-item /> Handle failure gracefully (do not return 500 unless truly broken)</label><br />
+        </div>
+      </section>
+
+      <section id="webhook-error-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Webhook Error Handling</h2>
+          <p>If something fails during processing:</p>
+<ul>
+  <li>Return <code>200</code> to the provider (acknowledge receipt)</li>
+  <li>Log the failure internally</li>
+  <li>Add to a retry queue if needed</li>
+</ul>
+<p>Returning <code>500</code> to a webhook provider may cause it to retry repeatedly and flood your system.</p>
+<hr />
+<h1>11. Environment Variables Standard</h1>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Variable</th>
+    <th>Usage</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Database credentials</td>
+    <td>Always use Xano environment settings — never hardcode</td>
+  </tr>
+  <tr>
+    <td>External API keys (Stripe, SendGrid, OpenAI)</td>
+    <td>Store in Xano Environment Variables</td>
+  </tr>
+  <tr>
+    <td>Webhook secrets</td>
+    <td>Store in Xano Environment Variables</td>
+  </tr>
+  <tr>
+    <td>Supabase service role key (if used in Xano)</td>
+    <td>Store in Xano Environment Variables</td>
+  </tr>
+  <tr>
+    <td>JWT secret</td>
+    <td>Managed by Xano — do not expose</td>
+  </tr>
+  </tbody>
+</table></div>
+<p><strong>Never hardcode API keys, passwords, or secrets inside Xano function logic.</strong></p>
+<hr />
+<h1>12. API Documentation Standard</h1>
+<p>Every Xano API must be documented before frontend integration.</p>
+<p>Use the <a href="../templates/api-doc-template.md">API Documentation Template</a>.</p>
+<p>At minimum, document:</p>
+<label><input type="checkbox" data-checklist-item /> API name and purpose</label><br />
+<label><input type="checkbox" data-checklist-item /> HTTP method and endpoint path</label><br />
+<label><input type="checkbox" data-checklist-item /> Auth required: Yes / No</label><br />
+<label><input type="checkbox" data-checklist-item /> Required user role</label><br />
+<label><input type="checkbox" data-checklist-item /> Request body fields (name, type, required, validation rules)</label><br />
+<label><input type="checkbox" data-checklist-item /> Success response with example JSON</label><br />
+<label><input type="checkbox" data-checklist-item /> All error responses (401, 403, 422, 404, 409, 500)</label><br />
+<label><input type="checkbox" data-checklist-item /> Frontend implementation notes</label><br />
+<label><input type="checkbox" data-checklist-item /> Sample frontend fetch/axios call</label><br />
+<label><input type="checkbox" data-checklist-item /> Test cases</label><br />
+<hr />
+<h1>13. Xano — Definition of Done</h1>
+<p>An API built in Xano is complete only when:</p>
+<label><input type="checkbox" data-checklist-item /> Auth token validation added (if protected)</label><br />
+<label><input type="checkbox" data-checklist-item /> Permission/role check added (if role-restricted)</label><br />
+<label><input type="checkbox" data-checklist-item /> All inputs validated (required, type, length, enum, ownership)</label><br />
+<label><input type="checkbox" data-checklist-item /> Error responses use the standard format</label><br />
+<label><input type="checkbox" data-checklist-item /> Reusable logic extracted to Xano Functions (not duplicated)</label><br />
+<label><input type="checkbox" data-checklist-item /> Database table/field naming follows snake_case convention</label><br />
+<label><input type="checkbox" data-checklist-item /> Webhook endpoints have signature verification and idempotency (if webhook)</label><br />
+<label><input type="checkbox" data-checklist-item /> External API keys stored in environment variables (not hardcoded)</label><br />
+<label><input type="checkbox" data-checklist-item /> API documented before frontend integration</label><br />
+<label><input type="checkbox" data-checklist-item /> Test cases run: success + auth failure + permission failure + validation failure</label><br />
+<label><input type="checkbox" data-checklist-item /> Staging tested before marking ready</label><br />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

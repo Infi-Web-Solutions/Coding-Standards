@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Backend-First Logic Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="The fundamental rule: auth, roles, validation, prices, and business rules are always enforced on the backend. Frontend validates for UX only."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Backend-First Logic Standard</h1>
+
+        <p class="page-subtitle">
+          The fundamental rule: auth, roles, validation, prices, and business rules are always enforced on the backend. Frontend validates for UX only.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#the-fundamental-principle" class="card card-clickable">The Fundamental Principle</a>
+            <a href="#what-belongs-on-the-backend-always" class="card card-clickable">What Belongs on the Backend</a>
+            <a href="#what-frontend-is-allowed-to-do-display-ux-only" class="card card-clickable">What Frontend Is Allowed to Do</a>
+            <a href="#anti-patterns-never-do-these" class="card card-clickable">Anti-Patterns — Never Do These</a>
+            <a href="#platform-specific-rules" class="card card-clickable">Platform-Specific Rules</a>
+            <a href="#the-backend-logic-decision-test" class="card card-clickable">The Decision Test</a>
+            <a href="#where-logic-lives-by-platform" class="card card-clickable">Where Logic Lives By Platform</a>
+            <a href="#summary-rules" class="card card-clickable">Summary Rules</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="the-fundamental-principle" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. The Fundamental Principle</h2>
+
+          <pre><code class="language-text">If it matters → it must be enforced on the backend.
+Frontend validation → improves UX.
+Backend validation → enforces correctness and security.
+Both must exist. Backend is never optional.</code></pre>
+
+          <p>A frontend developer can bypass browser validation in seconds. A user can open DevTools, modify a request, or call your API directly. If the backend does not enforce the rule — the rule does not exist.</p>
+        </div>
+      </section>
+
+      <section id="what-belongs-on-the-backend-always" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. What Belongs on the Backend (Always)</h2>
+
+          <p>These must never be frontend-only:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Logic</th>
+                  <th>Platform</th>
+                  <th>Why</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Authentication verification</td>
+                  <td>Supabase / Xano / Django</td>
+                  <td>Anyone can fake a logged-in state on frontend</td>
+                </tr>
+                <tr>
+                  <td>Role and permission checks</td>
+                  <td>Supabase RLS / Xano / Django</td>
+                  <td>Roles can be faked or manipulated on frontend</td>
+                </tr>
+                <tr>
+                  <td>Input validation (required, format, length)</td>
+                  <td>Supabase / Xano / Django</td>
+                  <td>Frontend validation can be bypassed</td>
+                </tr>
+                <tr>
+                  <td>Business rules (status transitions, eligibility, limits)</td>
+                  <td>Supabase / Xano / Django</td>
+                  <td>These are invariants — frontend cannot guarantee them</td>
+                </tr>
+                <tr>
+                  <td>Price and discount calculations</td>
+                  <td>Xano / Django</td>
+                  <td>Sending price from frontend means users can manipulate it</td>
+                </tr>
+                <tr>
+                  <td>Ownership verification ("can this user access this record?")</td>
+                  <td>Supabase RLS / Xano / Django</td>
+                  <td>Frontend only knows what it's told</td>
+                </tr>
+                <tr>
+                  <td>Quota and rate limit enforcement</td>
+                  <td>Xano / Django</td>
+                  <td>Never trust frontend counts</td>
+                </tr>
+                <tr>
+                  <td>Soft delete / hard delete rules</td>
+                  <td>Supabase / Xano / Django</td>
+                  <td>Frontend can hide a button — it cannot stop a direct API call</td>
+                </tr>
+                <tr>
+                  <td>File type and size validation</td>
+                  <td>Supabase / Xano / Django</td>
+                  <td>Frontend file checks are easily bypassed</td>
+                </tr>
+                <tr>
+                  <td>Sensitive data masking (API keys, tokens, PII)</td>
+                  <td>Supabase / Xano / Django</td>
+                  <td>Never compute on frontend and send masked output</td>
+                </tr>
+                <tr>
+                  <td>Audit log creation</td>
+                  <td>Supabase / Xano / Django</td>
+                  <td>Frontend can skip calls — backend triggers cannot</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="what-frontend-is-allowed-to-do-display-ux-only" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. What Frontend Is Allowed to Do (Display + UX Only)</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Frontend Responsibility</th>
+                  <th>Allowed?</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Show/hide buttons based on known user role</td>
+                  <td>Yes</td>
+                  <td>Still enforced on backend</td>
+                </tr>
+                <tr>
+                  <td>Disable form fields based on user state</td>
+                  <td>Yes</td>
+                  <td>Still validated on backend</td>
+                </tr>
+                <tr>
+                  <td>Client-side form validation before API call</td>
+                  <td>Yes</td>
+                  <td>Reduces unnecessary API calls</td>
+                </tr>
+                <tr>
+                  <td>Display loading/error/success states</td>
+                  <td>Yes</td>
+                  <td>Core frontend responsibility</td>
+                </tr>
+                <tr>
+                  <td>Format dates, numbers, currencies for display</td>
+                  <td>Yes</td>
+                  <td>Display-only, no backend impact</td>
+                </tr>
+                <tr>
+                  <td>Cache data locally for performance</td>
+                  <td>Yes</td>
+                  <td>Always re-validate on backend when mutation happens</td>
+                </tr>
+                <tr>
+                  <td>Compute totals for display only (shopping cart preview)</td>
+                  <td>Yes</td>
+                  <td>Backend must recompute on submit</td>
+                </tr>
+                <tr>
+                  <td>Show permission-based UI (hide invite button for viewers)</td>
+                  <td>Yes</td>
+                  <td>Backend still enforces on the API call</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="anti-patterns-never-do-these" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Anti-Patterns — Never Do These</h2>
+
+          <h3>Sending Role From Frontend and Trusting It</h3>
+          <p>Bad:</p>
+          <pre><code class="language-json">POST /projects
+{
+  "name": "New Project",
+  "user_role": "admin"
+}</code></pre>
+          <p>The backend then uses <code>user_role</code> from the request to decide what the user can do.</p>
+          <p><strong>Any user can send <code>"user_role": "admin"</code> and bypass all restrictions.</strong></p>
+          <p>Good:</p>
+          <pre><code class="language-text">Backend looks up the user's role from the database using auth.uid() / auth token.
+Role is never accepted from the frontend payload.</code></pre>
+
+          <div class="divider"></div>
+
+          <h3>Doing Permission Checks Only in Frontend</h3>
+          <p>Bad:</p>
+          <pre><code class="language-ts">// Frontend hides the button — that's all
+if (user.role !== 'admin') {
+  return null; // hide button
+}</code></pre>
+          <p>The API has no role check. Anyone who calls the API directly becomes an admin.</p>
+          <p>Good:</p>
+          <pre><code class="language-text">Frontend: Hide the button for non-admins (UX).
+Backend: Check role on every API call, return 403 if not allowed (enforcement).
+Both must exist.</code></pre>
+
+          <div class="divider"></div>
+
+          <h3>Sending Computed Price From Frontend</h3>
+          <p>Bad:</p>
+          <pre><code class="language-json">POST /checkout
+{
+  "items": [...],
+  "total": 150.00,
+  "discount": 20.00
+}</code></pre>
+          <p>The backend trusts the total and processes payment for 150.</p>
+          <p><strong>Any user can send <code>"total": 1.00</code> and get the product for 1 rupee.</strong></p>
+          <p>Good:</p>
+          <pre><code class="language-text">Backend receives the item list and quantities.
+Backend computes the price from its own database/pricing rules.
+Backend charges the computed amount — never the frontend-sent amount.</code></pre>
+
+          <div class="divider"></div>
+
+          <h3>Filtering Sensitive Data on Frontend</h3>
+          <p>Bad:</p>
+          <pre><code class="language-ts">// Backend returns all user data, frontend filters out private fields
+const { password_hash, secret_token, ...safeUser } = user;</code></pre>
+          <p>The browser received the sensitive fields. They appear in network requests.</p>
+          <p>Good:</p>
+          <pre><code class="language-text">Backend only returns fields the user is allowed to see.
+Sensitive fields are never included in the API response.
+Frontend receives only what it needs.</code></pre>
+
+          <div class="divider"></div>
+
+          <h3>Skipping Backend Validation Because Frontend Already Validates</h3>
+          <p>Bad:</p>
+          <pre><code class="language-python"># Django view
+def create_project(request):
+    # "Frontend validates this, so we trust it"
+    name = request.data.get('name')
+    Project.objects.create(name=name, workspace=workspace)</code></pre>
+          <p>Good:</p>
+          <pre><code class="language-python">def create_project(request):
+    name = request.data.get('name', '').strip()
+    if not name or len(name) &lt; 2:
+        return JsonResponse({'code': 'VALIDATION_ERROR', 'message': 'Name is required.'}, status=422)
+    if len(name) &gt; 100:
+        return JsonResponse({'code': 'VALIDATION_ERROR', 'message': 'Name too long.'}, status=422)
+    Project.objects.create(name=name, workspace=workspace)</code></pre>
+
+          <div class="divider"></div>
+
+          <h3>Letting Frontend Control Admin Actions via URL Parameters</h3>
+          <p>Bad:</p>
+          <pre><code class="language-text">GET /admin/users?role=admin</code></pre>
+          <p>Backend promotes users to admin based on the URL parameter.</p>
+          <p>Good:</p>
+          <pre><code class="language-text">Backend checks if the calling user is an admin.
+Backend performs the action using its own logic.
+URL parameters carry only resource identifiers, not permissions.</code></pre>
+        </div>
+      </section>
+
+      <section id="platform-specific-rules" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Platform-Specific Rules</h2>
+
+          <h3>Supabase</h3>
+          <label><input type="checkbox" data-checklist-item /> RLS is enabled on every table in the public schema.</label><br />
+          <label><input type="checkbox" data-checklist-item /> RLS policies use <code>auth.uid()</code> — not user-submitted IDs.</label><br />
+          <label><input type="checkbox" data-checklist-item /> No policy uses <code>"using (true)"</code> without documented reason.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Authorization data stored in <code>raw_app_meta_data</code>, not <code>raw_user_meta_data</code>.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Service role key never appears in any frontend code, environment variable, or public repo.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Frontend calls Supabase with the user's access token — not the service role key.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Frontend does not control what <code>workspace_id</code> is trusted — RLS verifies membership.</label>
+
+          <div class="divider"></div>
+
+          <h3>Xano</h3>
+          <label><input type="checkbox" data-checklist-item /> Auth token validation is the first step in every protected endpoint.</label><br />
+          <label><input type="checkbox" data-checklist-item /> User role is always fetched from the Xano database — never from the request payload.</label><br />
+          <label><input type="checkbox" data-checklist-item /> All inputs are validated in Xano using Preconditions — not just in the frontend.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Prices, totals, discounts are computed in Xano — not sent from frontend.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Webhook endpoints verify signatures before processing.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Environment variables hold all API keys — never hardcoded.</label>
+
+          <div class="divider"></div>
+
+          <h3>Django</h3>
+          <label><input type="checkbox" data-checklist-item /> Every view that requires login uses <code>@login_required</code> or <code>LoginRequiredMixin</code>.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Role checks happen in the view or a permission class — never rely only on frontend hiding.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Forms and serializers validate all inputs on the backend.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Sensitive fields (passwords, tokens, keys) are never included in API responses.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Users cannot access other users' data by changing an ID in the URL.</label><br />
+          <label><input type="checkbox" data-checklist-item /> All database queries are scoped to the authenticated user's workspace/organization.</label>
+
+          <div class="divider"></div>
+
+          <h3>WeWeb / React (Frontend)</h3>
+          <label><input type="checkbox" data-checklist-item /> Frontend never stores the Supabase service role key or any backend secret.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Frontend never sends a role, permission, or price that the backend should compute.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Frontend shows/hides UI based on role — but the API enforces it independently.</label><br />
+          <label><input type="checkbox" data-checklist-item /> All user inputs are validated on API call — not just on UI.</label><br />
+          <label><input type="checkbox" data-checklist-item /> Frontend never trusts data from localStorage/cookies as authoritative for permissions.</label>
+        </div>
+      </section>
+
+      <section id="the-backend-logic-decision-test" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. The Backend Logic Decision Test</h2>
+
+          <p>Before writing any logic, ask:</p>
+
+          <blockquote style="border-left: 4px solid var(--color-primary, #2563eb); padding: 12px 16px; margin: 16px 0; background: var(--color-surface, #f9fafb);">
+            <strong>"If a technically capable user bypassed the frontend and called this API directly — would they be able to do something they should not be able to do?"</strong>
+          </blockquote>
+
+          <p>If the answer is yes — the backend is missing a check.</p>
+
+          <p>Run this test for every:</p>
+          <ul style="padding-left: 20px; line-height: 2;">
+            <li>Permission rule</li>
+            <li>Validation rule</li>
+            <li>Calculation</li>
+            <li>Status transition</li>
+            <li>Data access</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="where-logic-lives-by-platform" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Where Logic Lives By Platform</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Logic Type</th>
+                  <th>Supabase</th>
+                  <th>Xano</th>
+                  <th>Django</th>
+                  <th>Frontend</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Who can read this record</td>
+                  <td>RLS SELECT policy</td>
+                  <td>Auth + Permission check</td>
+                  <td>View + QuerySet filter</td>
+                  <td>Display only</td>
+                </tr>
+                <tr>
+                  <td>Who can create this record</td>
+                  <td>RLS INSERT policy</td>
+                  <td>Auth + Permission check + Validation</td>
+                  <td>Form + Permission class</td>
+                  <td>UI gate only</td>
+                </tr>
+                <tr>
+                  <td>Who can edit this record</td>
+                  <td>RLS UPDATE policy</td>
+                  <td>Auth + Permission check</td>
+                  <td>View + Permission class</td>
+                  <td>UI gate only</td>
+                </tr>
+                <tr>
+                  <td>Who can delete this record</td>
+                  <td>RLS DELETE policy</td>
+                  <td>Auth + Permission check</td>
+                  <td>View + Permission class</td>
+                  <td>Confirm dialog only</td>
+                </tr>
+                <tr>
+                  <td>Input validation</td>
+                  <td>DB constraints + RPC</td>
+                  <td>Preconditions</td>
+                  <td>Form / Serializer</td>
+                  <td>UX hint only</td>
+                </tr>
+                <tr>
+                  <td>Price calculation</td>
+                  <td>RPC function</td>
+                  <td>Custom function</td>
+                  <td>Service function</td>
+                  <td>Display preview only</td>
+                </tr>
+                <tr>
+                  <td>Business rule enforcement</td>
+                  <td>RLS + RPC</td>
+                  <td>Xano function</td>
+                  <td>Service / Model method</td>
+                  <td>Not allowed</td>
+                </tr>
+                <tr>
+                  <td>Audit logging</td>
+                  <td>DB trigger / RPC</td>
+                  <td>Post-operation step</td>
+                  <td>Django signal / middleware</td>
+                  <td>Not allowed</td>
+                </tr>
+                <tr>
+                  <td>File validation</td>
+                  <td>Storage policy</td>
+                  <td>Preconditions</td>
+                  <td>View / Form</td>
+                  <td>UX hint only</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="summary-rules" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Summary Rules</h2>
+
+          <pre><code class="language-text">1. Backend is the source of truth — always.
+2. Frontend validation is UX — not security.
+3. Role is read from the database — never from the request.
+4. Price is computed on the backend — never sent from frontend.
+5. Ownership is verified by the backend using the authenticated user's ID.
+6. Service keys and secrets never touch frontend code.
+7. Hiding a button is not the same as enforcing a permission.
+8. Frontend can bypass any UI check — backend cannot be bypassed.
+9. If it matters, enforce it in two places: backend (required) and frontend (UX).
+10. When in doubt: the backend decides, the frontend displays.</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          The backend is the only source of truth. Frontend is for display and interaction only.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

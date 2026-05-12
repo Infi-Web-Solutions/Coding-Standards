@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Website Task — Landing Page Section | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Build a responsive hero section and features grid — pixel-perfect from Figma, mobile-first, accessible, no inline styles."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Practice Task</span>
+        <h1 class="page-title">Website Task — Landing Page Section</h1>
+
+        <p class="page-subtitle">
+          Build a responsive hero section and features grid — pixel-perfect from Figma, mobile-first, accessible, no inline styles.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../website-tasks.html" class="btn btn-secondary">Back to Website Tasks</a>
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Scenario</h2>
+
+          <p>A client wants their existing marketing landing page rebuilt in React (or WeWeb). The original is built in WordPress and is slow. You have been provided a Figma file with the design. Your job is to replicate the <strong>Hero section</strong>, <strong>Features section</strong>, and <strong>Call-to-Action section</strong> as a pixel-perfect replica, fully responsive across desktop, tablet, and mobile.</p>
+          <p>This is a <strong>Pixel-Perfect Replica</strong> — low tolerance for layout differences.</p>
+        </div>
+      </section>
+
+      <section id="what-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Build</h2>
+
+          <p>Three reusable section components that compose the landing page:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Content</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>HeroSection</code></td>
+                  <td>Headline, subheadline, CTA button, hero image</td>
+                </tr>
+                <tr>
+                  <td><code>FeaturesSection</code></td>
+                  <td>Grid of 6 feature cards (icon + title + description)</td>
+                </tr>
+                <tr>
+                  <td><code>CtaSection</code></td>
+                  <td>Bold headline, short paragraph, email signup form</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="design-specifications" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Design Specifications (extract from Figma before coding)</h2>
+
+          <p>Before writing a single line of code, document these from the Figma file:</p>
+
+          <h3>Design Tokens</h3>
+          <pre><code class="language-text">Colors:
+  Primary:   #0070F3
+  Secondary: #111827
+  Text:      #374151
+  Muted:     #6B7280
+  Background:#FFFFFF
+  Card BG:   #F9FAFB
+  Accent:    #F59E0B
+
+Typography:
+  Heading font:  Inter, 700 weight
+  Body font:     Inter, 400 weight
+  H1 size:       56px desktop / 36px mobile
+  H2 size:       40px desktop / 28px mobile
+  Body size:     18px desktop / 16px mobile
+  Small:         14px
+
+Spacing (8pt grid):
+  Section padding: 96px top/bottom desktop / 64px mobile
+  Card padding:    32px
+  Gap between cards: 24px
+
+Breakpoints:
+  Mobile:  &lt; 768px
+  Tablet:  768px – 1024px
+  Desktop: &gt; 1024px</code></pre>
+        </div>
+      </section>
+
+      <section id="part-1-hero" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Part 1 — Hero Section</h2>
+
+          <h3>Layout</h3>
+          <ul>
+            <li>Left: headline, subheadline, CTA button</li>
+            <li>Right: hero image (provide your own placeholder if no image in Figma)</li>
+            <li>On mobile: stacks vertically (image above text, or text above image — check Figma)</li>
+          </ul>
+
+          <h3>Content</h3>
+          <pre><code class="language-text">Headline:    "Build projects that matter."
+Subheadline: "WorkFlow helps your team stay organized, move faster, and ship with confidence."
+CTA Button:  "Get started free" (links to /signup)
+Hero Image:  App dashboard screenshot (placeholder acceptable)</code></pre>
+
+          <h3>Requirements</h3>
+          <ul>
+            <li>Headline is an <code>&lt;h1&gt;</code> tag — one <code>&lt;h1&gt;</code> per page</li>
+            <li>CTA button is an <code>&lt;a&gt;</code> tag linking to <code>/signup</code> — not a <code>&lt;button&gt;</code> tag (it navigates)</li>
+            <li>Hero image has a meaningful <code>alt</code> attribute (not <code>alt=""</code> or <code>alt="image"</code>)</li>
+            <li>Section has <code>id="hero"</code> for anchor linking</li>
+            <li>Fully responsive: image and text side-by-side on desktop, stacked on mobile</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="part-2-features" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Part 2 — Features Section</h2>
+
+          <h3>Layout</h3>
+          <ul>
+            <li>Section heading centered above the grid</li>
+            <li>6 feature cards in a 3-column grid (desktop), 2-column (tablet), 1-column (mobile)</li>
+            <li>Each card: icon + title + description</li>
+          </ul>
+
+          <h3>Feature Cards Content</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Icon</th>
+                  <th>Title</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>checkmark</td>
+                  <td>Task Management</td>
+                  <td>Organize work into projects and tasks with due dates and priorities.</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>lightning bolt</td>
+                  <td>Real-Time Updates</td>
+                  <td>See changes from your team the moment they happen.</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>lock</td>
+                  <td>Role-Based Access</td>
+                  <td>Control who can view, edit, or manage each project.</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>chart</td>
+                  <td>Progress Tracking</td>
+                  <td>Visual dashboards that show exactly where every project stands.</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>link</td>
+                  <td>Integrations</td>
+                  <td>Connect with Slack, GitHub, and the tools your team already uses.</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>mobile</td>
+                  <td>Mobile Ready</td>
+                  <td>Full access from any device — phone, tablet, or desktop.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Requirements</h3>
+          <ul>
+            <li>Section heading is an <code>&lt;h2&gt;</code> tag</li>
+            <li>Card titles are <code>&lt;h3&gt;</code> tags</li>
+            <li>Cards are built as a reusable <code>FeatureCard</code> component (not 6 separate blocks)</li>
+            <li>Card grid collapses correctly at each breakpoint (test at 375px, 768px, 1280px)</li>
+            <li>No hardcoded inline styles — all layout via CSS classes or CSS-in-JS consistent with your tech choice</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="part-3-cta" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Part 3 — CTA Section</h2>
+
+          <h3>Layout</h3>
+          <ul>
+            <li>Full-width section with a dark/colored background</li>
+            <li>Centered headline + paragraph + email input + submit button</li>
+          </ul>
+
+          <h3>Content</h3>
+          <pre><code class="language-text">Headline:  "Ready to get organized?"
+Paragraph: "Join thousands of teams already using WorkFlow. Free plan available."
+Input:     Email address placeholder ("Enter your email")
+Button:    "Start for free"</code></pre>
+
+          <h3>Requirements</h3>
+          <ul>
+            <li>Email input: <code>type="email"</code>, <code>required</code>, <code>placeholder</code>, <code>autocomplete="email"</code></li>
+            <li>On submit:
+              <ul>
+                <li>Validate email format client-side before sending</li>
+                <li>Show loading state on the button while submitting</li>
+                <li>On success: replace the form with "Thanks! Check your inbox."</li>
+                <li>On error: show "Something went wrong. Please try again." — never just <code>console.log</code></li>
+              </ul>
+            </li>
+            <li>Button is a <code>&lt;button type="submit"&gt;</code> inside a <code>&lt;form&gt;</code> — not a standalone <code>&lt;div&gt;</code></li>
+            <li>Section has <code>id="cta"</code> for anchor linking</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="responsive-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Responsive Requirements</h2>
+
+          <p>Test at all three breakpoints before marking done:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Element</th>
+                  <th>Desktop (1280px)</th>
+                  <th>Tablet (768px)</th>
+                  <th>Mobile (375px)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Hero layout</td>
+                  <td>Side-by-side</td>
+                  <td>Side-by-side</td>
+                  <td>Stacked</td>
+                </tr>
+                <tr>
+                  <td>Hero headline</td>
+                  <td>56px</td>
+                  <td>44px</td>
+                  <td>36px</td>
+                </tr>
+                <tr>
+                  <td>Feature grid</td>
+                  <td>3 columns</td>
+                  <td>2 columns</td>
+                  <td>1 column</td>
+                </tr>
+                <tr>
+                  <td>CTA form</td>
+                  <td>Inline (input + button side by side)</td>
+                  <td>Inline</td>
+                  <td>Stacked</td>
+                </tr>
+                <tr>
+                  <td>Section padding</td>
+                  <td>96px</td>
+                  <td>80px</td>
+                  <td>64px</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="performance-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Performance Requirements</h2>
+
+          <pre><code class="language-text">[ ] All images have explicit width and height attributes (prevents layout shift)
+[ ] Images use WebP format (or have a fallback)
+[ ] Images have descriptive alt text
+[ ] No image is wider than its display size (no loading a 2000px image to display at 400px)
+[ ] Fonts loaded with font-display: swap
+[ ] No render-blocking scripts
+[ ] Lighthouse Performance score above 90 on desktop</code></pre>
+        </div>
+      </section>
+
+      <section id="what-not-to-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+
+          <ul>
+            <li>Do not build all six feature cards as individual components — build one <code>FeatureCard</code> and map over data</li>
+            <li>Do not hardcode colors, fonts, or spacing that should come from design tokens</li>
+            <li>Do not use <code>&lt;div&gt;</code> for the CTA button — it is an interactive element, use <code>&lt;button&gt;</code></li>
+            <li>Do not use <code>&lt;div&gt;</code> for the CTA link — links that navigate should be <code>&lt;a href&gt;</code> tags</li>
+            <li>Do not skip mobile testing — test on an actual 375px viewport (not just "it looks fine on my laptop")</li>
+            <li>Do not use inline styles for layout — use CSS classes</li>
+            <li>Do not <code>console.log(error)</code> in the CTA form submission — show the error to the user</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+
+          <pre><code class="language-text">DESIGN ACCURACY
+[ ] Hero layout matches Figma at all breakpoints
+[ ] Feature card layout matches Figma at all breakpoints
+[ ] CTA section matches Figma at all breakpoints
+[ ] Colors, fonts, and spacing match documented design tokens
+[ ] No hardcoded colors that differ from design tokens
+
+COMPONENTS
+[ ] HeroSection is a reusable component
+[ ] FeaturesSection uses a single FeatureCard component with data mapping
+[ ] CtaSection is a reusable component
+
+HTML SEMANTICS
+[ ] One &lt;h1&gt; on the page (Hero headline)
+[ ] Feature section uses &lt;h2&gt; and cards use &lt;h3&gt;
+[ ] CTA button is &lt;button type="submit"&gt;
+[ ] Hero CTA is &lt;a href="/signup"&gt;
+[ ] Images have descriptive alt attributes
+
+CTA FORM
+[ ] Email validated before submission
+[ ] Loading state on button during submit
+[ ] Success: form replaced with thank you message
+[ ] Error: shown to user (not just logged)
+
+RESPONSIVE (tested at actual viewport sizes)
+[ ] Hero: side-by-side at 1280px, stacked at 375px
+[ ] Feature grid: 3 col at 1280px, 2 col at 768px, 1 col at 375px
+[ ] CTA form: inline at desktop, stacked at mobile
+[ ] No horizontal scroll at any breakpoint
+[ ] Text is readable at all sizes (no overflow or cut-off)
+
+PERFORMANCE
+[ ] Images have explicit width and height
+[ ] Images are optimized (WebP / correct dimensions)
+[ ] Lighthouse performance &gt; 90 on desktop
+[ ] No images loading without alt text</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Pixel-perfect landing pages require semantic HTML, design token adherence, and responsive testing at every breakpoint.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../website-tasks.html" class="footer-link">Website Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

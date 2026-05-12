@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django — DRF API View Checklist | Development Standards</title>
+  <meta name="description" content="View type selection, permission classes, serializer wiring, service delegation, response format, pagination." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Django — DRF API View Checklist</h1>
+        <p class="page-subtitle">View type selection, permission classes, serializer wiring, service delegation, response format, pagination.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../django-checklist.html" class="btn btn-secondary">Back to Django Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <blockquote>Run this checklist every time you build a DRF API view (APIView, ViewSet, or generic view).</blockquote>
+<p><strong>Standard:</strong> <a href="../../standards/backend-first-logic.md">Backend-First Logic Standard</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-view-type-decision" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. View Type Decision</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Use This</th>
+    <th>When</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>APIView</code></td>
+    <td>Custom logic that doesn't map cleanly to CRUD</td>
+  </tr>
+  <tr>
+    <td><code>generics.ListCreateAPIView</code></td>
+    <td>Standard list + create endpoint</td>
+  </tr>
+  <tr>
+    <td><code>generics.RetrieveUpdateDestroyAPIView</code></td>
+    <td>Standard get + update + delete endpoint</td>
+  </tr>
+  <tr>
+    <td><code>ModelViewSet</code></td>
+    <td>Full CRUD with routing via <code>router.register()</code></td>
+  </tr>
+  <tr>
+    <td><code>ReadOnlyModelViewSet</code></td>
+    <td>List + retrieve only</td>
+  </tr>
+  </tbody>
+</table></div>
+<label><input type="checkbox" data-checklist-item /> Correct view type chosen — not defaulting to APIView for everything</label><br />
+<label><input type="checkbox" data-checklist-item /> Generic views / ViewSets used when the logic is standard CRUD</label><br />
+<label><input type="checkbox" data-checklist-item /> APIView only for non-standard flows (multi-step, non-REST actions)</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="2-authentication-permissions" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Authentication &amp; Permissions</h2>
+          <label><input type="checkbox" data-checklist-item /> Authentication class set (IsAuthenticated is the default for protected endpoints)</label><br />
+<label><input type="checkbox" data-checklist-item /> permission_classes set on the view — not relying on defaults alone</label><br />
+<p class="checklist-note">— IsAuthenticated: logged-in users only</p>
+<p class="checklist-note">— IsAdminUser: admin-only</p>
+<p class="checklist-note">— Custom: e.g., IsWorkspaceMember, IsWorkspaceAdmin</p>
+<label><input type="checkbox" data-checklist-item /> Custom permission class written in permissions.py — not inline</label><br />
+<label><input type="checkbox" data-checklist-item /> Permission class checks the database for role (not just the user's JWT claim)</label><br />
+<label><input type="checkbox" data-checklist-item /> Every protected view explicitly declares permission_classes</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="3-serializer" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Serializer</h2>
+          <label><input type="checkbox" data-checklist-item /> serializer_class set on the view</label><br />
+<label><input type="checkbox" data-checklist-item /> Different serializers for read and write if the shapes differ:</label><br />
+<p class="checklist-note">serializer_class = ProjectSerializer         (read — includes nested data)</p>
+<p class="checklist-note">write_serializer_class = ProjectWriteSerializer  (write — flat fields only)</p>
+<label><input type="checkbox" data-checklist-item /> serializer.is_valid(raise_exception=True) used — not is_valid() with manual error check</label><br />
+<label><input type="checkbox" data-checklist-item /> validated_data passed to the service layer — not the raw request.data</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="4-business-logic-placement" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Business Logic Placement</h2>
+          <pre><code class="language-text">[ ] View calls a service function — it does NOT contain business logic itself
+
+CORRECT:
+  def post(self, request):
+      serializer = ProjectWriteSerializer(data=request.data)
+      serializer.is_valid(raise_exception=True)
+      project = ProjectService.create_project(
+          workspace_id=..., actor=request.user, **serializer.validated_data
+      )
+      return Response(ProjectSerializer(project).data, status=201)
+
+WRONG — logic in the view:
+  def post(self, request):
+      project = Project.objects.create(...)
+      TaskList.objects.create(project=project, ...)
+
+[ ] No ORM calls in the view body (except .get() or .filter() for object retrieval)
+[ ] No email sending, file handling, or external API calls in the view</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="5-response-format" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Response Format</h2>
+          <label><input type="checkbox" data-checklist-item /> Success responses use correct HTTP status codes:</label><br />
+<p class="checklist-note">— 200 OK: GET (retrieve or list)</p>
+<p class="checklist-note">— 201 Created: POST (create)</p>
+<p class="checklist-note">— 200 OK: PATCH/PUT (update — or 204 No Content if no body)</p>
+<p class="checklist-note">— 204 No Content: DELETE</p>
+<label><input type="checkbox" data-checklist-item /> Error responses:</label><br />
+<p class="checklist-note">— 400 Bad Request: validation error</p>
+<p class="checklist-note">— 401 Unauthorized: authentication required</p>
+<p class="checklist-note">— 403 Forbidden: authenticated but no permission</p>
+<p class="checklist-note">— 404 Not Found: object does not exist</p>
+<p class="checklist-note">— 409 Conflict: duplicate / uniqueness conflict</p>
+<p class="checklist-note">— 500 Internal Server Error: unexpected (logged, generic message returned)</p>
+<label><input type="checkbox" data-checklist-item /> List responses use pagination — not returning all records in one response</label><br />
+<label><input type="checkbox" data-checklist-item /> Error response body follows consistent format:</label><br />
+<p class="checklist-note">{ "error": "DUPLICATE", "message": "A project with this name already exists." }</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="6-filtering-sorting-pagination" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Filtering, Sorting, Pagination</h2>
+          <label><input type="checkbox" data-checklist-item /> Filtering via query params — not hardcoded in the view</label><br />
+<label><input type="checkbox" data-checklist-item /> django-filter or manual filter logic in get_queryset()</label><br />
+<label><input type="checkbox" data-checklist-item /> Sorting via ?ordering= param (DRF OrderingFilter)</label><br />
+<label><input type="checkbox" data-checklist-item /> Default ordering defined in queryset (not random)</label><br />
+<label><input type="checkbox" data-checklist-item /> Pagination class set: PageNumberPagination or CursorPagination</label><br />
+<label><input type="checkbox" data-checklist-item /> Page size defined and reasonable (default 25 or 50)</label><br />
+<label><input type="checkbox" data-checklist-item /> Total count returned in the paginated response</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="7-error-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Error Handling</h2>
+          <label><input type="checkbox" data-checklist-item /> Serializer errors: raised automatically with raise_exception=True → 400 response</label><br />
+<label><input type="checkbox" data-checklist-item /> Object not found: get_object_or_404() or explicit try/except → 404 response</label><br />
+<label><input type="checkbox" data-checklist-item /> Permission errors: raised by DRF permission classes → 403 response</label><br />
+<label><input type="checkbox" data-checklist-item /> Unexpected errors: caught in try/except, logged, return 500 with generic message</label><br />
+<label><input type="checkbox" data-checklist-item /> Never expose stack traces or raw exception messages in the response</label><br />
+<label><input type="checkbox" data-checklist-item /> Business rule violations: raise a custom exception that maps to 409 or 422</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="8-url-configuration" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. URL Configuration</h2>
+          <label><input type="checkbox" data-checklist-item /> URL pattern named: name='project-list', name='project-detail'</label><br />
+<label><input type="checkbox" data-checklist-item /> URL names follow kebab-case convention: project-list, project-detail, workspace-members</label><br />
+<label><input type="checkbox" data-checklist-item /> ViewSet registered with a router (not manually listing every URL)</label><br />
+<label><input type="checkbox" data-checklist-item /> API versioning considered: /api/v1/ prefix</label><br />
+<label><input type="checkbox" data-checklist-item /> URL parameters use meaningful names: <uuid:project_id> not <pk></label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="9-testing" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Testing</h2>
+          <label><input type="checkbox" data-checklist-item /> Success case: correct data → correct response status and body</label><br />
+<label><input type="checkbox" data-checklist-item /> Unauthenticated request: 401 returned</label><br />
+<label><input type="checkbox" data-checklist-item /> Authenticated but wrong role: 403 returned</label><br />
+<label><input type="checkbox" data-checklist-item /> Validation failure: 400 returned with correct field errors</label><br />
+<label><input type="checkbox" data-checklist-item /> Object not found: 404 returned</label><br />
+<label><input type="checkbox" data-checklist-item /> Duplicate (if applicable): 409 returned</label><br />
+<label><input type="checkbox" data-checklist-item /> Pagination tested: page 1, page 2, last page, beyond last page</label><br />
+<label><input type="checkbox" data-checklist-item /> Filter tested: correct filtering behavior</label><br />
+<label><input type="checkbox" data-checklist-item /> Sort tested: correct ordering</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <label><input type="checkbox" data-checklist-item /> Correct view type chosen</label><br />
+<label><input type="checkbox" data-checklist-item /> Authentication and permission classes explicitly set</label><br />
+<label><input type="checkbox" data-checklist-item /> Business logic delegated to a service function</label><br />
+<label><input type="checkbox" data-checklist-item /> Serializer validates input before service is called</label><br />
+<label><input type="checkbox" data-checklist-item /> Correct HTTP status codes for all responses</label><br />
+<label><input type="checkbox" data-checklist-item /> Pagination, filtering, sorting configured</label><br />
+<label><input type="checkbox" data-checklist-item /> All error cases return correct status and message</label><br />
+<label><input type="checkbox" data-checklist-item /> URL pattern named and follows convention</label><br />
+<label><input type="checkbox" data-checklist-item /> All test cases pass</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="practice-task" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Practice Task</h2>
+          <p><strong>→ <a href="../../tasks/django/04-drf-api-view.md">DRF API View Task</a></strong> Build a ProjectListCreateView and ProjectDetailView with authentication, permission checks, service delegation, and pagination.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../django-checklist.html" class="footer-link">Django Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

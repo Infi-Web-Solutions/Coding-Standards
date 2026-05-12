@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Search, Filters & Pagination Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Checklist for backend search, filters, pagination, URL state, empty states, infinite scroll, and shareable result pages."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Frontend Checklist</span>
+        <h1 class="page-title">Search, Filters &amp; Pagination Checklist</h1>
+
+        <p class="page-subtitle">
+          Search and filters must go to the backend — never filter a client-side array.
+          State must live in the URL so results are shareable and preserved on back navigation.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../frontend-checklist.html" class="btn btn-secondary">Back to Frontend Checklist</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="ui-demo">
+          <div class="ui-demo-title">Interactive Search, Filters &amp; Pagination Demo</div>
+
+          <!-- Search -->
+          <div style="margin-bottom: 16px;">
+            <div class="ui-demo-inline" style="position: relative; gap: 8px;">
+              <input
+                type="search"
+                class="form-control"
+                placeholder="Search projects..."
+                data-sfp-search
+                style="flex: 1;"
+                aria-label="Search projects"
+              />
+              <span class="ui-demo-spinner ui-demo-spinner-dark ui-demo-hidden" data-sfp-spinner aria-label="Searching"></span>
+            </div>
+          </div>
+
+          <!-- Active filter chips -->
+          <div style="margin-bottom: 12px;">
+            <span class="ui-demo-note" style="margin-right: 8px;">Active filters:</span>
+            <span data-sfp-chips style="display: inline-flex; gap: 6px; flex-wrap: wrap;"></span>
+            <button type="button" class="btn btn-secondary btn-sm ui-demo-hidden" data-sfp-clear-all style="margin-left: 8px;">Clear all</button>
+          </div>
+
+          <!-- Add filter buttons -->
+          <div style="margin-bottom: 16px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+            <span class="ui-demo-note">Add filter:</span>
+            <button type="button" class="btn btn-secondary btn-sm" data-sfp-filter-add="Active">Active</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-sfp-filter-add="Draft">Draft</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-sfp-filter-add="In Progress">In Progress</button>
+          </div>
+
+          <!-- Results list -->
+          <div data-sfp-results style="margin-bottom: 16px;"></div>
+
+          <!-- Pagination -->
+          <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;" data-sfp-pagination>
+            <button type="button" class="btn btn-secondary btn-sm" data-sfp-prev>Previous</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-sfp-page="1">1</button>
+            <button type="button" class="btn btn-primary btn-sm" data-sfp-page="2">2</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-sfp-page="3">3</button>
+            <span style="padding: 0 4px; color: var(--color-text-muted);">...</span>
+            <button type="button" class="btn btn-secondary btn-sm" data-sfp-page="5">5</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-sfp-next>Next</button>
+          </div>
+
+          <div class="ui-demo-note" style="margin-top: 12px;">
+            Type to search with 300ms debounce. Add/remove filter chips. Navigate pages — Previous disabled on page 1, Next disabled on page 5.
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">1. Search</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Search input is debounced — wait 300ms after the user stops typing before sending the request</label><br />
+            <label><input type="checkbox" data-checklist-item /> Do NOT fire a search request on every keystroke</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading indicator shown while search request is in progress</label><br />
+            <label><input type="checkbox" data-checklist-item /> Previous results stay visible while new search is loading</label><br />
+            <label><input type="checkbox" data-checklist-item /> Search is sent to the backend — never filtering a pre-loaded client-side array</label><br />
+            <label><input type="checkbox" data-checklist-item /> Search input is parameterized — user input is passed as a query parameter, never interpolated into SQL or code</label><br />
+            <label><input type="checkbox" data-checklist-item /> Minimum character count enforced if needed</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clear button appears inside the search input when it has a value</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clearing the input resets results to the unfiltered state</label><br />
+            <label><input type="checkbox" data-checklist-item /> Search query preserved in URL param: <code>?search=query</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Search preserved when navigating away and back</label><br />
+            <label><input type="checkbox" data-checklist-item /> Search input has placeholder like: <code>Search projects...</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Autocomplete suggestions fetched from backend, debounced, keyboard-navigable</label><br />
+            <label><input type="checkbox" data-checklist-item /> Autocomplete selection populates input and triggers search</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">2. Filters</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Filters sent to backend — not applied to the current page's data only</label><br />
+            <label><input type="checkbox" data-checklist-item /> Multiple filters combinable</label><br />
+            <label><input type="checkbox" data-checklist-item /> Filters are additive by default — AND logic unless OR is explicitly designed</label><br />
+            <label><input type="checkbox" data-checklist-item /> Active filters shown as removable chips/tags above or near the results</label><br />
+            <label><input type="checkbox" data-checklist-item /> Each active filter chip has an X to remove that specific filter</label><br />
+            <label><input type="checkbox" data-checklist-item /> Clear all filters button visible whenever any filter is active</label><br />
+            <label><input type="checkbox" data-checklist-item /> Filter state preserved in URL params: <code>?status=active&amp;assignee=me</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Date range filters validate that end date is after start date</label><br />
+            <label><input type="checkbox" data-checklist-item /> Dropdown filters show all possible values, not just values present in current results</label><br />
+            <label><input type="checkbox" data-checklist-item /> Filter counts shown if useful</label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state shown while filter request is processing</label><br />
+            <label><input type="checkbox" data-checklist-item /> Filters reset to page 1 when changed</label><br />
+            <label><input type="checkbox" data-checklist-item /> Filter panel/drawer uses Apply button or immediate apply consistently</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">3. Combining Search &amp; Filters</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Search and filters work together — both sent in the same request</label><br />
+            <label><input type="checkbox" data-checklist-item /> Search + filter results match BOTH the search term AND all active filters</label><br />
+            <label><input type="checkbox" data-checklist-item /> Changing a filter does not reset the search input</label><br />
+            <label><input type="checkbox" data-checklist-item /> Changing the search does not reset the filters</label><br />
+            <label><input type="checkbox" data-checklist-item /> URL contains both: <code>?search=marketing&amp;status=active</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Clear all resets both search and all filters simultaneously</label><br />
+            <label><input type="checkbox" data-checklist-item /> Sort state is preserved when search or filters change</label><br />
+            <label><input type="checkbox" data-checklist-item /> Page resets to 1 when search or filters change</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">4. Pagination</h2>
+
+            <label><input type="checkbox" data-checklist-item /> Total record count displayed: <code>Showing 1–20 of 143 results</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Per-page options available: 10, 25, 50, 100 or app-appropriate defaults</label><br />
+            <label><input type="checkbox" data-checklist-item /> User's per-page preference saved</label><br />
+            <label><input type="checkbox" data-checklist-item /> Previous button disabled on page 1</label><br />
+            <label><input type="checkbox" data-checklist-item /> Next button disabled on last page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Page numbers shown for quick navigation</label><br />
+            <label><input type="checkbox" data-checklist-item /> Current page highlighted</label><br />
+            <label><input type="checkbox" data-checklist-item /> Pagination resets to page 1 when search, filter, or sort changes</label><br />
+            <label><input type="checkbox" data-checklist-item /> Page number preserved in URL: <code>?page=3</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Loading state between page changes</label><br />
+            <label><input type="checkbox" data-checklist-item /> If total count unavailable, show Next only</label><br />
+            <label><input type="checkbox" data-checklist-item /> Jump-to-page input for large datasets when useful</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">5. Infinite Scroll / Load More</h2>
+            <p class="card-description">
+              Use this instead of pagination when the use case is browsing rather than precise navigation.
+            </p>
+
+            <label><input type="checkbox" data-checklist-item /> Load more button preferred over automatic infinite scroll</label><br />
+            <label><input type="checkbox" data-checklist-item /> Load more button shows a spinner while loading next page</label><br />
+            <label><input type="checkbox" data-checklist-item /> Load more button disabled while loading</label><br />
+            <label><input type="checkbox" data-checklist-item /> No more results / end state shown when all data is loaded</label><br />
+            <label><input type="checkbox" data-checklist-item /> Previously loaded items remain in the list</label><br />
+            <label><input type="checkbox" data-checklist-item /> Scroll position preserved when navigating away and back</label><br />
+            <label><input type="checkbox" data-checklist-item /> Error loading next page shown near Load more with retry option</label><br />
+            <label><input type="checkbox" data-checklist-item /> First load uses skeleton items</label>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">6. URL State</h2>
+            <p class="card-description">
+              Search, filter, sort, and page state must be in the URL so results are shareable and browser-back works.
+            </p>
+
+            <label><input type="checkbox" data-checklist-item /> Search: <code>?search=query</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Filters: <code>?status=active&amp;assignee=me&amp;created_after=2024-01-01</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Sort: <code>?sort=name&amp;order=asc</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Page: <code>?page=3</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> Per page: <code>?per_page=25</code></label><br />
+            <label><input type="checkbox" data-checklist-item /> URL state read on page load</label><br />
+            <label><input type="checkbox" data-checklist-item /> Shared URL reproduces same search/filter/sort/page</label><br />
+            <label><input type="checkbox" data-checklist-item /> URL updated without full page reload</label><br />
+            <label><input type="checkbox" data-checklist-item /> Back button restores previous filter/search state correctly</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Empty &amp; No-Results States</h2>
+
+          <div class="grid grid-2">
+            <div class="alert alert-info">
+              <div class="alert-title">No Records Exist</div>
+              <label><input type="checkbox" data-checklist-item /> Show: <code>No [entities] yet. [CTA to create first one].</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Illustration or icon shown</label><br />
+              <label><input type="checkbox" data-checklist-item /> Create button visible</label>
+            </div>
+
+            <div class="alert alert-info">
+              <div class="alert-title">Search Returned No Results</div>
+              <label><input type="checkbox" data-checklist-item /> Show: <code>No results for '[search term]'.</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Suggest trying a different search term</label><br />
+              <label><input type="checkbox" data-checklist-item /> Clear search button visible</label>
+            </div>
+
+            <div class="alert alert-info">
+              <div class="alert-title">Filters Returned No Results</div>
+              <label><input type="checkbox" data-checklist-item /> Show: <code>No [entities] match your filters.</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Clear filters button visible</label><br />
+              <label><input type="checkbox" data-checklist-item /> Active filters shown so user knows why results are empty</label>
+            </div>
+
+            <div class="alert alert-info">
+              <div class="alert-title">Search + Filters No Results</div>
+              <label><input type="checkbox" data-checklist-item /> Show: <code>No results for '[term]' with these filters.</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Clear search and Clear filters buttons both available</label><br />
+              <label><input type="checkbox" data-checklist-item /> Never show a blank table body</label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-success">
+          <div class="alert-title">Before Marking Done</div>
+          Search, filters, pagination, URL state, and empty states must all be tested together — not independently only.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Search and filters belong on the backend. URL state keeps results shareable and restorable.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../frontend-checklist.html" class="footer-link">Frontend Checklist</a>
+        <a href="../../standards/frontend-standards.html" class="footer-link">Frontend Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+  <script type="module" src="../../../js/pages/search-filters-demo.js"></script>
+</body>
+</html>

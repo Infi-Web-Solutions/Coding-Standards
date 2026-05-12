@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Backend Standards | Development Standards</title>
+  <meta name="description" content="Supabase backend standards for database schema, RLS, API design, docs, edge functions, storage, and testing." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="standards">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../index.html" class="navbar-link">Home</a><a href="../pages/standards.html" class="navbar-link active">Standards</a><a href="../pages/checklists.html" class="navbar-link">Checklists</a><a href="../pages/tasks.html" class="navbar-link">Tasks</a><a href="../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-primary">Supabase Backend Standards</span><h1 class="page-title">Supabase Backend Standards</h1><p class="page-subtitle">No API is complete until database schema, RLS, validation, error handling, logs, tests, and frontend documentation are all done.</p></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Contents</h2>
+      <div class="table-wrapper"><table class="table"><thead><tr><th>File</th><th>What It Covers</th></tr></thead><tbody>
+        <tr><td><a href="./supabase-database-and-rls.html">01 — Database Schema &amp; RLS</a></td><td>Developer responsibilities, table schema standards, naming, constraints, indexes, RLS policies, auth standards, service role rules</td></tr>
+        <tr><td><a href="./supabase-api-design.html">02 — API Design &amp; Error Codes</a></td><td>API types decision table, core build flow, API design standards, response format, standard error codes, frontend contract</td></tr>
+        <tr><td><a href="./supabase-api-documentation.html">03 — API Documentation</a></td><td>API documentation template, frontend code examples, RPC pattern, full worked API example (Add Project)</td></tr>
+        <tr><td><a href="./supabase-edge-functions.html">04 — Edge Functions</a></td><td>When to use Edge Functions, required structure, response standard, auth pattern, full Edge Function example</td></tr>
+        <tr><td><a href="./supabase-validation-multitenant-storage.html">05 — Validation, Multi-Tenant &amp; Storage</a></td><td>Validation layers, frontend error contract, multi-tenant scoping, workspace membership, role permission matrix, storage RLS</td></tr>
+        <tr><td><a href="./supabase-operations-and-testing.html">06 — Audit, Webhooks, Migrations &amp; Testing</a></td><td>Audit logs, edge function logging, webhooks, API keys, versioning, migrations, testing standards, RLS testing matrix, backend handoff checklist</td></tr>
+        <tr><td><a href="./supabase-rpc-functions.html">07 — RPC &amp; Postgres Functions</a></td><td>When to use RPC vs direct query vs Edge Function, SECURITY INVOKER vs SECURITY DEFINER, parameter naming (p_ prefix), return type standards, validation order (7 steps), error raising format, transaction handling, auth pattern, naming conventions, performance rules, testing requirements</td></tr>
+      </tbody></table></div>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Developer Responsibilities</h2>
+      <div class="table-wrapper"><table class="table"><thead><tr><th>Area</th><th>Responsibility</th></tr></thead><tbody>
+        <tr><td>Database Schema</td><td>Clean tables, constraints, indexes, relationships, timestamps.</td></tr>
+        <tr><td>RLS Policies</td><td>Row-level access rules for every exposed table.</td></tr>
+        <tr><td>API Layer</td><td>Correct API type: direct query, RPC, or Edge Function.</td></tr>
+        <tr><td>Auth Rules</td><td>Define who can call what: anonymous, authenticated, owner, admin, org member.</td></tr>
+        <tr><td>Validation</td><td>Validate payload on frontend AND backend AND database.</td></tr>
+        <tr><td>Error Handling</td><td>Return predictable errors — never silent failure.</td></tr>
+        <tr><td>Documentation</td><td>Write frontend-facing API contract for every API.</td></tr>
+        <tr><td>Testing</td><td>Test success, validation error, unauthorized, forbidden, duplicate, missing data.</td></tr>
+        <tr><td>Security</td><td>No service-role key exposed, no open table without RLS.</td></tr>
+        <tr><td>Observability</td><td>Log important actions, failed requests, webhook retries, background job failures.</td></tr>
+      </tbody></table></div>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">Definition of Done</h2>
+      <label><input type="checkbox" data-checklist-item /> Migration created</label><br />
+      <label><input type="checkbox" data-checklist-item /> Table schema reviewed</label><br />
+      <label><input type="checkbox" data-checklist-item /> Constraints added</label><br />
+      <label><input type="checkbox" data-checklist-item /> Indexes added</label><br />
+      <label><input type="checkbox" data-checklist-item /> RLS enabled</label><br />
+      <label><input type="checkbox" data-checklist-item /> SELECT policy added</label><br />
+      <label><input type="checkbox" data-checklist-item /> INSERT policy added</label><br />
+      <label><input type="checkbox" data-checklist-item /> UPDATE policy added</label><br />
+      <label><input type="checkbox" data-checklist-item /> DELETE policy added or intentionally blocked</label><br />
+      <label><input type="checkbox" data-checklist-item /> RPC/Edge Function created if needed</label><br />
+      <label><input type="checkbox" data-checklist-item /> Auth requirement implemented</label><br />
+      <label><input type="checkbox" data-checklist-item /> Role checks implemented</label><br />
+      <label><input type="checkbox" data-checklist-item /> Input validation implemented</label><br />
+      <label><input type="checkbox" data-checklist-item /> Error responses standardized</label><br />
+      <label><input type="checkbox" data-checklist-item /> Logs/audit logs added</label><br />
+      <label><input type="checkbox" data-checklist-item /> Storage policy added if files exist</label><br />
+      <label><input type="checkbox" data-checklist-item /> Webhook signature/idempotency added if webhook exists</label><br />
+      <label><input type="checkbox" data-checklist-item /> API documented</label><br />
+      <label><input type="checkbox" data-checklist-item /> Frontend sample code provided</label><br />
+      <label><input type="checkbox" data-checklist-item /> Test cases documented</label><br />
+      <label><input type="checkbox" data-checklist-item /> Tested as owner/admin/member/viewer/non-member/anonymous</label><br />
+      <label><input type="checkbox" data-checklist-item /> Staging verified</label>
+    </div></section>
+    <section class="section"><div class="content-card">
+      <h2 class="section-title">The Most Important Backend Rule</h2>
+      <pre><code class="language-text">Who is calling this?
+What are they allowed to access?
+How does the database enforce that?
+What exact payload is allowed?
+What exact error is returned when something fails?
+What should frontend do in every case?</code></pre>
+      <p>If any answer is unclear — the API is not production-ready.</p>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

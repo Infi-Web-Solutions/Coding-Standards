@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Supabase — Validation, Multi-Tenant &amp; Storage Standard | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Three validation layers, frontend error handling contract, multi-tenant workspace scoping, role permission matrix, storage bucket security."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Supabase — Validation, Multi-Tenant &amp; Storage Standard</h1>
+
+        <p class="page-subtitle">
+          Three validation layers, frontend error handling contract, multi-tenant workspace scoping, role permission matrix, storage bucket security.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+        </div>
+      </section>
+
+      <section id="validation-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">24. Validation Standards</h2>
+
+          <h3>Backend Must Validate</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Field Type</th>
+                  <th>Validation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>UUID</td>
+                  <td>Valid UUID format and accessible by user.</td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>Trim, lowercase, valid format.</td>
+                </tr>
+                <tr>
+                  <td>Phone</td>
+                  <td>E.164 format.</td>
+                </tr>
+                <tr>
+                  <td>Text</td>
+                  <td>Trim, min/max length.</td>
+                </tr>
+                <tr>
+                  <td>Number</td>
+                  <td>Min/max/decimal precision.</td>
+                </tr>
+                <tr>
+                  <td>Enum</td>
+                  <td>Must be allowed value.</td>
+                </tr>
+                <tr>
+                  <td>URL</td>
+                  <td>Must be valid <code>http</code>/<code>https</code>.</td>
+                </tr>
+                <tr>
+                  <td>Date</td>
+                  <td>Valid ISO date and logical range.</td>
+                </tr>
+                <tr>
+                  <td>File</td>
+                  <td>MIME, extension, size, ownership.</td>
+                </tr>
+                <tr>
+                  <td>JSON</td>
+                  <td>Schema validation.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Validation Must Exist In Three Layers</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Layer</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Frontend</td>
+                  <td>Good UX.</td>
+                </tr>
+                <tr>
+                  <td>Edge Function/RPC</td>
+                  <td>Security and business rules.</td>
+                </tr>
+                <tr>
+                  <td>Database</td>
+                  <td>Final protection through constraints/RLS.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="frontend-error-handling-contract" class="section">
+        <div class="content-card">
+          <h2 class="section-title">25. Frontend Error Handling Contract</h2>
+
+          <p>Backend developer must tell frontend exactly what to do.</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Backend Error</th>
+                  <th>Frontend Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>UNAUTHENTICATED</code></td>
+                  <td>Redirect to login/session expired modal.</td>
+                </tr>
+                <tr>
+                  <td><code>FORBIDDEN</code></td>
+                  <td>Show no-permission message or hide action.</td>
+                </tr>
+                <tr>
+                  <td><code>VALIDATION_ERROR</code></td>
+                  <td>Highlight field-level errors.</td>
+                </tr>
+                <tr>
+                  <td><code>NOT_FOUND</code></td>
+                  <td>Show 404/resource unavailable.</td>
+                </tr>
+                <tr>
+                  <td><code>CONFLICT</code></td>
+                  <td>Show duplicate/conflict message.</td>
+                </tr>
+                <tr>
+                  <td><code>RATE_LIMITED</code></td>
+                  <td>Disable retry temporarily, show cooldown.</td>
+                </tr>
+                <tr>
+                  <td><code>INTERNAL_ERROR</code></td>
+                  <td>Show generic retry message.</td>
+                </tr>
+                <tr>
+                  <td><code>EXTERNAL_SERVICE_ERROR</code></td>
+                  <td>Show integration-specific failure.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="field-level-errors" class="section">
+        <div class="content-card">
+          <h2 class="section-title">26. API Documentation Must Include Field-Level Errors</h2>
+
+          <p>Example:</p>
+
+          <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Please fix the highlighted fields.",
+    "fields": {
+      "name": "Project name is required.",
+      "workspace_id": "Workspace ID must be a valid UUID."
+    }
+  }
+}</code></pre>
+
+          <p>Frontend should not parse raw database messages directly. Backend should map them.</p>
+        </div>
+      </section>
+
+      <section id="multi-tenant-saas-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">27. Multi-Tenant SaaS Standards</h2>
+
+          <p>If the app has multiple companies, clients, hotels, agencies, teams, or workspaces, every important table must include tenant scoping.</p>
+
+          <h3>Required Pattern</h3>
+          <pre><code class="language-text">workspace_id / organization_id must exist on tenant-owned records.</code></pre>
+
+          <h3>Every Query Must Be Scoped</h3>
+          <p>Bad:</p>
+          <pre><code class="language-ts">supabase.from("projects").select("*");</code></pre>
+
+          <p>Good:</p>
+          <pre><code class="language-ts">supabase
+  .from("projects")
+  .select("*")
+  .eq("workspace_id", workspaceId);</code></pre>
+
+          <p>But still do not trust frontend <code>workspaceId</code>. RLS must verify user membership.</p>
+        </div>
+      </section>
+
+      <section id="workspace-membership-table" class="section">
+        <div class="content-card">
+          <h2 class="section-title">28. Workspace Membership Table Standard</h2>
+
+          <pre><code class="language-sql">create table public.workspace_members (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid not null references public.workspaces(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  role text not null check (role in ('owner', 'admin', 'manager', 'member', 'viewer')),
+  created_at timestamptz not null default now(),
+  unique (workspace_id, user_id)
+);</code></pre>
+
+          <p>This table becomes the base of most RLS policies.</p>
+        </div>
+      </section>
+
+      <section id="role-permission-matrix" class="section">
+        <div class="content-card">
+          <h2 class="section-title">29. Role Permission Matrix Documentation</h2>
+
+          <p>Backend must document permissions like this:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Owner</th>
+                  <th>Admin</th>
+                  <th>Manager</th>
+                  <th>Member</th>
+                  <th>Viewer</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>View projects</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>Create project</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Update project</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Own only</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Delete project</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Invite member</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Change billing</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>No</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Frontend uses this to hide/show actions, but backend/RLS remains the real authority.</p>
+        </div>
+      </section>
+
+      <section id="storage-security-standards" class="section">
+        <div class="content-card">
+          <h2 class="section-title">30. Storage Security Standards</h2>
+
+          <p>For Supabase Storage:</p>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Rule</th>
+                  <th>Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Buckets</td>
+                  <td>Separate public/private buckets.</td>
+                </tr>
+                <tr>
+                  <td>Public Files</td>
+                  <td>Only for assets safe to expose.</td>
+                </tr>
+                <tr>
+                  <td>Private Files</td>
+                  <td>Use signed URLs.</td>
+                </tr>
+                <tr>
+                  <td>Upload Policy</td>
+                  <td>User can upload only to allowed path.</td>
+                </tr>
+                <tr>
+                  <td>File Path</td>
+                  <td>Include tenant/user scope.</td>
+                </tr>
+                <tr>
+                  <td>File Size</td>
+                  <td>Validate.</td>
+                </tr>
+                <tr>
+                  <td>MIME Type</td>
+                  <td>Validate.</td>
+                </tr>
+                <tr>
+                  <td>Delete Permission</td>
+                  <td>Owner/admin only.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Path Standard</h3>
+          <pre><code class="language-text">workspace/{workspace_id}/projects/{project_id}/files/{file_id}.pdf</code></pre>
+
+          <p>Never allow users to upload to arbitrary paths.</p>
+        </div>
+      </section>
+
+      <section id="storage-rls-policy" class="section">
+        <div class="content-card">
+          <h2 class="section-title">31. Storage RLS Policy Pattern</h2>
+
+          <p>Example:</p>
+
+          <pre><code class="language-sql">create policy "Workspace members can view workspace files"
+on storage.objects
+for select
+to authenticated
+using (
+  bucket_id = 'project-files'
+  and exists (
+    select 1
+    from public.workspace_members wm
+    where wm.user_id = auth.uid()
+      and storage.foldername(name)[1] = 'workspace'
+      and wm.workspace_id::text = storage.foldername(name)[2]
+  )
+);</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Validate at all three layers. Scope every query. Protect every storage bucket. Document permissions clearly.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

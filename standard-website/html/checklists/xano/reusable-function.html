@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checklist — Xano Reusable Function | Development Standards</title>
+  <meta name="description" content="Checklist for extracting logic into a Xano reusable function." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+<body data-page="checklists">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../../index.html" class="navbar-link">Home</a><a href="../../pages/standards.html" class="navbar-link">Standards</a><a href="../../pages/checklists.html" class="navbar-link active">Checklists</a><a href="../../pages/tasks.html" class="navbar-link">Tasks</a><a href="../../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-primary">Xano Checklist</span><h1 class="page-title">Checklist — Xano Reusable Function</h1><p class="page-subtitle">Run this checklist every time you extract logic into a Xano Custom Function.</p></section>
+    <section class="section"><div class="content-card">
+      <p><strong>Standard:</strong> <a href="../../standards/xano-standards.html">Xano Standards</a></p>
+      <h2 class="section-title">1. Decision — Should This Be a Reusable Function?</h2>
+      <pre><code class="language-text">EXTRACT TO A REUSABLE FUNCTION WHEN:
+[ ] The same logic is used (or will be used) in 2 or more endpoints
+[ ] The logic is complex enough to be worth isolating and testing independently
+[ ] The logic represents a coherent unit: "check workspace permission", "format user object"
+
+DO NOT EXTRACT WHEN:
+[ ] It is only used once and is simple
+[ ] It is one or two steps that read clearly inline
+[ ] Extracting would require too many inputs, making it harder to understand</code></pre>
+      <h2 class="section-title">2. Naming</h2>
+      <label><input type="checkbox" data-checklist-item /> Function name describes exactly what it does using a <code>verb_noun</code> pattern</label><br />
+      <label><input type="checkbox" data-checklist-item /> No vague names like <code>helper</code>, <code>utility</code>, or <code>process_data</code></label><br />
+      <label><input type="checkbox" data-checklist-item /> Name matches what it returns or does — not what calls it</label>
+      <h2 class="section-title">3. Inputs, Logic, and Outputs</h2>
+      <label><input type="checkbox" data-checklist-item /> All inputs explicitly named and typed</label><br />
+      <label><input type="checkbox" data-checklist-item /> No implicit global access — required data is passed as an input</label><br />
+      <label><input type="checkbox" data-checklist-item /> Function does one thing only — single responsibility</label><br />
+      <label><input type="checkbox" data-checklist-item /> No auth token validation inside the reusable function</label><br />
+      <label><input type="checkbox" data-checklist-item /> Errors raised with the correct error format</label><br />
+      <label><input type="checkbox" data-checklist-item /> Output is typed, documented, and consistent across code paths</label><br />
+      <label><input type="checkbox" data-checklist-item /> On error, the function raises an exception — it does not return null or an empty object</label>
+      <h2 class="section-title">4. Testing and Documentation</h2>
+      <label><input type="checkbox" data-checklist-item /> Function tested directly in Xano with success and failure cases</label><br />
+      <label><input type="checkbox" data-checklist-item /> All calling endpoints re-tested after extraction</label><br />
+      <label><input type="checkbox" data-checklist-item /> Function purpose, inputs, output, errors, and calling endpoints documented</label>
+      <h2 class="section-title">Done When</h2>
+      <label><input type="checkbox" data-checklist-item /> Function extracted and named correctly</label><br />
+      <label><input type="checkbox" data-checklist-item /> All inputs explicitly typed</label><br />
+      <label><input type="checkbox" data-checklist-item /> Single responsibility — does one thing</label><br />
+      <label><input type="checkbox" data-checklist-item /> Error handling is consistent with the rest of the codebase</label><br />
+      <label><input type="checkbox" data-checklist-item /> All calling endpoints work after extraction</label><br />
+      <label><input type="checkbox" data-checklist-item /> Function documented</label>
+      <div class="divider"></div>
+      <p><strong>Practice Task:</strong> <a href="../../tasks/xano/02-reusable-function.html">Reusable Function Task</a></p>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project — Task Board | Development Standards</title>
+  <meta name="description" content="Build a task board with status/priority filters, bulk update, inline status toggle, and create_task RPC." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body class="project-detail-page" data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-info">Project — WeWeb + Supabase</span>
+        <h1 class="page-title">Project — Task Board</h1>
+        <p class="page-subtitle">Build a task board with status/priority filters, bulk update, inline status toggle, and create_task RPC.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
+          
+        </div>
+      </section>
+
+      <section class="section project-intro-grid">
+        <div class="content-card project-brief-card">
+          <span class="project-brief-kicker">Build Brief</span>
+          <div class="project-meta-row">
+            <span class="project-meta-pill">WeWeb + Supabase</span>
+            <span class="project-meta-pill">8 hours</span>
+            <span class="project-meta-pill">Intermediate</span>
+          </div>
+          <h2 class="section-title">What You Are Building</h2>
+          <p class="project-brief-copy">A workspace task board where members can create, assign, and track tasks. Tasks have a status, priority, due date, and assignee. Admins can delete tasks. All members can create and update task status. The list supports search, filtering by status and assignee, sorting, and pagination. Bulk status update is available for admins.</p>
+        </div>
+
+        <div class="content-card project-roles-card">
+          <span class="project-brief-kicker">Roles &amp; Access</span>
+          <ul class="project-role-list">
+            <li><strong>Member</strong>Create tasks, edit tasks, change status inline, and use the task board as part of daily workflow.</li>
+            <li><strong>Admin / Owner</strong>Can do everything members can do, plus permanently delete tasks and manage cleanup actions.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card project-flow-card">
+          <div class="project-flow-header">
+            <span class="project-brief-kicker">Core Flows</span>
+            <h2 class="section-title">How this product should work</h2>
+            <p class="project-flow-lead">This project should feel like a working queue for a real team, where everyday updates are fast and admin-only cleanup actions are clearly separated.</p>
+          </div>
+          <div class="project-flow-grid">
+            <article class="project-flow-item">
+              <strong>Board listing</strong>
+              <p>The task list supports search, assignee and status filters, sorting, pagination, and the expected loading, empty, and error states.</p>
+            </article>
+            <article class="project-flow-item">
+              <strong>Task creation and editing</strong>
+              <p>One shared modal handles add and edit, including assignee, priority, due date, and status rules.</p>
+            </article>
+            <article class="project-flow-item">
+              <strong>Status management</strong>
+              <p>Inline status updates and bulk status changes should both feel immediate and stay in sync with the RPC behavior.</p>
+            </article>
+            <article class="project-flow-item">
+              <strong>Admin cleanup</strong>
+              <p>Delete stays admin-only, uses confirmation, and removes the task cleanly without leaving the table in a broken state.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="features-to-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Features to Build</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>#</th>
+    <th>Feature</th>
+    <th>Est. Time</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>1</td>
+    <td><code>tasks</code> table + RLS + RPC functions</td>
+    <td>1h 30m</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Task list page (search, filters, sort, pagination)</td>
+    <td>1h 30m</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Add / Edit task modal (shared form)</td>
+    <td>1h 30m</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Inline status update (per row)</td>
+    <td>30m</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>Delete task (confirmation, admin only)</td>
+    <td>30m</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Bulk status update (select + action bar)</td>
+    <td>1h</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>All states + permissions</td>
+    <td>30m</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-database" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Database</h2>
+          <h3><code>tasks</code> Table</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Column</th>
+    <th>Type</th>
+    <th>Rules</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>id</td>
+    <td>uuid</td>
+    <td>PK, default gen_random_uuid()</td>
+  </tr>
+  <tr>
+    <td>workspace_id</td>
+    <td>uuid</td>
+    <td>FK → workspaces.id, ON DELETE CASCADE</td>
+  </tr>
+  <tr>
+    <td>title</td>
+    <td>text</td>
+    <td>NOT NULL, max 200 chars</td>
+  </tr>
+  <tr>
+    <td>description</td>
+    <td>text</td>
+    <td>nullable</td>
+  </tr>
+  <tr>
+    <td>status</td>
+    <td>text</td>
+    <td>NOT NULL, default 'open', one of: 'open', 'in-progress', 'done', 'cancelled'</td>
+  </tr>
+  <tr>
+    <td>priority</td>
+    <td>text</td>
+    <td>NOT NULL, default 'medium', one of: 'low', 'medium', 'high', 'urgent'</td>
+  </tr>
+  <tr>
+    <td>assignee_id</td>
+    <td>uuid</td>
+    <td>FK → auth.users.id, ON DELETE SET NULL, nullable</td>
+  </tr>
+  <tr>
+    <td>due_date</td>
+    <td>date</td>
+    <td>nullable</td>
+  </tr>
+  <tr>
+    <td>created_by</td>
+    <td>uuid</td>
+    <td>FK → auth.users.id, ON DELETE SET NULL</td>
+  </tr>
+  <tr>
+    <td>created_at</td>
+    <td>timestamptz</td>
+    <td>default now()</td>
+  </tr>
+  <tr>
+    <td>updated_at</td>
+    <td>timestamptz</td>
+    <td>default now(), updated by trigger</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Constraints</h3>
+<pre><code class="language-sql">CHECK (status IN (&#x27;open&#x27;, &#x27;in-progress&#x27;, &#x27;done&#x27;, &#x27;cancelled&#x27;))
+CHECK (priority IN (&#x27;low&#x27;, &#x27;medium&#x27;, &#x27;high&#x27;, &#x27;urgent&#x27;))</code></pre>
+<h3>Indexes</h3>
+<pre><code class="language-sql">CREATE INDEX idx_tasks_workspace_id ON tasks (workspace_id);
+CREATE INDEX idx_tasks_status ON tasks (workspace_id, status);
+CREATE INDEX idx_tasks_assignee ON tasks (workspace_id, assignee_id);
+CREATE INDEX idx_tasks_due_date ON tasks (workspace_id, due_date);</code></pre>
+<h3>RLS Policies</h3>
+<pre><code class="language-text">SELECT: workspace members can view all tasks in their workspace
+INSERT: workspace members can insert (created_by set via RLS WITH CHECK)
+UPDATE: workspace members can update tasks in their workspace
+DELETE: only workspace admins/owners can delete</code></pre>
+<h3>RPC Functions</h3>
+<p><strong><code>create_task</code></strong> — creates a task and writes to audit_logs</p>
+<pre><code class="language-sql">Parameters: p_workspace_id uuid, p_title text, p_description text DEFAULT NULL,
+            p_priority text DEFAULT &#x27;medium&#x27;, p_assignee_id uuid DEFAULT NULL,
+            p_due_date date DEFAULT NULL
+Validation:
+  1. Auth check
+  2. title not blank, max 200 chars
+  3. priority IN (&#x27;low&#x27;,&#x27;medium&#x27;,&#x27;high&#x27;,&#x27;urgent&#x27;)
+  4. workspace membership check
+  5. assignee_id exists in workspace_members if provided
+Returns: json — { &quot;data&quot;: { task row } }</code></pre>
+<p><strong><code>update_task_status</code></strong> — updates status of one or more tasks atomically</p>
+<pre><code class="language-sql">Parameters: p_task_ids uuid[], p_new_status text
+Validation:
+  1. Auth check
+  2. p_new_status is valid
+  3. all task_ids exist in the caller&#x27;s workspace
+Returns: json — { &quot;updated_count&quot;: N }</code></pre>
+<p><strong>Run checklist:</strong> <a href="../../../../checklists/supabase/new-table.md">New Table</a> · <a href="../../../../checklists/supabase/rls-policies.md">RLS Policies</a> · <a href="../../../../checklists/supabase/rpc-function.md">RPC Function</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="2-task-list-page" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Task List Page</h2>
+          <p><strong>URL:</strong> <code>/workspace/{id}/tasks</code></p>
+<h3>Requirements</h3>
+<pre><code class="language-text">HEADER
+[ ] Page title: &quot;Tasks&quot;
+[ ] &quot;Add Task&quot; button — visible to all members
+
+SEARCH &amp; FILTERS
+[ ] Search input: searches task title — debounced 300ms — sent to Supabase
+[ ] Filter: Status — dropdown (All / Open / In Progress / Done / Cancelled)
+[ ] Filter: Priority — dropdown (All / Low / Medium / High / Urgent)
+[ ] Filter: Assignee — dropdown (All / Me / specific members from backend)
+[ ] Active filters shown as chips above the table: &quot;Status: Open ×&quot;
+[ ] &quot;Clear all filters&quot; button appears when any filter is active
+[ ] All filters sent to Supabase — never client-side array filtering
+[ ] Filter state preserved in URL: ?status=open&amp;priority=high&amp;assignee=me
+
+SORT
+[ ] Default sort: created_at DESC (newest first)
+[ ] Sortable columns: Title, Priority, Due Date, Created At
+[ ] Sort state preserved in URL: ?sort=due_date&amp;order=asc
+
+TABLE COLUMNS
+[ ] Checkbox (for bulk) · Title · Status badge · Priority badge · Assignee avatar · Due Date · Actions
+
+BADGES
+[ ] Status: open=grey, in-progress=blue, done=green, cancelled=grey-strikethrough
+[ ] Priority: low=grey, medium=amber, high=orange, urgent=red
+
+PAGINATION
+[ ] 25 per page, &quot;Showing X–Y of Z tasks&quot;
+[ ] Page state in URL: ?page=2
+
+STATES
+[ ] Loading: skeleton rows
+[ ] Empty (no tasks): &quot;No tasks yet.&quot; + &quot;Add your first task&quot; button
+[ ] Empty (filter/search): &quot;No tasks match your filters.&quot; + clear button
+[ ] Error: &quot;Could not load tasks.&quot; + retry</code></pre>
+<p><strong>Run checklist:</strong> <a href="../../../../checklists/website/weweb-page.md">WeWeb Page Build</a> · <a href="../../../../checklists/frontend/search-filters-pagination.md">Search, Filters & Pagination</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="3-add-edit-task-modal" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Add / Edit Task Modal</h2>
+          <p>One shared component. Add mode = empty form. Edit mode = pre-filled.</p>
+<h3>Form Fields</h3>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Rules</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Title</td>
+    <td>text</td>
+    <td>Required, max 200 chars</td>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td>textarea</td>
+    <td>Optional</td>
+  </tr>
+  <tr>
+    <td>Priority</td>
+    <td>dropdown</td>
+    <td>Required, default: Medium</td>
+  </tr>
+  <tr>
+    <td>Assignee</td>
+    <td>searchable dropdown</td>
+    <td>Optional — fetches workspace members</td>
+  </tr>
+  <tr>
+    <td>Due Date</td>
+    <td>date picker</td>
+    <td>Optional, min: today</td>
+  </tr>
+  <tr>
+    <td>Status</td>
+    <td>dropdown</td>
+    <td>Required — visible in Edit mode only</td>
+  </tr>
+  </tbody>
+</table></div>
+<h3>Behavior</h3>
+<pre><code class="language-text">ADD MODE:
+[ ] Title: &quot;Add Task&quot; · Submit: &quot;Add Task&quot;
+[ ] Status field hidden (always starts as &#x27;open&#x27;)
+[ ] On success: &quot;Task added.&quot; toast, list refreshes with new task
+
+EDIT MODE:
+[ ] Title: &quot;Edit Task&quot; · Submit: &quot;Save Changes&quot;
+[ ] All fields pre-filled from current task data
+[ ] Status field visible — can be changed here
+[ ] On success: &quot;Changes saved.&quot; toast, list refreshes
+
+BOTH MODES:
+[ ] Loading state on submit button, all fields disabled during submit
+[ ] API error: banner above submit button
+[ ] Escape + X close button work
+[ ] Focus moves to first field on open</code></pre>
+<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/add-edit-consistency.md">Add/Edit Consistency</a> · <a href="../../../../checklists/frontend/modals-dialogs.md">Modals & Dialogs</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="4-inline-status-update" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Inline Status Update</h2>
+          <label><input type="checkbox" data-checklist-item /> Status badge in each row is clickable — opens a small dropdown with status options</label><br />
+<label><input type="checkbox" data-checklist-item /> Selecting a new status calls update_task_status RPC immediately</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading state: badge shows spinner while updating</label><br />
+<label><input type="checkbox" data-checklist-item /> On success: badge updates in place — no full page reload</label><br />
+<label><input type="checkbox" data-checklist-item /> On error: badge reverts to previous status, error toast shown</label><br />
+<label><input type="checkbox" data-checklist-item /> Disabled during bulk action operation</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="5-delete-task-admin-only" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Delete Task (Admin Only)</h2>
+          <label><input type="checkbox" data-checklist-item /> Delete action in the row's action menu — visible only to admins</label><br />
+<label><input type="checkbox" data-checklist-item /> Confirmation dialog:</label><br />
+<p class="checklist-note">Title:  "Delete Task?"</p>
+<p class="checklist-note">Body:   "'[Task Title]' will be permanently deleted."</p>
+<p class="checklist-note">Body:   "This action cannot be undone."</p>
+<p class="checklist-note">Buttons: Cancel · "Delete Task" (red)</p>
+<label><input type="checkbox" data-checklist-item /> On confirm: row removed from list, "Task deleted." toast</label><br />
+<label><input type="checkbox" data-checklist-item /> On error: modal stays open with error banner</label><br />
+<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/delete-destructive-actions.md">Delete & Destructive Actions</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="6-bulk-status-update" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Bulk Status Update</h2>
+          <pre><code class="language-text">SELECTION
+[ ] Checkbox in header: select/deselect all on current page
+[ ] Checkbox per row
+[ ] Selection count shown: &quot;5 selected&quot;
+
+BULK ACTION BAR
+[ ] Appears above table only when rows are selected
+[ ] &quot;Change Status:&quot; dropdown (Open / In Progress / Done / Cancelled)
+[ ] &quot;Apply to 5 tasks&quot; button — shows count
+[ ] &quot;Cancel&quot; button clears selection
+
+BEHAVIOR
+[ ] Calls update_task_status RPC with array of selected task IDs
+[ ] Loading state on Apply button during operation
+[ ] On success: &quot;5 tasks updated.&quot; toast, table refreshes, selection cleared
+[ ] On error: error banner in action bar, selection preserved
+[ ] Bulk action bar visible to all members (not admin-only — status update is allowed for all)</code></pre>
+<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/tables-data-lists.md">Tables & Data Lists</a></p>
+<hr />
+        </div>
+      </section>
+
+      <section id="7-permissions-summary" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Permissions Summary</h2>
+          <pre><code class="language-text">| Action | Member | Admin | Owner |
+|--------|--------|-------|-------|
+| View tasks | ✓ | ✓ | ✓ |
+| Add task | ✓ | ✓ | ✓ |
+| Edit task | ✓ | ✓ | ✓ |
+| Update status (inline + bulk) | ✓ | ✓ | ✓ |
+| Delete task | ✗ | ✓ | ✓ |
+
+[ ] Delete button/action hidden for member role — not just disabled
+[ ] RLS enforced: member cannot DELETE directly in Supabase</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="what-you-should-not-do" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What You Should NOT Do</h2>
+          <pre><code class="language-text">× Filter tasks client-side — all filters, search, sort go to Supabase
+× Make create_task and update_task_status two separate frontend calls — use RPC
+× Skip the RPC and do INSERT directly from WeWeb for task creation (no audit log)
+× Hardcode status or priority options — use WeWeb variables/constants
+× Show a full page spinner when loading — use skeleton rows
+× Forget to reset pagination to page 1 when any filter changes
+× Show the Delete action to member-role users
+× Send p_task_ids to update_task_status as individual calls in a loop (use array)</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="checklists-to-run-in-order" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Checklists to Run (in order)</h2>
+          <label><input type="checkbox" data-checklist-item /> New Table — tasks table</label><br />
+<label><input type="checkbox" data-checklist-item /> Database Trigger — updated_at trigger</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS Policies — tasks table</label><br />
+<label><input type="checkbox" data-checklist-item /> RPC Function — create_task</label><br />
+<label><input type="checkbox" data-checklist-item /> RPC Function — update_task_status</label><br />
+<label><input type="checkbox" data-checklist-item /> WeWeb Page Build — task list page</label><br />
+<label><input type="checkbox" data-checklist-item /> Search, Filters & Pagination — task list</label><br />
+<label><input type="checkbox" data-checklist-item /> Add/Edit Consistency — task modal</label><br />
+<label><input type="checkbox" data-checklist-item /> Modals & Dialogs — task modal</label><br />
+<label><input type="checkbox" data-checklist-item /> Tables & Data Lists — bulk actions</label><br />
+<label><input type="checkbox" data-checklist-item /> Loading States & Skeletons — list page</label><br />
+<label><input type="checkbox" data-checklist-item /> Delete & Destructive Actions — delete task</label><br />
+<label><input type="checkbox" data-checklist-item /> Notifications & Toasts — all async actions</label><br />
+<label><input type="checkbox" data-checklist-item /> Permissions & Role-Based UI — delete action visibility</label><br />
+<hr />
+        </div>
+      </section>
+
+      <section id="done-when" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Done When</h2>
+          <label><input type="checkbox" data-checklist-item /> tasks table created with all columns, constraints, indexes</label><br />
+<label><input type="checkbox" data-checklist-item /> updated_at trigger fires on every UPDATE</label><br />
+<label><input type="checkbox" data-checklist-item /> RLS: all members can SELECT/INSERT/UPDATE; only admin/owner can DELETE — tested</label><br />
+<label><input type="checkbox" data-checklist-item /> create_task RPC: validates all inputs, writes audit log, returns task data</label><br />
+<label><input type="checkbox" data-checklist-item /> update_task_status RPC: accepts array of IDs, updates all atomically</label><br />
+<label><input type="checkbox" data-checklist-item /> Task list: search + all filters sent to Supabase, URL params preserved</label><br />
+<label><input type="checkbox" data-checklist-item /> Task list: filter chips shown with X to remove each filter</label><br />
+<label><input type="checkbox" data-checklist-item /> Task list: sort works, pagination resets to page 1 on filter/sort change</label><br />
+<label><input type="checkbox" data-checklist-item /> Task list: all 4 states (loading/empty/empty-filter/error) work</label><br />
+<label><input type="checkbox" data-checklist-item /> Add/Edit: single shared component, pre-fill works in edit mode</label><br />
+<label><input type="checkbox" data-checklist-item /> Add/Edit: loading state on submit, all fields disabled during submit</label><br />
+<label><input type="checkbox" data-checklist-item /> Inline status update: no full page reload, loading indicator on badge</label><br />
+<label><input type="checkbox" data-checklist-item /> Bulk: selection count shown, Apply button calls RPC with all IDs at once</label><br />
+<label><input type="checkbox" data-checklist-item /> Delete: only visible to admin/owner, confirmation dialog shown</label><br />
+<label><input type="checkbox" data-checklist-item /> Mobile tested at 375px (table collapses correctly)</label><br />
+<label><input type="checkbox" data-checklist-item /> All filters/sort/page state in URL params</label><br />
+<label><input type="checkbox" data-checklist-item /> No client-side filtering anywhere</label><br />
+<label><input type="checkbox" data-checklist-item /> No silent failures — every error shown in UI</label><br />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

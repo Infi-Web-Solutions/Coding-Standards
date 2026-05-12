@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error &amp; Feedback Standard | Development Standards</title>
+  <meta name="description" content="Error types and display locations, field-level errors, form API errors, page-level errors, API error code mapping, no silent failures rules." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Error &amp; Feedback Standard</h1>
+        <p class="page-subtitle">Error types and display locations, field-level errors, form API errors, page-level errors, API error code mapping, no silent failures rules.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <blockquote>No error is silent. No action is invisible. Every failure tells the user what happened and what to do next.</blockquote>
+<hr />
+        </div>
+      </section>
+
+      <section id="contents" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>#</th>
+    <th>Section</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><a href="#1-error-types--display-locations">1</a></td>
+    <td>Error Types & Display Locations</td>
+  </tr>
+  <tr>
+    <td><a href="#2-field-level-errors">2</a></td>
+    <td>Field-Level Errors</td>
+  </tr>
+  <tr>
+    <td><a href="#3-form-api-errors">3</a></td>
+    <td>Form API Errors</td>
+  </tr>
+  <tr>
+    <td><a href="#4-page-level-errors">4</a></td>
+    <td>Page-Level Errors</td>
+  </tr>
+  <tr>
+    <td><a href="#5-api-error-code-mapping">5</a></td>
+    <td>API Error Code Mapping</td>
+  </tr>
+  <tr>
+    <td><a href="#6-empty-states">6</a></td>
+    <td>Empty States</td>
+  </tr>
+  <tr>
+    <td><a href="#7-destructive-action-confirmation">7</a></td>
+    <td>Destructive Action Confirmation</td>
+  </tr>
+  <tr>
+    <td><a href="#8-network-errors">8</a></td>
+    <td>Network Errors</td>
+  </tr>
+  <tr>
+    <td><a href="#9-auth-errors">9</a></td>
+    <td>Auth Errors</td>
+  </tr>
+  <tr>
+    <td><a href="#10-message-standards">10</a></td>
+    <td>Message Standards</td>
+  </tr>
+  <tr>
+    <td><a href="#11-no-silent-failures">11</a></td>
+    <td>No Silent Failures</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>1. Error Types & Display Locations</h1>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Error Source</th>
+    <th>What It Is</th>
+    <th>Where to Show It</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Client-side validation</td>
+    <td>Required field, format, length</td>
+    <td>Below the field (field error)</td>
+  </tr>
+  <tr>
+    <td>API field error</td>
+    <td>Duplicate, constraint failure</td>
+    <td>Below the field + form banner</td>
+  </tr>
+  <tr>
+    <td>API business rule</td>
+    <td>Permission, state conflict</td>
+    <td>Form banner or inline alert</td>
+  </tr>
+  <tr>
+    <td>API server error</td>
+    <td>500, unexpected</td>
+    <td>Form banner or page error banner</td>
+  </tr>
+  <tr>
+    <td>Page load failure</td>
+    <td>Data could not be fetched</td>
+    <td>Full page error state with retry</td>
+  </tr>
+  <tr>
+    <td>Network failure</td>
+    <td>No connection, timeout</td>
+    <td>Toast or inline banner</td>
+  </tr>
+  <tr>
+    <td>Auth expiry</td>
+    <td>Session expired</td>
+    <td>Redirect to login (not a blank page)</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>2. Field-Level Errors</h1>
+<label><input type="checkbox" data-checklist-item /> Message appears directly below the field it belongs to</label><br />
+<label><input type="checkbox" data-checklist-item /> Red text + red border on the field</label><br />
+<label><input type="checkbox" data-checklist-item /> Specific message: "Email is required." — not "Required."</label><br />
+<label><input type="checkbox" data-checklist-item /> aria-describedby on the input pointing to the error element</label><br />
+<label><input type="checkbox" data-checklist-item /> Error cleared when user corrects the field and moves on (on blur/re-submit)</label><br />
+<label><input type="checkbox" data-checklist-item /> Never clear an error while the user is still typing</label><br />
+<label><input type="checkbox" data-checklist-item /> Never show the same error twice in the same form</label><br />
+<hr />
+<h1>3. Form API Errors</h1>
+<label><input type="checkbox" data-checklist-item /> API errors shown in a red banner above the submit button (or top of form)</label><br />
+<label><input type="checkbox" data-checklist-item /> Banner stays visible — does not auto-dismiss</label><br />
+<label><input type="checkbox" data-checklist-item /> Form stays open with data intact — user can correct and retry</label><br />
+<label><input type="checkbox" data-checklist-item /> If the API error maps to a specific field: show it as a field error, not just in banner</label><br />
+<label><input type="checkbox" data-checklist-item /> Banner message is specific: "A project with this name already exists."</label><br />
+<label><input type="checkbox" data-checklist-item /> Never show raw API error strings, status codes, or stack traces to the user</label><br />
+<label><input type="checkbox" data-checklist-item /> Banner dismissed when user successfully resubmits</label><br />
+<hr />
+<h1>4. Page-Level Errors</h1>
+<label><input type="checkbox" data-checklist-item /> If page data fails to load: show an error state (not a blank page)</label><br />
+<label><input type="checkbox" data-checklist-item /> Error state contains:</label><br />
+<p class="checklist-note">— Friendly message: "Could not load projects. Please try again."</p>
+<p class="checklist-note">— Retry button (re-triggers the original fetch)</p>
+<label><input type="checkbox" data-checklist-item /> If data was previously loaded and a refresh fails: show error banner above the existing data</label><br />
+<label><input type="checkbox" data-checklist-item /> Never replace loaded data with an error state — show the banner, keep the data</label><br />
+<label><input type="checkbox" data-checklist-item /> 404 Not Found: show a "This page doesn't exist." state with a link back to the list</label><br />
+<label><input type="checkbox" data-checklist-item /> 403 Forbidden: show a "You don't have access to this page." state — not a blank page</label><br />
+<label><input type="checkbox" data-checklist-item /> 401 Unauthorized: redirect to login (not a blank screen)</label><br />
+<hr />
+<h1>5. API Error Code Mapping</h1>
+<p>Map backend error codes to user-facing messages on the frontend. Never show raw codes.</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Backend Code</th>
+    <th>User-Facing Message</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><code>VALIDATION_ERROR</code></td>
+    <td>Show the specific field message from the error detail</td>
+  </tr>
+  <tr>
+    <td><code>DUPLICATE</code></td>
+    <td>"A [entity] with this name already exists."</td>
+  </tr>
+  <tr>
+    <td><code>NOT_FOUND</code></td>
+    <td>"This item was not found. It may have been deleted."</td>
+  </tr>
+  <tr>
+    <td><code>FORBIDDEN</code></td>
+    <td>"You don't have permission to do this."</td>
+  </tr>
+  <tr>
+    <td><code>AUTH_REQUIRED</code></td>
+    <td>Redirect to login</td>
+  </tr>
+  <tr>
+    <td><code>BUSINESS_RULE_VIOLATION</code></td>
+    <td>Show the specific reason from the error detail</td>
+  </tr>
+  <tr>
+    <td><code>SERVER_ERROR</code></td>
+    <td>"Something went wrong. Please try again."</td>
+  </tr>
+  <tr>
+    <td>Network / no response</td>
+    <td>"Connection lost. Check your internet connection."</td>
+  </tr>
+  </tbody>
+</table></div>
+<pre><code class="language-ts">// Standard pattern for parsing Supabase/backend error codes
+const { data, error } = await supabase.rpc(&#x27;create_project&#x27;, params);
+
+if (error) {
+  const code = error.message.split(&#x27;:&#x27;)[0].trim();
+  const msg  = error.message.split(&#x27;:&#x27;).slice(1).join(&#x27;:&#x27;).trim();
+
+  switch (code) {
+    case &#x27;VALIDATION_ERROR&#x27;:          return showFieldError(msg);
+    case &#x27;DUPLICATE&#x27;:                 return showFormError(&#x27;A project with this name already exists.&#x27;);
+    case &#x27;FORBIDDEN&#x27;:                 return showFormError(&quot;You don&#x27;t have permission to do this.&quot;);
+    case &#x27;NOT_FOUND&#x27;:                 return showFormError(&#x27;This item was not found. It may have been deleted.&#x27;);
+    case &#x27;BUSINESS_RULE_VIOLATION&#x27;:   return showFormError(msg);
+    default:                          return showFormError(&#x27;Something went wrong. Please try again.&#x27;);
+  }
+}</code></pre>
+<hr />
+<h1>6. Empty States</h1>
+<pre><code class="language-text">NO DATA EXISTS
+[ ] Illustration or icon — not just text
+[ ] Specific message: &quot;No projects yet.&quot; — not &quot;No data.&quot; or &quot;Empty.&quot;
+[ ] Call to action: &quot;Create your first project&quot; button or link
+
+SEARCH RETURNED NO RESULTS
+[ ] &quot;No results for &#x27;[search term]&#x27;.&quot;
+[ ] &quot;Try a different search term.&quot;
+[ ] Clear search button visible
+
+FILTER RETURNED NO RESULTS
+[ ] &quot;No [entities] match your current filters.&quot;
+[ ] Shows what filters are active
+[ ] &quot;Clear all filters&quot; button prominent
+
+COMBINATION (search + filters active)
+[ ] &quot;No results for &#x27;[term]&#x27; with these filters.&quot;
+[ ] Both &quot;Clear search&quot; and &quot;Clear filters&quot; available
+
+RULE: Never show a blank table body or an empty list without a message.</code></pre>
+<hr />
+<h1>7. Destructive Action Confirmation</h1>
+<p>Before any irreversible action, show a confirmation dialog.</p>
+<pre><code class="language-text">LOW RISK (Archive, soft actions)
+  Title:  &quot;Archive Project?&quot;
+  Body:   What happens + whether reversible: &quot;This project will be hidden from your workspace. You can restore it later.&quot;
+  Buttons: &quot;Cancel&quot; (left), amber or red action button (right): &quot;Archive&quot;
+
+MEDIUM RISK (Delete a record)
+  Title:  &quot;Delete Project?&quot;
+  Body:   Item name + consequence: &quot;&#x27;Marketing Q1&#x27; will be permanently deleted along with all its tasks.&quot;
+  Body:   &quot;This action cannot be undone.&quot;
+  Buttons: &quot;Cancel&quot; (left), &quot;Delete Project&quot; — red/danger (right)
+
+HIGH RISK (Delete account, all data, bulk delete)
+  Same as medium +
+  Type-to-confirm input: &quot;Type DELETE to confirm&quot;
+  Submit button: disabled until input matches exactly (case-sensitive)
+  Buttons: &quot;Cancel&quot; (left), &quot;Delete Everything&quot; — red/danger, disabled until confirmed (right)</code></pre>
+<hr />
+<h1>8. Network Errors</h1>
+<label><input type="checkbox" data-checklist-item /> Show an error when a request fails due to no connection or timeout</label><br />
+<label><input type="checkbox" data-checklist-item /> "Connection lost. Check your internet connection." — not a blank response</label><br />
+<label><input type="checkbox" data-checklist-item /> Retry button where appropriate (especially for page loads)</label><br />
+<label><input type="checkbox" data-checklist-item /> If the user is filling a form: do not clear the form on network error</label><br />
+<label><input type="checkbox" data-checklist-item /> Request timeout: treat the same as an error — show the error state</label><br />
+<label><input type="checkbox" data-checklist-item /> Do not silently swallow network errors and show a success toast</label><br />
+<hr />
+<h1>9. Auth Errors</h1>
+<label><input type="checkbox" data-checklist-item /> Expired session: redirect to login — do not show a blank screen</label><br />
+<label><input type="checkbox" data-checklist-item /> After login redirect: return user to the page they were on (use redirect param)</label><br />
+<label><input type="checkbox" data-checklist-item /> 401 from an API call mid-session: show "Your session has expired. Please log in again." and redirect</label><br />
+<label><input type="checkbox" data-checklist-item /> Do not show the user a raw "401 Unauthorized" message</label><br />
+<label><input type="checkbox" data-checklist-item /> Forbidden (403) action: show inline message — do not redirect unless the whole page is inaccessible</label><br />
+<label><input type="checkbox" data-checklist-item /> Token refresh: handled silently — user should not see a flash or error during refresh</label><br />
+<hr />
+<h1>10. Message Standards</h1>
+<pre><code class="language-text">TONE
+[ ] Friendly and specific — not technical
+[ ] No &quot;Error&quot;, &quot;Failure&quot;, &quot;Exception&quot; as the full message
+[ ] No exclamation marks on error messages
+[ ] Past tense for completed: &quot;Project saved.&quot; &quot;Changes discarded.&quot;
+[ ] Present tense for ongoing: &quot;Saving...&quot; &quot;Deleting...&quot;
+[ ] No ALL CAPS in messages
+
+SPECIFICITY
+Good:  &quot;Password must be at least 8 characters.&quot;
+Bad:   &quot;Invalid input.&quot;
+
+Good:  &quot;A project named &#x27;Website Redesign&#x27; already exists in this workspace.&quot;
+Bad:   &quot;Duplicate error.&quot;
+
+Good:  &quot;Could not load team members. Please try again.&quot;
+Bad:   &quot;Error 500&quot;
+
+NO TECHNICAL DETAILS TO USERS
+[ ] No error codes (SQLSTATE, HTTP status codes)
+[ ] No stack traces
+[ ] No variable names or internal identifiers
+[ ] No &quot;undefined&quot;, &quot;null&quot;, &quot;NaN&quot; in user-facing messages</code></pre>
+<hr />
+<h1>11. No Silent Failures</h1>
+<p>These are the most dangerous violations — the user thinks something worked when it didn't.</p>
+<pre><code class="language-text">NEVER:
+× console.log(error) without showing anything in the UI
+× Catch an error and return undefined / null without showing a message
+× Show a success toast after a failed operation
+× Let a form submit without feedback (no spinner, no error, no success)
+× Show &quot;Saved&quot; when the save actually failed
+× Catch errors in a catch block with an empty body: catch (e) {}
+× Swallow a network error and show stale data as if fresh
+× Not handle the error state of a Promise or async/await call
+
+ALWAYS:
+✓ Every try/catch must show an error in the UI if the catch fires
+✓ Every async call must have an error handler
+✓ Every error handler must update UI state — not just log to console
+✓ If you show a loading spinner, you must also handle the error that cancels it</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="practice-task" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Practice Task</h2>
+          <p><strong>→ <a href="../../../tasks/frontend/03-add-edit-project-form.md">Add/Edit Project Form</a></strong> Build a project form that correctly handles field errors, API errors (duplicate, forbidden), and network failures — with no silent failures.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

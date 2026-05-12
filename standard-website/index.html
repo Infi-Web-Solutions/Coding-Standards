@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Development Standards | Team Standards Library</title>
+
+  <meta
+    name="description"
+    content="Single source of truth for team standards, checklists, templates, tasks, and definition of done."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="./assets/images/working-standards.png" />
+  <link rel="stylesheet" href="./css/main.css" />
+</head>
+
+<body data-page="home">
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="./index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="./assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="./index.html" class="navbar-link active">Home</a>
+        <a href="./html/pages/standards.html" class="navbar-link">Standards</a>
+        <a href="./html/pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="./html/pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="./html/pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="home-main">
+    <!-- Hero -->
+    <section class="page home-page-shell">
+      <div class="container">
+        <section class="home-hero">
+          <div class="home-hero-copy page-header">
+            <span class="badge badge-primary">Team Single Source of Truth</span>
+
+            <h1 class="page-title">
+              Own the work. Test before handoff. Make every change traceable.
+            </h1>
+
+            <p class="page-subtitle">
+              This standards website defines how our team builds, reviews, tests,
+              documents, and delivers work across backend, frontend, Supabase,
+              Django, Xano, websites, integrations, and project tasks.
+            </p>
+
+            <div class="home-hero-actions">
+              <a href="./html/pages/standards.html" class="btn btn-primary">Explore Standards</a>
+              <a href="#quick-start" class="btn btn-secondary">Start by Role</a>
+            </div>
+          </div>
+
+          <div class="home-hero-aside">
+            <div class="home-hero-panel">
+              <span class="home-hero-panel-label">How Teams Use This</span>
+              <h2>Read the standard. Run the checklist. Ship with evidence.</h2>
+              <p>Everything here is designed to reduce guesswork, make delivery consistent, and keep quality visible at handoff.</p>
+            </div>
+
+            <div class="home-hero-signals">
+              <div class="home-hero-signal">
+                <strong>Build</strong>
+                <span>Standards for implementation, validation, permissions, and UX behavior.</span>
+              </div>
+              <div class="home-hero-signal">
+                <strong>Review</strong>
+                <span>Checklists and templates that make work reviewable and traceable.</span>
+              </div>
+              <div class="home-hero-signal">
+                <strong>Improve</strong>
+                <span>Tasks and ownership rules that turn process into repeatable team habits.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Non-negotiables -->
+        <section class="section">
+          <div class="content-card home-feature-shell">
+            <div class="card-header home-section-header">
+              <span class="badge badge-danger">Non-Negotiables</span>
+              <h2 class="section-title">Rules for Every Task</h2>
+              <p class="section-description">
+                These rules apply regardless of role, platform, task size, or deadline.
+              </p>
+            </div>
+
+            <div class="grid grid-3 home-rule-grid">
+              <div class="card">
+                <h3 class="card-title">No Silent Failures</h3>
+                <p class="card-description">
+                  Every error must be visible to the user. Console-only errors are not acceptable.
+                </p>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">No Untested Handoff</h3>
+                <p class="card-description">
+                  Test your own work before marking it complete. Evidence must be added to the ticket.
+                </p>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">Backend Is Source of Truth</h3>
+                <p class="card-description">
+                  Frontend improves UX, but business rules, permissions, and validation must be enforced on backend.
+                </p>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">No Missing Loading State</h3>
+                <p class="card-description">
+                  Every async action must show loading, success, and failure states.
+                </p>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">No Unsafe Delete</h3>
+                <p class="card-description">
+                  Destructive actions must have confirmation, clear messaging, and permission checks.
+                </p>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">No Mobile Skipped</h3>
+                <p class="card-description">
+                  Every UI must be checked on mobile before delivery.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="content-card team-ownership-panel">
+            <div class="team-ownership-layout">
+              <div class="team-ownership-copy">
+                <span class="badge badge-success">Team Ownership</span>
+                <h2 class="section-title">Team Ownership &amp; Process Standards</h2>
+                <p class="section-description">
+                  Own the work end-to-end. Understand the requirement, ask questions early, build with standards,
+                  test your own work, update clearly, raise issues in the ticket, and stay accountable for changes.
+                </p>
+
+                <div class="team-ownership-quote">
+                  <span class="team-ownership-kicker">Core Rule</span>
+                  <p>
+                    Every team member must own their work end-to-end: understand the requirement, ask questions early,
+                    build with standards, test their own work, update clearly, raise issues in the ticket, and stay
+                    accountable for changes. Before marking things Done — meet the standards.
+                  </p>
+                </div>
+
+                <div class="team-ownership-actions">
+                  <a href="./html/standards/team-ownership.html" class="btn btn-primary">View Details</a>
+                </div>
+              </div>
+
+              <div class="team-ownership-side">
+                <div class="team-ownership-side-header">
+                  <span class="team-ownership-side-label">Expected Standards</span>
+                  <p>These are the habits every team member is expected to follow on every task.</p>
+                </div>
+
+                <div class="team-ownership-points">
+                  <div class="team-ownership-point">
+                    <strong>Understanding</strong>
+                    <span>Read the task properly before starting.</span>
+                  </div>
+                  <div class="team-ownership-point">
+                    <strong>Clarification</strong>
+                    <span>Ask questions before building unclear requirements.</span>
+                  </div>
+                  <div class="team-ownership-point">
+                    <strong>Accountability</strong>
+                    <span>Own your changes, bugs, and fixes.</span>
+                  </div>
+                  <div class="team-ownership-point">
+                    <strong>Communication</strong>
+                    <span>Give concise updates with time and status.</span>
+                  </div>
+                  <div class="team-ownership-point">
+                    <strong>Escalation</strong>
+                    <span>Ask for help when blocked after proper effort.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Start -->
+        <section id="quick-start" class="section">
+          <div class="page-header home-section-header">
+            <span class="badge badge-info">Quick Start</span>
+            <h2 class="section-title">What Are You Working On?</h2>
+            <p class="section-description">
+              Choose the closest work type and follow the related standard, checklist, and task guide.
+            </p>
+          </div>
+
+          <div class="table-wrapper home-table-shell">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Work Type</th>
+                  <th>Standard</th>
+                  <th>Checklist</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Supabase API, table, RPC, RLS, or Edge Function</td>
+                  <td>
+                    <a href="./html/standards/supabase-standards.html" class="quick-start-link">
+                      <span>Supabase Standards</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                  <td>
+                    <a href="./html/checklists/supabase-checklist.html" class="quick-start-link">
+                      <span>Supabase Checklist</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Django view, model, form, serializer, or service</td>
+                  <td>
+                    <a href="./html/standards/django-standards.html" class="quick-start-link">
+                      <span>Django Standards</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                  <td>
+                    <a href="./html/checklists/django-checklist.html" class="quick-start-link">
+                      <span>Django Checklist</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>React page, component, form, table, modal, or UI state</td>
+                  <td>
+                    <a href="./html/standards/frontend-standards.html" class="quick-start-link">
+                      <span>Frontend Standards</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                  <td>
+                    <a href="./html/checklists/frontend-checklist.html" class="quick-start-link">
+                      <span>Frontend Checklist</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Xano API, reusable function, workflow, or webhook</td>
+                  <td>
+                    <a href="./html/standards/xano-standards.html" class="quick-start-link">
+                      <span>Xano Standards</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                  <td>
+                    <a href="./html/checklists/xano-checklist.html" class="quick-start-link">
+                      <span>Xano Checklist</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Website build, migration, replication, launch, or handoff</td>
+                  <td>
+                    <a href="./html/standards/website-standards.html" class="quick-start-link">
+                      <span>Website Standards</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                  <td>
+                    <a href="./html/checklists/website-launch-checklist.html" class="quick-start-link">
+                      <span>Website Launch Checklist</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Third-party integration like Stripe, SendGrid, Gmail, Razorpay</td>
+                  <td>
+                    <a href="./html/standards/third-party-standards.html" class="quick-start-link">
+                      <span>Third-Party Standards</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                  <td>
+                    <a href="./html/checklists/third-party-checklist.html" class="quick-start-link">
+                      <span>Third-Party Checklist</span>
+                      <span class="quick-start-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Standards -->
+        <section id="standards" class="section">
+          <div class="content-card home-library-shell">
+            <div class="page-header home-section-header home-section-header-row">
+              <div>
+                <span class="badge badge-primary">Standards Library</span>
+                <h2 class="section-title">Build Standards</h2>
+                <p class="section-description">
+                  Standards define how work should be designed, implemented, reviewed, and maintained.
+                </p>
+              </div>
+              <a href="./html/pages/standards.html" class="btn btn-secondary btn-sm home-section-cta">Browse All</a>
+            </div>
+
+            <div class="grid grid-3 home-library-grid">
+              <a href="./html/standards/backend-standards.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Core Logic</span>
+                <h3 class="card-title">Backend Standards</h3>
+                <p class="card-description">
+                  Backend-first logic, validation, permissions, services, APIs, and source-of-truth rules.
+                </p>
+              </a>
+
+              <a href="./html/standards/frontend-standards.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">UI Quality</span>
+                <h3 class="card-title">Frontend Standards</h3>
+                <p class="card-description">
+                  Forms, validation, loading states, error feedback, tables, modals, and responsive UI.
+                </p>
+              </a>
+
+              <a href="./html/standards/supabase-standards.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Database & Auth</span>
+                <h3 class="card-title">Supabase Standards</h3>
+                <p class="card-description">
+                  Database schema, RLS, RPC functions, Edge Functions, storage, and testing.
+                </p>
+              </a>
+
+              <a href="./html/standards/django-standards.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Templates & Services</span>
+                <h3 class="card-title">Django Standards</h3>
+                <p class="card-description">
+                  Views, models, forms, serializers, services, templates, and reusable backend structure.
+                </p>
+              </a>
+
+              <a href="./html/standards/xano-standards.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">No-Code Backend</span>
+                <h3 class="card-title">Xano Standards</h3>
+                <p class="card-description">
+                  Auth checks, input validation, reusable functions, workflows, and standard error responses.
+                </p>
+              </a>
+
+              <a href="./html/standards/website-standards.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Launch Ready</span>
+                <h3 class="card-title">Website Standards</h3>
+                <p class="card-description">
+                  Scoping, design audit, responsive QA, SEO, migration, launch, and client handoff.
+                </p>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Checklists -->
+        <section id="checklists" class="section">
+          <div class="content-card home-library-shell">
+            <div class="page-header home-section-header home-section-header-row">
+              <div>
+                <span class="badge badge-success">Checklists</span>
+                <h2 class="section-title">Before You Mark Work Complete</h2>
+                <p class="section-description">
+                  Checklists are the delivery gates. Use them before submitting work for review.
+                </p>
+              </div>
+              <a href="./html/pages/checklists.html" class="btn btn-secondary btn-sm home-section-cta">Open Checklists</a>
+            </div>
+
+            <div class="grid grid-4 home-library-grid home-library-grid-compact">
+              <a href="./html/checklists/backend-checklist.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Delivery Gate</span>
+                <h3 class="card-title">Backend Checklist</h3>
+                <p class="card-description">Validation, permissions, errors, logs, tests, and documentation.</p>
+              </a>
+
+              <a href="./html/checklists/frontend-checklist.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">UI Delivery</span>
+                <h3 class="card-title">Frontend Checklist</h3>
+                <p class="card-description">States, UX, mobile, Add/Edit consistency, forms, and errors.</p>
+              </a>
+
+              <a href="./html/checklists/website-launch-checklist.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Go-Live Review</span>
+                <h3 class="card-title">Website Launch</h3>
+                <p class="card-description">SEO, forms, redirects, analytics, responsiveness, and approvals.</p>
+              </a>
+
+              <a href="./html/checklists/task-completion-checklist.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Final Proof</span>
+                <h3 class="card-title">Task Completion</h3>
+                <p class="card-description">Evidence, self-testing, ticket update, and final handoff.</p>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Templates -->
+        <section id="templates" class="section">
+          <div class="content-card home-library-shell">
+            <div class="page-header home-section-header home-section-header-row">
+              <div>
+                <span class="badge badge-warning">Templates</span>
+                <h2 class="section-title">Copy-Paste Work Templates</h2>
+                <p class="section-description">
+                  Use these templates for tickets, work logs, bug reports, completion comments, API docs, and form docs.
+                </p>
+              </div>
+              <a href="./html/pages/templates.html" class="btn btn-secondary btn-sm home-section-cta">View Templates</a>
+            </div>
+
+            <div class="grid grid-3 home-library-grid">
+              <a href="./html/templates/work-log-template.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Tracking</span>
+                <h3 class="card-title">Work Log Template</h3>
+                <p class="card-description">For time tracking, task updates, progress notes, and next steps.</p>
+              </a>
+
+              <a href="./html/templates/bug-report-template.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Issues</span>
+                <h3 class="card-title">Bug Report Template</h3>
+                <p class="card-description">For blockers, bugs, reproduction steps, impact, and expected behavior.</p>
+              </a>
+
+              <a href="./html/templates/completion-comment-template.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Handoff</span>
+                <h3 class="card-title">Completion Comment</h3>
+                <p class="card-description">For marking work done with evidence, testing notes, and changed files.</p>
+              </a>
+
+              <a href="./html/templates/api-doc-template.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">API Detail</span>
+                <h3 class="card-title">API Doc Template</h3>
+                <p class="card-description">For endpoint details, auth, request, response, errors, and test cases.</p>
+              </a>
+
+              <a href="./html/templates/form-doc-template.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Form Behavior</span>
+                <h3 class="card-title">Form Doc Template</h3>
+                <p class="card-description">For fields, validation, submit behavior, error handling, and permissions.</p>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tasks -->
+        <section id="tasks" class="section">
+          <div class="content-card home-library-shell">
+            <div class="page-header home-section-header home-section-header-row">
+              <div>
+                <span class="badge badge-info">Practice Tasks</span>
+                <h2 class="section-title">Learn Standards by Building</h2>
+                <p class="section-description">
+                  Tasks help team members practice standards through real implementation examples.
+                </p>
+              </div>
+              <a href="./html/pages/tasks.html" class="btn btn-secondary btn-sm home-section-cta">See Task Tracks</a>
+            </div>
+
+            <div class="grid grid-3 home-library-grid">
+              <a href="./html/tasks/django-tasks.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Backend Practice</span>
+                <h3 class="card-title">Django Tasks</h3>
+                <p class="card-description">Views, templates, models, services, DRF APIs, and backend structure.</p>
+              </a>
+
+              <a href="./html/tasks/frontend-tasks.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">UI Practice</span>
+                <h3 class="card-title">Frontend Tasks</h3>
+                <p class="card-description">Registration, login, Add/Edit forms, validation, loading, and errors.</p>
+              </a>
+
+              <a href="./html/tasks/supabase-tasks.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Data Practice</span>
+                <h3 class="card-title">Supabase Tasks</h3>
+                <p class="card-description">Tables, RLS policies, API endpoints, Edge Functions, RPC, and storage.</p>
+              </a>
+
+              <a href="./html/tasks/xano-tasks.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Workflow Practice</span>
+                <h3 class="card-title">Xano Tasks</h3>
+                <p class="card-description">Endpoints, auth validation, reusable functions, and webhooks.</p>
+              </a>
+
+              <a href="./html/tasks/website-tasks.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">Launch Practice</span>
+                <h3 class="card-title">Website Tasks</h3>
+                <p class="card-description">Landing page sections, responsive design, QA, and launch readiness.</p>
+              </a>
+
+              <a href="./html/tasks/project-tasks.html" class="card card-clickable home-showcase-card">
+                <span class="home-showcase-kicker">End-to-End Practice</span>
+                <h3 class="card-title">Project Tasks</h3>
+                <p class="card-description">Complete mini-projects using React, Django, Supabase, WeWeb, and Xano.</p>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Definition of Done -->
+        <section id="definition-of-done" class="section">
+          <div class="content-card home-proof-shell">
+            <div class="page-header home-section-header">
+              <span class="badge badge-success">Definition of Done</span>
+              <h2 class="section-title">A Task Is Not Done Until It Is Proven</h2>
+              <p class="section-description">
+                Done means the requirement is met, the implementation is safe, the work is tested,
+                and the ticket has enough evidence for review.
+              </p>
+            </div>
+
+            <div class="grid grid-2 home-proof-grid">
+              <div class="alert alert-info">
+                <div class="alert-title">Backend API Done</div>
+                Schema, constraints, indexes, RLS or permissions, validation, error responses,
+                logs, tests, and frontend API documentation are complete.
+              </div>
+
+              <div class="alert alert-info">
+                <div class="alert-title">Frontend Task Done</div>
+                Main flow works, validation works, loading state works, errors show in UI,
+                mobile is checked, and Add/Edit behavior is consistent.
+              </div>
+
+              <div class="alert alert-info">
+                <div class="alert-title">Django Feature Done</div>
+                Permission enforced, validation in form or serializer, logic in service,
+                no duplicated business logic, and templates keep CSS/JS separate.
+              </div>
+
+              <div class="alert alert-info">
+                <div class="alert-title">Website Done</div>
+                Pages built, forms tested, mobile responsive, SEO metadata configured,
+                redirects handled, analytics added, and staging approved.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="section">
+          <div class="content-card text-center home-cta-panel">
+            <span class="badge badge-primary">Start Here</span>
+            <h2 class="section-title">Use Standards Before Building</h2>
+            <p class="section-description home-cta-description">
+              Before starting any task, read the matching standard, follow the checklist,
+              and submit the final work with evidence.
+            </p>
+
+            <div class="home-cta-actions">
+              <a href="./html/pages/standards.html" class="btn btn-primary">View All Standards</a>
+              <a href="./html/pages/checklists.html" class="btn btn-secondary">View All Checklists</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Build consistently. Communicate clearly. Deliver with evidence.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="./index.html" class="footer-link">Home</a>
+        <a href="./html/pages/standards.html" class="footer-link">Standards</a>
+        <a href="./html/pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="./html/pages/tasks.html" class="footer-link">Tasks</a>
+        <a href="./html/pages/templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

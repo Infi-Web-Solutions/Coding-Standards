@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Work Log Template | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Template for posting work progress, completed updates, blocked updates, and time tracking logs."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="templates">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link active">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-warning">Template</span>
+        <h1 class="page-title">Work Log Template</h1>
+        <p class="page-subtitle">
+          Use this when posting status updates in a ticket.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/templates.html" class="btn btn-secondary">Back to Templates</a>
+          <button class="btn btn-primary" data-copy-template="work-log-copy">Copy Full Template</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">In Progress Update</h2>
+            <pre>Time Spent: [e.g. 1h 20m]
+Status: In Progress
+
+Work Done:
+- [What was completed so far]
+- [What was fixed or updated]
+
+Issue:
+- [Any problem encountered, or "None"]
+
+Next:
+- [What will be done next]</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Completed Update</h2>
+            <pre>Time Spent: [e.g. 2h]
+Status: Completed
+
+Work Done:
+- [What was built or fixed]
+- [What was tested]
+- [What was updated]</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Blocked Update</h2>
+            <pre>Time Spent: [e.g. 45m]
+Status: Blocked
+
+Work Done:
+- [What was attempted and checked]
+
+Blocker:
+- [What is blocking progress]
+- [What is needed to unblock]</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Work Log Line</h2>
+            <pre>[Duration] — [What was done]. [Reason if it took extra time.]</pre>
+
+            <div class="divider"></div>
+
+            <h3 class="card-title">Examples</h3>
+            <pre>1h 30m — Built Add/Edit form validation and tested required fields.
+45m — Fixed mobile spacing issue in project card component.
+2h — Debugged API failure; issue was caused by missing workspace_id in payload.
+2h 15m — Fixed form submission issue. Extra time required because API was silently failing without a proper error response.</pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <span class="badge badge-danger">Rules</span>
+          <h2 class="section-title">Rules for Work Logs</h2>
+
+          <ul>
+            <li>Include time spent, status, what was done, and next step.</li>
+            <li>Keep it short — no long stories.</li>
+            <li>When something took extra time, mention the reason briefly.</li>
+            <li>Never write vague logs like "Worked on task" or "Fixed issues."</li>
+          </ul>
+        </div>
+      </section>
+
+      <pre id="work-log-copy" hidden>Time Spent: [e.g. 1h 20m]
+Status: In Progress
+
+Work Done:
+- [What was completed so far]
+- [What was fixed or updated]
+
+Issue:
+- [Any problem encountered, or "None"]
+
+Next:
+- [What will be done next]</pre>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Use work logs to keep task progress clear and traceable.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="../pages/templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

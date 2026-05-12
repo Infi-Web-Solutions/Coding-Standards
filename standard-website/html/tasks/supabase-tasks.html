@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Practice Tasks | Development Standards</title>
+  <meta name="description" content="Supabase practice tasks for schema, RLS, RPCs, and Edge Functions." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+<body data-page="tasks">
+  <header class="navbar"><div class="navbar-inner">
+    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <nav class="navbar-menu" aria-label="Main Navigation">
+      <a href="../../index.html" class="navbar-link">Home</a><a href="../pages/standards.html" class="navbar-link">Standards</a><a href="../pages/checklists.html" class="navbar-link">Checklists</a><a href="../pages/tasks.html" class="navbar-link active">Tasks</a><a href="../pages/templates.html" class="navbar-link">Templates</a>
+    </nav>
+    <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+  </div></header>
+  <main class="page"><div class="container">
+    <section class="page-header"><span class="badge badge-info">Supabase Practice Tasks</span><h1 class="page-title">Supabase Practice Tasks</h1><p class="page-subtitle">Complete these in order — each task builds on the previous one.</p></section>
+    <section class="section"><div class="content-card">
+      <div class="table-wrapper"><table class="table"><thead><tr><th>Task</th><th>What You Practice</th></tr></thead><tbody>
+        <tr><td><a href="./supabase/01-create-projects-table.html">01 — Create the Projects Table</a></td><td>Schema design, required columns (id/created_at/updated_at/workspace_id/created_by), CHECK constraints, indexes, soft delete, updated_at trigger, migration file</td></tr>
+        <tr><td><a href="./supabase/02-rls-policies.html">02 — Write RLS Policies</a></td><td>All four policy types, workspace membership subquery pattern, role-based rules, INSERT WITH CHECK for created_by, UPDATE WITH CHECK to prevent workspace change, testing across all roles</td></tr>
+        <tr><td><a href="./supabase/03-create-project-api.html">03 — Create Project API (RPC)</a></td><td>RPC function with atomic multi-step logic (insert project + task list + audit log), RAISE EXCEPTION with standard error codes, API documentation</td></tr>
+        <tr><td><a href="./supabase/04-invite-edge-function.html">04 — Project Invite Edge Function</a></td><td>Edge Function structure (CORS/auth/validation/logic/response), Deno secrets, JWT validation, third-party API call (Resend email), logging rules</td></tr>
+      </tbody></table></div>
+      <div class="divider"></div>
+      <h2 class="section-title">Standards to Read First</h2>
+      <ul>
+        <li><a href="../standards/supabase-standards.html">Supabase Standards Overview</a></li>
+        <li><a href="../standards/supabase-database-and-rls.html">01 — Database &amp; RLS</a></li>
+        <li><a href="../standards/supabase-api-design.html">02 — API Design</a></li>
+        <li><a href="../standards/supabase-edge-functions.html">04 — Edge Functions</a></li>
+      </ul>
+    </div></section>
+  </div></main>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

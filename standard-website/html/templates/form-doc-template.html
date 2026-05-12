@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Form Documentation Template | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Template for documenting form fields, validation rules, submit destination, success behavior, error behavior, spam protection, and frontend behavior."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="templates">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link active">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-info">Form Documentation</span>
+        <h1 class="page-title">Form Documentation Template</h1>
+        <p class="page-subtitle">
+          Use this to document every form before or during development.
+          Backend and frontend must both know this information before building.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/templates.html" class="btn btn-secondary">Back to Templates</a>
+          <button class="btn btn-primary" data-copy-template="form-doc-copy">Copy Form Template</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Form: [Form Name]</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">Page</h3>
+              <p>[URL or page name where this form lives]</p>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Purpose</h3>
+              <p>[What does this form do? Who fills it out?]</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Fields</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Required</th>
+                  <th>Validation</th>
+                  <th>Placeholder</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>[name]</td><td>text</td><td>Yes</td><td>2–100 chars</td><td>Enter full name</td></tr>
+                <tr><td>[email]</td><td>email</td><td>Yes</td><td>Valid email</td><td>Enter email address</td></tr>
+                <tr><td>[phone]</td><td>phone</td><td>No</td><td>Country code + valid number</td><td>+91 9876543210</td></tr>
+                <tr><td>[message]</td><td>textarea</td><td>Yes</td><td>10–1000 chars</td><td>Type your message</td></tr>
+                <tr><td>[dropdown]</td><td>select</td><td>Yes</td><td>Must be one of: [options]</td><td>Select an option</td></tr>
+                <tr><td>[file]</td><td>file</td><td>No</td><td>PDF/JPG, max 5MB</td><td>Upload file</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2 class="card-title">Submit Destination</h2>
+            <ul>
+              <li>CRM: [CRM name and lead field mapping]</li>
+              <li>Email Notification: [Who gets notified and to which email]</li>
+              <li>Database: [Table and fields]</li>
+              <li>Webhook: [Endpoint if applicable]</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Success Behavior</h2>
+            <p>Message shown to user:</p>
+            <pre>[Success message text]</pre>
+
+            <ul>
+              <li>Form fields cleared</li>
+              <li>Redirect to: [URL]</li>
+              <li>Email confirmation sent to user</li>
+              <li>Notification sent to team</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Error Behavior</h2>
+            <p>Message shown to user on API failure:</p>
+            <pre>[Error message text]</pre>
+
+            <p>Field-level error examples:</p>
+            <pre>Name: "Please enter your full name."
+Email: "Enter a valid email address."
+Phone: "Enter a valid phone number with country code."
+Message: "Message must be at least 10 characters."</pre>
+          </article>
+
+          <article class="card">
+            <h2 class="card-title">Spam Protection</h2>
+            <ul>
+              <li>CAPTCHA: reCAPTCHA / hCaptcha</li>
+              <li>Honeypot field</li>
+              <li>Rate limiting</li>
+              <li>None — explain why</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Frontend Behavior</h2>
+
+          <ul>
+            <li>Submit button disables while request is pending.</li>
+            <li>Loading state shown on submit button: "Sending..."</li>
+            <li>Form values preserved if request fails.</li>
+            <li>Fields cleared on successful submit.</li>
+            <li>Success message shown after submit.</li>
+            <li>Field-level errors shown near each invalid field.</li>
+            <li>Mobile layout tested.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Example — Contact Form</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">Page</h3>
+              <p>/contact</p>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Purpose</h3>
+              <p>Collects website visitor inquiries and routes them to the sales team.</p>
+            </article>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3 class="card-title">Example Success Message</h3>
+          <pre>Thank you. Our team will contact you within 24 hours.</pre>
+
+          <h3 class="card-title">Example Error Message</h3>
+          <pre>We could not submit your request. Please try again.</pre>
+        </div>
+      </section>
+
+      <pre id="form-doc-copy" hidden># Form: [Form Name]
+
+## Page
+[URL or page name where this form lives]
+
+## Purpose
+[What does this form do? Who fills it out?]
+
+## Fields
+| Field | Type | Required | Validation | Placeholder |
+|-------|------|----------|------------|-------------|
+| [name] | text | Yes | 2–100 chars | Enter full name |
+| [email] | email | Yes | Valid email | Enter email address |
+| [phone] | phone | No | Country code + valid number | +91 9876543210 |
+| [message] | textarea | Yes | 10–1000 chars | Type your message |
+
+## Submit Destination
+- CRM: [CRM name and lead field mapping]
+- Email Notification: [Who gets notified and to which email]
+- Database: [Table and fields]
+- Webhook: [Endpoint if applicable]
+
+## Success Behavior
+Message shown to user:
+[Success message text]
+
+## Error Behavior
+Message shown to user on API failure:
+[Error message text]
+
+## Frontend Behavior
+- Submit button disables while request is pending.
+- Loading state shown on submit button.
+- Form values preserved if request fails.
+- Fields cleared on successful submit.
+- Success message shown after submit.
+- Field-level errors shown near each invalid field.
+- Mobile layout tested.</pre>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Document form behavior before frontend and backend implementation.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="../pages/templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

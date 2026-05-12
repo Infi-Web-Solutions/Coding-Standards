@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Django — New View Checklist | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Auth decorators, form/serializer validation, services.py pattern, response handling, error mapping."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Django — New View Checklist</h1>
+
+        <p class="page-subtitle">
+          Auth decorators, form/serializer validation, services.py pattern, response handling, error mapping.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../django-checklist.html" class="btn btn-secondary">Back to Django Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+
+          <div class="grid grid-3">
+            <a href="#before-you-build" class="card card-clickable">Before You Build</a>
+            <a href="#view-type-decision" class="card card-clickable">View Type Decision</a>
+            <a href="#authentication-authorization" class="card card-clickable">Authentication &amp; Authorization</a>
+            <a href="#form-input-validation" class="card card-clickable">Form &amp; Input Validation</a>
+            <a href="#business-logic-placement" class="card card-clickable">Business Logic Placement</a>
+            <a href="#response-handling" class="card card-clickable">Response Handling</a>
+            <a href="#error-handling" class="card card-clickable">Error Handling</a>
+            <a href="#reusability-code-organization" class="card card-clickable">Reusability &amp; Code Organization</a>
+            <a href="#testing-requirements" class="card card-clickable">Testing Requirements</a>
+            <a href="#before-marking-done" class="card card-clickable">Before Marking Done</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="before-you-build" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. Before You Build</h2>
+
+          <label><input type="checkbox" data-checklist-item /> What does this view do? (one clear sentence)</label><br />
+          <label><input type="checkbox" data-checklist-item /> What URL will it be accessible at?</label><br />
+          <label><input type="checkbox" data-checklist-item /> Does a similar view already exist that could be extended?</label><br />
+          <label><input type="checkbox" data-checklist-item /> Does the required business logic already exist in a service?</label><br />
+          <label><input type="checkbox" data-checklist-item /> What permissions does this view require?</label><br />
+          <label><input type="checkbox" data-checklist-item /> What form/serializer will validate the input?</label><br />
+          <label><input type="checkbox" data-checklist-item /> What does the success response look like? (redirect, template, JSON)</label><br />
+          <label><input type="checkbox" data-checklist-item /> What does the failure response look like?</label>
+        </div>
+      </section>
+
+      <section id="view-type-decision" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. View Type Decision</h2>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Use This</th>
+                  <th>When</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Function-based view (<code>def</code>)</td>
+                  <td>Simple, one-off views with minimal logic</td>
+                </tr>
+                <tr>
+                  <td>Class-based view (<code>View</code>, <code>TemplateView</code>, <code>ListView</code>)</td>
+                  <td>Standard patterns (list, detail, create, update, delete)</td>
+                </tr>
+                <tr>
+                  <td><code>CreateView</code> / <code>UpdateView</code></td>
+                  <td>Form-based create and update with Django forms</td>
+                </tr>
+                <tr>
+                  <td><code>ListView</code> / <code>DetailView</code></td>
+                  <td>Standard read views</td>
+                </tr>
+                <tr>
+                  <td><code>DeleteView</code></td>
+                  <td>Standard delete with confirmation</td>
+                </tr>
+                <tr>
+                  <td>DRF <code>APIView</code> or <code>ViewSet</code></td>
+                  <td>JSON APIs consumed by React or other frontends</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <label><input type="checkbox" data-checklist-item /> View type chosen based on the pattern — not personal preference</label><br />
+          <label><input type="checkbox" data-checklist-item /> Not writing a class-based view that just reimplements a built-in generic view</label><br />
+          <label><input type="checkbox" data-checklist-item /> Not writing a function view for something with many methods (use CBV)</label>
+        </div>
+      </section>
+
+      <section id="authentication-authorization" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Authentication &amp; Authorization</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Every protected view uses <code>@login_required</code> or <code>LoginRequiredMixin</code> — no exceptions</label><br />
+          <label><input type="checkbox" data-checklist-item /> Role/permission check performed for sensitive operations:</label><br />
+          <div style="margin-left: 24px; margin-bottom: 8px;">
+            <label><input type="checkbox" data-checklist-item /> User is member of the correct workspace/org</label><br />
+            <label><input type="checkbox" data-checklist-item /> User has the required role (admin, owner, etc.)</label>
+          </div>
+          <label><input type="checkbox" data-checklist-item /> Permission read from database — not from session payload or request parameter</label><br />
+          <label><input type="checkbox" data-checklist-item /> Anonymous users handled: redirect to login or return 401 (for APIs)</label><br />
+          <label><input type="checkbox" data-checklist-item /> DRF views use <code>permission_classes = [IsAuthenticated]</code> or custom permission class</label><br />
+          <label><input type="checkbox" data-checklist-item /> Object-level permission checked: user has access to THIS specific object (not just the type)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No role or user ID accepted from <code>request.POST</code> or <code>request.GET</code> for permission decisions</label>
+        </div>
+      </section>
+
+      <section id="form-input-validation" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Form &amp; Input Validation</h2>
+
+          <label><input type="checkbox" data-checklist-item /> All user input flows through a Django Form or Serializer — not accessed directly from <code>request.POST</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>form.is_valid()</code> called before accessing any cleaned data</label><br />
+          <label><input type="checkbox" data-checklist-item /> <code>cleaned_data</code> used for all values — not raw <code>request.POST.get()</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Validation errors returned to user with clear field-level messages</label><br />
+          <label><input type="checkbox" data-checklist-item /> Required fields defined in the form — not validated inline in the view</label><br />
+          <label><input type="checkbox" data-checklist-item /> Custom validators live in <code>validators.py</code> — not inline in forms or views</label><br />
+          <label><input type="checkbox" data-checklist-item /> For REST APIs: <code>serializer.is_valid(raise_exception=True)</code> used</label><br />
+          <label><input type="checkbox" data-checklist-item /> No manual type casting from strings to integers/dates in the view — form handles this</label>
+        </div>
+      </section>
+
+      <section id="business-logic-placement" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Business Logic Placement</h2>
+
+          <p>This is the most important rule for Django views.</p>
+
+          <label><input type="checkbox" data-checklist-item /> View does NOT contain business logic — only HTTP handling</label><br />
+          <label><input type="checkbox" data-checklist-item /> Business logic lives in <code>services.py</code> or a service class</label><br />
+          <label><input type="checkbox" data-checklist-item /> View calls service: <code>result = ProjectService.create_project(...)</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> No database queries written directly in the view (use service or manager)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No slug generation, price calculation, or email sending in the view</label><br />
+          <label><input type="checkbox" data-checklist-item /> No multi-step operations inline in the view (extract to service)</label>
+
+          <div class="divider"></div>
+
+          <h3>Good Pattern</h3>
+          <pre>
+# views.py
+def create_project(request):
+    form = ProjectForm(request.POST)
+    if not form.is_valid():
+        return render(request, 'projects/create.html', {'form': form})
+
+    project = ProjectService.create_project(
+        workspace=request.workspace,
+        name=form.cleaned_data['name'],
+        created_by=request.user
+    )
+    messages.success(request, 'Project created successfully.')
+    return redirect('projects:detail', pk=project.pk)</pre>
+
+          <h3>Bad Pattern (logic in view)</h3>
+          <pre>
+# views.py — DO NOT DO THIS
+def create_project(request):
+    name = request.POST.get('name')
+    slug = name.lower().replace(' ', '-')
+    if Project.objects.filter(slug=slug).exists():
+        # ...
+    project = Project.objects.create(name=name, slug=slug, ...)
+    send_email(request.user, 'project_created', project)
+    AuditLog.objects.create(...)
+    return redirect(...)</pre>
+        </div>
+      </section>
+
+      <section id="response-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. Response Handling</h2>
+
+          <h3>For HTML Views (Template)</h3>
+          <label><input type="checkbox" data-checklist-item /> Success: redirect using <code>redirect()</code> after POST (POST → redirect → GET pattern)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Never return a rendered template directly after a successful POST (causes re-submit on refresh)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Failure: render form with errors (not redirect — user loses error context)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Success messages use Django messages framework (<code>messages.success</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Error messages use <code>messages.error</code> or form errors — not hardcoded in template</label>
+
+          <div class="divider"></div>
+
+          <h3>For REST API Views (JSON)</h3>
+          <label><input type="checkbox" data-checklist-item /> Success: return <code>Response(serializer.data, status=201)</code> for create</label><br />
+          <label><input type="checkbox" data-checklist-item /> Success: return <code>Response(serializer.data, status=200)</code> for read/update</label><br />
+          <label><input type="checkbox" data-checklist-item /> Delete: return <code>Response(status=204)</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Validation error: return <code>Response(serializer.errors, status=400)</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Auth error: return <code>Response({'error': 'AUTH_REQUIRED'}, status=401)</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Permission error: return <code>Response({'error': 'FORBIDDEN'}, status=403)</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> Not found: return <code>Response({'error': 'NOT_FOUND'}, status=404)</code></label>
+        </div>
+      </section>
+
+      <section id="error-handling" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Error Handling</h2>
+
+          <label><input type="checkbox" data-checklist-item /> No unhandled exceptions that return a 500 with a Django debug page in production</label><br />
+          <label><input type="checkbox" data-checklist-item /> Custom exception handlers defined for DRF APIs (global handler, not per-view)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Business logic exceptions caught and mapped to HTTP responses:</label><br />
+          <div style="margin-left: 24px; margin-bottom: 8px;">
+            <label><input type="checkbox" data-checklist-item /> <code>NotFoundException</code> → 404</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>PermissionDenied</code> → 403</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>ConflictError</code> → 409</label><br />
+            <label><input type="checkbox" data-checklist-item /> <code>ValidationError</code> → 400</label>
+          </div>
+          <label><input type="checkbox" data-checklist-item /> Django's <code>Http404</code> or <code>get_object_or_404()</code> used for not-found cases</label><br />
+          <label><input type="checkbox" data-checklist-item /> User-facing error messages do not expose internal details (no stack traces, no SQL errors)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Errors logged server-side with enough context for debugging</label>
+        </div>
+      </section>
+
+      <section id="reusability-code-organization" class="section">
+        <div class="content-card">
+          <h2 class="section-title">8. Reusability &amp; Code Organization</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Permission logic extracted to a mixin or decorator if used in multiple views</label><br />
+          <label><input type="checkbox" data-checklist-item /> Common query patterns in <code>managers.py</code> (e.g., <code>Project.objects.active()</code>)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Reusable form used across create and update views (same form class)</label><br />
+          <label><input type="checkbox" data-checklist-item /> No copy-pasted validation logic between views — extracted to form or validator</label><br />
+          <label><input type="checkbox" data-checklist-item /> URL names defined clearly: <code>projects:list</code>, <code>projects:detail</code>, <code>projects:create</code></label><br />
+          <label><input type="checkbox" data-checklist-item /> No business logic in URL conf (<code>urls.py</code> stays clean)</label>
+        </div>
+      </section>
+
+      <section id="testing-requirements" class="section">
+        <div class="content-card">
+          <h2 class="section-title">9. Testing Requirements</h2>
+
+          <label><input type="checkbox" data-checklist-item /> Test: successful request returns expected response</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test: unauthenticated request redirects to login (or 401 for API)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test: unauthorized user (wrong workspace) gets 403</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test: invalid input returns form errors (or 400 for API)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test: not found ID returns 404</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test: POST → redirect → correct destination (for HTML views)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test: business logic was called with correct arguments (mock service layer)</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test: duplicate/conflict case handled correctly</label><br />
+          <label><input type="checkbox" data-checklist-item /> Tests use Django TestCase or pytest-django</label><br />
+          <label><input type="checkbox" data-checklist-item /> Test database does not share state between tests (use setUp/tearDown)</label>
+        </div>
+      </section>
+
+      <section id="before-marking-done" class="section">
+        <div class="content-card">
+          <span class="badge badge-success">Before Marking Done</span>
+          <h2 class="section-title">10. Django View Checklist — Before Marking Done</h2>
+
+          <div class="grid grid-2">
+            <article class="card">
+              <h3 class="card-title">View Type</h3>
+              <label><input type="checkbox" data-checklist-item /> Correct view type chosen (function / class-based / generic / DRF)</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Auth &amp; Permissions</h3>
+              <label><input type="checkbox" data-checklist-item /> <code>@login_required</code> or <code>LoginRequiredMixin</code> applied</label><br />
+              <label><input type="checkbox" data-checklist-item /> Role/permission read from database — not from request</label><br />
+              <label><input type="checkbox" data-checklist-item /> Object-level permission checked (user has access to THIS object)</label><br />
+              <label><input type="checkbox" data-checklist-item /> Anonymous users handled with redirect or 401</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Form/Validation</h3>
+              <label><input type="checkbox" data-checklist-item /> All input through Django Form or Serializer</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>form.is_valid()</code> / <code>serializer.is_valid()</code> called before accessing data</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>cleaned_data</code> used — not raw <code>request.POST</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> Required fields defined in form — not validated in view</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Business Logic</h3>
+              <label><input type="checkbox" data-checklist-item /> No business logic in view — extracted to <code>services.py</code></label><br />
+              <label><input type="checkbox" data-checklist-item /> No database queries directly in view — use service or manager</label><br />
+              <label><input type="checkbox" data-checklist-item /> No email sending, slug generation, or calculations in view</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Response</h3>
+              <label><input type="checkbox" data-checklist-item /> HTML views: POST → redirect (never render template after successful POST)</label><br />
+              <label><input type="checkbox" data-checklist-item /> API views: correct HTTP status codes (200/201/204/400/401/403/404)</label><br />
+              <label><input type="checkbox" data-checklist-item /> Errors shown to user — not only logged</label><br />
+              <label><input type="checkbox" data-checklist-item /> Success messages via Django messages framework or API response</label>
+            </article>
+
+            <article class="card">
+              <h3 class="card-title">Error Handling &amp; Testing</h3>
+              <label><input type="checkbox" data-checklist-item /> Business exceptions mapped to HTTP responses</label><br />
+              <label><input type="checkbox" data-checklist-item /> <code>get_object_or_404</code> used for not-found cases</label><br />
+              <label><input type="checkbox" data-checklist-item /> No stack traces exposed to users</label><br />
+              <label><input type="checkbox" data-checklist-item /> Errors logged server-side</label><br />
+              <label><input type="checkbox" data-checklist-item /> Success, auth failure, permission failure, validation failure, not found tested</label>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="alert alert-info">
+          <div class="alert-title">Practice Task</div>
+          <p>
+            Apply what you learned by building a real view with a reusable permission mixin, form validation, and a service layer. Covers: LoginRequiredMixin, WorkspaceMemberMixin, ProjectForm with cross-field date validation, ProjectService.create_project(), POST→redirect→GET pattern.
+          </p>
+          <a href="../../tasks/django/01-project-list-create-view.html" class="btn btn-primary btn-sm">
+            Open Task 01: Build a Project List &amp; Create View
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">
+          Views handle HTTP only. Business logic goes in services.py. Every protected view requires @login_required or LoginRequiredMixin.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../django-checklist.html" class="footer-link">Django Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

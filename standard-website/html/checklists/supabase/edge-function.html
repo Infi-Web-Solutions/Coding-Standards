@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase — Edge Function Checklist | Development Standards</title>
+  <meta name="description" content="Required structure, CORS, auth pattern, secrets management, error handling, webhook signature verification." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link active">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-primary">Checklist</span>
+        <h1 class="page-title">Supabase — Edge Function Checklist</h1>
+        <p class="page-subtitle">Required structure, CORS, auth pattern, secrets management, error handling, webhook signature verification.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../supabase-checklist.html" class="btn btn-secondary">Back to Supabase Checklists</a>
+          <span class="badge badge-info" data-checklist-progress>0/0 completed</span>
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <blockquote><strong>Core Rule:</strong> Edge Functions are for server-side logic that cannot or should not run in the browser — webhooks, external API calls, payment processing, email sending, and any logic that requires secrets. They are not a replacement for simple table queries or RPCs.</blockquote>
+<hr />
+        </div>
+      </section>
+
+      <section id="contents" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Contents</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>#</th>
+    <th>Section</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td><a href="#1-when-to-use-an-edge-function">1</a></td>
+    <td>When to Use an Edge Function</td>
+  </tr>
+  <tr>
+    <td><a href="#2-edge-function-structure">2</a></td>
+    <td>Edge Function Structure</td>
+  </tr>
+  <tr>
+    <td><a href="#3-auth-pattern">3</a></td>
+    <td>Auth Pattern</td>
+  </tr>
+  <tr>
+    <td><a href="#4-request-validation">4</a></td>
+    <td>Request Validation</td>
+  </tr>
+  <tr>
+    <td><a href="#5-response-standard">5</a></td>
+    <td>Response Standard</td>
+  </tr>
+  <tr>
+    <td><a href="#6-secrets--environment-variables">6</a></td>
+    <td>Secrets & Environment Variables</td>
+  </tr>
+  <tr>
+    <td><a href="#7-error-handling--logging">7</a></td>
+    <td>Error Handling & Logging</td>
+  </tr>
+  <tr>
+    <td><a href="#8-webhook-handling">8</a></td>
+    <td>Webhook Handling</td>
+  </tr>
+  <tr>
+    <td><a href="#9-edge-function-checklist--before-marking-done">9</a></td>
+    <td>Edge Function Checklist — Before Marking Done</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+<h1>1. When to Use an Edge Function</h1>
+<p>Use an Edge Function when:</p>
+<label><input type="checkbox" data-checklist-item /> Sending email (Resend, SendGrid, etc.)</label><br />
+<label><input type="checkbox" data-checklist-item /> Processing payments (Stripe, etc.)</label><br />
+<label><input type="checkbox" data-checklist-item /> Calling a third-party API with a secret key</label><br />
+<label><input type="checkbox" data-checklist-item /> Handling webhooks from external services</label><br />
+<label><input type="checkbox" data-checklist-item /> Running logic that requires secrets not safe to expose</label><br />
+<label><input type="checkbox" data-checklist-item /> Complex multi-step operations not suited for RPC</label><br />
+<label><input type="checkbox" data-checklist-item /> Background jobs triggered by HTTP</label><br />
+<p>Do NOT use an Edge Function when:</p>
+<pre><code class="language-text">× Simple table query — use supabase.from() with RLS
+× Business logic without secrets — use RPC / Postgres Function
+× Just to &quot;wrap&quot; a table query for no reason
+× The logic could be enforced at the database level (constraints, triggers)</code></pre>
+<hr />
+<h1>2. Edge Function Structure</h1>
+<p>Every Edge Function must follow this structure:</p>
+<pre><code class="language-ts">import { serve } from &#x27;https://deno.land/std@0.168.0/http/server.ts&#x27;;
+import { createClient } from &#x27;https://esm.sh/@supabase/supabase-js@2&#x27;;
+
+const corsHeaders = {
+  &#x27;Access-Control-Allow-Origin&#x27;: &#x27;*&#x27;,
+  &#x27;Access-Control-Allow-Headers&#x27;: &#x27;authorization, x-client-info, apikey, content-type&#x27;,
+};
+
+serve(async (req: Request) =&gt; {
+  // 1. Handle CORS preflight
+  if (req.method === &#x27;OPTIONS&#x27;) {
+    return new Response(&#x27;ok&#x27;, { headers: corsHeaders });
+  }
+
+  try {
+    // 2. Auth check (if protected)
+    // 3. Parse and validate input
+    // 4. Execute business logic
+    // 5. Return success response
+
+    return new Response(
+      JSON.stringify({ data: result, message: &#x27;Success.&#x27; }),
+      { headers: { ...corsHeaders, &#x27;Content-Type&#x27;: &#x27;application/json&#x27; }, status: 200 }
+    );
+
+  } catch (error) {
+    // 6. Handle errors
+    console.error(&#x27;[function-name] Error:&#x27;, error.message);
+
+    return new Response(
+      JSON.stringify({ error: &#x27;SERVER_ERROR&#x27;, message: &#x27;An unexpected error occurred.&#x27; }),
+      { headers: { ...corsHeaders, &#x27;Content-Type&#x27;: &#x27;application/json&#x27; }, status: 500 }
+    );
+  }
+});</code></pre>
+<hr />
+<h1>3. Auth Pattern</h1>
+<pre><code class="language-ts">// For protected Edge Functions — validate auth token first
+const authHeader = req.headers.get(&#x27;Authorization&#x27;);
+if (!authHeader) {
+  return new Response(
+    JSON.stringify({ error: &#x27;AUTH_REQUIRED&#x27;, message: &#x27;Authentication required.&#x27; }),
+    { headers: { ...corsHeaders, &#x27;Content-Type&#x27;: &#x27;application/json&#x27; }, status: 401 }
+  );
+}
+
+// Create client with user&#x27;s token (not service role)
+const supabase = createClient(
+  Deno.env.get(&#x27;SUPABASE_URL&#x27;) ?? &#x27;&#x27;,
+  Deno.env.get(&#x27;SUPABASE_ANON_KEY&#x27;) ?? &#x27;&#x27;,
+  { global: { headers: { Authorization: authHeader } } }
+);
+
+// Verify token and get user
+const { data: { user }, error: authError } = await supabase.auth.getUser();
+if (authError || !user) {
+  return new Response(
+    JSON.stringify({ error: &#x27;AUTH_REQUIRED&#x27;, message: &#x27;Invalid or expired token.&#x27; }),
+    { headers: { ...corsHeaders, &#x27;Content-Type&#x27;: &#x27;application/json&#x27; }, status: 401 }
+  );
+}</code></pre>
+<label><input type="checkbox" data-checklist-item /> Auth token validated at the start of every protected function</label><br />
+<label><input type="checkbox" data-checklist-item /> User ID extracted from validated JWT — not from request body</label><br />
+<label><input type="checkbox" data-checklist-item /> Role/permissions read from database — never trusted from request body</label><br />
+<label><input type="checkbox" data-checklist-item /> Public functions (e.g., contact form) confirmed intentionally public</label><br />
+<hr />
+<h1>4. Request Validation</h1>
+<pre><code class="language-ts">// Parse body
+const body = await req.json().catch(() =&gt; null);
+if (!body) {
+  return new Response(
+    JSON.stringify({ error: &#x27;VALIDATION_ERROR&#x27;, message: &#x27;Invalid request body.&#x27; }),
+    { status: 400, headers: { ...corsHeaders, &#x27;Content-Type&#x27;: &#x27;application/json&#x27; } }
+  );
+}
+
+// Validate required fields
+const errors: Record&lt;string, string&gt; = {};
+if (!body.name || typeof body.name !== &#x27;string&#x27; || body.name.trim() === &#x27;&#x27;) {
+  errors.name = &#x27;Name is required.&#x27;;
+}
+if (!body.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
+  errors.email = &#x27;Enter a valid email address.&#x27;;
+}
+
+if (Object.keys(errors).length &gt; 0) {
+  return new Response(
+    JSON.stringify({ error: &#x27;VALIDATION_ERROR&#x27;, message: &#x27;Validation failed.&#x27;, fields: errors }),
+    { status: 400, headers: { ...corsHeaders, &#x27;Content-Type&#x27;: &#x27;application/json&#x27; } }
+  );
+}</code></pre>
+<label><input type="checkbox" data-checklist-item /> req.json() wrapped in try/catch — invalid JSON returns 400</label><br />
+<label><input type="checkbox" data-checklist-item /> Every required field validated (not null, not empty)</label><br />
+<label><input type="checkbox" data-checklist-item /> String lengths validated (max characters enforced)</label><br />
+<label><input type="checkbox" data-checklist-item /> Format validated (email format, UUID format, enum values)</label><br />
+<label><input type="checkbox" data-checklist-item /> Numeric ranges validated</label><br />
+<label><input type="checkbox" data-checklist-item /> Field-level errors returned with VALIDATION_ERROR code</label><br />
+<hr />
+<h1>5. Response Standard</h1>
+<p>All responses must follow this format:</p>
+        </div>
+      </section>
+
+      <section id="success" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Success</h2>
+          <pre><code class="language-json">{
+  &quot;data&quot;: { ... },
+  &quot;message&quot;: &quot;Descriptive success message.&quot;
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="error" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Error</h2>
+          <pre><code class="language-json">{
+  &quot;error&quot;: &quot;ERROR_CODE&quot;,
+  &quot;message&quot;: &quot;Human-readable description.&quot;
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="validation-error-with-field-errors" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Validation Error (with field errors)</h2>
+          <pre><code class="language-json">{
+  &quot;error&quot;: &quot;VALIDATION_ERROR&quot;,
+  &quot;message&quot;: &quot;Validation failed.&quot;,
+  &quot;fields&quot;: {
+    &quot;email&quot;: &quot;Enter a valid email address.&quot;,
+    &quot;name&quot;: &quot;Name is required.&quot;
+  }
+}</code></pre>
+<label><input type="checkbox" data-checklist-item /> All responses include Content-Type: application/json</label><br />
+<label><input type="checkbox" data-checklist-item /> All responses include CORS headers</label><br />
+<label><input type="checkbox" data-checklist-item /> Success: status 200 or 201</label><br />
+<label><input type="checkbox" data-checklist-item /> Validation error: status 400</label><br />
+<label><input type="checkbox" data-checklist-item /> Auth error: status 401</label><br />
+<label><input type="checkbox" data-checklist-item /> Forbidden: status 403</label><br />
+<label><input type="checkbox" data-checklist-item /> Not found: status 404</label><br />
+<label><input type="checkbox" data-checklist-item /> Server error: status 500</label><br />
+<label><input type="checkbox" data-checklist-item /> No stack traces or internal error details in response body</label><br />
+<hr />
+<h1>6. Secrets & Environment Variables</h1>
+<label><input type="checkbox" data-checklist-item /> All API keys accessed via Deno.env.get('KEY_NAME')</label><br />
+<label><input type="checkbox" data-checklist-item /> No secrets hardcoded in function code</label><br />
+<label><input type="checkbox" data-checklist-item /> No secrets committed to git</label><br />
+<label><input type="checkbox" data-checklist-item /> Secrets set in Supabase Dashboard → Edge Functions → Secrets</label><br />
+<label><input type="checkbox" data-checklist-item /> Service role key used ONLY when needed (and only in server-side functions)</label><br />
+<label><input type="checkbox" data-checklist-item /> Supabase anon key used for user-scoped operations (respects RLS)</label><br />
+<label><input type="checkbox" data-checklist-item /> Third-party API keys (Stripe, Resend, etc.) stored as secrets</label><br />
+<label><input type="checkbox" data-checklist-item /> Environment variable names follow: UPPERCASE_SNAKE_CASE</label><br />
+<label><input type="checkbox" data-checklist-item /> Local development uses .env.local — not committed to git</label><br />
+<hr />
+<h1>7. Error Handling & Logging</h1>
+        </div>
+      </section>
+
+      <section id="what-to-log" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What to Log</h2>
+          <label><input type="checkbox" data-checklist-item /> Function name included in every log: console.log('[function-name] ...')</label><br />
+<label><input type="checkbox" data-checklist-item /> Request received: log action type, NOT sensitive data (no passwords, tokens, card numbers)</label><br />
+<label><input type="checkbox" data-checklist-item /> Success: log what was done (e.g., "Email sent to user-id: xxx")</label><br />
+<label><input type="checkbox" data-checklist-item /> Failure: log error message + relevant non-sensitive context</label><br />
+<label><input type="checkbox" data-checklist-item /> External API failures: log status code and error message from provider</label><br />
+        </div>
+      </section>
+
+      <section id="what-not-to-log" class="section">
+        <div class="content-card">
+          <h2 class="section-title">What NOT to Log</h2>
+          <pre><code class="language-text">× Passwords or tokens
+× Full credit card numbers
+× Personal data beyond what is needed for debugging (e.g., log user ID, not full name)
+× Full request body if it contains sensitive fields
+× Supabase service role key or other secrets</code></pre>
+        </div>
+      </section>
+
+      <section id="error-pattern" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Error Pattern</h2>
+          <pre><code class="language-ts">try {
+  // business logic
+} catch (error) {
+  // Log for debugging
+  console.error(`[function-name] Unexpected error: ${error.message}`);
+
+  // Never expose internal details to client
+  return new Response(
+    JSON.stringify({ error: &#x27;SERVER_ERROR&#x27;, message: &#x27;An unexpected error occurred.&#x27; }),
+    { status: 500, headers: { ...corsHeaders, &#x27;Content-Type&#x27;: &#x27;application/json&#x27; } }
+  );
+}</code></pre>
+<hr />
+<h1>8. Webhook Handling</h1>
+<p>For Edge Functions that receive webhooks from external services:</p>
+<pre><code class="language-text">[ ] Webhook signature verified before processing payload
+[ ] Signature secret stored as an environment variable — never hardcoded
+[ ] Idempotency check: if the same event arrives twice, only process it once
+  — Store event_id in a processed_webhooks table
+  — Check for duplicate before processing
+[ ] Respond with 200 immediately if only acknowledgement is needed (queue async work)
+[ ] Never trust payload claims without signature verification
+[ ] Webhook secret rotated if ever exposed</code></pre>
+        </div>
+      </section>
+
+      <section id="signature-verification-example-stripe" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Signature Verification Example (Stripe)</h2>
+          <pre><code class="language-ts">import Stripe from &#x27;https://esm.sh/stripe@12&#x27;;
+
+const stripe = new Stripe(Deno.env.get(&#x27;STRIPE_SECRET_KEY&#x27;) ?? &#x27;&#x27;, {
+  apiVersion: &#x27;2023-10-16&#x27;,
+});
+
+const signature = req.headers.get(&#x27;stripe-signature&#x27;) ?? &#x27;&#x27;;
+const body = await req.text();
+
+let event: Stripe.Event;
+try {
+  event = stripe.webhooks.constructEvent(
+    body,
+    signature,
+    Deno.env.get(&#x27;STRIPE_WEBHOOK_SECRET&#x27;) ?? &#x27;&#x27;
+  );
+} catch (err) {
+  return new Response(
+    JSON.stringify({ error: &#x27;INVALID_SIGNATURE&#x27;, message: &#x27;Webhook signature verification failed.&#x27; }),
+    { status: 400 }
+  );
+}</code></pre>
+<hr />
+<h1>9. Edge Function Checklist — Before Marking Done</h1>
+<pre><code class="language-text">JUSTIFICATION
+[ ] Edge Function is needed — not a simpler table query or RPC
+[ ] Reason documented (requires secrets / webhook / third-party API)
+
+STRUCTURE
+[ ] CORS OPTIONS handler at the top
+[ ] Try/catch wraps entire logic
+[ ] All responses include CORS headers + Content-Type: application/json
+
+AUTH
+[ ] Protected functions validate auth token at the start
+[ ] Public functions confirmed intentionally public
+[ ] User ID from validated JWT — not from request body
+[ ] Role from database — not from request body
+
+INPUT VALIDATION
+[ ] req.json() wrapped in try/catch
+[ ] Required fields validated
+[ ] Field-level errors returned for validation failures
+[ ] String lengths validated
+[ ] Format/enum values validated
+
+RESPONSE FORMAT
+[ ] Success: { data, message } with 200/201
+[ ] Error: { error, message } with correct status
+[ ] Validation: { error, message, fields } with 400
+[ ] No stack traces or secrets in response
+
+SECRETS
+[ ] All secrets via Deno.env.get()
+[ ] No secrets hardcoded
+[ ] Secrets added to Supabase Dashboard (not just .env.local)
+
+ERROR HANDLING
+[ ] All errors caught and returned with correct status
+[ ] Logging includes function name, action, and error details
+[ ] No sensitive data in logs
+
+WEBHOOKS (if applicable)
+[ ] Signature verified before processing
+[ ] Idempotency check implemented
+[ ] Returns 200 quickly (async processing if needed)
+
+TESTING
+[ ] Success case tested
+[ ] Invalid input tested
+[ ] Auth failure tested
+[ ] Webhook signature rejection tested (if webhook)
+[ ] Staged on staging before production
+[ ] Secrets confirmed set in the correct Supabase project/environment</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="practice-task" class="section">
+        <div class="content-card">
+          <h2 class="section-title">Practice Task</h2>
+          <p>Apply what you learned by building a real Edge Function that calls a third-party API and handles every error case.</p>
+<p><strong>→ <a href="../../tasks/supabase/04-invite-edge-function.md">Task 04: Build a Project Invite Edge Function</a></strong></p>
+<p>Covers: full Edge Function structure (CORS/auth/validation/logic/response), Deno.env secrets, JWT validation, permission check, duplicate check, DB insert via service role, email via Resend, structured logging without sensitive data.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../supabase-checklist.html" class="footer-link">Supabase Checklists</a>
+        <a href="../../pages/standards.html" class="footer-link">Standards</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Checklists | Development Standards</title>
+
+  <meta
+    name="description"
+    content="Checklist catalog for frontend, backend, Supabase, Xano, Django, website, and third-party integration delivery gates."
+  />
+
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="checklists">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="./standards.html" class="navbar-link">Standards</a>
+        <a href="./checklists.html" class="navbar-link active">Checklists</a>
+        <a href="./tasks.html" class="navbar-link">Tasks</a>
+        <a href="./templates.html" class="navbar-link">Templates</a>
+      </nav>
+
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>
+        Dark Mode
+      </button>
+    </div>
+  </header>
+
+  <main class="page checklists-page-shell">
+    <div class="container">
+      <section class="section checklists-hero">
+        <div class="checklists-hero-copy page-header">
+          <span class="badge badge-success">Checklists</span>
+          <h1 class="page-title">Run the right checklist before you call the work complete.</h1>
+          <p class="page-subtitle">
+            These are delivery gates, not optional reminders. Use the matching checklist before handoff, review,
+            release, or go-live.
+          </p>
+
+          <div class="checklists-hero-actions">
+            <a href="#checklists-catalog" class="btn btn-primary">Browse Checklists</a>
+            <a href="./standards.html" class="btn btn-secondary">Go to Standards</a>
+          </div>
+
+          <div class="checklists-hero-strip">
+            <div class="checklists-hero-stat">
+              <strong>39</strong>
+              <span>Checklist gates</span>
+            </div>
+            <div class="checklists-hero-stat">
+              <strong>7</strong>
+              <span>Workstreams covered</span>
+            </div>
+            <div class="checklists-hero-stat">
+              <strong>1 rule</strong>
+              <span>Run them before done</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="checklists-hero-aside">
+          <div class="checklists-hero-panel">
+            <span class="checklists-panel-label">What This Covers</span>
+            <h2>Platform gates, role checklists, and task-specific delivery reviews.</h2>
+            <p>
+              The catalog follows the team checklist README across general work, frontend, Supabase, Xano, Django,
+              websites, and third-party integrations.
+            </p>
+          </div>
+
+          <div class="checklists-search-panel">
+            <div class="checklists-search-copy">
+              <span class="badge badge-info">Quick Filter</span>
+              <h2 class="section-title">Find a Checklist</h2>
+              <p class="checklists-search-note">
+                Search by platform, action, task type, or delivery gate.
+              </p>
+            </div>
+
+            <div class="checklists-search-field">
+              <label for="checklists-search" class="form-label">Search checklists</label>
+              <input
+                id="checklists-search"
+                class="form-control"
+                type="search"
+                placeholder="Search frontend, Supabase, validation, Stripe, launch..."
+                data-search-input
+              />
+              <p class="form-help">
+                Minimum 2 characters. Results filter automatically.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section checklists-overview">
+        <div class="checklists-overview-card">
+          <span class="checklists-overview-label">Checklist Map</span>
+          <h2>Every checklist index from the README, organized by how the team actually ships.</h2>
+          <p>
+            Start with the platform you are working in, then open the exact checklist for the feature, endpoint, page,
+            or delivery step you are building.
+          </p>
+        </div>
+
+        <div class="checklists-overview-grid">
+          <a href="#general-checklists" class="checklists-overview-pill">General</a>
+          <a href="#frontend-checklists" class="checklists-overview-pill">Frontend</a>
+          <a href="#supabase-checklists" class="checklists-overview-pill">Supabase</a>
+          <a href="#xano-checklists" class="checklists-overview-pill">Xano</a>
+          <a href="#django-checklists" class="checklists-overview-pill">Django</a>
+          <a href="#website-checklists" class="checklists-overview-pill">Website</a>
+          <a href="#third-party-checklists" class="checklists-overview-pill">Third-Party</a>
+        </div>
+      </section>
+
+      <section id="checklists-catalog" class="section" data-search-scope>
+        <div class="page-header checklists-catalog-header">
+          <div>
+            <span class="badge badge-info">Checklist Catalog</span>
+            <h2 class="section-title">Review the right gate before the work leaves your hands.</h2>
+            <p class="section-description">All categories and descriptions here are based on the team checklist README.</p>
+          </div>
+          <div class="checklists-catalog-note">
+            <strong>Core Rule</strong>
+            <span>Run the relevant checklist before marking any task done. These are gates, not optional.</span>
+          </div>
+        </div>
+
+        <section id="general-checklists" class="checklists-group">
+          <div class="checklists-group-header">
+            <div>
+              <span class="badge badge-success">General Checklists</span>
+              <h3>Core gates used across all roles and platforms.</h3>
+            </div>
+            <p>These apply across all platforms and roles.</p>
+          </div>
+
+          <div class="checklists-doc-list checklists-doc-list-compact">
+            <a href="../checklists/backend-checklist.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Backend Checklist backend developer before marking any API or feature complete">
+              <span class="checklists-doc-meta">Who Uses It</span>
+              <h4 class="card-title">Backend Checklist</h4>
+              <p class="card-description">Backend developer — before marking any API or feature complete.</p>
+            </a>
+
+            <a href="../checklists/frontend-checklist.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Frontend Checklist frontend developer before submitting any task">
+              <span class="checklists-doc-meta">Who Uses It</span>
+              <h4 class="card-title">Frontend Checklist</h4>
+              <p class="card-description">Frontend developer — before submitting any task.</p>
+            </a>
+
+            <a href="../checklists/website-launch-checklist.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Website Launch Checklist website builder before going live">
+              <span class="checklists-doc-meta">Who Uses It</span>
+              <h4 class="card-title">Website Launch Checklist</h4>
+              <p class="card-description">Website builder — before going live.</p>
+            </a>
+
+            <a href="../checklists/task-completion-checklist.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Task Completion Checklist all roles universal task completion gate">
+              <span class="checklists-doc-meta">Who Uses It</span>
+              <h4 class="card-title">Task Completion Checklist</h4>
+              <p class="card-description">All roles — universal task completion gate.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="frontend-checklists" class="checklists-group">
+          <div class="checklists-group-header">
+            <div>
+              <span class="badge badge-success">Frontend</span>
+              <h3>Detailed frontend reviews for forms, UI, states, and page behavior.</h3>
+            </div>
+            <p>Detailed checklists for specific frontend tasks and UI patterns.</p>
+          </div>
+
+          <div class="checklists-subgroup-grid">
+            <section class="checklists-subgroup">
+              <div class="checklists-subgroup-header">
+                <span class="checklists-subgroup-kicker">Forms &amp; Auth</span>
+                <p>Use these while building form flows, auth screens, and shared add/edit patterns.</p>
+              </div>
+              <div class="checklists-doc-list">
+                <a href="../checklists/frontend/form-field-validation.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Form Field Validation building any form text email phone E.164 location Google Places date time file upload MIME OTP autocomplete and more">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Form Field Validation</h4>
+                  <p class="card-description">Building any form — every input type: text, email, phone (E.164), location/Google Places, date, time, file upload (MIME type), OTP, autocomplete, and more.</p>
+                </a>
+
+                <a href="../checklists/frontend/login-signup.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Login Signup building login signup forgot password reset password email verification OAuth social login">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Login &amp; Signup Standards</h4>
+                  <p class="card-description">Building login, signup, forgot password, reset password, email verification, or OAuth/social login.</p>
+                </a>
+
+                <a href="../checklists/frontend/add-edit-consistency.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Add Edit Consistency shared component identical validation pre-fill behavior">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Add / Edit Consistency</h4>
+                  <p class="card-description">Building Add or Edit forms for the same entity — shared component, identical validation, pre-fill behavior.</p>
+                </a>
+
+                <a href="../checklists/frontend/multi-step-forms.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Multi-Step Forms wizard multi-step flow step validation progress indicator back forward data preservation">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Multi-Step Forms</h4>
+                  <p class="card-description">Building any wizard or multi-step flow — step validation, progress indicator, back/forward, data preservation.</p>
+                </a>
+              </div>
+            </section>
+
+            <section class="checklists-subgroup">
+              <div class="checklists-subgroup-header">
+                <span class="checklists-subgroup-kicker">Data Display</span>
+                <p>Use these for tables, search, filters, pagination, and every list-based delivery flow.</p>
+              </div>
+              <div class="checklists-doc-list checklists-doc-list-compact">
+                <a href="../checklists/frontend/tables-data-lists.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Tables Data Lists skeleton loading empty state error state sorting filtering pagination row bulk actions">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Tables &amp; Data Lists</h4>
+                  <p class="card-description">Building any table or list — skeleton loading, empty state, error state, sorting, filtering, pagination, row/bulk actions.</p>
+                </a>
+
+                <a href="../checklists/frontend/search-filters-pagination.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Search Filters Pagination debounce URL state backend-sent empty states">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Search, Filters &amp; Pagination</h4>
+                  <p class="card-description">Adding search, filters, or pagination — debounce, URL state, backend-sent, empty states.</p>
+                </a>
+              </div>
+            </section>
+
+            <section class="checklists-subgroup">
+              <div class="checklists-subgroup-header">
+                <span class="checklists-subgroup-kicker">UI Components</span>
+                <p>Use these when a feature depends on modals, feedback surfaces, or destructive actions.</p>
+              </div>
+              <div class="checklists-doc-list">
+                <a href="../checklists/frontend/modals-dialogs.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Modals Dialogs open close focus trap ESC key form modals confirmation dialogs accessibility">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Modals &amp; Dialogs</h4>
+                  <p class="card-description">Building any modal — open/close, focus trap, ESC key, form modals, confirmation dialogs, accessibility.</p>
+                </a>
+
+                <a href="../checklists/frontend/notifications-toasts.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Notifications Toasts async feedback auto-dismiss stacking inline banners message standards">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Notifications &amp; Toasts</h4>
+                  <p class="card-description">Adding feedback to any async action — types, auto-dismiss, stacking, inline banners, message standards.</p>
+                </a>
+
+                <a href="../checklists/frontend/delete-destructive-actions.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Delete Destructive Actions archive irreversible risk levels confirmation standards type-to-confirm soft hard delete">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Delete &amp; Destructive Actions</h4>
+                  <p class="card-description">Any delete, archive, or irreversible action — risk levels, confirmation standards, type-to-confirm, soft vs hard delete.</p>
+                </a>
+              </div>
+            </section>
+
+            <section class="checklists-subgroup">
+              <div class="checklists-subgroup-header">
+                <span class="checklists-subgroup-kicker">States &amp; Behavior</span>
+                <p>Use these for async behavior, error handling, settings UX, and role-based access rules.</p>
+              </div>
+              <div class="checklists-doc-list">
+                <a href="../checklists/frontend/loading-states-skeletons.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Loading States Skeletons button loading skeleton screens page loading table loading">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Loading States &amp; Skeletons</h4>
+                  <p class="card-description">Any async action or data fetch — button loading, skeleton screens, page loading, table loading.</p>
+                </a>
+
+                <a href="../checklists/frontend/error-handling.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Error Handling field errors form banners page errors network failures auth errors">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Error Handling</h4>
+                  <p class="card-description">Any page or feature calling an API — field errors, form banners, page errors, network failures, auth errors.</p>
+                </a>
+
+                <a href="../checklists/frontend/settings-profile.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Settings Profile Pages save behavior password change avatar upload notification prefs danger zone">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Settings &amp; Profile Pages</h4>
+                  <p class="card-description">Building any settings section — save behavior, password change, avatar upload, notification prefs, danger zone.</p>
+                </a>
+
+                <a href="../checklists/frontend/permissions-role-ui.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Permissions Role-Based UI hide vs disable tooltip disabled page access role read from backend">
+                  <span class="checklists-doc-meta">Use When</span>
+                  <h4 class="card-title">Permissions &amp; Role-Based UI</h4>
+                  <p class="card-description">Any UI dependent on the user's role — hide vs disable, tooltip for disabled, page access, role read from backend.</p>
+                </a>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section id="supabase-checklists" class="checklists-group">
+          <div class="checklists-group-header">
+            <div>
+              <span class="badge badge-success">Supabase</span>
+              <h3>Backend delivery reviews for schema, permissions, APIs, functions, storage, and triggers.</h3>
+            </div>
+            <p>Step-by-step checklists for every Supabase backend task.</p>
+          </div>
+
+          <div class="checklists-doc-list">
+            <a href="../checklists/supabase/new-table.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="New Table schema required columns naming constraints indexes RLS migration documentation">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">New Table</h4>
+              <p class="card-description">Creating any new database table — schema, required columns, naming conventions, constraints, indexes, RLS setup, migration file, documentation.</p>
+            </a>
+
+            <a href="../checklists/supabase/rls-policies.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="RLS Policies policy patterns role permission matrix anti-patterns testing guide per role">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">RLS Policies</h4>
+              <p class="card-description">Writing or reviewing Row Level Security — policy patterns by access type, role permission matrix, anti-patterns, full testing guide per role.</p>
+            </a>
+
+            <a href="../checklists/supabase/new-api-endpoint.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="New API Endpoint auth input validation response format error codes testing requirements">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">New API Endpoint</h4>
+              <p class="card-description">Building any new endpoint (direct query / RPC / Edge Function) — auth, input validation, response format, error codes, testing requirements.</p>
+            </a>
+
+            <a href="../checklists/supabase/edge-function.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Edge Function required structure CORS auth pattern secrets management error handling webhook signature verification">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Edge Function</h4>
+              <p class="card-description">Building a Supabase Edge Function — required structure, CORS, auth pattern, secrets management, error handling, webhook signature verification.</p>
+            </a>
+
+            <a href="../checklists/supabase/rpc-function.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="RPC Function SECURITY mode parameter naming validation order error format transaction safety">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">RPC Function</h4>
+              <p class="card-description">Writing any Postgres RPC function — SECURITY mode, parameter naming, validation order, error format, transaction safety.</p>
+            </a>
+
+            <a href="../checklists/supabase/storage-bucket.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Storage Bucket visibility RLS policies file path structure signed URLs upload delete flow">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Storage Bucket</h4>
+              <p class="card-description">Creating a storage bucket — visibility, RLS policies, file path structure, signed URLs, upload/delete flow.</p>
+            </a>
+
+            <a href="../checklists/supabase/database-trigger.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Database Trigger BEFORE AFTER trigger function timestamps audit log pattern">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Database Trigger</h4>
+              <p class="card-description">Writing a database trigger — BEFORE vs AFTER, trigger function standards, timestamps, audit log pattern.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="xano-checklists" class="checklists-group">
+          <div class="checklists-group-header">
+            <div>
+              <span class="badge badge-success">Xano</span>
+              <h3>Delivery reviews for endpoint logic, reusable functions, and webhook handling.</h3>
+            </div>
+            <p>Step-by-step checklists for every Xano delivery flow.</p>
+          </div>
+
+          <div class="checklists-doc-list checklists-doc-list-compact">
+            <a href="../checklists/xano/new-endpoint.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Xano New API Endpoint auth token first DB-based permission input validation order standard error reusable function extraction">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">New API Endpoint</h4>
+              <p class="card-description">Building any Xano endpoint — auth token as first step, DB-based permission check, input validation order, standard error format, reusable function extraction.</p>
+            </a>
+
+            <a href="../checklists/xano/reusable-function.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Reusable Function naming single responsibility inputs outputs error raising testing">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Reusable Function</h4>
+              <p class="card-description">Extracting shared logic into a Xano Custom Function — naming, single responsibility, inputs/outputs, error raising, testing.</p>
+            </a>
+
+            <a href="../checklists/xano/webhook-endpoint.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Webhook Endpoint signature verification idempotency payload handling response standards logging">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Webhook Endpoint</h4>
+              <p class="card-description">Building a Xano webhook receiver — signature verification, idempotency, payload handling, response standards, logging.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="django-checklists" class="checklists-group">
+          <div class="checklists-group-header">
+            <div>
+              <span class="badge badge-success">Django</span>
+              <h3>Checklist gates for views, templates, models, serializers, and API views.</h3>
+            </div>
+            <p>Step-by-step checklists for common Django implementation work.</p>
+          </div>
+
+          <div class="checklists-doc-list">
+            <a href="../checklists/django/new-view.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="New View auth decorators form serializer validation services pattern response handling error mapping testing">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">New View</h4>
+              <p class="card-description">Building any Django view — auth decorators, form/serializer validation, services.py pattern, response handling, error mapping, testing.</p>
+            </a>
+
+            <a href="../checklists/django/template.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Template 3-folder structure base inheritance zero inline styles scripts data attribute pattern CSRF helper">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Template</h4>
+              <p class="card-description">Building any Django HTML template — 3-folder structure, base.html inheritance, zero inline styles/scripts, data-* attribute pattern, CSRF helper.</p>
+            </a>
+
+            <a href="../checklists/django/model.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Model field types relationships on_delete null blank constraints indexes Meta class migrations">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Model</h4>
+              <p class="card-description">Creating or modifying a Django model — field types, relationships, on_delete, null/blank, constraints, indexes, Meta class, migrations.</p>
+            </a>
+
+            <a href="../checklists/django/form-serializer.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Form Serializer field definitions field-level cross-field validation read_only write_only">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Form / Serializer</h4>
+              <p class="card-description">Building a Django Form or DRF Serializer — field definitions, field-level vs cross-field validation, read_only/write_only fields.</p>
+            </a>
+
+            <a href="../checklists/django/api-view.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="DRF API View view type selection permission classes serializer wiring service delegation response format pagination">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">DRF API View</h4>
+              <p class="card-description">Building a DRF API view — view type selection, permission classes, serializer wiring, service delegation, response format, pagination.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="website-checklists" class="checklists-group">
+          <div class="checklists-group-header">
+            <div>
+              <span class="badge badge-success">Website</span>
+              <h3>Launch and page-build reviews for websites across different delivery stacks.</h3>
+            </div>
+            <p>Checklist gates for launch readiness and page builds across platforms.</p>
+          </div>
+
+          <div class="checklists-doc-list checklists-doc-list-compact">
+            <a href="../checklists/website-launch-checklist.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Website Launch Checklist pre-launch gate design responsive testing forms SEO redirects analytics performance accessibility go-live client handoff">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Website Launch Checklist</h4>
+              <p class="card-description">Pre-launch gate — design, responsive testing, forms, SEO, migration redirects, analytics, performance, accessibility, go-live, client handoff.</p>
+            </a>
+
+            <a href="../checklists/website/weweb-page.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="WeWeb Page Build global layout data binding four states Xano calls forms reusable components mobile">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">WeWeb Page Build</h4>
+              <p class="card-description">Building a WeWeb page — global layout, data binding (all 4 states), Xano calls, forms, reusable components, mobile.</p>
+            </a>
+
+            <a href="../checklists/website/react-page.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="React Page Build component structure data fetching hooks shared add edit forms TypeScript accessibility mobile">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">React Page Build</h4>
+              <p class="card-description">Building a React page — component structure, data fetching hooks, shared Add/Edit forms, TypeScript, accessibility, mobile.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="third-party-checklists" class="checklists-group">
+          <div class="checklists-group-header">
+            <div>
+              <span class="badge badge-success">Third-Party Integrations</span>
+              <h3>Integration delivery reviews for payments, email, and external service handoffs.</h3>
+            </div>
+            <p>Checklist gates for external payment and email integration work.</p>
+          </div>
+
+          <div class="checklists-doc-list checklists-doc-list-compact">
+            <a href="../checklists/third-parties-implementation/stripe-integration.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Stripe Integration keys customers payment intents checkout subscriptions webhooks metadata error handling refunds">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Stripe Integration</h4>
+              <p class="card-description">Adding any Stripe payment flow — keys, customers, Payment Intents, Checkout, subscriptions, webhooks, metadata, error handling, refunds.</p>
+            </a>
+
+            <a href="../checklists/third-parties-implementation/razorpay-integration.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Razorpay Integration keys order creation payment verification HMAC SHA256 checkout subscriptions webhooks refunds">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Razorpay Integration</h4>
+              <p class="card-description">Adding any Razorpay payment flow — keys, order creation, payment verification (HMAC SHA256), Checkout.js, subscriptions, webhooks, refunds.</p>
+            </a>
+
+            <a href="../checklists/third-parties-implementation/sendgrid-integration.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="SendGrid Integration domain auth API key template decision code-rendered dynamic templates error handling bounce management">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">SendGrid Integration</h4>
+              <p class="card-description">Setting up SendGrid — domain auth, API key, template decision, code-rendered vs dynamic templates, error handling, bounce management.</p>
+            </a>
+
+            <a href="../checklists/third-parties-implementation/gmail-integration.html" class="checklists-doc-card card card-clickable" data-search-item data-search-text="Gmail Integration App Passwords Django config environment check when to switch to SendGrid">
+              <span class="checklists-doc-meta">Use When</span>
+              <h4 class="card-title">Gmail Integration</h4>
+              <p class="card-description">Using Gmail SMTP — App Passwords, Django config, environment check, when to switch to SendGrid.</p>
+            </a>
+          </div>
+        </section>
+
+        <div class="content-card checklists-empty-state" data-search-empty hidden>
+          <p>No matching checklist found.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Run the right checklist before every handoff, review, and release.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">Home</a>
+        <a href="./standards.html" class="footer-link">Standards</a>
+        <a href="./checklists.html" class="footer-link">Checklists</a>
+        <a href="./tasks.html" class="footer-link">Tasks</a>
+        <a href="./templates.html" class="footer-link">Templates</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

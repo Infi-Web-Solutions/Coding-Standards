@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gmail Integration Standard | Development Standards</title>
+  <meta name="description" content="When to use Gmail, App Passwords, OAuth2 setup, Django configuration per environment, Rate limits, When to switch to SendGrid." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+
+  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body data-page="standards">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../index.html" class="navbar-link">Home</a>
+        <a href="../pages/standards.html" class="navbar-link active">Standards</a>
+        <a href="../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../pages/tasks.html" class="navbar-link">Tasks</a>
+        <a href="../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-success">Standard</span>
+        <h1 class="page-title">Gmail Integration Standard</h1>
+        <p class="page-subtitle">When to use Gmail, App Passwords, OAuth2 setup, Django configuration per environment, Rate limits, When to switch to SendGrid.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../pages/standards.html" class="btn btn-secondary">Back to Standards</a>
+          
+        </div>
+      </section>
+
+            <section class="section">
+        <div class="content-card">
+          <p>Covers when to use Gmail for sending email, OAuth2 setup, App Passwords for SMTP, Django configuration, rate limits, and when you should switch to SendGrid instead.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="1-when-to-use-gmail" class="section">
+        <div class="content-card">
+          <h2 class="section-title">1. When to Use Gmail</h2>
+          <p>Gmail is appropriate in specific, limited scenarios:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Scenario</th>
+    <th>Use Gmail?</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Local development and testing</td>
+    <td>Yes — simple SMTP setup</td>
+  </tr>
+  <tr>
+    <td>Internal tools with < 100 emails/day</td>
+    <td>Yes — within personal Gmail limits</td>
+  </tr>
+  <tr>
+    <td>Admin notification emails to your team</td>
+    <td>Yes — internal only</td>
+  </tr>
+  <tr>
+    <td>Staging environment (low volume)</td>
+    <td>Yes — acceptable</td>
+  </tr>
+  <tr>
+    <td>Production app with real users</td>
+    <td><strong>No</strong> — use SendGrid</td>
+  </tr>
+  <tr>
+    <td>Marketing/bulk email</td>
+    <td><strong>No</strong> — violates Gmail ToS, poor deliverability</td>
+  </tr>
+  <tr>
+    <td>Transactional email at scale (> 500/day)</td>
+    <td><strong>No</strong> — daily limits apply</td>
+  </tr>
+  </tbody>
+</table></div>
+<hr />
+        </div>
+      </section>
+
+      <section id="2-gmail-limits" class="section">
+        <div class="content-card">
+          <h2 class="section-title">2. Gmail Limits</h2>
+          <div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Account Type</th>
+    <th>Daily Limit</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>Free personal Gmail</td>
+    <td>500 emails/day</td>
+  </tr>
+  <tr>
+    <td>Google Workspace (paid)</td>
+    <td>2,000 emails/day</td>
+  </tr>
+  </tbody>
+</table></div>
+<p>Exceeding limits results in your account being temporarily blocked from sending. This is why Gmail is not suitable for production applications with real user activity.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="3-authentication-options" class="section">
+        <div class="content-card">
+          <h2 class="section-title">3. Authentication Options</h2>
+          <h3>Option A: App Passwords (Recommended for SMTP with 2FA)</h3>
+<p>Google disabled basic authentication (username + password) in 2022. If you have 2-Step Verification enabled (required for Workspace accounts), use App Passwords:</p>
+<ol>
+  <li>Enable 2-Step Verification on the Gmail account</li>
+  <li>Go to: Google Account → Security → 2-Step Verification → App passwords</li>
+  <li>Create an App Password: select "Mail" and your device type</li>
+  <li>Google generates a 16-character password — use this as your SMTP password</li>
+</ol>
+<pre><code>GMAIL_USER=your@gmail.com
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx   # 16-char app password (spaces are fine)</code></pre>
+<h3>Option B: OAuth2 (Recommended for Production Internal Tools)</h3>
+<p>For production use, OAuth2 is more secure than App Passwords because:</p>
+<ul>
+  <li>No stored password</li>
+  <li>Can be revoked per-application from Google's security console</li>
+  <li>Tokens expire and auto-refresh</li>
+</ul>
+<p>OAuth2 setup requires:</p>
+<ol>
+  <li>A Google Cloud project with Gmail API enabled</li>
+  <li>OAuth2 credentials (client_id + client_secret)</li>
+  <li>A refresh token obtained via the OAuth2 consent flow</li>
+</ol>
+<pre><code>GMAIL_OAUTH_CLIENT_ID=xxx.apps.googleusercontent.com
+GMAIL_OAUTH_CLIENT_SECRET=xxx
+GMAIL_OAUTH_REFRESH_TOKEN=xxx
+GMAIL_USER=your@gmail.com</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="4-django-configuration" class="section">
+        <div class="content-card">
+          <h2 class="section-title">4. Django Configuration</h2>
+          <h3>Using App Passwords (SMTP)</h3>
+<pre><code class="language-python"># settings.py
+EMAIL_BACKEND = &#x27;django.core.mail.backends.smtp.EmailBackend&#x27;
+EMAIL_HOST = &#x27;smtp.gmail.com&#x27;
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env(&#x27;GMAIL_USER&#x27;)
+EMAIL_HOST_PASSWORD = env(&#x27;GMAIL_APP_PASSWORD&#x27;)
+DEFAULT_FROM_EMAIL = env(&#x27;GMAIL_USER&#x27;)</code></pre>
+<h3>Local Development — Console Backend (No Emails Sent)</h3>
+<pre><code class="language-python"># settings/local.py
+EMAIL_BACKEND = &#x27;django.core.mail.backends.console.EmailBackend&#x27;</code></pre>
+<p>This prints emails to your terminal instead of sending them. Use this in development so you don't send real emails when testing.</p>
+<h3>Local Development — File Backend</h3>
+<pre><code class="language-python"># settings/local.py
+EMAIL_BACKEND = &#x27;django.core.mail.backends.filebased.EmailBackend&#x27;
+EMAIL_FILE_PATH = &#x27;/tmp/app-emails&#x27;  # emails written as files</code></pre>
+<p>Useful when you want to view the full email HTML in a browser during development.</p>
+<h3>Staging — MailHog (Recommended)</h3>
+<p>Run MailHog or MailPit locally/in staging — it catches all outgoing emails and lets you view them in a web UI without actually sending them:</p>
+<pre><code class="language-python"># settings/staging.py
+EMAIL_BACKEND = &#x27;django.core.mail.backends.smtp.EmailBackend&#x27;
+EMAIL_HOST = &#x27;localhost&#x27;   # or &#x27;mailhog&#x27; in Docker
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = False</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="5-sending-email-django" class="section">
+        <div class="content-card">
+          <h2 class="section-title">5. Sending Email (Django)</h2>
+          <pre><code class="language-python">from django.core.mail import send_mail, EmailMultiAlternatives
+from django.conf import settings
+
+# Simple plaintext email
+send_mail(
+    subject=&#x27;Your invite link&#x27;,
+    message=&#x27;Click here to join: https://...&#x27;,
+    from_email=settings.DEFAULT_FROM_EMAIL,
+    recipient_list=[&#x27;user@example.com&#x27;],
+    fail_silently=False,   # Let exceptions propagate for critical emails
+)
+
+# HTML + plaintext (preferred for most emails)
+msg = EmailMultiAlternatives(
+    subject=&#x27;Your invite link&#x27;,
+    body=&#x27;Click here to join: https://...&#x27;,   # plaintext version
+    from_email=settings.DEFAULT_FROM_EMAIL,
+    to=[&#x27;user@example.com&#x27;],
+)
+msg.attach_alternative(&#x27;&lt;h1&gt;Click here&lt;/h1&gt;&#x27;, &#x27;text/html&#x27;)
+msg.send()</code></pre>
+<hr />
+        </div>
+      </section>
+
+      <section id="6-when-to-switch-from-gmail-to-sendgrid" class="section">
+        <div class="content-card">
+          <h2 class="section-title">6. When to Switch from Gmail to SendGrid</h2>
+          <p>Switch when any of the following are true:</p>
+<div class="table-wrapper"><table class="table">
+  <thead><tr>
+    <th>Trigger</th>
+    <th>Switch To</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>You're getting close to 500 emails/day</td>
+    <td>SendGrid</td>
+  </tr>
+  <tr>
+    <td>You need to send to users who are not in your team</td>
+    <td>SendGrid</td>
+  </tr>
+  <tr>
+    <td>You need email open/click analytics</td>
+    <td>SendGrid</td>
+  </tr>
+  <tr>
+    <td>Your emails are landing in spam</td>
+    <td>SendGrid with domain auth</td>
+  </tr>
+  <tr>
+    <td>You need unsubscribe management</td>
+    <td>SendGrid</td>
+  </tr>
+  <tr>
+    <td>You need marketing/campaign emails</td>
+    <td>SendGrid</td>
+  </tr>
+  <tr>
+    <td>Customer-facing transactional email in production</td>
+    <td>SendGrid</td>
+  </tr>
+  </tbody>
+</table></div>
+<p>Gmail is a development convenience, not a production email service.</p>
+<hr />
+        </div>
+      </section>
+
+      <section id="7-security-rules-for-gmail-integration" class="section">
+        <div class="content-card">
+          <h2 class="section-title">7. Security Rules for Gmail Integration</h2>
+          <ul>
+  <li>Never commit Gmail credentials to version control</li>
+  <li>Use App Passwords or OAuth2 — never use your main account password</li>
+  <li>Use a dedicated Gmail account for the application (not your personal email)</li>
+  <li>If using a Google Workspace account: enable 2-Step Verification — required for App Passwords</li>
+  <li>Rotate App Passwords if they are exposed (revoke in Google Security settings, generate a new one)</li>
+  <li>Monitor sent email activity: Google Workspace Admin → Reports → Email Log Search</li>
+</ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build to the standard. Every time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../pages/standards.html" class="footer-link">Standards</a>
+        <a href="../pages/checklists.html" class="footer-link">Checklists</a>
+        <a href="../pages/tasks.html" class="footer-link">Tasks</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>
