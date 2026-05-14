@@ -283,6 +283,7 @@
   background:
     radial-gradient(circle at top left, rgba(0, 0, 0, 0.04), transparent 28%),
     linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-muted) 100%);
+  scroll-margin-top: 108px;
 }
 
 [data-page="checklists"] .checklists-group:last-of-type {
@@ -291,22 +292,36 @@
 
 [data-page="checklists"] .checklists-group-header {
   display: grid;
-  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
-  gap: var(--space-4);
+  grid-template-columns: 1fr;
+  gap: 12px;
   align-items: start;
   margin-bottom: var(--space-5);
 }
 
+[data-page="checklists"] .checklists-group-header .badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 12px 18px;
+  border-radius: 18px;
+  font-size: clamp(1.1rem, 2vw, 1.7rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  text-transform: none;
+}
+
 [data-page="checklists"] .checklists-group-header h3 {
-  margin-top: var(--space-2);
-  font-size: var(--text-2xl);
-  letter-spacing: -0.04em;
+  margin-top: 2px;
+  font-size: clamp(1.85rem, 3vw, 2.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.05em;
 }
 
 [data-page="checklists"] .checklists-group-header p {
   max-width: 760px;
-  padding-top: 2px;
-  font-size: var(--text-sm);
+  padding-left: 2px;
+  font-size: var(--text-md);
+  line-height: 1.65;
   color: var(--color-text-muted);
 }
 
@@ -357,6 +372,7 @@
   border-radius: 20px;
   background:
     linear-gradient(180deg, var(--color-surface) 0%, rgba(245, 245, 245, 0.9) 100%);
+  scroll-margin-top: 118px;
 }
 
 [data-page="checklists"] .checklists-doc-card:hover {

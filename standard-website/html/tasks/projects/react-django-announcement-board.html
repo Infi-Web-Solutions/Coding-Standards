@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project — Announcement Board | Development Standards</title>
-  <meta name="description" content="Build an announcement board with pin toggle, expiry, optimistic UI, and role-based create/edit/delete." />
+  <meta name="description" content="Build a workspace-based announcement board using Django REST Framework and React." />
   <script>
   (function () {
     try {
@@ -15,16 +15,14 @@
     } catch (error) {}
   })();
 </script>
-
-  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="icon" href="../../../assets/images/infiweb-logo.png" />
   <link rel="stylesheet" href="../../../css/main.css" />
 </head>
-
 <body class="project-detail-page" data-page="tasks">
   <header class="navbar">
     <div class="navbar-inner">
       <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
-        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <img src="../../../assets/images/infiweb-logo.png" alt="Infi Web Solutions Logo" class="navbar-logo" />
         <span>Development Standards</span>
       </a>
       <nav class="navbar-menu" aria-label="Main Navigation">
@@ -37,464 +35,88 @@
       <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
     </div>
   </header>
-
   <main class="page">
     <div class="container">
       <section class="page-header">
-        <span class="badge badge-info">Project — React + Django</span>
+        <span class="badge badge-info">Project Task</span>
         <h1 class="page-title">Project — Announcement Board</h1>
-        <p class="page-subtitle">Build an announcement board with pin toggle, expiry, optimistic UI, and role-based create/edit/delete.</p>
+        <p class="page-subtitle">Build a workspace-based announcement board using Django REST Framework and React.</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
-          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
-          
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Project Tasks</a>
         </div>
       </section>
-
-      <section class="section project-intro-grid">
-        <div class="content-card project-brief-card">
-          <span class="project-brief-kicker">Build Brief</span>
-          <div class="project-meta-row">
-            <span class="project-meta-pill">React (TypeScript) + Django REST Framework</span>
-            <span class="project-meta-pill">8 hours</span>
-            <span class="project-meta-pill">Intermediate</span>
+      <section class="section project-showcase">
+        <div class="project-showcase-main">
+          <div class="project-kicker-row">
+            <span class="project-stack-badge">React + Django</span>
+            <span class="project-brief-kicker">~8 Hours</span>
+            <span class="project-brief-kicker">Intermediate</span>
           </div>
           <h2 class="section-title">What You Are Building</h2>
-          <p class="project-brief-copy">A workspace announcement board. Admins post announcements to the whole workspace. All members can view them. Announcements can be pinned to the top, set to expire on a date, and deleted. The list is paginated and shows pinned announcements first.</p>
-        </div>
-
-        <div class="content-card project-roles-card">
-          <span class="project-brief-kicker">Roles &amp; Access</span>
-          <ul class="project-role-list">
-            <li><strong>Member</strong>Can browse the announcement feed and read active posts, but cannot access create, edit, pin, or delete actions.</li>
-            <li><strong>Admin / Owner</strong>Create announcements, edit them, pin or unpin them, and remove them when they are no longer needed.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="content-card project-flow-card">
-          <div class="project-flow-header">
-            <span class="project-brief-kicker">Core Flows</span>
-            <h2 class="section-title">How this product should work</h2>
-            <p class="project-flow-lead">This page should read like a real internal announcement system, with clear member visibility, strong admin controls, and feed ordering that changes correctly when items are pinned or expire.</p>
-          </div>
-          <div class="project-flow-grid">
-            <article class="project-flow-item">
-              <strong>Read the feed</strong>
-              <p>Members load a paginated announcement list where pinned announcements surface first and expired items are excluded.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Create and edit</strong>
-              <p>Admins use one shared modal for create and edit so title, body, pin, and expiry logic stay consistent.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Pin and ordering</strong>
-              <p>Pin toggles update the backend and immediately change the visual order so priority announcements stay at the top.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Delete and expire</strong>
-              <p>Delete requires confirmation, while expiry changes what members can see without depending on frontend guesses.</p>
-            </article>
+          <p class="project-lead">Build a workspace-based announcement board using Django REST Framework and React.</p>
+          <div class="project-side-block">
+            <h3 class="project-side-title">This project teaches</h3>
+            <ul class="project-skill-list"><li>Django model design</li><li>DRF API</li><li>Service layer</li><li>React list/detail/form pages</li><li>Permission handling</li><li>Loading, empty, and error states</li></ul>
           </div>
         </div>
+        <aside class="project-showcase-side">
+          <div class="project-side-block">
+            <span class="project-brief-kicker">User Stories</span>
+            <h2 class="section-title">Who this flow is for</h2>
+          </div>
+          <div class="project-story-grid"><article class="project-story-card"><strong>Owner Or Admin</strong><p>I want to publish announcements to a workspace.</p></article><article class="project-story-card"><strong>Member</strong><p>I want to read announcements for my workspace.</p></article></div>
+        </aside>
       </section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Example Flow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">flowchart TD
+    Login[User logs in]
+    Workspace[Selects workspace]
+    Board[Opens Announcement Board]
 
-      <section id="features-to-build" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Features to Build</h2>
-          <div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>#</th>
-    <th>Feature</th>
-    <th>Est. Time</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>1</td>
-    <td>Django: Announcement model + migration</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>Django: AnnouncementSerializer + AnnouncementWriteSerializer</td>
-    <td>30m</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>Django: AnnouncementService (create, pin, delete)</td>
-    <td>30m</td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>Django: DRF views + URLs + permission class</td>
-    <td>1h</td>
-  </tr>
-  <tr>
-    <td>5</td>
-    <td>React: Announcement list page (skeleton, empty, error)</td>
-    <td>1h 30m</td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td>React: Create/Edit announcement modal (shared component)</td>
-    <td>1h 30m</td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>React: Pin toggle + delete (admin only)</td>
-    <td>30m</td>
-  </tr>
-  <tr>
-    <td>8</td>
-    <td>Permissions + all states</td>
-    <td>30m</td>
-  </tr>
-  </tbody>
-</table></div>
-<hr />
-        </div>
-      </section>
+    Login --> Workspace --> Board
 
-      <section id="1-django-model" class="section">
-        <div class="content-card">
-          <h2 class="section-title">1. Django Model</h2>
-          <h3><code>Announcement</code></h3>
-<pre><code class="language-python">class Announcement(models.Model):
-    workspace   = models.ForeignKey(&#x27;Workspace&#x27;, on_delete=models.CASCADE, related_name=&#x27;announcements&#x27;)
-    title       = models.CharField(max_length=200)
-    body        = models.TextField()
-    is_pinned   = models.BooleanField(default=False)
-    expires_at  = models.DateTimeField(null=True, blank=True)
-    created_by  = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
-                                    null=True, related_name=&#x27;announcements&#x27;)
-    created_at  = models.DateTimeField(auto_now_add=True)
-    updated_at  = models.DateTimeField(auto_now=True)
+    Board --> Owner[Owner Flow]
+    Board --> Admin[Admin Flow]
+    Board --> Member[Member Flow]
 
-    class Meta:
-        ordering = [&#x27;-is_pinned&#x27;, &#x27;-created_at&#x27;]
-        verbose_name = &#x27;Announcement&#x27;
-        verbose_name_plural = &#x27;Announcements&#x27;
+    Owner --> OwnerList[View announcements across owned workspaces]
+    OwnerList --> OwnerFilter[Search / filter / paginate]
+    OwnerFilter --> OwnerDraft[Create or edit draft]
+    OwnerDraft --> OwnerPublish[Publish, pin, unpublish, or delete]
+    OwnerPublish --> OwnerView[Open detail and audit visibility]
 
-    def __str__(self):
-        return f&quot;{self.workspace.name} / {self.title}&quot;</code></pre>
-<p><strong>Rules:</strong></p>
-<ul>
-  <li>Pinned announcements always appear at the top (ordering by <code>-is_pinned</code> first)</li>
-  <li><code>expires_at</code> is optional — if set, expired announcements are excluded from member views</li>
-</ul>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/model.md">Django Model</a></p>
-<hr />
-        </div>
-      </section>
+    Admin --> AdminList[View workspace announcements]
+    AdminList --> AdminFilter[Search / filter / paginate]
+    AdminFilter --> AdminDraft[Create or edit draft in assigned workspace]
+    AdminDraft --> AdminPublish[Publish or update announcement]
+    AdminPublish --> AdminView[Open detail and manage pinned state]
+    AdminPublish -. cannot publish to another workspace .-> AdminBlocked[Blocked by workspace permission rules]
 
-      <section id="2-serializers" class="section">
-        <div class="content-card">
-          <h2 class="section-title">2. Serializers</h2>
-          <h3><code>AnnouncementSerializer</code> (read — response)</h3>
-<pre><code class="language-python">fields = [&#x27;id&#x27;, &#x27;title&#x27;, &#x27;body&#x27;, &#x27;is_pinned&#x27;, &#x27;expires_at&#x27;,
-          &#x27;created_by&#x27;, &#x27;created_at&#x27;, &#x27;updated_at&#x27;, &#x27;is_expired&#x27;]
-read_only_fields = [&#x27;id&#x27;, &#x27;created_by&#x27;, &#x27;created_at&#x27;, &#x27;updated_at&#x27;]
-
-# is_expired: SerializerMethodField — returns True if expires_at &lt; now()</code></pre>
-<h3><code>AnnouncementWriteSerializer</code> (write — create/update)</h3>
-<pre><code class="language-python">fields = [&#x27;title&#x27;, &#x27;body&#x27;, &#x27;is_pinned&#x27;, &#x27;expires_at&#x27;]
-
-# Validation:
-# - title: required, max 200 chars
-# - body: required
-# - expires_at: if provided, must be in the future</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/form-serializer.md">Django Form / Serializer</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="3-announcementservice" class="section">
-        <div class="content-card">
-          <h2 class="section-title">3. AnnouncementService</h2>
-          <pre><code class="language-python"># services.py
-
-class AnnouncementService:
-
-    @staticmethod
-    def create_announcement(workspace, title, body, created_by,
-                            is_pinned=False, expires_at=None):
-        &quot;&quot;&quot;
-        Creates a new announcement.
-        Raises ValidationError if title or body is blank.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def toggle_pin(announcement):
-        &quot;&quot;&quot;
-        Toggles is_pinned on the announcement and saves.
-        Returns the updated announcement.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def delete_announcement(announcement):
-        &quot;&quot;&quot;
-        Deletes the announcement.
-        &quot;&quot;&quot;</code></pre>
-<p>No business logic in the view. Views call service methods.</p>
-<hr />
-        </div>
-      </section>
-
-      <section id="4-drf-views-urls" class="section">
-        <div class="content-card">
-          <h2 class="section-title">4. DRF Views &amp; URLs</h2>
-          <h3>Permission Class: <code>IsWorkspaceMember</code></h3>
-<pre><code class="language-python"># permissions.py
-class IsWorkspaceMember(BasePermission):
-    def has_permission(self, request, view):
-        workspace_id = view.kwargs.get(&#x27;workspace_id&#x27;)
-        return WorkspaceMember.objects.filter(
-            workspace_id=workspace_id, user=request.user, status=&#x27;active&#x27;
-        ).exists()</code></pre>
-<h3><code>AnnouncementListCreateView</code></h3>
-<pre><code class="language-text">GET  /api/v1/workspaces/{workspace_id}/announcements/
-  — Returns active (non-expired) announcements, pinned first
-  — Pagination: 20 per page
-  — For admins: include expired announcements (add ?include_expired=true)
-
-POST /api/v1/workspaces/{workspace_id}/announcements/
-  — Admin only
-  — Calls AnnouncementService.create_announcement()
-  — Returns 201 with created announcement</code></pre>
-<h3><code>AnnouncementDetailView</code></h3>
-<pre><code class="language-text">GET    /api/v1/workspaces/{workspace_id}/announcements/{id}/
-PATCH  /api/v1/workspaces/{workspace_id}/announcements/{id}/  — admin only
-DELETE /api/v1/workspaces/{workspace_id}/announcements/{id}/  — admin only, returns 204</code></pre>
-<h3><code>AnnouncementPinView</code></h3>
-<pre><code class="language-text">POST /api/v1/workspaces/{workspace_id}/announcements/{id}/pin/
-  — Admin only
-  — Calls AnnouncementService.toggle_pin()
-  — Returns 200 with updated announcement</code></pre>
-<h3>URL names (kebab-case)</h3>
-<pre><code class="language-python">name=&#x27;announcement-list&#x27;
-name=&#x27;announcement-detail&#x27;
-name=&#x27;announcement-pin&#x27;</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/api-view.md">DRF API View</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="5-react-announcement-list-page" class="section">
-        <div class="content-card">
-          <h2 class="section-title">5. React: Announcement List Page</h2>
-          <p><strong>URL:</strong> <code>/workspaces/{id}/announcements</code></p>
-<pre><code class="language-text">[ ] Pinned announcements shown at top with a 📌 pin indicator
-[ ] Each announcement card shows: title, body preview (3 lines, truncated), created by, date
-[ ] Clicking a card expands it to show full body
-[ ] Admin actions on each card: Pin/Unpin toggle · Edit · Delete — hidden for member role
-[ ] &quot;New Announcement&quot; button at top right — admin only
-[ ] Pagination: 20 per page (&quot;Load more&quot; style acceptable)
-
-TypeScript:
-  interface Announcement {
-    id: number;
-    title: string;
-    body: string;
-    is_pinned: boolean;
-    is_expired: boolean;
-    expires_at: string | null;
-    created_by: { id: number; name: string };
-    created_at: string;
-  }
-
-Custom hook: useAnnouncements(workspaceId) → { data, isLoading, error, refetch }
-
-STATES:
-[ ] Loading: 3 skeleton cards (matching card shape)
-[ ] Empty: &quot;No announcements yet.&quot; + &quot;Post your first announcement&quot; (admin only)
-[ ] Error: &quot;Could not load announcements.&quot; + retry button</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/website/react-page.md">React Page Build</a> · <a href="../../../../checklists/frontend/loading-states-skeletons.md">Loading States & Skeletons</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="6-create-edit-announcement-modal" class="section">
-        <div class="content-card">
-          <h2 class="section-title">6. Create / Edit Announcement Modal</h2>
-          <p>One shared <code>AnnouncementModal</code> component.</p>
-<h3>Props</h3>
-<pre><code class="language-ts">interface AnnouncementModalProps {
-  mode: &#x27;add&#x27; | &#x27;edit&#x27;;
-  announcement?: Announcement;  // provided in edit mode
-  workspaceId: number;
-  onSuccess: () =&gt; void;
-  onClose: () =&gt; void;
-}</code></pre>
-<h3>Form Fields</h3>
-<div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>Field</th>
-    <th>Type</th>
-    <th>Rules</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>Title</td>
-    <td>text input</td>
-    <td>Required, max 200 chars</td>
-  </tr>
-  <tr>
-    <td>Body</td>
-    <td>textarea</td>
-    <td>Required</td>
-  </tr>
-  <tr>
-    <td>Pin this announcement</td>
-    <td>checkbox</td>
-    <td>Default: unchecked</td>
-  </tr>
-  <tr>
-    <td>Expires on</td>
-    <td>date-time picker</td>
-    <td>Optional, must be future</td>
-  </tr>
-  </tbody>
-</table></div>
-<h3>Behavior</h3>
-<pre><code class="language-text">ADD MODE: title &quot;New Announcement&quot;, submit &quot;Post Announcement&quot;
-EDIT MODE: title &quot;Edit Announcement&quot;, pre-filled, submit &quot;Save Changes&quot;
-
-[ ] Loading state on submit button, fields disabled
-[ ] Validation errors shown below each field
-[ ] API error shown in a banner above submit (not toast)
-[ ] On success: close modal, call onSuccess (triggers list refetch), &quot;Announcement posted.&quot; toast
-[ ] Escape + X close — prompt &quot;Discard changes?&quot; if dirty</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/add-edit-consistency.md">Add/Edit Consistency</a> · <a href="../../../../checklists/frontend/modals-dialogs.md">Modals & Dialogs</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="7-pin-delete" class="section">
-        <div class="content-card">
-          <h2 class="section-title">7. Pin &amp; Delete</h2>
-          <h3>Pin Toggle</h3>
-<label><input type="checkbox" data-checklist-item /> Pin/Unpin button on each card (admin only)</label><br />
-<label><input type="checkbox" data-checklist-item /> Calls POST /announcements/{id}/pin/</label><br />
-<label><input type="checkbox" data-checklist-item /> Optimistic UI: pin indicator toggles immediately, reverts on error</label><br />
-<label><input type="checkbox" data-checklist-item /> Loading: button spinner during API call</label><br />
-<label><input type="checkbox" data-checklist-item /> Toast: "Announcement pinned." / "Announcement unpinned."</label><br />
-<h3>Delete</h3>
-<label><input type="checkbox" data-checklist-item /> Delete button on card (admin only)</label><br />
-<label><input type="checkbox" data-checklist-item /> Confirmation dialog:</label><br />
-<p class="checklist-note">Title:  "Delete Announcement?"</p>
-<p class="checklist-note">Body:   "'[Title]' will be permanently deleted."</p>
-<p class="checklist-note">Buttons: Cancel · "Delete" (red)</p>
-<label><input type="checkbox" data-checklist-item /> On confirm: loading state, card removed on success</label><br />
-<label><input type="checkbox" data-checklist-item /> Toast: "Announcement deleted."</label><br />
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/delete-destructive-actions.md">Delete & Destructive Actions</a> · <a href="../../../../checklists/frontend/notifications-toasts.md">Notifications & Toasts</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="error-handling" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Error Handling</h2>
-          <label><input type="checkbox" data-checklist-item /> All API errors parsed: code → user-friendly message</label><br />
-<label><input type="checkbox" data-checklist-item /> 403 errors: "You don't have permission to do this."</label><br />
-<label><input type="checkbox" data-checklist-item /> 404 errors: "This announcement was not found."</label><br />
-<label><input type="checkbox" data-checklist-item /> Network errors: "Connection lost. Please try again."</label><br />
-<label><input type="checkbox" data-checklist-item /> Never show raw API error strings to user</label><br />
-<label><input type="checkbox" data-checklist-item /> No catch (e) {} empty blocks</label><br />
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/error-handling.md">Error Handling</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="permissions-summary" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Permissions Summary</h2>
-          <pre><code class="language-text">| Action | Member | Admin | Owner |
-|--------|--------|-------|-------|
-| View announcements | ✓ | ✓ | ✓ |
-| Create announcement | ✗ | ✓ | ✓ |
-| Edit announcement | ✗ | ✓ | ✓ |
-| Pin announcement | ✗ | ✓ | ✓ |
-| Delete announcement | ✗ | ✓ | ✓ |
-
-[ ] New Announcement button hidden for member role
-[ ] Edit, Pin, Delete actions hidden per card for member role
-[ ] Django: permission class checks workspace membership AND role for write operations</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="what-you-should-not-do" class="section">
-        <div class="content-card">
-          <h2 class="section-title">What You Should NOT Do</h2>
-          <pre><code class="language-text">× Put create/pin/delete logic in the DRF view — delegate to AnnouncementService
-× Use fields = &#x27;__all__&#x27; in any serializer
-× Return 200 for a newly created announcement — use 201
-× Show Create/Edit/Delete to member-role React users
-× Forget to check if expires_at is in the future during validation
-× Show expired announcements to members (filter on backend, not frontend)
-× Let the Delete work without a confirmation dialog</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="checklists-to-run-in-order" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Checklists to Run (in order)</h2>
-          <label><input type="checkbox" data-checklist-item /> Django Model — Announcement model</label><br />
-<label><input type="checkbox" data-checklist-item /> Django Form / Serializer — both serializers</label><br />
-<label><input type="checkbox" data-checklist-item /> DRF API View — list/create view, detail view, pin view</label><br />
-<label><input type="checkbox" data-checklist-item /> React Page Build — announcement list page</label><br />
-<label><input type="checkbox" data-checklist-item /> Add/Edit Consistency — AnnouncementModal</label><br />
-<label><input type="checkbox" data-checklist-item /> Modals & Dialogs — AnnouncementModal</label><br />
-<label><input type="checkbox" data-checklist-item /> Loading States & Skeletons — list page</label><br />
-<label><input type="checkbox" data-checklist-item /> Error Handling — all API calls</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete & Destructive Actions — delete announcement</label><br />
-<label><input type="checkbox" data-checklist-item /> Notifications & Toasts — all async actions</label><br />
-<label><input type="checkbox" data-checklist-item /> Permissions & Role-Based UI — all admin-only actions</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="done-when" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Done When</h2>
-          <label><input type="checkbox" data-checklist-item /> Announcement model: all fields, ordering, __str__, migration</label><br />
-<label><input type="checkbox" data-checklist-item /> Serializers: read-only fields set, expires_at future validation, is_expired computed</label><br />
-<label><input type="checkbox" data-checklist-item /> AnnouncementService: create, toggle_pin, delete — no logic in views</label><br />
-<label><input type="checkbox" data-checklist-item /> IsWorkspaceMember permission class queries database (not just JWT)</label><br />
-<label><input type="checkbox" data-checklist-item /> List endpoint: non-expired announcements for members, pinned first, paginated</label><br />
-<label><input type="checkbox" data-checklist-item /> Create endpoint: admin only (403 for member), returns 201</label><br />
-<label><input type="checkbox" data-checklist-item /> Pin endpoint: toggles is_pinned, returns 200</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete endpoint: returns 204</label><br />
-<label><input type="checkbox" data-checklist-item /> React list: useAnnouncements hook with { data, isLoading, error, refetch }</label><br />
-<label><input type="checkbox" data-checklist-item /> React list: all 3 states (loading skeletons / empty / error with retry)</label><br />
-<label><input type="checkbox" data-checklist-item /> AnnouncementModal: single component, pre-fill in edit mode works</label><br />
-<label><input type="checkbox" data-checklist-item /> AnnouncementModal: loading state on submit, fields disabled</label><br />
-<label><input type="checkbox" data-checklist-item /> Pin toggle: optimistic UI, reverts on error</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete: confirmation dialog required, 204 response removes card from list</label><br />
-<label><input type="checkbox" data-checklist-item /> TypeScript: no any types, Announcement interface defined</label><br />
-<label><input type="checkbox" data-checklist-item /> Admin actions (Create/Edit/Pin/Delete) hidden for member-role React users</label><br />
-<label><input type="checkbox" data-checklist-item /> Mobile tested at 375px and 768px</label><br />
-<label><input type="checkbox" data-checklist-item /> All errors shown in UI — no silent failures</label><br />
-        </div>
-      </section>
+    Member --> MemberList[View published announcements only]
+    MemberList --> MemberSearch[Search / filter visible announcements]
+    MemberSearch --> MemberDetail[Open announcement detail]
+    MemberDetail -. drafts and admin controls are hidden .-> MemberBlocked[Restricted actions denied]</pre></div></div></div></section>
+      <section id="required-screens" class="section"><div class="project-rich-card"><h2 class="section-title">Required Screens</h2><div class="project-screen-grid"><article class="project-screen-card"><h3>Announcement List Page</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Title, short description, author, publish status, created date, and pinned state.</li><li>Search/filter by title, status, and pinned state.</li><li>Pagination for longer announcement history.</li><li>Create Announcement button for Admin/Owner only.</li><li>View button or card click to open full detail.</li><li>Clear distinction between draft and published records.</li><li>Loading, empty, filtered-empty, and error states.</li></ul></div></article><article class="project-screen-card"><h3>Announcement Detail Page</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Full title, content, author, published date, and workspace context.</li><li>Attachment upload/download is out of scope for the base project.</li><li>Pin/unpin and edit actions for Admin/Owner only.</li><li>Draft visibility blocked for members.</li></ul></div></article><article class="project-screen-card"><h3>Create/Edit Announcement Form</h3><div class="project-rich-content"><p>Fields:</p><ul><li>Title, content, workspace, status, and pinned flag.</li><li>Shared add/edit form with publish and save-draft behavior.</li><li>Validation for required title/content and permission-safe workspace selection.</li></ul><p>Base scope note:</p><ul><li>Visibility is fixed to the selected workspace, so extra visibility modes are not part of the base project.</li><li>Attachment upload is out of scope for the base project.</li></ul></div></article><article class="project-screen-card"><h3>Publish / Delete Actions</h3><div class="project-rich-content"><p>Should include:</p><ul><li>Confirmation for destructive delete.</li><li>Clear publish/unpublish or draft-to-published state change.</li><li>Immediate list refresh after pin, publish, or delete.</li><li>No admin controls visible to members.</li></ul></div></article></div></div></section><section id="django-backend-structure" class="section"><div class="project-rich-card"><h2 class="section-title">Django Backend Structure</h2><div class="project-rich-content"><p>Recommended structure:</p><pre><code class="language-text">announcements/
+  models.py
+  serializers.py
+  views.py
+  urls.py
+  services.py
+  permissions.py
+  tests.py</code></pre><p>Use the service layer for business logic, not the view.</p><p>Example service responsibilities:</p><ul><li>Create announcement.</li><li>Publish announcement.</li><li>Validate workspace access.</li><li>Record audit log.</li><li>Send notification if required.</li></ul></div></div></section><section id="data-model" class="section"><div class="project-rich-card"><h2 class="section-title">Data Model</h2><div class="project-rich-content"><p>Recommended <code>Announcement</code> model fields:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Field</th><th>Purpose</th></tr></thead><tbody><tr><td><code>workspace</code></td><td>Workspace relation.</td></tr><tr><td><code>title</code></td><td>Announcement title.</td></tr><tr><td><code>content</code></td><td>Full content.</td></tr><tr><td><code>status</code></td><td>Draft or published.</td></tr><tr><td><code>is_pinned</code></td><td>Pin important announcement.</td></tr><tr><td><code>created_by</code></td><td>Author.</td></tr><tr><td><code>published_at</code></td><td>Publish timestamp.</td></tr></tbody></table></div></div></div></section><section id="permission-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Permission Rules</h2><div class="project-rich-content"><div class="table-wrapper"><table class="table"><thead><tr><th>Actor</th><th>Allowed</th></tr></thead><tbody><tr><td>Owner</td><td>Create, update, delete, publish all announcements.</td></tr><tr><td>Admin</td><td>Create and manage announcements in assigned workspace.</td></tr><tr><td>Member</td><td>Read published announcements in own workspace.</td></tr><tr><td>Non-member</td><td>No access.</td></tr></tbody></table></div></div></div></section><section id="acceptance-checklist" class="section"><div class="project-rich-card"><h2 class="section-title">Acceptance Checklist</h2><div class="project-rich-content"><ul><li>Owner/Admin can create announcement.</li><li>Member cannot create, edit, publish, or delete announcements.</li><li>Draft announcements are hidden from members.</li><li>Published announcements are visible to workspace members.</li><li>Admin cannot publish to another workspace.</li><li>Service layer handles business rules.</li><li>DRF permissions enforce access server-side.</li><li>React handles loading, empty, and error states.</li></ul></div></div></section>
     </div>
   </main>
-
   <footer class="footer">
     <div class="footer-inner">
       <div>
         <div class="footer-brand">Development Standards</div>
-        <p class="footer-text">Build to the standard. Every time.</p>
+        <p class="footer-text">Build a workspace-based announcement board using Django REST Framework and React.</p>
       </div>
       <div class="footer-links">
         <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
         <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
-        <a href="../../pages/standards.html" class="footer-link">Standards</a>
       </div>
     </div>
   </footer>
-
   <script type="module" src="../../../js/main.js"></script>
 </body>
 </html>

@@ -3,14 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Project — Member Directory (WeWeb + Supabase) | Development Standards</title>
-
-  <meta
-    name="description"
-    content="Full project task: build a member directory with Supabase schema, RLS, and WeWeb list page with Add/Edit modal."
-  />
-
+  <title>Project — Team Member Directory | Development Standards</title>
+  <meta name="description" content="Build a workspace-based team directory where Owners and Admins can manage members, and Members can view other people inside the same workspace." />
   <script>
   (function () {
     try {
@@ -21,19 +15,16 @@
     } catch (error) {}
   })();
 </script>
-
-  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="icon" href="../../../assets/images/infiweb-logo.png" />
   <link rel="stylesheet" href="../../../css/main.css" />
 </head>
-
 <body class="project-detail-page" data-page="tasks">
   <header class="navbar">
     <div class="navbar-inner">
-      <a href="../../../index.html" class="navbar-brand">
-        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/infiweb-logo.png" alt="Infi Web Solutions Logo" class="navbar-logo" />
         <span>Development Standards</span>
       </a>
-
       <nav class="navbar-menu" aria-label="Main Navigation">
         <a href="../../../index.html" class="navbar-link">Home</a>
         <a href="../../pages/standards.html" class="navbar-link">Standards</a>
@@ -41,379 +32,82 @@
         <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
         <a href="../../pages/templates.html" class="navbar-link">Templates</a>
       </nav>
-
       <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
     </div>
   </header>
-
   <main class="page">
     <div class="container">
       <section class="page-header">
         <span class="badge badge-info">Project Task</span>
-        <h1 class="page-title">Project — Member Directory (WeWeb + Supabase)</h1>
-
-        <p class="page-subtitle">
-          Full project task: build a member directory with Supabase schema, RLS, and WeWeb list page with Add/Edit modal.
-        </p>
-
+        <h1 class="page-title">Project — Team Member Directory</h1>
+        <p class="page-subtitle">Build a workspace-based team directory where Owners and Admins can manage members, and Members can view other people inside the same workspace.</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
           <a href="../project-tasks.html" class="btn btn-secondary">Back to Project Tasks</a>
         </div>
       </section>
-
-      <section class="section project-intro-grid">
-        <div class="content-card project-brief-card">
-          <span class="project-brief-kicker">Build Brief</span>
-          <div class="project-meta-row">
-            <span class="project-meta-pill">WeWeb + Supabase</span>
-            <span class="project-meta-pill">8 hours</span>
-            <span class="project-meta-pill">Beginner–Intermediate</span>
+      <section class="section project-showcase">
+        <div class="project-showcase-main">
+          <div class="project-kicker-row">
+            <span class="project-stack-badge">WeWeb + Supabase</span>
+            <span class="project-brief-kicker">~8 Hours</span>
+            <span class="project-brief-kicker">Beginner–Intermediate</span>
           </div>
           <h2 class="section-title">What You Are Building</h2>
-          <p class="project-brief-copy">A team member directory for a workspace. Admins can add, edit, and remove members. All workspace members can view the directory. Each member has a profile with a name, role, department, bio, and avatar photo stored in Supabase Storage.</p>
-        </div>
-
-        <div class="content-card project-roles-card">
-          <span class="project-brief-kicker">Roles &amp; Access</span>
-          <ul class="project-role-list">
-            <li><strong>Member</strong>Browse the directory, open member profiles, and view shared workspace information.</li>
-            <li><strong>Admin / Owner</strong>Add members, edit profiles, change status, and remove members when needed.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="content-card project-flow-card">
-          <div class="project-flow-header">
-            <span class="project-brief-kicker">Core Flows</span>
-            <h2 class="section-title">How this product should work</h2>
-            <p class="project-flow-lead">This should feel like a real internal people directory, with strong list behavior, a clean profile view, and role-based actions that are obvious at the start.</p>
-          </div>
-          <div class="project-flow-grid">
-            <article class="project-flow-item">
-              <strong>Searchable directory</strong>
-              <p>The main list page supports search, department and status filters, pagination, and the correct empty or error state for each case.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Profile detail view</strong>
-              <p>Users can open a member profile to see avatar, role, department, bio, and contact information with proper not-found handling.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Shared member form</strong>
-              <p>One modal handles both add and edit, including validation, avatar upload, status handling, and pre-filled edit mode.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Removal and storage rules</strong>
-              <p>Delete requires confirmation, and avatar files live in a private storage structure tied to workspace-scoped access rules.</p>
-            </article>
+          <p class="project-lead">Build a workspace-based team directory where Owners and Admins can manage members, and Members can view other people inside the same workspace.</p>
+          <div class="project-side-block">
+            <h3 class="project-side-title">This project teaches</h3>
+            <ul class="project-skill-list"><li>Supabase table design</li><li>Row Level Security</li><li>Avatar upload with Supabase Storage</li><li>WeWeb list page</li><li>WeWeb detail page</li><li>WeWeb create/edit form</li><li>Search and filters</li><li>Loading, empty, and error states</li></ul>
           </div>
         </div>
-      </section>
-
-      <section id="features-to-build" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Features to Build</h2>
-
-          <div class="table-wrapper">
-            <table class="table">
-              <thead>
-                <tr><th>#</th><th>Feature</th><th>Est. Time</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>1</td><td><code>members</code> table + RLS policies</td><td>1h</td></tr>
-                <tr><td>2</td><td><code>member-avatars</code> storage bucket + RLS</td><td>30m</td></tr>
-                <tr><td>3</td><td>Members list page (search + department filter + pagination)</td><td>1h 30m</td></tr>
-                <tr><td>4</td><td>Member detail page (full profile view)</td><td>45m</td></tr>
-                <tr><td>5</td><td>Add / Edit member modal (shared form with avatar upload)</td><td>2h</td></tr>
-                <tr><td>6</td><td>Delete member (confirmation dialog, admin only)</td><td>45m</td></tr>
-                <tr><td>7</td><td>Loading, empty, and error states on all pages</td><td>30m</td></tr>
-              </tbody>
-            </table>
+        <aside class="project-showcase-side">
+          <div class="project-side-block">
+            <span class="project-brief-kicker">User Stories</span>
+            <h2 class="section-title">Who this flow is for</h2>
           </div>
-        </div>
+          <div class="project-story-grid"><article class="project-story-card"><strong>Owner</strong><p>I want to create workspaces and add team members so that each workspace has its own isolated directory.</p></article><article class="project-story-card"><strong>Admin</strong><p>I want to manage members only inside my assigned workspace so that I cannot access unrelated teams.</p></article><article class="project-story-card"><strong>Member</strong><p>I want to see the people in my workspace so that I know who belongs to my team.</p></article></div>
+        </aside>
       </section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Example Flow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">flowchart TD
+    Login[User logs in]
+    Workspace[Opens assigned workspace]
+    Directory[Opens Team Member Directory]
 
-      <section id="database-members-table" class="section">
-        <div class="content-card">
-          <h2 class="section-title">1. Database — <code>members</code> Table</h2>
+    Login --> Workspace --> Directory
 
-          <h3>Schema</h3>
-          <div class="table-wrapper">
-            <table class="table">
-              <thead>
-                <tr><th>Column</th><th>Type</th><th>Rules</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>id</td><td>uuid</td><td>PK, default gen_random_uuid()</td></tr>
-                <tr><td>workspace_id</td><td>uuid</td><td>FK → workspaces.id, ON DELETE CASCADE</td></tr>
-                <tr><td>full_name</td><td>text</td><td>NOT NULL, max 100 chars</td></tr>
-                <tr><td>email</td><td>text</td><td>NOT NULL, unique per workspace</td></tr>
-                <tr><td>role</td><td>text</td><td>NOT NULL, one of: 'owner', 'admin', 'member'</td></tr>
-                <tr><td>department</td><td>text</td><td>nullable</td></tr>
-                <tr><td>bio</td><td>text</td><td>nullable, max 500 chars</td></tr>
-                <tr><td>avatar_path</td><td>text</td><td>nullable — path in storage bucket</td></tr>
-                <tr><td>status</td><td>text</td><td>NOT NULL, default 'active', one of: 'active', 'inactive'</td></tr>
-                <tr><td>created_at</td><td>timestamptz</td><td>default now()</td></tr>
-                <tr><td>updated_at</td><td>timestamptz</td><td>default now(), updated by trigger</td></tr>
-              </tbody>
-            </table>
-          </div>
+    Directory --> Owner[Owner Flow]
+    Directory --> Admin[Admin Flow]
+    Directory --> Member[Member Flow]
 
-          <h3>Constraints</h3>
-          <pre><code class="language-sql">-- Unique email per workspace
-UNIQUE (workspace_id, email)
+    Owner --> OwnerOverview[View all owned workspaces and member counts]
+    OwnerOverview --> OwnerOpen[Open any workspace directory]
+    OwnerOpen --> OwnerManage[Add admin, add member, edit member, change status]
+    OwnerManage --> OwnerSearch[Search, filter, paginate, open member profile]
 
--- Status must be valid
-CHECK (status IN ('active', 'inactive'))
+    Admin --> AdminList[View assigned workspace directory]
+    AdminList --> AdminSearch[Search, filter, paginate members]
+    AdminSearch --> AdminView[Open member profile]
+    AdminView --> AdminManage[Add member, edit member, upload avatar, update status]
+    AdminManage -. cannot access other workspaces .-> AdminBlocked[Blocked by workspace rules]
 
--- Role must be valid
-CHECK (role IN ('owner', 'admin', 'member'))</code></pre>
-
-          <h3>Indexes</h3>
-          <pre><code class="language-sql">CREATE INDEX idx_members_workspace_id ON members (workspace_id);
-CREATE INDEX idx_members_department ON members (workspace_id, department);
-CREATE INDEX idx_members_status ON members (workspace_id, status);</code></pre>
-
-          <h3>Trigger</h3>
-          <p>Create a <code>set_timestamps</code> trigger that sets <code>updated_at = now()</code> on every UPDATE.</p>
-
-          <h3>RLS Policies</h3>
-          <pre><code class="language-text">SELECT: workspace members can view all members in their workspace
-INSERT: only workspace admins/owners can insert
-UPDATE: only workspace admins/owners can update
-DELETE: only workspace admins/owners can delete</code></pre>
-        </div>
-      </section>
-
-      <section id="storage-avatars" class="section">
-        <div class="content-card">
-          <h2 class="section-title">2. Storage — <code>member-avatars</code> Bucket</h2>
-
-          <ul>
-            <li>Visibility: <strong>Private</strong></li>
-            <li>Allowed MIME types: <code>image/jpeg</code>, <code>image/png</code>, <code>image/webp</code></li>
-            <li>Max file size: 2 MB</li>
-            <li>Path structure: <code>{workspace_id}/{member_id}/avatar.{ext}</code></li>
-          </ul>
-
-          <h3>RLS on storage.objects</h3>
-          <pre><code class="language-text">SELECT: workspace members can view avatars for their workspace (first path segment = workspace_id)
-INSERT: workspace admins/owners can upload
-UPDATE: workspace admins/owners can replace
-DELETE: workspace admins/owners can delete</code></pre>
-        </div>
-      </section>
-
-      <section id="members-list-page" class="section">
-        <div class="content-card">
-          <h2 class="section-title">3. Members List Page</h2>
-
-          <p><strong>URL:</strong> <code>/workspace/{id}/members</code></p>
-
-          <pre><code class="language-text">[ ] Page header: "Team Members" + "Add Member" button (admin only — hidden for non-admins)
-[ ] Search input: searches by full_name and email — debounced 300ms — sent to Supabase
-[ ] Filter: Department dropdown (all departments from backend, not hardcoded)
-[ ] Filter: Status toggle (Active / All)
-[ ] Results shown in a table or card grid (your choice — be consistent)
-[ ] Columns (table): Avatar · Full Name · Role badge · Department · Status badge · Actions
-[ ] Actions column: Edit (admin only) · Delete (admin only)
-[ ] Role badge: owner=purple, admin=blue, member=grey
-[ ] Status badge: active=green, inactive=grey
-[ ] Pagination: 20 per page, "Showing X–Y of Z members"
-
-STATES:
-[ ] Loading: skeleton rows (matching page size)
-[ ] Empty (no members): "No team members yet." + "Add your first member" button
-[ ] Empty (filter/search): "No members match your search." + clear button
-[ ] Error: "Could not load members." + retry button</code></pre>
-        </div>
-      </section>
-
-      <section id="member-detail-page" class="section">
-        <div class="content-card">
-          <h2 class="section-title">4. Member Detail Page</h2>
-
-          <p><strong>URL:</strong> <code>/workspace/{id}/members/{member_id}</code></p>
-
-          <pre><code class="language-text">[ ] Shows avatar (or initials fallback if no avatar)
-[ ] Full name, role badge, department, status badge
-[ ] Bio text (or "No bio added." if empty — not a blank space)
-[ ] Email (clickable mailto link)
-[ ] "Edit Member" button (admin only)
-[ ] "Back to Members" link
-[ ] Loading skeleton while data loads
-[ ] Error state if member not found: "Member not found." + back link</code></pre>
-        </div>
-      </section>
-
-      <section id="add-edit-modal" class="section">
-        <div class="content-card">
-          <h2 class="section-title">5. Add / Edit Member Modal</h2>
-
-          <p>A <strong>single shared modal component</strong> used for both Add and Edit. The only difference is the title and submit button label.</p>
-
-          <h3>Form Fields</h3>
-          <div class="table-wrapper">
-            <table class="table">
-              <thead>
-                <tr><th>Field</th><th>Type</th><th>Rules</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>Full Name</td><td>text input</td><td>Required, max 100 chars</td></tr>
-                <tr><td>Email</td><td>email input</td><td>Required, valid email format, unique in workspace (check on submit)</td></tr>
-                <tr><td>Role</td><td>dropdown</td><td>Required, options: Admin / Member (Owner cannot be set via form)</td></tr>
-                <tr><td>Department</td><td>text input</td><td>Optional, max 100 chars</td></tr>
-                <tr><td>Bio</td><td>textarea</td><td>Optional, max 500 chars, show character count</td></tr>
-                <tr><td>Avatar</td><td>file upload</td><td>Optional, JPG/PNG/WebP only, max 2 MB, show preview</td></tr>
-                <tr><td>Status</td><td>toggle (Active/Inactive)</td><td>Default: Active, visible in Edit mode only</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Behavior</h3>
-          <pre><code class="language-text">ADD MODE:
-[ ] Modal title: "Add Member"
-[ ] All fields empty on open
-[ ] Submit button: "Add Member" — shows loading state during submit
-[ ] On success: close modal, show "Member added." toast, list refreshes
-
-EDIT MODE:
-[ ] Modal title: "Edit Member"
-[ ] All fields pre-filled with current member data
-[ ] Avatar shows current avatar (or initials)
-[ ] Submit button: "Save Changes" — shows loading state during submit
-[ ] On success: close modal, show "Changes saved." toast, list refreshes
-
-BOTH MODES:
-[ ] X close button + Escape key close the modal
-[ ] If email already exists: show "A member with this email already exists." error below email field
-[ ] API error: show banner above submit button (not a toast)
-[ ] Loading during submit: disable all fields and close button</code></pre>
-        </div>
-      </section>
-
-      <section id="delete-member" class="section">
-        <div class="content-card">
-          <h2 class="section-title">6. Delete Member</h2>
-
-          <pre><code class="language-text">[ ] Delete button visible only to admins (hidden for member role)
-[ ] Clicking Delete opens a confirmation modal:
-    Title:  "Remove [Full Name]?"
-    Body:   "[Full Name] will be removed from the workspace and lose access immediately."
-    Body:   "This action cannot be undone."
-    Buttons: "Cancel" (left) · "Remove Member" red (right)
-[ ] Confirm button shows loading state during delete
-[ ] On success: modal closes, "Member removed." toast shown, row disappears without page refresh
-[ ] On error: show error banner in the modal, keep modal open</code></pre>
-        </div>
-      </section>
-
-      <section id="permissions-summary" class="section">
-        <div class="content-card">
-          <h2 class="section-title">7. Permissions Summary</h2>
-
-          <div class="table-wrapper">
-            <table class="table">
-              <thead>
-                <tr><th>Action</th><th>Member</th><th>Admin</th><th>Owner</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>View list</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
-                <tr><td>View detail</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
-                <tr><td>Add member</td><td>No</td><td>Yes</td><td>Yes</td></tr>
-                <tr><td>Edit member</td><td>No</td><td>Yes</td><td>Yes</td></tr>
-                <tr><td>Delete member</td><td>No</td><td>Yes</td><td>Yes</td></tr>
-                <tr><td>Set role to Admin</td><td>No</td><td>Yes</td><td>Yes</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <pre><code class="language-text">[ ] "Add Member" button hidden for member role — not just disabled
-[ ] Edit and Delete buttons hidden in table rows for member role
-[ ] Backend (RLS) enforces all of the above — frontend is display only</code></pre>
-        </div>
-      </section>
-
-      <section id="what-not-to-do" class="section">
-        <div class="content-card">
-          <h2 class="section-title">What You Should NOT Do</h2>
-
-          <pre><code class="language-text">x Hardcode department options — fetch from the backend (distinct departments query)
-x Use a public storage bucket for avatars — they contain user data
-x Store signed avatar URLs in the database — generate them at render time
-x Duplicate the Add and Edit form — one shared component only
-x Filter members client-side — all search/filter must go to Supabase
-x Show a blank area for empty states — always show a message
-x Skip loading skeletons — every data fetch needs a skeleton, not a spinner
-x Let the delete work without a confirmation dialog
-x Show the Add/Edit/Delete buttons to a member-role user</code></pre>
-        </div>
-      </section>
-
-      <section id="checklists" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Checklists to Run (in order)</h2>
-
-          <pre><code class="language-text">[ ] New Table — members table
-[ ] Database Trigger — updated_at trigger
-[ ] RLS Policies — members table
-[ ] Storage Bucket — member-avatars bucket
-[ ] WeWeb Page Build — members list page
-[ ] WeWeb Page Build — member detail page
-[ ] Add/Edit Consistency — member modal
-[ ] Modals &amp; Dialogs — member modal
-[ ] Loading States &amp; Skeletons — list and detail pages
-[ ] Delete &amp; Destructive Actions — delete member
-[ ] Notifications &amp; Toasts — all async actions
-[ ] Permissions &amp; Role-Based UI — all pages and actions</code></pre>
-        </div>
-      </section>
-
-      <section id="done-when" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Done When</h2>
-
-          <pre><code class="language-text">[ ] members table created with all columns, constraints, indexes
-[ ] updated_at trigger works: UPDATE sets updated_at automatically
-[ ] RLS: member can read; only admin/owner can write — tested for both roles
-[ ] member-avatars storage bucket: private, MIME restricted, RLS enforced
-[ ] Members list: search and department filter sent to Supabase (not client-side)
-[ ] Members list: all 4 states work (loading/empty/empty-filter/error)
-[ ] Members list: pagination shows "Showing X–Y of Z"
-[ ] Member detail: loading skeleton and not-found error state work
-[ ] Add/Edit: same component used for both modes
-[ ] Add/Edit: pre-fill works in edit mode
-[ ] Add/Edit: duplicate email error shown as field error (not toast)
-[ ] Add/Edit: loading state during submit, button disabled
-[ ] Avatar upload: MIME type validated, 2 MB limit enforced, preview shown
-[ ] Signed URL generated for avatar display (not stored public URL)
-[ ] Delete: confirmation dialog shown, loading state on confirm button
-[ ] Delete: row removed from list without page refresh
-[ ] Add/Edit/Delete buttons hidden for member-role users
-[ ] Backend RLS tested: member cannot INSERT/UPDATE/DELETE via Supabase directly
-[ ] Mobile tested at 375px and 768px
-[ ] No silent failures — every error shown in UI</code></pre>
-        </div>
-      </section>
+    Member --> MemberList[View members in shared workspace only]
+    MemberList --> MemberSearch[Search visible members and filter allowed results]
+    MemberSearch --> MemberView[Open member profile]
+    MemberView -. cannot add, edit, or remove members .-> MemberBlocked[Restricted actions hidden and denied]</pre></div></div></div></section>
+      <section id="required-screens" class="section"><div class="project-rich-card"><h2 class="section-title">Required Screens</h2><div class="project-screen-grid"><article class="project-screen-card"><h3>Owner Dashboard</h3><div class="project-rich-content"><p>Owner should see:</p><ul><li>Workspace cards with total admins, total members, and active/inactive summary.</li><li>Search by workspace name if multiple teams exist.</li><li>Create workspace button and open-directory action on every card.</li><li>Quick action to assign or review workspace admins.</li><li>Empty state when no workspace exists yet.</li></ul></div></article><article class="project-screen-card"><h3>Workspace Directory Page</h3><div class="project-rich-content"><p>This page should show:</p><ul><li>Member cards or table with avatar, full name, email, role, department, and status.</li><li>Search by name and email.</li><li>Filters for role, status, and department.</li><li>Pagination with member count and current page state.</li><li>View button or clickable row/card to open member profile.</li><li>Add Member button for Admin/Owner only.</li><li>Edit and remove actions hidden from normal members.</li><li>Loading, empty, no-result, and error states.</li></ul></div></article><article class="project-screen-card"><h3>Member Detail Page</h3><div class="project-rich-content"><p>This page should show:</p><ul><li>Full name, avatar, email, phone, role, department, workspace name, and joined date.</li><li>Bio area with fallback if no bio is added.</li><li>Status badge and activity summary if available.</li><li>Edit button for Admin/Owner only.</li><li>Back-to-directory link.</li><li>Proper not-found state if the member does not exist or is outside workspace access.</li></ul></div></article><article class="project-screen-card"><h3>Add/Edit Member Form</h3><div class="project-rich-content"><p>Fields and behaviors:</p><ul><li>Name, email, phone, role, department, avatar, status, and bio.</li><li>Avatar upload with type/size validation, preview, replace, and remove actions.</li><li>No direct public avatar URL storage; file path only and signed/private render access.</li><li>Duplicate email handling inside the same workspace.</li><li>Save button disabled during submit and clear success/error feedback.</li></ul></div></article></div></div></section><section id="data-model" class="section"><div class="project-rich-card"><h2 class="section-title">Data Model</h2><div class="project-rich-content"><p>Recommended tables:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Table</th><th>Purpose</th></tr></thead><tbody><tr><td><code>profiles</code></td><td>User profile data.</td></tr><tr><td><code>workspaces</code></td><td>Workspace records.</td></tr><tr><td><code>workspace_members</code></td><td>User-workspace-role relation.</td></tr><tr><td><code>member_profiles</code></td><td>Use this table only if extra directory fields are not stored on <code>profiles</code>; otherwise keep all member profile fields on <code>profiles</code> and do not create this extra table.</td></tr><tr><td><code>storage.objects</code></td><td>Avatar files.</td></tr></tbody></table></div></div></div></section><section id="permission-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Permission Rules</h2><div class="project-rich-content"><div class="table-wrapper"><table class="table"><thead><tr><th>Actor</th><th>Allowed</th></tr></thead><tbody><tr><td>Owner</td><td>Can see and manage all workspace members.</td></tr><tr><td>Admin</td><td>Can see and manage members only in assigned workspaces.</td></tr><tr><td>Member</td><td>Can see members only in shared workspace.</td></tr><tr><td>Non-member</td><td>Cannot see workspace members.</td></tr></tbody></table></div><p>Important anti-pattern to avoid:</p><p>Do not fetch all users on the frontend and filter them in WeWeb. Filtering must happen at database/RLS/query level.</p></div></div></section><section id="acceptance-checklist" class="section"><div class="project-rich-card"><h2 class="section-title">Acceptance Checklist</h2><div class="project-rich-content"><ul><li>Owner can create multiple workspaces.</li><li>Owner can assign admins to workspaces.</li><li>Admin can add members only in assigned workspace.</li><li>Admin cannot see users from other workspaces.</li><li>Member can see other members only in the same workspace.</li><li>Search works by name and email.</li><li>Filters work by role/status/department.</li><li>Avatar upload works.</li><li>Empty state appears when no members exist.</li><li>Error state appears when API/database request fails.</li><li>RLS blocks unauthorized access even if API request is manually changed.</li></ul></div></div></section>
     </div>
   </main>
-
   <footer class="footer">
     <div class="footer-inner">
       <div>
         <div class="footer-brand">Development Standards</div>
-        <p class="footer-text">
-          Build member directories with private storage, RLS enforcement, shared modals, and proper role-based UI visibility.
-        </p>
+        <p class="footer-text">Build a workspace-based team directory where Owners and Admins can manage members, and Members can view other people inside the same workspace.</p>
       </div>
-
       <div class="footer-links">
         <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
         <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
       </div>
     </div>
   </footer>
-
   <script type="module" src="../../../js/main.js"></script>
 </body>
 </html>

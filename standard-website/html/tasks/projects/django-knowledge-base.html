@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project — Internal Knowledge Base (Django Templates) | Development Standards</title>
-  <meta name="description" content="Build a knowledge base with Article/Category models, draft/published workflow, slug routing, and role-gated views." />
+  <title>Project — Internal Knowledge Base | Development Standards</title>
+  <meta name="description" content="Build a workspace-based internal knowledge base where admins can create articles and members can search/read approved content." />
   <script>
   (function () {
     try {
@@ -15,16 +15,14 @@
     } catch (error) {}
   })();
 </script>
-
-  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="icon" href="../../../assets/images/infiweb-logo.png" />
   <link rel="stylesheet" href="../../../css/main.css" />
 </head>
-
 <body class="project-detail-page" data-page="tasks">
   <header class="navbar">
     <div class="navbar-inner">
       <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
-        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <img src="../../../assets/images/infiweb-logo.png" alt="Infi Web Solutions Logo" class="navbar-logo" />
         <span>Development Standards</span>
       </a>
       <nav class="navbar-menu" aria-label="Main Navigation">
@@ -37,678 +35,79 @@
       <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
     </div>
   </header>
-
   <main class="page">
     <div class="container">
       <section class="page-header">
-        <span class="badge badge-info">Project — Django + Templates</span>
-        <h1 class="page-title">Project — Internal Knowledge Base (Django Templates)</h1>
-        <p class="page-subtitle">Build a knowledge base with Article/Category models, draft/published workflow, slug routing, and role-gated views.</p>
+        <span class="badge badge-info">Project Task</span>
+        <h1 class="page-title">Project — Internal Knowledge Base</h1>
+        <p class="page-subtitle">Build a workspace-based internal knowledge base where admins can create articles and members can search/read approved content.</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
-          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
-          
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Project Tasks</a>
         </div>
       </section>
-
-      <section class="section project-intro-grid">
-        <div class="content-card project-brief-card">
-          <span class="project-brief-kicker">Build Brief</span>
-          <div class="project-meta-row">
-            <span class="project-meta-pill">Django + Django Templates</span>
-            <span class="project-meta-pill">8 hours</span>
-            <span class="project-meta-pill">Intermediate</span>
+      <section class="section project-showcase">
+        <div class="project-showcase-main">
+          <div class="project-kicker-row">
+            <span class="project-stack-badge">Django + Templates</span>
+            <span class="project-brief-kicker">~8 Hours</span>
+            <span class="project-brief-kicker">Intermediate</span>
           </div>
           <h2 class="section-title">What You Are Building</h2>
-          <p class="project-brief-copy">A server-rendered internal knowledge base. Members can browse and read articles organised by category. Editors and admins can create and edit articles. Only admins can delete articles. Articles can be saved as drafts (visible only to editors/admins) or published (visible to all members). Django handles the full request-response cycle. No React. All pages extend <code>base.html</code>. All CSS in <code>static/css/</code>, all JS in <code>static/js/</code>. Data passed to JavaScript via <code>data-*</code> attributes only.</p>
-        </div>
-
-        <div class="content-card project-roles-card">
-          <span class="project-brief-kicker">Roles &amp; Access</span>
-          <ul class="project-role-list">
-            <li><strong>Member</strong>Can browse published articles and open detail pages, but cannot manage content.</li>
-            <li><strong>Editor</strong>Create and edit articles, including draft work that is not visible to regular members.</li>
-            <li><strong>Admin / Owner</strong>Manage the full knowledge base, including article deletion and category-level administration.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="content-card project-flow-card">
-          <div class="project-flow-header">
-            <span class="project-brief-kicker">Core Flows</span>
-            <h2 class="section-title">How this product should work</h2>
-            <p class="project-flow-lead">This project should clearly communicate the publishing workflow: who can read, who can draft, who can publish, and who can clean up content or categories.</p>
-          </div>
-          <div class="project-flow-grid">
-            <article class="project-flow-item">
-              <strong>Browse the knowledge base</strong>
-              <p>Members move through article lists and detail pages that respect category structure and only expose published content to the right audience.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Draft and publish workflow</strong>
-              <p>Editors and admins can save articles as draft or publish them, changing who is allowed to see each article.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Article authoring</strong>
-              <p>Create and edit pages manage category, slug, excerpt, body, and status while keeping the implementation fully server-rendered.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Category and cleanup actions</strong>
-              <p>Admins handle category creation and article deletion with proper permission checks and confirmation-driven cleanup behavior.</p>
-            </article>
+          <p class="project-lead">Build a workspace-based internal knowledge base where admins can create articles and members can search/read approved content.</p>
+          <div class="project-side-block">
+            <h3 class="project-side-title">This project teaches</h3>
+            <ul class="project-skill-list"><li>Django models</li><li>Forms</li><li>Services</li><li>Views</li><li>Templates</li><li>Search</li><li>Categories</li><li>Permissions</li><li>Rich content</li><li>Slug routing</li></ul>
           </div>
         </div>
+        <aside class="project-showcase-side">
+          <div class="project-side-block">
+            <span class="project-brief-kicker">User Stories</span>
+            <h2 class="section-title">Who this flow is for</h2>
+          </div>
+          <div class="project-story-grid"><article class="project-story-card"><strong>Admin</strong><p>I want to create internal help articles for my workspace.</p></article><article class="project-story-card"><strong>Member</strong><p>I want to search and read articles relevant to my workspace.</p></article><article class="project-story-card"><strong>Owner</strong><p>I want to manage knowledge across all workspaces.</p></article></div>
+        </aside>
       </section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Example Flow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">flowchart TD
+    Login[User logs in]
+    Workspace[Selects workspace]
+    KB[Opens Knowledge Base]
 
-      <section id="features-to-build" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Features to Build</h2>
-          <div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>#</th>
-    <th>Feature</th>
-    <th>Est. Time</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>1</td>
-    <td>Django models: Category, Article</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>Django forms: CategoryForm, ArticleForm</td>
-    <td>30m</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>Django service: ArticleService</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>Django views: 7 views (list, detail, create, edit, delete, category list, category create)</td>
-    <td>1h 30m</td>
-  </tr>
-  <tr>
-    <td>5</td>
-    <td>Templates: article_list.html, article_detail.html, article_form.html, category_list.html</td>
-    <td>2h</td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td>Static CSS: article cards, category badges, search bar, status badges</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>Static JS: delete confirmation, character counter for excerpt</td>
-    <td>30m</td>
-  </tr>
-  </tbody>
-</table></div>
-<hr />
-        </div>
-      </section>
+    Login --> Workspace --> KB
 
-      <section id="1-django-models" class="section">
-        <div class="content-card">
-          <h2 class="section-title">1. Django Models</h2>
-          <h3><code>Category</code></h3>
-<pre><code class="language-python">from django.db import models
-from django.utils.text import slugify
+    KB --> Owner[Owner Flow]
+    KB --> Admin[Admin Flow]
+    KB --> Member[Member Flow]
 
-class Category(models.Model):
-    workspace   = models.ForeignKey(&#x27;Workspace&#x27;, on_delete=models.CASCADE, related_name=&#x27;categories&#x27;)
-    name        = models.CharField(max_length=100)
-    slug        = models.SlugField(max_length=110)
-    description = models.TextField(blank=True, default=&#x27;&#x27;)
-    created_at  = models.DateTimeField(auto_now_add=True)
+    Owner --> OwnerOverview[View knowledge across owned workspaces]
+    OwnerOverview --> OwnerFilter[Search / filter / paginate articles]
+    OwnerFilter --> OwnerManage[Create category, edit article, publish, archive]
+    OwnerManage --> OwnerAudit[Review article visibility and content quality]
 
-    class Meta:
-        ordering = [&#x27;name&#x27;]
-        verbose_name_plural = &#x27;Categories&#x27;
-        constraints = [
-            models.UniqueConstraint(
-                fields=[&#x27;workspace&#x27;, &#x27;slug&#x27;],
-                name=&#x27;unique_category_slug_per_workspace&#x27;
-            ),
-        ]
+    Admin --> AdminHome[View workspace knowledge base]
+    AdminHome --> AdminCategory[Create or manage categories]
+    AdminCategory --> AdminDraft[Write or edit draft article]
+    AdminDraft --> AdminPublish[Publish article for workspace members]
+    AdminPublish -. cannot manage another workspace .-> AdminBlocked[Blocked by workspace permission rules]
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name</code></pre>
-<h3><code>Article</code></h3>
-<pre><code class="language-python">class Article(models.Model):
-
-    class Status(models.TextChoices):
-        DRAFT     = &#x27;draft&#x27;,     &#x27;Draft&#x27;
-        PUBLISHED = &#x27;published&#x27;, &#x27;Published&#x27;
-
-    workspace   = models.ForeignKey(&#x27;Workspace&#x27;, on_delete=models.CASCADE, related_name=&#x27;articles&#x27;)
-    category    = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True,
-                                    related_name=&#x27;articles&#x27;)
-    author      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
-                                    null=True, related_name=&#x27;authored_articles&#x27;)
-    title       = models.CharField(max_length=200)
-    slug        = models.SlugField(max_length=220)
-    excerpt     = models.CharField(max_length=300, blank=True, default=&#x27;&#x27;)
-    body        = models.TextField()
-    status      = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT)
-    created_at  = models.DateTimeField(auto_now_add=True)
-    updated_at  = models.DateTimeField(auto_now=True)
-    published_at = models.DateTimeField(null=True, blank=True)
-
-    class Meta:
-        ordering = [&#x27;-created_at&#x27;]
-        constraints = [
-            models.UniqueConstraint(
-                fields=[&#x27;workspace&#x27;, &#x27;slug&#x27;],
-                name=&#x27;unique_article_slug_per_workspace&#x27;
-            ),
-        ]
-        indexes = [
-            models.Index(fields=[&#x27;workspace&#x27;, &#x27;status&#x27;, &#x27;-created_at&#x27;]),
-            models.Index(fields=[&#x27;workspace&#x27;, &#x27;category&#x27;, &#x27;status&#x27;]),
-        ]
-
-    def __str__(self):
-        return self.title</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/model.md">Django Model</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="2-django-forms" class="section">
-        <div class="content-card">
-          <h2 class="section-title">2. Django Forms</h2>
-          <h3><code>CategoryForm</code></h3>
-<pre><code class="language-python">class CategoryForm(forms.ModelForm):
-    class Meta:
-        model = Category
-        fields = [&#x27;name&#x27;, &#x27;description&#x27;]
-
-    def clean_name(self):
-        name = self.cleaned_data.get(&#x27;name&#x27;, &#x27;&#x27;).strip()
-        if not name:
-            raise forms.ValidationError(&quot;Category name is required.&quot;)
-        return name</code></pre>
-<h3><code>ArticleForm</code></h3>
-<pre><code class="language-python">class ArticleForm(forms.ModelForm):
-    class Meta:
-        model = Article
-        fields = [&#x27;title&#x27;, &#x27;category&#x27;, &#x27;excerpt&#x27;, &#x27;body&#x27;, &#x27;status&#x27;]
-        widgets = {
-            &#x27;excerpt&#x27;: forms.Textarea(attrs={&#x27;rows&#x27;: 3, &#x27;maxlength&#x27;: 300}),
-            &#x27;body&#x27;:    forms.Textarea(attrs={&#x27;rows&#x27;: 20}),
-        }
-
-    def __init__(self, *args, workspace=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        if workspace:
-            self.fields[&#x27;category&#x27;].queryset = Category.objects.filter(workspace=workspace)
-        self.fields[&#x27;category&#x27;].required = False
-
-    def clean_title(self):
-        title = self.cleaned_data.get(&#x27;title&#x27;, &#x27;&#x27;).strip()
-        if not title:
-            raise forms.ValidationError(&quot;Title is required.&quot;)
-        return title
-
-    def clean_body(self):
-        body = self.cleaned_data.get(&#x27;body&#x27;, &#x27;&#x27;).strip()
-        if not body:
-            raise forms.ValidationError(&quot;Body is required.&quot;)
-        return body</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/form-serializer.md">Django Form / Serializer</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="3-articleservice" class="section">
-        <div class="content-card">
-          <h2 class="section-title">3. ArticleService</h2>
-          <pre><code class="language-python"># services.py
-from django.utils import timezone
-from django.utils.text import slugify
-from django.core.exceptions import ValidationError, PermissionDenied
-
-class ArticleService:
-
-    @staticmethod
-    def create_article(workspace, author, title, body, category=None, excerpt=&#x27;&#x27;, status=&#x27;draft&#x27;):
-        &quot;&quot;&quot;
-        Creates a new article.
-        Validates:
-          - title and body are not empty
-          - slug is unique within workspace (auto-generated from title; append suffix if collision)
-        Sets published_at if status == &#x27;published&#x27;.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def update_article(article, editor, title, body, category=None, excerpt=&#x27;&#x27;, status=&#x27;draft&#x27;):
-        &quot;&quot;&quot;
-        Updates an existing article.
-        Validates:
-          - editor is a workspace member (editor or admin role)
-          - title and body are not empty
-        Re-generates slug only if title changed and slug collision would occur.
-        Sets published_at if status changes to &#x27;published&#x27; and was previously not.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def delete_article(article, actor):
-        &quot;&quot;&quot;
-        Deletes an article.
-        Raises PermissionDenied if actor does not have admin or owner role in the workspace.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def _unique_slug(workspace, base_slug, exclude_id=None):
-        &quot;&quot;&quot;
-        Returns a unique slug for the workspace.
-        If base_slug is taken, appends -2, -3, etc.
-        &quot;&quot;&quot;</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="4-django-views" class="section">
-        <div class="content-card">
-          <h2 class="section-title">4. Django Views</h2>
-          <h3><code>WorkspaceMemberMixin</code></h3>
-<pre><code class="language-python">class WorkspaceMemberMixin(LoginRequiredMixin):
-    def dispatch(self, request, *args, **kwargs):
-        self.workspace = get_object_or_404(Workspace, id=kwargs[&#x27;workspace_id&#x27;])
-        self.membership = get_object_or_404(
-            WorkspaceMember, workspace=self.workspace, user=request.user, status=&#x27;active&#x27;
-        )
-        return super().dispatch(request, *args, **kwargs)</code></pre>
-<h3>Views to Build</h3>
-<pre><code class="language-text">ArticleListView (GET /workspace/{id}/kb/)
-  — WorkspaceMemberMixin
-  — Members see published articles only
-  — Editors/admins see published + their own drafts
-  — Supports ?search= (title/excerpt contains, DB query — not client-side)
-  — Supports ?category= (slug filter)
-  — Paginated: 12 per page
-  — Template: article_list.html
-
-ArticleDetailView (GET /workspace/{id}/kb/&lt;slug:slug&gt;/)
-  — WorkspaceMemberMixin
-  — Members: 404 if article is draft and they are not the author or admin
-  — Template: article_detail.html
-
-ArticleCreateView (GET+POST /workspace/{id}/kb/new/)
-  — WorkspaceMemberMixin + editor/admin role check (403 if member role)
-  — GET: render empty ArticleForm
-  — POST: validate → ArticleService.create_article() → redirect to article detail
-  — Template: article_form.html
-
-ArticleEditView (GET+POST /workspace/{id}/kb/&lt;slug:slug&gt;/edit/)
-  — WorkspaceMemberMixin + editor/admin role check
-  — GET: render ArticleForm prefilled
-  — POST: validate → ArticleService.update_article() → redirect to article detail
-  — Template: article_form.html (same template as create, different heading)
-
-ArticleDeleteView (POST /workspace/{id}/kb/&lt;slug:slug&gt;/delete/)
-  — WorkspaceMemberMixin + admin/owner role check (403 if editor or member)
-  — POST only (from a form button with CSRF)
-  — Calls ArticleService.delete_article()
-  — Redirects to article list with success/error message
-
-CategoryListView (GET /workspace/{id}/kb/categories/)
-  — WorkspaceMemberMixin + admin/owner role check
-  — Lists all categories for the workspace
-  — Supports ?search= (name contains)
-  — Template: category_list.html
-
-CategoryCreateView (GET+POST /workspace/{id}/kb/categories/new/)
-  — WorkspaceMemberMixin + admin/owner role check
-  — GET: render empty CategoryForm
-  — POST: validate → save category → redirect to category list
-  — On duplicate slug: show form error &quot;A category with this name already exists.&quot;
-  — Template: category_form.html</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/new-view.md">Django New View</a> for each view</p>
-<hr />
-        </div>
-      </section>
-
-      <section id="5-templates" class="section">
-        <div class="content-card">
-          <h2 class="section-title">5. Templates</h2>
-          <p>All templates must:</p>
-<ul>
-  <li>Extend <code>base.html</code></li>
-  <li>Have NO <code>&lt;style&gt;</code> blocks (all CSS in <code>static/css/kb.css</code>)</li>
-  <li>Have NO inline <code>&lt;script&gt;</code> logic (all JS in <code>static/js/kb.js</code>)</li>
-  <li>Load static with <code>{% load static %}</code></li>
-</ul>
-<h3><code>article_list.html</code></h3>
-<pre><code class="language-html">{% extends &quot;base.html&quot; %}
-{% load static %}
-
-{% block title %}Knowledge Base{% endblock %}
-
-{% block content %}
-  &lt;!-- Search + category filter bar (GET form) --&gt;
-  &lt;!-- Active filter chips: show if ?search= or ?category= is set --&gt;
-  &lt;!-- &quot;New Article&quot; button — visible to editor/admin only --&gt;
-  &lt;!-- Article cards grid --&gt;
-  &lt;!-- Each card: title, excerpt, category badge, status badge (draft/published), author, date --&gt;
-  &lt;!-- Empty state: &quot;No articles found.&quot; --&gt;
-  &lt;!-- Pagination links --&gt;
-{% endblock %}</code></pre>
-<h3><code>article_detail.html</code></h3>
-<pre><code class="language-html">{% extends &quot;base.html&quot; %}
-{% load static %}
-
-{% block title %}{{ article.title }}{% endblock %}
-
-{% block content %}
-  &lt;!-- Breadcrumb: Knowledge Base / [Category] / [Title] --&gt;
-  &lt;!-- Status badge (draft warning for editors/admins) --&gt;
-  &lt;!-- Article title, author, published date --&gt;
-  &lt;!-- Category badge linking to filtered list --&gt;
-  &lt;!-- Article body (rendered as HTML from trusted source) --&gt;
-  &lt;!-- Edit button — visible to editor/admin only --&gt;
-  &lt;!-- Delete button — visible to admin/owner only, POST form with CSRF --&gt;
-{% endblock %}</code></pre>
-<h3><code>article_form.html</code></h3>
-<pre><code class="language-html">{% extends &quot;base.html&quot; %}
-{% load static %}
-
-{% block title %}{% if article %}Edit Article{% else %}New Article{% endif %}{% endblock %}
-
-{% block content %}
-  &lt;!-- Heading: &quot;Edit Article&quot; or &quot;New Article&quot; --&gt;
-  &lt;form method=&quot;post&quot;&gt;
-    {% csrf_token %}
-    &lt;!-- Render each field individually (not {{ form.as_p }}) --&gt;
-    &lt;!-- Show field errors below each field --&gt;
-    &lt;!-- Show non-field errors at top of form --&gt;
-    &lt;!-- Excerpt field: show character counter (300 max) via data-* and JS --&gt;
-    &lt;!-- Status field: dropdown (Draft / Published) --&gt;
-    &lt;!-- Submit button: &quot;Save Article&quot; with loading state via data-* --&gt;
-    &lt;!-- Cancel link back to article list or detail --&gt;
-  &lt;/form&gt;
-{% endblock %}</code></pre>
-<h3><code>category_list.html</code></h3>
-<pre><code class="language-html">{% extends &quot;base.html&quot; %}
-{% load static %}
-
-{% block title %}Categories{% endblock %}
-
-{% block content %}
-  &lt;!-- &quot;New Category&quot; button (admin/owner only) --&gt;
-  &lt;!-- Search bar (GET form) --&gt;
-  &lt;!-- Categories table: Name | Description | Article Count | Actions --&gt;
-  &lt;!-- Delete button per category — POST form with CSRF, confirmation via data-* and JS --&gt;
-  &lt;!-- Empty state: &quot;No categories yet.&quot; --&gt;
-{% endblock %}</code></pre>
-<h3><code>category_form.html</code></h3>
-<pre><code class="language-html">{% extends &quot;base.html&quot; %}
-{% load static %}
-
-{% block title %}New Category{% endblock %}
-
-{% block content %}
-  &lt;form method=&quot;post&quot;&gt;
-    {% csrf_token %}
-    &lt;!-- Name field with error --&gt;
-    &lt;!-- Description field with error --&gt;
-    &lt;!-- Submit button --&gt;
-  &lt;/form&gt;
-{% endblock %}</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/template.md">Django Template</a> for each template</p>
-<hr />
-        </div>
-      </section>
-
-      <section id="6-static-css-staticcsskbcss" class="section">
-        <div class="content-card">
-          <h2 class="section-title">6. Static CSS (`static/css/kb.css`)</h2>
-          <label><input type="checkbox" data-checklist-item /> Article card styles (grid layout, hover shadow, border-radius)</label><br />
-<label><input type="checkbox" data-checklist-item /> Status badge styles using CSS variables:</label><br />
-<p class="checklist-note">.badge-draft     { background: var(--color-warning); color: white; }</p>
-<p class="checklist-note">.badge-published { background: var(--color-success); color: white; }</p>
-<label><input type="checkbox" data-checklist-item /> Category badge styles (.badge-category)</label><br />
-<label><input type="checkbox" data-checklist-item /> Search bar and filter chip styles</label><br />
-<label><input type="checkbox" data-checklist-item /> Article detail: body typography (headings, paragraphs, lists, code blocks)</label><br />
-<label><input type="checkbox" data-checklist-item /> Breadcrumb styles</label><br />
-<label><input type="checkbox" data-checklist-item /> Table styles for category list (striped rows, hover)</label><br />
-<label><input type="checkbox" data-checklist-item /> Form layout: label above field, character counter below excerpt</label><br />
-<label><input type="checkbox" data-checklist-item /> Pagination styles</label><br />
-<label><input type="checkbox" data-checklist-item /> Empty state styles (.empty-state — centered, muted text)</label><br />
-<label><input type="checkbox" data-checklist-item /> Responsive: card grid collapses to 1 column on mobile</label><br />
-<label><input type="checkbox" data-checklist-item /> NO hardcoded colors — all in CSS variables: --color-success, --color-warning, --color-danger</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="7-static-js-staticjskbjs" class="section">
-        <div class="content-card">
-          <h2 class="section-title">7. Static JS (`static/js/kb.js`)</h2>
-          <pre><code class="language-text">All JavaScript must use data-* attributes — never string interpolation in script tags.
-
-DELETE CONFIRMATION:
-&lt;!-- HTML --&gt;
-&lt;button
-  class=&quot;btn-delete-article&quot;
-  data-article-title=&quot;{{ article.title }}&quot;
-  data-form-id=&quot;delete-form-{{ article.id }}&quot;
-&gt;Delete&lt;/button&gt;
-&lt;form id=&quot;delete-form-{{ article.id }}&quot; method=&quot;post&quot;
-      action=&quot;{% url &#x27;delete-article&#x27; workspace.id article.slug %}&quot; style=&quot;display:none;&quot;&gt;
-  {% csrf_token %}
-&lt;/form&gt;
-
-// JS
-document.querySelectorAll(&#x27;.btn-delete-article&#x27;).forEach(btn =&gt; {
-  btn.addEventListener(&#x27;click&#x27;, () =&gt; {
-    const title = btn.dataset.articleTitle;
-    if (confirm(`Delete &quot;${title}&quot;? This cannot be undone.`)) {
-      document.getElementById(btn.dataset.formId).submit();
-    }
-  });
-});
-
-CHARACTER COUNTER FOR EXCERPT:
-&lt;!-- HTML --&gt;
-&lt;textarea
-  name=&quot;excerpt&quot;
-  class=&quot;excerpt-field&quot;
-  data-max-length=&quot;300&quot;
-  data-counter-id=&quot;excerpt-counter&quot;
-  maxlength=&quot;300&quot;
-&gt;&lt;/textarea&gt;
-&lt;span id=&quot;excerpt-counter&quot; class=&quot;char-counter&quot;&gt;0 / 300&lt;/span&gt;
-
-// JS
-document.querySelectorAll(&#x27;.excerpt-field&#x27;).forEach(field =&gt; {
-  const counterId = field.dataset.counterId;
-  const maxLength = parseInt(field.dataset.maxLength, 10);
-  const counter = document.getElementById(counterId);
-  const update = () =&gt; {
-    counter.textContent = `${field.value.length} / ${maxLength}`;
-  };
-  field.addEventListener(&#x27;input&#x27;, update);
-  update();
-});
-
-SUBMIT LOADING STATE:
-&lt;!-- HTML --&gt;
-&lt;button type=&quot;submit&quot; class=&quot;btn-submit-form&quot; data-loading-text=&quot;Saving...&quot;&gt;
-  Save Article
-&lt;/button&gt;
-
-// JS
-document.querySelectorAll(&#x27;.btn-submit-form&#x27;).forEach(btn =&gt; {
-  btn.closest(&#x27;form&#x27;).addEventListener(&#x27;submit&#x27;, () =&gt; {
-    btn.disabled = true;
-    btn.textContent = btn.dataset.loadingText;
-  });
-});</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="url-configuration" class="section">
-        <div class="content-card">
-          <h2 class="section-title">URL Configuration</h2>
-          <pre><code class="language-python">urlpatterns = [
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/kb/&#x27;,
-         ArticleListView.as_view(), name=&#x27;article-list&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/kb/new/&#x27;,
-         ArticleCreateView.as_view(), name=&#x27;article-create&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/kb/categories/&#x27;,
-         CategoryListView.as_view(), name=&#x27;category-list&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/kb/categories/new/&#x27;,
-         CategoryCreateView.as_view(), name=&#x27;category-create&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/kb/&lt;slug:slug&gt;/&#x27;,
-         ArticleDetailView.as_view(), name=&#x27;article-detail&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/kb/&lt;slug:slug&gt;/edit/&#x27;,
-         ArticleEditView.as_view(), name=&#x27;article-edit&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/kb/&lt;slug:slug&gt;/delete/&#x27;,
-         ArticleDeleteView.as_view(), name=&#x27;article-delete&#x27;),
-]</code></pre>
-<p><strong>Note:</strong> Place the <code>new/</code> and <code>categories/</code> URLs before the <code>&lt;slug:slug&gt;/</code> pattern to avoid <code>new</code> and <code>categories</code> being matched as slugs.</p>
-<hr />
-        </div>
-      </section>
-
-      <section id="permissions-summary" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Permissions Summary</h2>
-          <div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>Action</th>
-    <th>Member</th>
-    <th>Editor</th>
-    <th>Admin / Owner</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>Read published articles</td>
-    <td>Yes</td>
-    <td>Yes</td>
-    <td>Yes</td>
-  </tr>
-  <tr>
-    <td>Read draft articles</td>
-    <td>Own only</td>
-    <td>Own only</td>
-    <td>All</td>
-  </tr>
-  <tr>
-    <td>Create / Edit articles</td>
-    <td>No</td>
-    <td>Yes</td>
-    <td>Yes</td>
-  </tr>
-  <tr>
-    <td>Delete articles</td>
-    <td>No</td>
-    <td>No</td>
-    <td>Yes</td>
-  </tr>
-  <tr>
-    <td>Manage categories</td>
-    <td>No</td>
-    <td>No</td>
-    <td>Yes</td>
-  </tr>
-  </tbody>
-</table></div>
-<hr />
-        </div>
-      </section>
-
-      <section id="what-you-should-not-do" class="section">
-        <div class="content-card">
-          <h2 class="section-title">What You Should NOT Do</h2>
-          <pre><code class="language-text">× Filter draft/published visibility in the template — do it in the queryset
-× Skip the slug uniqueness check — two articles with the same title would collide
-× Let member-role users access the create/edit views (check role, raise PermissionDenied)
-× Let editor-role users delete articles (admin/owner only)
-× Pass article content to JavaScript via {{ variable }} in a script tag
-× Use client-side search filtering — search must query the database
-× Not extend base.html in every template
-× Add &lt;style&gt; blocks to templates — all CSS in static/css/kb.css
-× Skip CSRF token on any POST form (delete, category create)
-× Use {{ form.as_p }} — render each field individually
-× Generate slugs with collisions — use _unique_slug() with suffix fallback</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="checklists-to-run-in-order" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Checklists to Run (in order)</h2>
-          <label><input type="checkbox" data-checklist-item /> Django Model — Category model</label><br />
-<label><input type="checkbox" data-checklist-item /> Django Model — Article model</label><br />
-<label><input type="checkbox" data-checklist-item /> Django Form / Serializer — ArticleForm, CategoryForm</label><br />
-<label><input type="checkbox" data-checklist-item /> Django New View — each of the 7 views</label><br />
-<label><input type="checkbox" data-checklist-item /> Django Template — article_list.html, article_detail.html, article_form.html, category_list.html</label><br />
-<label><input type="checkbox" data-checklist-item /> Permissions & Role-Based UI — draft visibility, create/edit/delete gating</label><br />
-<label><input type="checkbox" data-checklist-item /> Error Handling — form errors shown per field, service errors shown at top</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete & Destructive Actions — article delete confirmation</label><br />
-<label><input type="checkbox" data-checklist-item /> Notifications & Toasts — success/error messages after redirect (Django messages framework)</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="done-when" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Done When</h2>
-          <label><input type="checkbox" data-checklist-item /> Category model: name, slug (auto-generated), UniqueConstraint per workspace, ordering by name</label><br />
-<label><input type="checkbox" data-checklist-item /> Article model: all fields, Status TextChoices, UniqueConstraint on slug per workspace, indexes</label><br />
-<label><input type="checkbox" data-checklist-item /> ArticleService: create generates unique slug, update re-slugifies only on title change</label><br />
-<label><input type="checkbox" data-checklist-item /> ArticleService: published_at set when status becomes 'published'</label><br />
-<label><input type="checkbox" data-checklist-item /> ArticleService: delete raises PermissionDenied for non-admin actors</label><br />
-<label><input type="checkbox" data-checklist-item /> ArticleListView: members see published only; editors/admins see published + their own drafts</label><br />
-<label><input type="checkbox" data-checklist-item /> ArticleListView: ?search= filters title/excerpt in DB (not client-side)</label><br />
-<label><input type="checkbox" data-checklist-item /> ArticleListView: ?category= filters by category slug</label><br />
-<label><input type="checkbox" data-checklist-item /> ArticleDetailView: returns 404 for draft if requester is member (not author/admin)</label><br />
-<label><input type="checkbox" data-checklist-item /> ArticleCreateView / ArticleEditView: 403 for member-role users</label><br />
-<label><input type="checkbox" data-checklist-item /> ArticleDeleteView: 403 for editor and member roles; admin/owner only</label><br />
-<label><input type="checkbox" data-checklist-item /> CategoryCreateView: duplicate slug shows form error, not a crash</label><br />
-<label><input type="checkbox" data-checklist-item /> All POST views: redirect on success (POST→redirect→GET pattern)</label><br />
-<label><input type="checkbox" data-checklist-item /> All templates: extend base.html, no inline styles, no inline scripts</label><br />
-<label><input type="checkbox" data-checklist-item /> Status badges: .badge-draft and .badge-published using CSS variables</label><br />
-<label><input type="checkbox" data-checklist-item /> JS: delete confirmation uses data-* attributes (no string interpolation in script)</label><br />
-<label><input type="checkbox" data-checklist-item /> JS: excerpt character counter reads data-max-length from HTML (not hardcoded in JS)</label><br />
-<label><input type="checkbox" data-checklist-item /> JS: submit button loading state uses data-loading-text attribute</label><br />
-<label><input type="checkbox" data-checklist-item /> Filter bar: GET method, search/category filter applied from DB</label><br />
-<label><input type="checkbox" data-checklist-item /> Breadcrumb: on article detail showing Knowledge Base / Category / Title</label><br />
-<label><input type="checkbox" data-checklist-item /> Pagination: works on article list and category list pages</label><br />
-<label><input type="checkbox" data-checklist-item /> Django messages: success/error toast shown after redirect</label><br />
-<label><input type="checkbox" data-checklist-item /> Mobile: card grid collapses to single column at small screen width</label><br />
-<label><input type="checkbox" data-checklist-item /> CSRF token present on all POST forms</label><br />
-<label><input type="checkbox" data-checklist-item /> URL order: new/ and categories/ routes registered before <slug:slug>/ catch-all</label><br />
-        </div>
-      </section>
+    Member --> MemberHome[View published knowledge base]
+    MemberHome --> MemberSearch[Search topics, categories, or article content]
+    MemberSearch --> MemberRead[Open published article detail]
+    MemberRead -. drafts and admin edit controls are hidden .-> MemberBlocked[Restricted actions denied]</pre></div></div></div></section>
+      <section id="required-pages" class="section"><div class="project-rich-card"><h2 class="section-title">Required Pages</h2><div class="project-screen-grid"><article class="project-screen-card"><h3>Knowledge Base Home</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Search bar for article title/content.</li><li>Category cards or list.</li><li>Recently published articles.</li><li>Popular article tracking is out of scope for the base project.</li><li>Workspace-safe empty state when no article exists yet.</li><li>Pagination or “load more” if article volume grows.</li></ul></div></article><article class="project-screen-card"><h3>Category Page</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Category title, article count, and filtered article list.</li><li>Search inside the category.</li><li>Sort by recent first by default, with optional alphabetical sort only if time remains after the base project is complete.</li><li>Pagination for long article lists.</li><li>Clear no-result state for empty categories or filtered searches.</li></ul></div></article><article class="project-screen-card"><h3>Article Detail Page</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Title, rich content, category, author, and last updated date.</li><li>Related articles are optional only after the base project is complete and are not required for delivery.</li><li>Drafts fully blocked from member view.</li></ul></div></article><article class="project-screen-card"><h3>Admin Article Form</h3><div class="project-rich-content"><p>Fields:</p><ul><li>Title, slug, category, content, status, and visibility fixed to the current workspace.</li><li>Slug preview and uniqueness validation.</li><li>Rich content editor or structured content area.</li><li>Save draft and publish actions are required.</li><li>Preview mode before publish is a nice-to-have only after the base project is complete.</li></ul></div></article></div></div></section><section id="data-model" class="section"><div class="project-rich-card"><h2 class="section-title">Data Model</h2><div class="project-rich-content"><p>Recommended models:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Model</th><th>Purpose</th></tr></thead><tbody><tr><td><code>KnowledgeCategory</code></td><td>Groups articles.</td></tr><tr><td><code>KnowledgeArticle</code></td><td>Main article content.</td></tr><tr><td><code>ArticleView</code></td><td>Optional article analytics.</td></tr></tbody></table></div><p>Recommended <code>KnowledgeArticle</code> fields:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Field</th><th>Purpose</th></tr></thead><tbody><tr><td><code>workspace</code></td><td>Workspace relation.</td></tr><tr><td><code>category</code></td><td>Category relation.</td></tr><tr><td><code>title</code></td><td>Article title.</td></tr><tr><td><code>slug</code></td><td>URL-safe slug.</td></tr><tr><td><code>content</code></td><td>Rich article content.</td></tr><tr><td><code>status</code></td><td>Draft or published.</td></tr><tr><td><code>created_by</code></td><td>Author.</td></tr><tr><td><code>updated_at</code></td><td>Last update time.</td></tr></tbody></table></div></div></div></section><section id="slug-routing" class="section"><div class="project-rich-card"><h2 class="section-title">Slug Routing</h2><div class="project-rich-content"><p>Recommended route style:</p><pre><code class="language-text">/kb/&lt;category_slug&gt;/&lt;article_slug&gt;/</code></pre><p>Slug rules:</p><ul><li>Slug should be unique per workspace.</li><li>Slug should not expose database ID where avoidable.</li><li>Slug should update carefully to avoid broken links.</li></ul></div></div></section><section id="permission-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Permission Rules</h2><div class="project-rich-content"><div class="table-wrapper"><table class="table"><thead><tr><th>Actor</th><th>Allowed</th></tr></thead><tbody><tr><td>Owner</td><td>Manage all knowledge base content.</td></tr><tr><td>Admin</td><td>Create/edit articles in assigned workspace.</td></tr><tr><td>Member</td><td>Read published articles in own workspace.</td></tr><tr><td>Non-member</td><td>No access.</td></tr></tbody></table></div></div></div></section><section id="search-expectations" class="section"><div class="project-rich-card"><h2 class="section-title">Search Expectations</h2><div class="project-rich-content"><p>Search should work by:</p><ul><li>Article title</li><li>Article content</li><li>Category</li></ul><p>Use Django ORM search for the base project. PostgreSQL full-text search is a later enhancement, not part of the required delivery.</p></div></div></section><section id="acceptance-checklist" class="section"><div class="project-rich-card"><h2 class="section-title">Acceptance Checklist</h2><div class="project-rich-content"><ul><li>Admin can create category.</li><li>Admin can create article.</li><li>Draft articles are hidden from members.</li><li>Published articles are visible to workspace members.</li><li>Member cannot see articles from another workspace.</li><li>Search works.</li><li>Category filtering works.</li><li>Slug routing works.</li><li>Empty state appears when no article exists.</li><li>Business logic is handled in service layer.</li></ul></div></div></section>
     </div>
   </main>
-
   <footer class="footer">
     <div class="footer-inner">
       <div>
         <div class="footer-brand">Development Standards</div>
-        <p class="footer-text">Build to the standard. Every time.</p>
+        <p class="footer-text">Build a workspace-based internal knowledge base where admins can create articles and members can search/read approved content.</p>
       </div>
       <div class="footer-links">
         <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
         <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
-        <a href="../../pages/standards.html" class="footer-link">Standards</a>
       </div>
     </div>
   </footer>
-
   <script type="module" src="../../../js/main.js"></script>
 </body>
 </html>

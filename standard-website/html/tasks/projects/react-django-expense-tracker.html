@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project — Expense Tracker | Development Standards</title>
-  <meta name="description" content="Build an expense tracker with receipt upload (MIME validated), status workflow, and manager review page." />
+  <meta name="description" content="Build an expense submission and approval system with file uploads." />
   <script>
   (function () {
     try {
@@ -15,16 +15,14 @@
     } catch (error) {}
   })();
 </script>
-
-  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="icon" href="../../../assets/images/infiweb-logo.png" />
   <link rel="stylesheet" href="../../../css/main.css" />
 </head>
-
 <body class="project-detail-page" data-page="tasks">
   <header class="navbar">
     <div class="navbar-inner">
       <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
-        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <img src="../../../assets/images/infiweb-logo.png" alt="Infi Web Solutions Logo" class="navbar-logo" />
         <span>Development Standards</span>
       </a>
       <nav class="navbar-menu" aria-label="Main Navigation">
@@ -37,455 +35,88 @@
       <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
     </div>
   </header>
-
   <main class="page">
     <div class="container">
       <section class="page-header">
-        <span class="badge badge-info">Project — React + Django</span>
+        <span class="badge badge-info">Project Task</span>
         <h1 class="page-title">Project — Expense Tracker</h1>
-        <p class="page-subtitle">Build an expense tracker with receipt upload (MIME validated), status workflow, and manager review page.</p>
+        <p class="page-subtitle">Build an expense submission and approval system with file uploads.</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
-          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
-          
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Project Tasks</a>
         </div>
       </section>
-
-      <section class="section project-intro-grid">
-        <div class="content-card project-brief-card">
-          <span class="project-brief-kicker">Build Brief</span>
-          <div class="project-meta-row">
-            <span class="project-meta-pill">React (TypeScript) + Django REST Framework</span>
-            <span class="project-meta-pill">8 hours</span>
-            <span class="project-meta-pill">Intermediate–Advanced</span>
+      <section class="section project-showcase">
+        <div class="project-showcase-main">
+          <div class="project-kicker-row">
+            <span class="project-stack-badge">React + Django</span>
+            <span class="project-brief-kicker">~8 Hours</span>
+            <span class="project-brief-kicker">Intermediate</span>
           </div>
           <h2 class="section-title">What You Are Building</h2>
-          <p class="project-brief-copy">A workspace expense tracker with an approval workflow. Employees submit expense records with a receipt file. Managers (admin role) approve or reject submissions. The system has two views: "My Expenses" for employees and "Review Expenses" for managers.</p>
-        </div>
-
-        <div class="content-card project-roles-card">
-          <span class="project-brief-kicker">Roles &amp; Access</span>
-          <ul class="project-role-list">
-            <li><strong>Employee / Member</strong>Submit expenses, upload receipts, review personal history, and delete eligible submitted items.</li>
-            <li><strong>Manager / Admin</strong>Open the review queue, approve expenses, or reject them with required review notes.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="content-card project-flow-card">
-          <div class="project-flow-header">
-            <span class="project-brief-kicker">Core Flows</span>
-            <h2 class="section-title">How this product should work</h2>
-            <p class="project-flow-lead">This needs to read as one full approval system: employee submission, receipt handling, status history, and manager review all need to connect clearly.</p>
-          </div>
-          <div class="project-flow-grid">
-            <article class="project-flow-item">
-              <strong>Submit an expense</strong>
-              <p>Employees open the submit flow, attach a receipt, and create a new expense in submitted status.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Track my expenses</strong>
-              <p>The employee-facing page filters personal records and shows whether each submission is waiting, approved, or rejected.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Manager review</strong>
-              <p>The admin-only review page filters pending records and exposes approve and reject actions with the correct note and confirmation rules.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Receipt and delete rules</strong>
-              <p>Receipt files stay attached to the right expense, and deletes must respect status restrictions and storage cleanup rules.</p>
-            </article>
+          <p class="project-lead">Build an expense submission and approval system with file uploads.</p>
+          <div class="project-side-block">
+            <h3 class="project-side-title">This project teaches</h3>
+            <ul class="project-skill-list"><li>Django model design</li><li>File upload handling</li><li>Approval workflow</li><li>DRF backend</li><li>React list, form, and admin views</li></ul>
           </div>
         </div>
+        <aside class="project-showcase-side">
+          <div class="project-side-block">
+            <span class="project-brief-kicker">User Stories</span>
+            <h2 class="section-title">Who this flow is for</h2>
+          </div>
+          <div class="project-story-grid"><article class="project-story-card"><strong>Member</strong><p>I want to submit an expense with receipt.</p></article><article class="project-story-card"><strong>Admin</strong><p>I want to approve or reject expenses for my workspace.</p></article><article class="project-story-card"><strong>Owner</strong><p>I want to view expenses across all workspaces.</p></article></div>
+        </aside>
       </section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Expense Workflow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">stateDiagram-v2
+    [*] --> Draft
+    Draft --> Submitted
+    Submitted --> Approved
+    Submitted --> Rejected
+    Rejected --> Submitted
+    Approved --> Paid</pre></div></div></div></section><section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Example Flow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">flowchart TD
+    Login[User logs in]
+    Workspace[Selects workspace]
+    Expenses[Opens Expense Tracker]
 
-      <section id="features-to-build" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Features to Build</h2>
-          <div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>#</th>
-    <th>Feature</th>
-    <th>Est. Time</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>1</td>
-    <td>Django: Expense model + migration</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>Django: ExpenseSerializer + ExpenseWriteSerializer</td>
-    <td>30m</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>Django: ExpenseService (submit, approve, reject, delete)</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>Django: DRF views + URLs + file upload handling</td>
-    <td>1h</td>
-  </tr>
-  <tr>
-    <td>5</td>
-    <td>React: My Expenses page (list + submit form)</td>
-    <td>1h 30m</td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td>React: Submit expense form with file upload</td>
-    <td>1h</td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>React: Manager review page (approve/reject)</td>
-    <td>1h</td>
-  </tr>
-  <tr>
-    <td>8</td>
-    <td>Permissions + all states</td>
-    <td>30m</td>
-  </tr>
-  </tbody>
-</table></div>
-<hr />
-        </div>
-      </section>
+    Login --> Workspace --> Expenses
 
-      <section id="1-django-model" class="section">
-        <div class="content-card">
-          <h2 class="section-title">1. Django Model</h2>
-          <h3><code>Expense</code></h3>
-<pre><code class="language-python">class Expense(models.Model):
+    Expenses --> Member[Member Flow]
+    Expenses --> Admin[Admin Flow]
+    Expenses --> Owner[Owner Flow]
 
-    class Status(models.TextChoices):
-        SUBMITTED = &#x27;submitted&#x27;, &#x27;Submitted&#x27;
-        APPROVED  = &#x27;approved&#x27;,  &#x27;Approved&#x27;
-        REJECTED  = &#x27;rejected&#x27;,  &#x27;Rejected&#x27;
+    Member --> MemberList[View own expenses]
+    MemberList --> MemberFilter[Search / filter / paginate own submissions]
+    MemberFilter --> MemberCreate[Create expense draft]
+    MemberCreate --> MemberUpload[Upload receipt securely]
+    MemberUpload --> MemberSubmit[Submit expense for review]
+    MemberSubmit --> MemberTrack[Track approval or rejection status]
+    MemberTrack -. cannot approve own expense .-> MemberBlocked[Approval actions blocked]
 
-    class Category(models.TextChoices):
-        TRAVEL      = &#x27;travel&#x27;,      &#x27;Travel&#x27;
-        MEALS       = &#x27;meals&#x27;,       &#x27;Meals&#x27;
-        SOFTWARE    = &#x27;software&#x27;,    &#x27;Software&#x27;
-        EQUIPMENT   = &#x27;equipment&#x27;,   &#x27;Equipment&#x27;
-        OTHER       = &#x27;other&#x27;,       &#x27;Other&#x27;
+    Admin --> AdminQueue[View workspace expense queue]
+    AdminQueue --> AdminFilter[Search / filter / paginate by submitter, status, category]
+    AdminFilter --> AdminView[Open expense detail and receipt preview]
+    AdminView --> AdminDecision[Approve or reject with reason]
+    AdminDecision -. cannot review other workspaces .-> AdminBlocked[Blocked by workspace permission rules]
 
-    workspace    = models.ForeignKey(&#x27;Workspace&#x27;, on_delete=models.CASCADE, related_name=&#x27;expenses&#x27;)
-    title        = models.CharField(max_length=200)
-    amount       = models.DecimalField(max_digits=10, decimal_places=2)
-    category     = models.CharField(max_length=20, choices=Category.choices)
-    description  = models.TextField(blank=True, default=&#x27;&#x27;)
-    receipt      = models.FileField(upload_to=&#x27;receipts/%Y/%m/&#x27;, null=True, blank=True)
-    status       = models.CharField(max_length=20, choices=Status.choices,
-                                    default=Status.SUBMITTED)
-    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
-                                     null=True, related_name=&#x27;expenses&#x27;)
-    reviewed_by  = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
-                                     null=True, blank=True, related_name=&#x27;reviewed_expenses&#x27;)
-    reviewed_at  = models.DateTimeField(null=True, blank=True)
-    review_notes = models.TextField(blank=True, default=&#x27;&#x27;)
-    created_at   = models.DateTimeField(auto_now_add=True)
-    updated_at   = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = [&#x27;-created_at&#x27;]
-        verbose_name = &#x27;Expense&#x27;
-        verbose_name_plural = &#x27;Expenses&#x27;
-        constraints = [
-            models.CheckConstraint(
-                check=models.Q(amount__gt=0),
-                name=&#x27;expense_amount_positive&#x27;
-            )
-        ]
-
-    def __str__(self):
-        return f&quot;{self.submitted_by} — {self.title} (${self.amount})&quot;</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/model.md">Django Model</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="2-serializers" class="section">
-        <div class="content-card">
-          <h2 class="section-title">2. Serializers</h2>
-          <h3><code>ExpenseSerializer</code> (read)</h3>
-<pre><code class="language-python">fields = [&#x27;id&#x27;, &#x27;title&#x27;, &#x27;amount&#x27;, &#x27;category&#x27;, &#x27;description&#x27;,
-          &#x27;receipt_url&#x27;, &#x27;status&#x27;, &#x27;submitted_by&#x27;, &#x27;reviewed_by&#x27;,
-          &#x27;reviewed_at&#x27;, &#x27;review_notes&#x27;, &#x27;created_at&#x27;]
-read_only_fields = [&#x27;id&#x27;, &#x27;status&#x27;, &#x27;submitted_by&#x27;, &#x27;reviewed_by&#x27;,
-                    &#x27;reviewed_at&#x27;, &#x27;created_at&#x27;]
-
-# receipt_url: SerializerMethodField — returns the file URL or None</code></pre>
-<h3><code>ExpenseWriteSerializer</code> (write)</h3>
-<pre><code class="language-python">fields = [&#x27;title&#x27;, &#x27;amount&#x27;, &#x27;category&#x27;, &#x27;description&#x27;, &#x27;receipt&#x27;]
-
-# Validation:
-# - title: required, max 200 chars
-# - amount: required, must be &gt; 0, max 2 decimal places
-# - category: required, must be a valid choice
-# - receipt: optional, MIME type must be image/jpeg, image/png, or application/pdf, max 10 MB</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/form-serializer.md">Django Form / Serializer</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="3-expenseservice" class="section">
-        <div class="content-card">
-          <h2 class="section-title">3. ExpenseService</h2>
-          <pre><code class="language-python">class ExpenseService:
-
-    @staticmethod
-    def submit_expense(workspace, title, amount, category,
-                       submitted_by, description=&#x27;&#x27;, receipt=None):
-        &quot;&quot;&quot;Creates a new expense in &#x27;submitted&#x27; status.&quot;&quot;&quot;
-
-    @staticmethod
-    def approve_expense(expense, reviewed_by, review_notes=&#x27;&#x27;):
-        &quot;&quot;&quot;
-        Approves the expense.
-        Raises ValidationError if status is not &#x27;submitted&#x27;.
-        Sets reviewed_by, reviewed_at, status = &#x27;approved&#x27;.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def reject_expense(expense, reviewed_by, review_notes):
-        &quot;&quot;&quot;
-        Rejects the expense.
-        Raises ValidationError if status is not &#x27;submitted&#x27;.
-        review_notes is required for rejection.
-        Sets reviewed_by, reviewed_at, review_notes, status = &#x27;rejected&#x27;.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def delete_expense(expense, actor):
-        &quot;&quot;&quot;
-        Deletes the expense and its receipt file from storage.
-        Only the submitter or an admin can delete.
-        Cannot delete an approved expense.
-        &quot;&quot;&quot;</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="4-drf-views-urls" class="section">
-        <div class="content-card">
-          <h2 class="section-title">4. DRF Views &amp; URLs</h2>
-          <h3>Views</h3>
-<pre><code class="language-text">ExpenseListCreateView
-  GET  /api/v1/workspaces/{workspace_id}/expenses/
-    — Returns current user&#x27;s own expenses
-    — Filters: ?status=submitted, ?category=travel
-    — Pagination: 20 per page
-
-  POST /api/v1/workspaces/{workspace_id}/expenses/
-    — Uses multipart/form-data (supports file upload)
-    — Calls ExpenseService.submit_expense()
-    — Returns 201
-
-ExpenseDetailView
-  GET    /api/v1/workspaces/{workspace_id}/expenses/{id}/
-  DELETE /api/v1/workspaces/{workspace_id}/expenses/{id}/
-    — Only submitter or admin can delete
-    — Cannot delete approved expense (409)
-    — Returns 204
-
-ExpenseApproveView
-  POST /api/v1/workspaces/{workspace_id}/expenses/{id}/approve/
-    — Admin only
-    — Calls ExpenseService.approve_expense()
-    — Returns 200
-
-ExpenseRejectView
-  POST /api/v1/workspaces/{workspace_id}/expenses/{id}/reject/
-    — Admin only
-    — Body: { review_notes: &quot;...&quot; } — required
-    — Calls ExpenseService.reject_expense()
-    — Returns 200
-
-AdminExpenseListView
-  GET /api/v1/workspaces/{workspace_id}/expenses/all/
-    — Admin only
-    — Returns ALL workspace expenses
-    — Filters: ?status=submitted&amp;submitted_by={user_id}
-    — Pagination: 25 per page</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/api-view.md">DRF API View</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="5-react-my-expenses-page" class="section">
-        <div class="content-card">
-          <h2 class="section-title">5. React: My Expenses Page</h2>
-          <p><strong>URL:</strong> <code>/workspaces/{id}/expenses</code></p>
-<pre><code class="language-text">HEADER:
-[ ] &quot;My Expenses&quot; title + &quot;Submit Expense&quot; button
-
-FILTERS:
-[ ] Status: All / Submitted / Approved / Rejected
-[ ] Category: All / Travel / Meals / Software / Equipment / Other
-[ ] Filter state in URL: ?status=submitted&amp;category=travel
-
-TABLE COLUMNS:
-[ ] Title · Amount (right-aligned, 2dp) · Category · Status badge · Submitted On · Actions
-
-STATUS BADGES:
-[ ] submitted=blue, approved=green, rejected=red
-
-ACTIONS:
-[ ] View receipt link (if receipt exists)
-[ ] Delete button — only shown when status = &#x27;submitted&#x27; (cannot delete approved)
-
-PAGINATION: 20 per page
-
-STATES:
-[ ] Loading: skeleton rows
-[ ] Empty: &quot;No expenses yet.&quot; + &quot;Submit your first expense&quot; button
-[ ] Empty (filter): &quot;No expenses match your filters.&quot; + clear button
-[ ] Error: &quot;Could not load expenses.&quot; + retry</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/website/react-page.md">React Page Build</a> · <a href="../../../../checklists/frontend/tables-data-lists.md">Tables & Data Lists</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="6-submit-expense-form-modal" class="section">
-        <div class="content-card">
-          <h2 class="section-title">6. Submit Expense Form (Modal)</h2>
-          <pre><code class="language-text">Fields:
-[ ] Title: text, required, max 200 chars
-[ ] Amount: number input, required, min 0.01, 2 decimal places
-[ ] Category: dropdown, required
-[ ] Description: textarea, optional
-[ ] Receipt: file upload — JPG, PNG, PDF only, max 10 MB
-
-File Upload:
-[ ] Show accepted types: &quot;JPG, PNG, or PDF up to 10 MB&quot;
-[ ] Validate MIME type before submitting (not just extension)
-[ ] Show file size error if &gt; 10 MB before upload
-[ ] Preview filename + size after selection
-[ ] Upload sent as multipart/form-data
-
-Behavior:
-[ ] Loading state on submit, button disabled
-[ ] On success: &quot;Expense submitted.&quot; toast, list refreshes
-[ ] On error: banner above submit button (field errors below fields)
-[ ] Validation: amount &gt; 0, category selected, file MIME valid</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/modals-dialogs.md">Modals & Dialogs</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="7-react-manager-review-page" class="section">
-        <div class="content-card">
-          <h2 class="section-title">7. React: Manager Review Page</h2>
-          <p><strong>URL:</strong> <code>/workspaces/{id}/expenses/review</code></p>
-<pre><code class="language-text">[ ] Visible only to admin/owner — 403 state for members
-[ ] Default filter: status=submitted (pending review)
-[ ] Filters: Status · Employee (dropdown of workspace members) · Category
-[ ] Filter chips with X + &quot;Clear all&quot; button
-
-TABLE COLUMNS:
-[ ] Employee Name · Title · Amount · Category · Submitted On · Status badge · Actions
-
-ACTIONS (when status = &#x27;submitted&#x27;):
-[ ] &quot;Approve&quot; (green) · &quot;Reject&quot; (red)
-
-Approve flow:
-[ ] Confirmation: &quot;Approve this expense?&quot; + optional note input
-[ ] On confirm: calls /approve endpoint, row updates in place
-
-Reject flow:
-[ ] Modal: &quot;Reject Expense&quot; with required review_notes textarea
-[ ] On submit: calls /reject endpoint, row updates in place
-[ ] review_notes required — cannot reject without a reason
-
-After action:
-[ ] Approve/Reject buttons replaced by the result badge
-[ ] Toast: &quot;Expense approved.&quot; / &quot;Expense rejected.&quot;
-
-STATES: Loading · Empty · Empty (filter) · Error</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/permissions-role-ui.md">Permissions & Role-Based UI</a> · <a href="../../../../checklists/frontend/search-filters-pagination.md">Search, Filters & Pagination</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="what-you-should-not-do" class="section">
-        <div class="content-card">
-          <h2 class="section-title">What You Should NOT Do</h2>
-          <pre><code class="language-text">× Put business logic (approve, reject, delete) in DRF views — use ExpenseService
-× Accept receipt file without MIME type validation (check actual MIME, not extension)
-× Let a member-role user access /expenses/all/ or approve/reject endpoints
-× Let a user delete an approved expense
-× Skip the receipt file cleanup when deleting an expense
-× Use DecimalField with max_digits &lt; what&#x27;s needed (use max_digits=10, decimal_places=2)
-× Return 200 for a submitted expense (new resource) — use 201
-× Accept any file type — only JPG, PNG, PDF</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="checklists-to-run-in-order" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Checklists to Run (in order)</h2>
-          <label><input type="checkbox" data-checklist-item /> Django Model — Expense model</label><br />
-<label><input type="checkbox" data-checklist-item /> Django Form / Serializer — both serializers + file field validation</label><br />
-<label><input type="checkbox" data-checklist-item /> DRF API View — all views</label><br />
-<label><input type="checkbox" data-checklist-item /> React Page Build — My Expenses page + Manager Review page</label><br />
-<label><input type="checkbox" data-checklist-item /> Tables & Data Lists — both tables</label><br />
-<label><input type="checkbox" data-checklist-item /> Modals & Dialogs — submit expense modal, approve/reject modals</label><br />
-<label><input type="checkbox" data-checklist-item /> Search, Filters & Pagination — both pages</label><br />
-<label><input type="checkbox" data-checklist-item /> Loading States & Skeletons — both pages</label><br />
-<label><input type="checkbox" data-checklist-item /> Error Handling — all API calls</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete & Destructive Actions — delete expense</label><br />
-<label><input type="checkbox" data-checklist-item /> Notifications & Toasts — approve/reject/submit/delete</label><br />
-<label><input type="checkbox" data-checklist-item /> Permissions & Role-Based UI — manager page access, delete visibility</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="done-when" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Done When</h2>
-          <label><input type="checkbox" data-checklist-item /> Expense model: all fields, CheckConstraint for amount > 0, migration</label><br />
-<label><input type="checkbox" data-checklist-item /> ExpenseWriteSerializer: MIME type validated (not just extension), amount > 0 validated</label><br />
-<label><input type="checkbox" data-checklist-item /> ExpenseService: submit, approve, reject, delete all work correctly</label><br />
-<label><input type="checkbox" data-checklist-item /> delete_expense: removes file from storage AND database record</label><br />
-<label><input type="checkbox" data-checklist-item /> Approve endpoint: admin only, 409 if not 'submitted' status</label><br />
-<label><input type="checkbox" data-checklist-item /> Reject endpoint: admin only, review_notes required, 409 if not 'submitted'</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete endpoint: submitter or admin only; 409 if status = 'approved'</label><br />
-<label><input type="checkbox" data-checklist-item /> AdminExpenseListView: admin only, 403 for member role</label><br />
-<label><input type="checkbox" data-checklist-item /> My Expenses: filters by current user only (not all workspace expenses)</label><br />
-<label><input type="checkbox" data-checklist-item /> My Expenses: all 4 states (loading/empty/filter-empty/error)</label><br />
-<label><input type="checkbox" data-checklist-item /> Submit form: MIME type checked, 10 MB limit enforced before upload</label><br />
-<label><input type="checkbox" data-checklist-item /> Submit form: multipart/form-data, file included in request</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete: only shown for 'submitted' expenses — not approved</label><br />
-<label><input type="checkbox" data-checklist-item /> Manager page: 403 state for member-role React users</label><br />
-<label><input type="checkbox" data-checklist-item /> Manager page: reject requires review_notes (shown as required field in modal)</label><br />
-<label><input type="checkbox" data-checklist-item /> After approve/reject: buttons replaced by badge in table</label><br />
-<label><input type="checkbox" data-checklist-item /> Receipt files: served correctly, URL included in serializer</label><br />
-<label><input type="checkbox" data-checklist-item /> TypeScript: no any types, Expense interface defined</label><br />
-<label><input type="checkbox" data-checklist-item /> Mobile tested at 375px and 768px</label><br />
-        </div>
-      </section>
+    Owner --> OwnerOverview[View expenses across owned workspaces]
+    OwnerOverview --> OwnerFilter[Filter by workspace, status, category, submitter]
+    OwnerFilter --> OwnerView[Open expense detail]
+    OwnerView --> OwnerManage[Approve, reject, audit, or confirm paid state]</pre></div></div></div></section>
+      <section id="required-screens" class="section"><div class="project-rich-card"><h2 class="section-title">Required Screens</h2><div class="project-screen-grid"><article class="project-screen-card"><h3>My Expenses Page</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Expense title, amount, category, status, submitted date, and receipt indicator.</li><li>Search by title or category.</li><li>Filters for status, category, and date range.</li><li>Pagination if many submissions exist.</li><li>View button to open full expense details.</li><li>Receipt preview button for image and PDF files; all other file types should show download-only behavior.</li><li>Loading, empty, no-result, and error states.</li></ul></div></article><article class="project-screen-card"><h3>Submit Expense Form</h3><div class="project-rich-content"><p>Fields:</p><ul><li>Title, amount, category, date, description, and receipt upload.</li><li>File picker with allowed type and size validation for PDF, JPG, and PNG only.</li><li>Preview selected receipt before submit for PDF, JPG, and PNG files.</li><li>Replace/remove uploaded file before final save.</li><li>No direct public receipt URL; file access should stay private or signed.</li></ul></div></article><article class="project-screen-card"><h3>Expense Detail / Receipt Preview</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Full expense summary with submitter, amounts, category, notes, and status history.</li><li>Receipt preview modal or drawer for supported formats.</li><li>Secure signed download action for the original file.</li><li>Decision metadata after approval or rejection.</li></ul></div></article><article class="project-screen-card"><h3>Admin Expense Review Page</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Pending and reviewed expenses with submitter, amount, category, and status.</li><li>Search and filters for status, category, submitter, and date range.</li><li>Pagination for large review queues.</li><li>Receipt preview/download through signed or private access only.</li><li>Approve button and reject button.</li><li>Rejection reason field or modal that is required before reject completes.</li></ul></div></article></div></div></section><section id="data-model" class="section"><div class="project-rich-card"><h2 class="section-title">Data Model</h2><div class="project-rich-content"><p>Recommended <code>Expense</code> fields:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Field</th><th>Purpose</th></tr></thead><tbody><tr><td><code>workspace</code></td><td>Workspace relation.</td></tr><tr><td><code>submitted_by</code></td><td>User who submitted expense.</td></tr><tr><td><code>title</code></td><td>Expense title.</td></tr><tr><td><code>amount</code></td><td>Expense amount.</td></tr><tr><td><code>category</code></td><td>Travel, food, office, etc.</td></tr><tr><td><code>receipt_file</code></td><td>Uploaded receipt.</td></tr><tr><td><code>status</code></td><td>Draft, submitted, approved, rejected, paid.</td></tr><tr><td><code>reviewed_by</code></td><td>Admin/Owner who reviewed.</td></tr><tr><td><code>reviewed_at</code></td><td>Review timestamp.</td></tr><tr><td><code>rejection_reason</code></td><td>Required if rejected.</td></tr></tbody></table></div></div></div></section><section id="permission-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Permission Rules</h2><div class="project-rich-content"><div class="table-wrapper"><table class="table"><thead><tr><th>Actor</th><th>Allowed</th></tr></thead><tbody><tr><td>Owner</td><td>View/manage all expenses in owned workspaces.</td></tr><tr><td>Admin</td><td>Review expenses in assigned workspace.</td></tr><tr><td>Member</td><td>Create/view own expenses.</td></tr><tr><td>Non-member</td><td>No access.</td></tr></tbody></table></div><p>Important rule:</p><p>A user should not approve their own expense.</p></div></div></section><section id="file-upload-requirements" class="section"><div class="project-rich-card"><h2 class="section-title">File Upload Requirements</h2><div class="project-rich-content"><ul><li>Validate file type.</li><li>Validate file size.</li><li>Store file securely.</li><li>Do not expose private files publicly.</li><li>Use signed/private download for all receipt access.</li></ul><p>Allowed examples:</p><ul><li>PDF</li><li>JPG</li><li>PNG</li></ul><p>Blocked examples:</p><ul><li>Executable files</li><li>Scripts</li><li>Unknown file types</li></ul></div></div></section><section id="acceptance-checklist" class="section"><div class="project-rich-card"><h2 class="section-title">Acceptance Checklist</h2><div class="project-rich-content"><ul><li>Member can submit expense.</li><li>Receipt upload works.</li><li>Invalid files are blocked.</li><li>Admin can approve/reject workspace expenses.</li><li>Admin cannot see other workspace expenses.</li><li>User cannot approve own expense.</li><li>Rejection requires reason.</li><li>Status transitions are controlled server-side.</li><li>React handles loading, empty, and error states.</li></ul></div></div></section>
     </div>
   </main>
-
   <footer class="footer">
     <div class="footer-inner">
       <div>
         <div class="footer-brand">Development Standards</div>
-        <p class="footer-text">Build to the standard. Every time.</p>
+        <p class="footer-text">Build an expense submission and approval system with file uploads.</p>
       </div>
       <div class="footer-links">
         <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
         <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
-        <a href="../../pages/standards.html" class="footer-link">Standards</a>
       </div>
     </div>
   </footer>
-
   <script type="module" src="../../../js/main.js"></script>
 </body>
 </html>

@@ -1,9 +1,34 @@
-import { qs, qsa, on } from "../utils.js";
+import { on, qs, qsa, resolveProjectPath } from "../utils.js";
 
 export function initNavbar() {
+  initNavbarBranding();
   initMobileNavbar();
   initNavbarScrollState();
   initHashLinkClosing();
+}
+
+function initNavbarBranding() {
+  qsa(".navbar-brand").forEach((brand) => {
+    const logo = qs(".navbar-logo", brand);
+    if (logo) {
+      logo.src = resolveProjectPath("assets/images/infiweb-logo.png");
+      logo.alt = "Infi Web Solutions Logo";
+    }
+
+    const existingText = Array.from(brand.children).find((element) => element.tagName === "SPAN");
+    if (existingText) {
+      existingText.remove();
+    }
+
+    const brandText = document.createElement("span");
+    brandText.className = "navbar-brand-copy";
+    brandText.innerHTML = `
+      <span class="navbar-brand-title">Development Standards</span>
+      <span class="navbar-brand-subtitle">by Infi Web Solutions</span>
+    `;
+
+    brand.appendChild(brandText);
+  });
 }
 
 function initMobileNavbar() {

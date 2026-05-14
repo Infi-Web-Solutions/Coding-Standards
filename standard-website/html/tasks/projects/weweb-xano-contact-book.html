@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project — Contact Book | Development Standards</title>
-  <meta name="description" content="Build a workspace contact directory with Xano endpoints, search/sort/filter, shared Add/Edit modal, and E.164 phone validation." />
+  <meta name="description" content="Build a workspace-based contact book using Xano as backend and WeWeb as frontend." />
   <script>
   (function () {
     try {
@@ -15,16 +15,14 @@
     } catch (error) {}
   })();
 </script>
-
-  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="icon" href="../../../assets/images/infiweb-logo.png" />
   <link rel="stylesheet" href="../../../css/main.css" />
 </head>
-
 <body class="project-detail-page" data-page="tasks">
   <header class="navbar">
     <div class="navbar-inner">
       <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
-        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <img src="../../../assets/images/infiweb-logo.png" alt="Infi Web Solutions Logo" class="navbar-logo" />
         <span>Development Standards</span>
       </a>
       <nav class="navbar-menu" aria-label="Main Navigation">
@@ -37,476 +35,81 @@
       <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
     </div>
   </header>
-
   <main class="page">
     <div class="container">
       <section class="page-header">
-        <span class="badge badge-info">Project — WeWeb + Xano</span>
+        <span class="badge badge-info">Project Task</span>
         <h1 class="page-title">Project — Contact Book</h1>
-        <p class="page-subtitle">Build a workspace contact directory with Xano endpoints, search/sort/filter, shared Add/Edit modal, and E.164 phone validation.</p>
+        <p class="page-subtitle">Build a workspace-based contact book using Xano as backend and WeWeb as frontend.</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
-          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
-          
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Project Tasks</a>
         </div>
       </section>
-
-      <section class="section project-intro-grid">
-        <div class="content-card project-brief-card">
-          <span class="project-brief-kicker">Build Brief</span>
-          <div class="project-meta-row">
-            <span class="project-meta-pill">WeWeb + Xano</span>
-            <span class="project-meta-pill">8 hours</span>
-            <span class="project-meta-pill">Beginner–Intermediate</span>
+      <section class="section project-showcase">
+        <div class="project-showcase-main">
+          <div class="project-kicker-row">
+            <span class="project-stack-badge">WeWeb + Xano</span>
+            <span class="project-brief-kicker">~8 Hours</span>
+            <span class="project-brief-kicker">Beginner–Intermediate</span>
           </div>
           <h2 class="section-title">What You Are Building</h2>
-          <p class="project-brief-copy">A workspace contact book (light CRM). Members can add, view, edit, and delete contacts. Contacts have a name, email, phone, company, status, and notes. The list is searchable, filterable, and paginated. All backend logic lives in Xano with proper auth, permission checks, and error handling.</p>
-        </div>
-
-        <div class="content-card project-roles-card">
-          <span class="project-brief-kicker">Roles &amp; Access</span>
-          <ul class="project-role-list">
-            <li><strong>Member</strong>Can list contacts, open detail views, and use the shared add or edit workflow defined for the contact UI.</li>
-            <li><strong>Admin / Owner</strong>Can also permanently delete contacts through the protected Xano delete endpoint.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="content-card project-flow-card">
-          <div class="project-flow-header">
-            <span class="project-brief-kicker">Core Flows</span>
-            <h2 class="section-title">How this product should work</h2>
-            <p class="project-flow-lead">This should read like a lightweight CRM, with clear list behavior, reusable forms, and backend permissions that actually match what the UI exposes.</p>
-          </div>
-          <div class="project-flow-grid">
-            <article class="project-flow-item">
-              <strong>Searchable contact list</strong>
-              <p>The list page keeps search, filter, sort, and pagination state aligned with the Xano query params instead of relying on local-only UI tricks.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Detail view</strong>
-              <p>Users open a full contact record, view all fields including notes, and see edit or delete actions based on role.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Shared contact modal</strong>
-              <p>The same component powers add and edit, with duplicate email handling and inline validation feedback.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Protected delete</strong>
-              <p>Delete is reserved for admin or owner roles and always runs through a confirmation-driven cleanup flow.</p>
-            </article>
+          <p class="project-lead">Build a workspace-based contact book using Xano as backend and WeWeb as frontend.</p>
+          <div class="project-side-block">
+            <h3 class="project-side-title">This project teaches</h3>
+            <ul class="project-skill-list"><li>Xano CRUD endpoints</li><li>Reusable permission function</li><li>WeWeb list page</li><li>WeWeb form page</li><li>Search</li><li>Filters</li><li>Pagination</li><li>Loading, empty, and error states</li></ul>
           </div>
         </div>
+        <aside class="project-showcase-side">
+          <div class="project-side-block">
+            <span class="project-brief-kicker">User Stories</span>
+            <h2 class="section-title">Who this flow is for</h2>
+          </div>
+          <div class="project-story-grid"><article class="project-story-card"><strong>Owner</strong><p>I want each workspace to maintain its own contacts.</p></article><article class="project-story-card"><strong>Admin</strong><p>I want to add and manage contacts for my assigned workspace.</p></article><article class="project-story-card"><strong>Member</strong><p>I want to view contacts inside my workspace. For this base project, members are read-only and do not create or delete contacts.</p></article></div>
+        </aside>
       </section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Example Flow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">flowchart TD
+    Login[User logs in]
+    Select[Selects workspace]
+    Contacts[Opens Contact Book]
 
-      <section id="features-to-build" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Features to Build</h2>
-          <div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>#</th>
-    <th>Feature</th>
-    <th>Est. Time</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>1</td>
-    <td>Xano tables + <code>check_workspace_permission</code> reusable function</td>
-    <td>1h</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>Xano endpoints: list, get, create, update, delete</td>
-    <td>1h 30m</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>Contacts list page (search, filter, sort, pagination)</td>
-    <td>1h 30m</td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>Add / Edit contact modal (shared form)</td>
-    <td>1h 30m</td>
-  </tr>
-  <tr>
-    <td>5</td>
-    <td>Contact detail view (side panel or page)</td>
-    <td>30m</td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td>Delete contact (confirmation, admin only)</td>
-    <td>30m</td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>All states + permissions</td>
-    <td>30m</td>
-  </tr>
-  </tbody>
-</table></div>
-<hr />
-        </div>
-      </section>
+    Login --> Select --> Contacts
 
-      <section id="1-xano-database-tables" class="section">
-        <div class="content-card">
-          <h2 class="section-title">1. Xano Database Tables</h2>
-          <h3><code>contacts</code> Table</h3>
-<div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>Column</th>
-    <th>Type</th>
-    <th>Rules</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>id</td>
-    <td>int (auto)</td>
-    <td>PK</td>
-  </tr>
-  <tr>
-    <td>workspace_id</td>
-    <td>int</td>
-    <td>FK → workspaces.id, required</td>
-  </tr>
-  <tr>
-    <td>full_name</td>
-    <td>text</td>
-    <td>required, max 100 chars</td>
-  </tr>
-  <tr>
-    <td>email</td>
-    <td>text</td>
-    <td>optional, valid email format if provided</td>
-  </tr>
-  <tr>
-    <td>phone</td>
-    <td>text</td>
-    <td>optional, E.164 format if provided</td>
-  </tr>
-  <tr>
-    <td>company</td>
-    <td>text</td>
-    <td>optional, max 100 chars</td>
-  </tr>
-  <tr>
-    <td>status</td>
-    <td>enum</td>
-    <td>required, one of: 'lead', 'active', 'inactive', default: 'lead'</td>
-  </tr>
-  <tr>
-    <td>notes</td>
-    <td>text</td>
-    <td>optional, max 1000 chars</td>
-  </tr>
-  <tr>
-    <td>created_by</td>
-    <td>int</td>
-    <td>FK → users.id, set from auth token</td>
-  </tr>
-  <tr>
-    <td>created_at</td>
-    <td>timestamp</td>
-    <td>auto</td>
-  </tr>
-  <tr>
-    <td>updated_at</td>
-    <td>timestamp</td>
-    <td>auto</td>
-  </tr>
-  </tbody>
-</table></div>
-<hr />
-        </div>
-      </section>
+    Contacts --> Owner[Owner Flow]
+    Contacts --> Admin[Admin Flow]
+    Contacts --> Member[Member Flow]
 
-      <section id="2-xano-reusable-function" class="section">
-        <div class="content-card">
-          <h2 class="section-title">2. Xano Reusable Function</h2>
-          <h3><code>check_workspace_permission</code></h3>
-<p>Before building endpoints, extract this reusable function:</p>
-<pre><code class="language-text">Inputs:
-  workspace_id (integer, required)
-  user_id (integer, required)
-  required_role (text, optional) — &#x27;member&#x27;, &#x27;admin&#x27;, &#x27;owner&#x27;
+    Owner --> OwnerList[View all workspace contacts]
+    OwnerList --> OwnerSearch[Search / filter / paginate]
+    OwnerSearch --> OwnerView[Open contact detail]
+    OwnerView --> OwnerManage[Create / edit / delete contact]
+    OwnerManage -. cannot access other owners' workspaces .-> OwnerBlocked[Blocked by workspace permission rules]
 
-Logic:
-  1. Query workspace_members WHERE workspace_id = input AND user_id = input AND status = &#x27;active&#x27;
-  2. If not found: RAISE FORBIDDEN &quot;You are not a member of this workspace.&quot;
-  3. If required_role provided: check role hierarchy — RAISE FORBIDDEN if insufficient
-  4. Return member record
+    Admin --> AdminList[View assigned workspace contacts]
+    AdminList --> AdminSearch[Search / filter / paginate]
+    AdminSearch --> AdminView[Open contact detail]
+    AdminView --> AdminManage[Create / edit / delete contacts in assigned workspace]
+    AdminManage -. cannot access another workspace .-> AdminBlocked[Blocked by workspace permission rules]
 
-Role hierarchy: member &lt; admin &lt; owner</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/xano/reusable-function.md">Reusable Function</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="3-xano-endpoints" class="section">
-        <div class="content-card">
-          <h2 class="section-title">3. Xano Endpoints</h2>
-          <p>All endpoints follow this structure:</p>
-<ol>
-  <li><strong>Auth Token</strong> — validate as the first precondition</li>
-  <li><strong>check_workspace_permission</strong> — called with workspace_id from the request</li>
-  <li><strong>Input validation</strong> — validate all required fields</li>
-  <li><strong>Business logic</strong> — query/mutate the database</li>
-  <li><strong>Response</strong> — standard format</li>
-</ol>
-<h3><code>GET /api/contacts</code> — List Contacts</h3>
-<pre><code class="language-text">Auth: Required
-Input query params:
-  workspace_id (required)
-  search (optional) — searches full_name, email, company
-  status (optional) — filter by status
-  sort (optional) — &#x27;full_name&#x27;, &#x27;created_at&#x27;, &#x27;company&#x27; (default: created_at DESC)
-  page (optional, default: 1)
-  per_page (optional, default: 25, max: 100)
-
-Logic:
-  1. Auth + workspace permission check (any member)
-  2. Build query with filters applied
-  3. Return paginated results
-
-Response:
-  { &quot;data&quot;: [...], &quot;total&quot;: 143, &quot;page&quot;: 1, &quot;per_page&quot;: 25 }</code></pre>
-<h3><code>GET /api/contacts/{id}</code> — Get Single Contact</h3>
-<pre><code class="language-text">Auth: Required
-Logic:
-  1. Auth + workspace permission (any member)
-  2. Verify contact belongs to workspace (NOT_FOUND if not)
-  3. Return contact</code></pre>
-<h3><code>POST /api/contacts</code> — Create Contact</h3>
-<pre><code class="language-text">Auth: Required
-Body: { workspace_id, full_name, email, phone, company, status, notes }
-Validation (in order):
-  1. full_name: required, max 100 chars
-  2. email: valid format if provided
-  3. phone: E.164 format if provided
-  4. status: one of valid values
-  5. Workspace permission (any member)
-  6. No duplicate email in same workspace (if email provided)
-Logic: Insert contact, set created_by from auth token
-Response: { &quot;data&quot;: { contact } }
-Error codes: VALIDATION_ERROR, DUPLICATE, FORBIDDEN</code></pre>
-<h3><code>PUT /api/contacts/{id}</code> — Update Contact</h3>
-<pre><code class="language-text">Auth: Required
-Same validation as create (except workspace check — verify contact ownership)
-Logic: Update contact, set updated_at
-Response: { &quot;data&quot;: { contact } }</code></pre>
-<h3><code>DELETE /api/contacts/{id}</code> — Delete Contact</h3>
-<pre><code class="language-text">Auth: Required
-Permission: admin or owner role only
-Logic: Verify contact in workspace, delete record
-Response: { &quot;message&quot;: &quot;Contact deleted.&quot; }
-Error codes: FORBIDDEN, NOT_FOUND</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/xano/new-endpoint.md">New API Endpoint (Xano)</a> for each endpoint</p>
-<hr />
-        </div>
-      </section>
-
-      <section id="4-contacts-list-page" class="section">
-        <div class="content-card">
-          <h2 class="section-title">4. Contacts List Page</h2>
-          <p><strong>URL:</strong> <code>/workspace/{id}/contacts</code></p>
-<h3>Requirements</h3>
-<pre><code class="language-text">HEADER
-[ ] &quot;Contacts&quot; title + &quot;Add Contact&quot; button (all members can add)
-
-SEARCH &amp; FILTERS
-[ ] Search: searches full_name, email, company — debounced 300ms — sent to Xano
-[ ] Filter: Status dropdown (All / Lead / Active / Inactive)
-[ ] Active filter chips shown with X to remove
-[ ] &quot;Clear all&quot; button when any filter is active
-[ ] Filter/search state in URL params: ?search=acme&amp;status=active
-
-SORT
-[ ] Sort dropdown or column headers: Name A–Z / Name Z–A / Newest / Oldest
-[ ] Sort state in URL: ?sort=full_name&amp;order=asc
-
-TABLE COLUMNS
-[ ] Full Name · Company · Email · Phone · Status badge · Actions
-
-STATUS BADGES
-[ ] lead=blue, active=green, inactive=grey
-
-PAGINATION
-[ ] 25 per page, &quot;Showing X–Y of Z contacts&quot;
-[ ] Page in URL: ?page=2
-[ ] Pagination resets to 1 when search/filter changes
-
-STATES
-[ ] Loading: skeleton rows
-[ ] Empty (no contacts): &quot;No contacts yet.&quot; + &quot;Add your first contact&quot; button
-[ ] Empty (filter/search): &quot;No contacts match your search.&quot; + clear button
-[ ] Error: &quot;Could not load contacts.&quot; + retry button</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/website/weweb-page.md">WeWeb Page Build</a> · <a href="../../../../checklists/frontend/search-filters-pagination.md">Search, Filters & Pagination</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="5-contact-detail-panel-page" class="section">
-        <div class="content-card">
-          <h2 class="section-title">5. Contact Detail Panel / Page</h2>
-          <p>A side panel or separate page showing the full contact details.</p>
-<label><input type="checkbox" data-checklist-item /> All fields shown (including notes)</label><br />
-<label><input type="checkbox" data-checklist-item /> "Edit Contact" button (any member)</label><br />
-<label><input type="checkbox" data-checklist-item /> "Delete Contact" button (admin/owner only — hidden for member role)</label><br />
-<label><input type="checkbox" data-checklist-item /> Loading skeleton while fetching</label><br />
-<label><input type="checkbox" data-checklist-item /> Error if contact not found: "Contact not found." + back link</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="6-add-edit-contact-modal" class="section">
-        <div class="content-card">
-          <h2 class="section-title">6. Add / Edit Contact Modal</h2>
-          <p>One shared WeWeb component used for both Add and Edit.</p>
-<h3>Form Fields</h3>
-<div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>Field</th>
-    <th>Type</th>
-    <th>Rules</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>Full Name</td>
-    <td>text</td>
-    <td>Required, max 100 chars</td>
-  </tr>
-  <tr>
-    <td>Email</td>
-    <td>email</td>
-    <td>Optional, valid format</td>
-  </tr>
-  <tr>
-    <td>Phone</td>
-    <td>tel + country code</td>
-    <td>Optional, E.164 stored</td>
-  </tr>
-  <tr>
-    <td>Company</td>
-    <td>text</td>
-    <td>Optional, max 100 chars</td>
-  </tr>
-  <tr>
-    <td>Status</td>
-    <td>dropdown</td>
-    <td>Required, default: Lead</td>
-  </tr>
-  <tr>
-    <td>Notes</td>
-    <td>textarea</td>
-    <td>Optional, max 1000 chars, show character count</td>
-  </tr>
-  </tbody>
-</table></div>
-<h3>Behavior</h3>
-<pre><code class="language-text">ADD MODE: title &quot;Add Contact&quot;, submit &quot;Add Contact&quot;
-EDIT MODE: title &quot;Edit Contact&quot;, pre-filled fields, submit &quot;Save Changes&quot;
-
-BOTH:
-[ ] Duplicate email error shown below email field (not a toast)
-[ ] Submit button: loading state, disabled during request
-[ ] X + Escape close modal (confirm if dirty)
-[ ] On success: toast notification, list refreshes
-[ ] On API error: red banner above submit button</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/add-edit-consistency.md">Add/Edit Consistency</a> · <a href="../../../../checklists/frontend/modals-dialogs.md">Modals & Dialogs</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="7-delete-contact" class="section">
-        <div class="content-card">
-          <h2 class="section-title">7. Delete Contact</h2>
-          <label><input type="checkbox" data-checklist-item /> Admin/owner only — button hidden for member role</label><br />
-<label><input type="checkbox" data-checklist-item /> Confirmation dialog:</label><br />
-<p class="checklist-note">Title:  "Delete Contact?"</p>
-<p class="checklist-note">Body:   "'[Full Name]' will be permanently deleted."</p>
-<p class="checklist-note">Buttons: Cancel · "Delete Contact" (red)</p>
-<label><input type="checkbox" data-checklist-item /> Loading state on confirm button</label><br />
-<label><input type="checkbox" data-checklist-item /> On success: row removed, "Contact deleted." toast</label><br />
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/frontend/delete-destructive-actions.md">Delete & Destructive Actions</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="what-you-should-not-do" class="section">
-        <div class="content-card">
-          <h2 class="section-title">What You Should NOT Do</h2>
-          <pre><code class="language-text">× Put permission logic in WeWeb — check_workspace_permission runs in Xano
-× Filter contacts client-side — all search/filter sent to Xano
-× Use separate Add and Edit components
-× Let DELETE endpoint succeed for a member-role user
-× Skip the phone format — store E.164 even though display is formatted
-× Show delete button to member-role users
-× Return 500 for a DUPLICATE email — return a specific error code</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="checklists-to-run-in-order" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Checklists to Run (in order)</h2>
-          <label><input type="checkbox" data-checklist-item /> Reusable Function — check_workspace_permission</label><br />
-<label><input type="checkbox" data-checklist-item /> New API Endpoint (Xano) — GET /api/contacts (list)</label><br />
-<label><input type="checkbox" data-checklist-item /> New API Endpoint (Xano) — POST /api/contacts (create)</label><br />
-<label><input type="checkbox" data-checklist-item /> New API Endpoint (Xano) — PUT /api/contacts/{id} (update)</label><br />
-<label><input type="checkbox" data-checklist-item /> New API Endpoint (Xano) — DELETE /api/contacts/{id} (delete)</label><br />
-<label><input type="checkbox" data-checklist-item /> WeWeb Page Build — contacts list page</label><br />
-<label><input type="checkbox" data-checklist-item /> Search, Filters & Pagination — contacts list</label><br />
-<label><input type="checkbox" data-checklist-item /> Add/Edit Consistency — contact modal</label><br />
-<label><input type="checkbox" data-checklist-item /> Modals & Dialogs — contact modal</label><br />
-<label><input type="checkbox" data-checklist-item /> Loading States & Skeletons — list page</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete & Destructive Actions — delete contact</label><br />
-<label><input type="checkbox" data-checklist-item /> Notifications & Toasts — all async actions</label><br />
-<label><input type="checkbox" data-checklist-item /> Permissions & Role-Based UI — delete visibility</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="done-when" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Done When</h2>
-          <label><input type="checkbox" data-checklist-item /> contacts table created in Xano with all fields</label><br />
-<label><input type="checkbox" data-checklist-item /> check_workspace_permission reusable function works with role hierarchy</label><br />
-<label><input type="checkbox" data-checklist-item /> Auth token validation is the FIRST step in every endpoint</label><br />
-<label><input type="checkbox" data-checklist-item /> List endpoint: search, filter, sort, pagination all work from Xano</label><br />
-<label><input type="checkbox" data-checklist-item /> Create endpoint: validation in correct order, duplicate email caught, created_by set from token</label><br />
-<label><input type="checkbox" data-checklist-item /> Update endpoint: validates, checks contact is in caller's workspace</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete endpoint: FORBIDDEN for member role</label><br />
-<label><input type="checkbox" data-checklist-item /> Contacts list: search + filters go to Xano (not client-side)</label><br />
-<label><input type="checkbox" data-checklist-item /> Contacts list: URL params preserved for search/filter/sort/page</label><br />
-<label><input type="checkbox" data-checklist-item /> Contacts list: pagination resets to page 1 on filter change</label><br />
-<label><input type="checkbox" data-checklist-item /> Contacts list: all 4 states work (loading/empty/empty-filter/error)</label><br />
-<label><input type="checkbox" data-checklist-item /> Add/Edit: one shared WeWeb component — pre-fill in edit mode works</label><br />
-<label><input type="checkbox" data-checklist-item /> Duplicate email: shown as field error below email input</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete: admin/owner only, confirmation dialog required</label><br />
-<label><input type="checkbox" data-checklist-item /> Phone: E.164 format enforced in Xano, formatted display in WeWeb</label><br />
-<label><input type="checkbox" data-checklist-item /> Mobile tested at 375px and 768px</label><br />
-<label><input type="checkbox" data-checklist-item /> No silent failures — every Xano error shown in UI</label><br />
-        </div>
-      </section>
+    Member --> MemberList[View allowed contacts]
+    MemberList --> MemberSearch[Search / filter / paginate]
+    MemberSearch --> MemberView[Open contact detail]
+    MemberView --> MemberRead[Read contact details only]
+    MemberRead -. create, edit, and delete actions are not part of member scope .-> MemberBlocked[Blocked actions hidden and denied]</pre></div></div></div></section>
+      <section id="required-screens" class="section"><div class="project-rich-card"><h2 class="section-title">Required Screens</h2><div class="project-screen-grid"><article class="project-screen-card"><h3>Contact List Page</h3><div class="project-rich-content"><p>Should include:</p><ul><li>Contact name, company, email, phone, tags, and created date.</li><li>Search bar for name, email, phone, or company.</li><li>Filters for company and tags in the base project.</li><li>Pagination with total contacts and current page.</li><li>View button or row click to open full contact details.</li><li>Add Contact button only for Owner and Admin roles.</li><li>Loading, empty, no-result, and error states.</li></ul></div></article><article class="project-screen-card"><h3>Contact Detail Page</h3><div class="project-rich-content"><p>Should include:</p><ul><li>Full contact information, notes, related company, and tags.</li><li>Created by and last updated date.</li><li>Edit and delete actions only for Owner and Admin users in the base project.</li><li>Back to list navigation.</li><li>Not-found handling if the URL is changed to an unauthorized or missing contact.</li></ul></div></article><article class="project-screen-card"><h3>Add/Edit Contact Form</h3><div class="project-rich-content"><p>Fields:</p><ul><li>Name, email, phone, company, job title, tags, and notes.</li><li>Shared form for add and edit mode.</li><li>Validation for required fields and proper email/phone formats.</li><li>Tag selector should be consistent and workspace-safe.</li><li>Submit loading state and inline validation feedback.</li></ul></div></article><article class="project-screen-card"><h3>Delete Confirmation</h3><div class="project-rich-content"><p>Should include:</p><ul><li>Confirmation modal before deletion.</li><li>Contact name in the warning text.</li><li>Success feedback after delete and immediate list refresh.</li><li>No hard delete UI for unauthorized members.</li></ul></div></article></div></div></section><section id="xano-backend-expectations" class="section"><div class="project-rich-card"><h2 class="section-title">Xano Backend Expectations</h2><div class="project-rich-content"><p>Create endpoints for:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Endpoint</th><th>Purpose</th></tr></thead><tbody><tr><td><code>GET /contacts</code></td><td>List contacts with workspace filter.</td></tr><tr><td><code>GET /contacts/{id}</code></td><td>Get one contact.</td></tr><tr><td><code>POST /contacts</code></td><td>Create contact.</td></tr><tr><td><code>PATCH /contacts/{id}</code></td><td>Update contact.</td></tr><tr><td><code>DELETE /contacts/{id}</code></td><td>Delete contact.</td></tr></tbody></table></div><p>Every endpoint must call a reusable permission function before returning or changing data.</p></div></div></section><section id="reusable-permission-function" class="section"><div class="project-rich-card"><h2 class="section-title">Reusable Permission Function</h2><div class="project-rich-content"><p>Create a Xano function similar to:</p><p><code>can_access_workspace(user_id, workspace_id, required_roles)</code></p><p>It should check:</p><ul><li>Is user authenticated?</li><li>Is user part of this workspace?</li><li>Does user have required role?</li><li>Is user status active?</li></ul></div></div></section><section id="permission-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Permission Rules</h2><div class="project-rich-content"><div class="table-wrapper"><table class="table"><thead><tr><th>Actor</th><th>Allowed</th></tr></thead><tbody><tr><td>Owner</td><td>Manage all contacts in owned workspaces.</td></tr><tr><td>Admin</td><td>Manage contacts in assigned workspace.</td></tr><tr><td>Member</td><td>View contacts in the shared workspace. Members are read-only in the base project and cannot create, edit, or delete contacts.</td></tr><tr><td>Non-member</td><td>No access.</td></tr></tbody></table></div></div></div></section><section id="acceptance-checklist" class="section"><div class="project-rich-card"><h2 class="section-title">Acceptance Checklist</h2><div class="project-rich-content"><ul><li>All contacts have <code>workspace_id</code>.</li><li>List endpoint only returns contacts from allowed workspace.</li><li>Search works by name, email, company, and phone.</li><li>Pagination works correctly.</li><li>Admin cannot access another workspace by changing URL parameter.</li><li>Empty state appears when no contacts exist.</li><li>Error state appears when backend fails.</li><li>Delete action requires confirmation.</li></ul></div></div></section>
     </div>
   </main>
-
   <footer class="footer">
     <div class="footer-inner">
       <div>
         <div class="footer-brand">Development Standards</div>
-        <p class="footer-text">Build to the standard. Every time.</p>
+        <p class="footer-text">Build a workspace-based contact book using Xano as backend and WeWeb as frontend.</p>
       </div>
       <div class="footer-links">
         <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
         <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
-        <a href="../../pages/standards.html" class="footer-link">Standards</a>
       </div>
     </div>
   </footer>
-
   <script type="module" src="../../../js/main.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project Tasks | Development Standards</title>
-  <meta name="description" content="Project tasks by stack with evaluation checklists." />
+  <meta name="description" content="Project tasks by stack for practice and delivery work." />
   <script>
   (function () {
     try {
@@ -16,22 +16,36 @@
   })();
 </script>
 
-  <link rel="icon" href="../../assets/images/working-standards.png" />
+  <link rel="icon" href="../../assets/images/infiweb-logo.png" />
   <link rel="stylesheet" href="../../css/main.css" />
 </head>
 <body data-page="tasks">
   <header class="navbar"><div class="navbar-inner">
-    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
+    <a href="../../index.html" class="navbar-brand" aria-label="Development Standards Home"><img src="../../assets/images/infiweb-logo.png" alt="Standards Logo" class="navbar-logo" /><span>Development Standards</span></a>
     <nav class="navbar-menu" aria-label="Main Navigation">
       <a href="../../index.html" class="navbar-link">Home</a><a href="../pages/standards.html" class="navbar-link">Standards</a><a href="../pages/checklists.html" class="navbar-link">Checklists</a><a href="../pages/tasks.html" class="navbar-link active">Tasks</a><a href="../pages/templates.html" class="navbar-link">Templates</a>
     </nav>
     <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
   </div></header>
-  <main class="page"><div class="container">
+  <main class="page tasks-library-page project-overview-page"><div class="container">
     <section class="page-header"><span class="badge badge-info">Project Tasks</span><h1 class="page-title">Project Tasks</h1><p class="page-subtitle">Each project is a complete mini-application scoped to ~8 hours. Every project is designed to exercise every relevant standard and checklist for its tech stack. Complete the project, run every linked checklist, and tick every item in "Done When" before marking it done.</p></section>
+    <section class="section">
+      <div class="content-card project-overview-intro">
+        <div>
+          <span class="badge badge-success">Read This First</span>
+          <h2 class="section-title">Start from this overview before opening any individual project.</h2>
+          <p class="section-description">These rules are shared across all project briefs. Employees should read this page first, understand the common role model and workspace rules, and then open the selected project detail page.</p>
+        </div>
+        <div class="project-overview-intro-note">
+          <strong>Order to follow</strong>
+          <span>Read shared rules here, pick your stack, open one project brief, then build only after understanding the flow, permissions, screens, and acceptance checklist.</span>
+        </div>
+      </div>
+    </section>
     <section class="section"><div class="content-card">
       <h2 class="section-title">How to Use</h2>
       <ol>
+        <li>Read the common rules on this page before picking any project</li>
         <li>Pick the project matching your tech stack</li>
         <li>Read the full project brief before writing any code</li>
         <li>Plan your approach — identify which checklists apply before starting</li>
@@ -39,7 +53,108 @@
         <li>A project is not done until every "Done When" item is checked</li>
       </ol>
     </div></section>
-    <section class="section"><div class="content-card">
+    <section id="project-playbook" class="section">
+      <div class="content-card project-overview-playbook">
+        <div class="project-overview-playbook-header">
+          <div>
+            <span class="badge badge-info">Common Rules</span>
+            <h2 class="section-title">What stays the same across all projects</h2>
+            <p class="section-description">The project brief changes, but the product model, permission thinking, data shape, and delivery expectations stay consistent across all stacks.</p>
+          </div>
+          <div class="project-overview-playbook-note">
+            <strong>Important</strong>
+            <span>Do not assume project-specific tools like Notion, third-party dashboards, or external workflows unless the project brief explicitly asks for them.</span>
+          </div>
+        </div>
+
+        <div class="project-overview-rule-grid">
+          <article class="project-overview-rule-card">
+            <span class="project-overview-rule-kicker">Common Product Model</span>
+            <h3>Most projects are multi-workspace SaaS-style builds.</h3>
+            <p>Even a small project should be designed with ownership, workspace isolation, permissions, and scalable data structure in mind.</p>
+          </article>
+
+          <article class="project-overview-rule-card">
+            <span class="project-overview-rule-kicker">Core Roles</span>
+            <h3>Owner, Workspace Admin, and Member exist across the project tracks.</h3>
+            <ul>
+              <li><strong>Owner:</strong> creates and manages multiple workspaces, sees all related users and activity, and controls workspace-level settings.</li>
+              <li><strong>Workspace Admin:</strong> manages only assigned workspaces, can manage project records there, and cannot access unrelated workspaces.</li>
+              <li><strong>Member:</strong> works inside assigned workspaces, creates or updates own records where allowed, and cannot access admin-only views or approve own requests.</li>
+            </ul>
+          </article>
+
+          <article class="project-overview-rule-card">
+            <span class="project-overview-rule-kicker">Permission Rule</span>
+            <h3>Every important record should be scoped by workspace.</h3>
+            <p>A user can access a record only if they are the Owner of that workspace, an Admin of that workspace, or a Member of the same workspace with the correct permission.</p>
+            <p>This applies to directories, tasks, contacts, leave requests, announcements, expenses, invites, documents, and knowledge base records.</p>
+          </article>
+
+          <article class="project-overview-rule-card">
+            <span class="project-overview-rule-kicker">Common Data Model</span>
+            <h3>Most projects should include the same backbone entities.</h3>
+            <ul>
+              <li><code>users</code> for authenticated user profiles</li>
+              <li><code>workspaces</code> for team or company units</li>
+              <li><code>workspace_members</code> for user-to-workspace role mapping</li>
+              <li>a role field or role table for <code>owner</code>, <code>admin</code>, and <code>member</code></li>
+              <li><code>audit_logs</code> where important actions must be tracked</li>
+              <li>the project-specific table(s) that store the actual feature records</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="project-overview-flow-card">
+          <span class="project-overview-rule-kicker">Common User Flow</span>
+          <h3>Most project journeys follow the same base pattern.</h3>
+          <div class="project-overview-flow-steps">
+            <div class="project-overview-flow-step"><strong>1</strong><span>Owner creates a workspace.</span></div>
+            <div class="project-overview-flow-step"><strong>2</strong><span>Owner adds an admin to that workspace.</span></div>
+            <div class="project-overview-flow-step"><strong>3</strong><span>Admin logs in, opens assigned workspace, and adds members.</span></div>
+            <div class="project-overview-flow-step"><strong>4</strong><span>Member logs in, opens assigned workspace, and creates or views project records.</span></div>
+            <div class="project-overview-flow-step"><strong>5</strong><span>Admin manages, reviews, or approves records where the workflow requires it.</span></div>
+            <div class="project-overview-flow-step"><strong>6</strong><span>Owner can review all workspace activity and cross-workspace visibility where allowed.</span></div>
+          </div>
+        </div>
+
+        <div class="project-overview-standard-grid">
+          <article class="project-overview-standard-card">
+            <h3>Security Standards</h3>
+            <ul>
+              <li>Never trust frontend-only permissions.</li>
+              <li>Enforce access control on backend or database level.</li>
+              <li>Every workspace record must be scoped by <code>workspace_id</code>.</li>
+              <li>Validate input on both frontend and backend.</li>
+              <li>Use private storage for sensitive files.</li>
+              <li>Do not leak data through search, filters, or dropdown options.</li>
+            </ul>
+          </article>
+
+          <article class="project-overview-standard-card">
+            <h3>UI / UX Standards</h3>
+            <ul>
+              <li>Every list page must include loading, empty, and error states.</li>
+              <li>Add search and filters where relevant.</li>
+              <li>Show clear action buttons and permission-aware UI.</li>
+              <li>Every form must include validation, labels, error messages, success feedback, and disabled submit during save.</li>
+              <li>Destructive actions must use confirmation.</li>
+            </ul>
+          </article>
+
+          <article class="project-overview-standard-card">
+            <h3>Backend and Testing Standards</h3>
+            <ul>
+              <li>Include proper data model, server-side permissions, validation, and business-rule handling.</li>
+              <li>Use service-layer thinking and clean API responses.</li>
+              <li>Support pagination for list endpoints where needed.</li>
+              <li>Test Owner, Admin, Member, non-member blocked access, create/edit/delete, invalid input, and cross-workspace blocking.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section id="project-listing" class="section"><div class="content-card">
       <h2 class="section-title">Projects by Stack</h2>
       <div class="table-wrapper"><table class="table"><thead><tr><th>Stack</th><th>Project 1</th><th>Project 2</th></tr></thead><tbody>
         <tr><td>WeWeb + Supabase</td><td><a href="./projects/weweb-supabase-member-directory.html">Team Member Directory</a></td><td><a href="./projects/weweb-supabase-task-board.html">Task Board</a></td></tr>
@@ -60,22 +175,6 @@
         <li>Applying role-based permissions at every level</li>
         <li>Running the full checklist for every feature before calling it done</li>
       </ul>
-    </div></section>
-    <section class="section"><div class="content-card">
-      <h2 class="section-title">Evaluation</h2>
-      <p>When a project is submitted for review, evaluators use the checklists in the <code>evaluation/</code> folder. Each evaluation checklist maps directly to a project and covers every requirement — schema, service logic, UI states, permissions, security, and standards compliance.</p>
-      <div class="table-wrapper"><table class="table"><thead><tr><th>Project</th><th>Evaluation Checklist</th></tr></thead><tbody>
-        <tr><td>WeWeb + Supabase: Member Directory</td><td><a href="./evaluation/weweb-supabase-01-member-directory.html">evaluation/weweb-supabase-01-member-directory.md</a></td></tr>
-        <tr><td>WeWeb + Supabase: Task Board</td><td><a href="./evaluation/weweb-supabase-02-task-board.html">evaluation/weweb-supabase-02-task-board.md</a></td></tr>
-        <tr><td>WeWeb + Xano: Contact Book</td><td><a href="./evaluation/weweb-xano-01-contact-book.html">evaluation/weweb-xano-01-contact-book.md</a></td></tr>
-        <tr><td>WeWeb + Xano: Leave Requests</td><td><a href="./evaluation/weweb-xano-02-leave-requests.html">evaluation/weweb-xano-02-leave-requests.md</a></td></tr>
-        <tr><td>React + Django: Announcement Board</td><td><a href="./evaluation/react-django-01-announcement-board.html">evaluation/react-django-01-announcement-board.md</a></td></tr>
-        <tr><td>React + Django: Expense Tracker</td><td><a href="./evaluation/react-django-02-expense-tracker.html">evaluation/react-django-02-expense-tracker.md</a></td></tr>
-        <tr><td>React + Supabase: Invite System</td><td><a href="./evaluation/react-supabase-01-invite-system.html">evaluation/react-supabase-01-invite-system.md</a></td></tr>
-        <tr><td>React + Supabase: Document Library</td><td><a href="./evaluation/react-supabase-02-document-library.html">evaluation/react-supabase-02-document-library.md</a></td></tr>
-        <tr><td>Django + Templates: Leave Requests</td><td><a href="./evaluation/django-templates-01-leave-requests.html">evaluation/django-templates-01-leave-requests.md</a></td></tr>
-        <tr><td>Django + Templates: Knowledge Base</td><td><a href="./evaluation/django-templates-02-knowledge-base.html">evaluation/django-templates-02-knowledge-base.md</a></td></tr>
-      </tbody></table></div>
     </div></section>
   </div></main>
   <script type="module" src="../../js/main.js"></script>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project — Leave Request System (Django Templates) | Development Standards</title>
-  <meta name="description" content="Build a server-rendered leave request system with LeaveService, WorkspaceMemberMixin, data-* JS, and CSS variables." />
+  <title>Project — Leave Request System | Development Standards</title>
+  <meta name="description" content="Build a server-rendered leave request system using Django models, forms, services, views, and templates." />
   <script>
   (function () {
     try {
@@ -15,16 +15,14 @@
     } catch (error) {}
   })();
 </script>
-
-  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="icon" href="../../../assets/images/infiweb-logo.png" />
   <link rel="stylesheet" href="../../../css/main.css" />
 </head>
-
 <body class="project-detail-page" data-page="tasks">
   <header class="navbar">
     <div class="navbar-inner">
       <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
-        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <img src="../../../assets/images/infiweb-logo.png" alt="Infi Web Solutions Logo" class="navbar-logo" />
         <span>Development Standards</span>
       </a>
       <nav class="navbar-menu" aria-label="Main Navigation">
@@ -37,516 +35,109 @@
       <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
     </div>
   </header>
-
   <main class="page">
     <div class="container">
       <section class="page-header">
-        <span class="badge badge-info">Project — Django + Templates</span>
-        <h1 class="page-title">Project — Leave Request System (Django Templates)</h1>
-        <p class="page-subtitle">Build a server-rendered leave request system with LeaveService, WorkspaceMemberMixin, data-* JS, and CSS variables.</p>
+        <span class="badge badge-info">Project Task</span>
+        <h1 class="page-title">Project — Leave Request System</h1>
+        <p class="page-subtitle">Build a server-rendered leave request system using Django models, forms, services, views, and templates.</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
-          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
-          
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Project Tasks</a>
         </div>
       </section>
-
-      <section class="section project-intro-grid">
-        <div class="content-card project-brief-card">
-          <span class="project-brief-kicker">Build Brief</span>
-          <div class="project-meta-row">
-            <span class="project-meta-pill">Django + Django Templates</span>
-            <span class="project-meta-pill">8 hours</span>
-            <span class="project-meta-pill">Intermediate</span>
+      <section class="section project-showcase">
+        <div class="project-showcase-main">
+          <div class="project-kicker-row">
+            <span class="project-stack-badge">Django + Templates</span>
+            <span class="project-brief-kicker">~8 Hours</span>
+            <span class="project-brief-kicker">Intermediate</span>
           </div>
           <h2 class="section-title">What You Are Building</h2>
-          <p class="project-brief-copy">A server-rendered leave request system. Employees submit leave requests, managers approve or reject them. Django handles the full request-response cycle. No React. All pages extend <code>base.html</code>. All CSS in <code>static/css/</code>, all JS in <code>static/js/</code>. Data passed to JavaScript via <code>data-*</code> attributes only.</p>
-        </div>
-
-        <div class="content-card project-roles-card">
-          <span class="project-brief-kicker">Roles &amp; Access</span>
-          <ul class="project-role-list">
-            <li><strong>Employee / Member</strong>Submit their own leave requests, review personal history, and cancel requests before approval.</li>
-            <li><strong>Admin / Owner</strong>Open the admin review page, approve requests directly, or reject them with a required reason.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="content-card project-flow-card">
-          <div class="project-flow-header">
-            <span class="project-brief-kicker">Core Flows</span>
-            <h2 class="section-title">How this product should work</h2>
-            <p class="project-flow-lead">This should read like a complete internal leave tool, where employees understand their submission path and admins understand exactly how review and state changes work.</p>
-          </div>
-          <div class="project-flow-grid">
-            <article class="project-flow-item">
-              <strong>Submit leave</strong>
-              <p>Employees use a server-rendered form with validation and overlap checks before the request enters the submitted state.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>My leaves</strong>
-              <p>The employee-facing history page shows status changes clearly and only exposes cancel where the rules allow it.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Admin review queue</strong>
-              <p>Admins load the full request table, review pending items, and approve or reject them through protected POST actions.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Rejection and status changes</strong>
-              <p>Rejection uses an inline reason form, while approved, rejected, and cancelled states all need consistent visibility across the UI.</p>
-            </article>
+          <p class="project-lead">Build a server-rendered leave request system using Django models, forms, services, views, and templates.</p>
+          <div class="project-side-block">
+            <h3 class="project-side-title">This project teaches</h3>
+            <ul class="project-skill-list"><li>Django models</li><li>Django forms</li><li>Service layer</li><li>Function-based or class-based views</li><li>Templates</li><li>3-folder frontend structure</li><li><code>base.html</code></li><li>Data attributes</li><li>Status workflow</li></ul>
           </div>
         </div>
+        <aside class="project-showcase-side">
+          <div class="project-side-block">
+            <span class="project-brief-kicker">User Stories</span>
+            <h2 class="section-title">Who this flow is for</h2>
+          </div>
+          <div class="project-story-grid"><article class="project-story-card"><strong>Member</strong><p>I want to request leave.</p></article><article class="project-story-card"><strong>Admin</strong><p>I want to approve or reject leave requests from my workspace.</p></article><article class="project-story-card"><strong>Owner</strong><p>I want to manage leave requests across workspaces.</p></article></div>
+        </aside>
       </section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Status Workflow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">stateDiagram-v2
+    [*] --> Submitted
+    Submitted --> Approved
+    Submitted --> Rejected
+    Submitted --> Cancelled</pre></div></div></div></section><section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Example Flow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">flowchart TD
+    Login[User logs in]
+    Workspace[Selects workspace]
+    LeaveArea[Opens Leave Request Pages]
 
-      <section id="features-to-build" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Features to Build</h2>
-          <div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>#</th>
-    <th>Feature</th>
-    <th>Est. Time</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>1</td>
-    <td>Django model: LeaveRequest</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>Django form: LeaveRequestForm</td>
-    <td>30m</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>Django service: LeaveService</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>Django views: 5 views (list, submit, admin, approve, reject)</td>
-    <td>1h 30m</td>
-  </tr>
-  <tr>
-    <td>5</td>
-    <td>Templates: my_leaves.html, submit_form.html, admin_leaves.html</td>
-    <td>2h</td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td>Static CSS: badges, form styles, status table</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>Static JS: confirm dialog for cancel + approve/reject</td>
-    <td>30m</td>
-  </tr>
-  </tbody>
-</table></div>
-<hr />
-        </div>
-      </section>
+    Login --> Workspace --> LeaveArea
 
-      <section id="1-django-model" class="section">
-        <div class="content-card">
-          <h2 class="section-title">1. Django Model</h2>
-          <h3><code>LeaveRequest</code></h3>
-<pre><code class="language-python">from django.db import models
-from django.conf import settings
+    LeaveArea --> Member[Member Flow]
+    LeaveArea --> Admin[Admin Flow]
+    LeaveArea --> Owner[Owner Flow]
 
-class LeaveRequest(models.Model):
+    Member --> MemberList[View own leave requests]
+    MemberList --> MemberFilter[Search / filter / paginate own requests]
+    MemberFilter --> MemberCreate[Open create leave form]
+    MemberCreate --> MemberSubmit[Submit leave request]
+    MemberSubmit --> MemberTrack[Track status and decision]
+    MemberTrack -. cannot approve own request .-> MemberBlocked[Approval actions blocked]
 
-    class LeaveType(models.TextChoices):
-        ANNUAL   = &#x27;annual&#x27;,   &#x27;Annual Leave&#x27;
-        SICK     = &#x27;sick&#x27;,     &#x27;Sick Leave&#x27;
-        PERSONAL = &#x27;personal&#x27;, &#x27;Personal Leave&#x27;
-        UNPAID   = &#x27;unpaid&#x27;,   &#x27;Unpaid Leave&#x27;
+    Admin --> AdminQueue[View assigned workspace requests]
+    AdminQueue --> AdminFilter[Search / filter / paginate by member, status, date]
+    AdminFilter --> AdminDetail[Open request detail]
+    AdminDetail --> AdminDecision[Approve or reject with reason]
+    AdminDecision -. cannot review other workspaces .-> AdminBlocked[Blocked by workspace permission rules]
 
-    class Status(models.TextChoices):
-        SUBMITTED  = &#x27;submitted&#x27;,  &#x27;Submitted&#x27;
-        APPROVED   = &#x27;approved&#x27;,   &#x27;Approved&#x27;
-        REJECTED   = &#x27;rejected&#x27;,   &#x27;Rejected&#x27;
-        CANCELLED  = &#x27;cancelled&#x27;,  &#x27;Cancelled&#x27;
-
-    workspace     = models.ForeignKey(&#x27;Workspace&#x27;, on_delete=models.CASCADE, related_name=&#x27;leave_requests&#x27;)
-    employee      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                      related_name=&#x27;leave_requests&#x27;)
-    leave_type    = models.CharField(max_length=20, choices=LeaveType.choices)
-    start_date    = models.DateField()
-    end_date      = models.DateField()
-    total_days    = models.PositiveIntegerField()
-    reason        = models.TextField(blank=True, default=&#x27;&#x27;)
-    status        = models.CharField(max_length=20, choices=Status.choices,
-                                     default=Status.SUBMITTED)
-    reviewed_by   = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
-                                      null=True, blank=True, related_name=&#x27;reviewed_leaves&#x27;)
-    reviewed_at   = models.DateTimeField(null=True, blank=True)
-    review_notes  = models.TextField(blank=True, default=&#x27;&#x27;)
-    created_at    = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = [&#x27;-created_at&#x27;]
-        verbose_name = &#x27;Leave Request&#x27;
-        verbose_name_plural = &#x27;Leave Requests&#x27;
-        constraints = [
-            models.CheckConstraint(
-                check=models.Q(end_date__gte=models.F(&#x27;start_date&#x27;)),
-                name=&#x27;leave_end_date_after_start&#x27;
-            ),
-            models.CheckConstraint(
-                check=models.Q(total_days__gt=0),
-                name=&#x27;leave_total_days_positive&#x27;
-            ),
-        ]
-        indexes = [
-            models.Index(fields=[&#x27;workspace&#x27;, &#x27;employee&#x27;, &#x27;status&#x27;]),
-            models.Index(fields=[&#x27;workspace&#x27;, &#x27;status&#x27;, &#x27;-created_at&#x27;]),
-        ]
-
-    def __str__(self):
-        return f&quot;{self.employee.get_full_name()} — {self.get_leave_type_display()} ({self.start_date} to {self.end_date})&quot;</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/model.md">Django Model</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="2-django-form" class="section">
-        <div class="content-card">
-          <h2 class="section-title">2. Django Form</h2>
-          <h3><code>LeaveRequestForm</code></h3>
-<pre><code class="language-python">class LeaveRequestForm(forms.ModelForm):
-    class Meta:
-        model = LeaveRequest
-        fields = [&#x27;leave_type&#x27;, &#x27;start_date&#x27;, &#x27;end_date&#x27;, &#x27;reason&#x27;]
-        widgets = {
-            &#x27;start_date&#x27;: forms.DateInput(attrs={&#x27;type&#x27;: &#x27;date&#x27;}),
-            &#x27;end_date&#x27;:   forms.DateInput(attrs={&#x27;type&#x27;: &#x27;date&#x27;}),
-        }
-
-    def clean_start_date(self):
-        start = self.cleaned_data.get(&#x27;start_date&#x27;)
-        if start and start &lt; date.today():
-            raise forms.ValidationError(&quot;Start date cannot be in the past.&quot;)
-        return start
-
-    def clean(self):
-        cleaned = super().clean()
-        start = cleaned.get(&#x27;start_date&#x27;)
-        end = cleaned.get(&#x27;end_date&#x27;)
-        if start and end:
-            if end &lt; start:
-                raise forms.ValidationError({&#x27;end_date&#x27;: &quot;End date must be on or after start date.&quot;})
-        return cleaned</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/form-serializer.md">Django Form / Serializer</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="3-leaveservice" class="section">
-        <div class="content-card">
-          <h2 class="section-title">3. LeaveService</h2>
-          <pre><code class="language-python"># services.py
-from datetime import date, datetime
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-
-class LeaveService:
-
-    @staticmethod
-    def submit_request(workspace, employee, leave_type, start_date, end_date, reason=&#x27;&#x27;):
-        &quot;&quot;&quot;
-        Submits a leave request.
-        Validates:
-          - start_date &gt;= today
-          - end_date &gt;= start_date
-          - No overlapping submitted/approved request for this employee
-        Computes total_days.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def approve_request(leave_request, reviewed_by, review_notes=&#x27;&#x27;):
-        &quot;&quot;&quot;
-        Approves a leave request.
-        Raises ValidationError if status != &#x27;submitted&#x27;.
-        Sets status = &#x27;approved&#x27;, reviewed_by, reviewed_at.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def reject_request(leave_request, reviewed_by, review_notes):
-        &quot;&quot;&quot;
-        Rejects a leave request.
-        review_notes is required.
-        Raises ValidationError if status != &#x27;submitted&#x27;.
-        &quot;&quot;&quot;
-
-    @staticmethod
-    def cancel_request(leave_request, actor):
-        &quot;&quot;&quot;
-        Cancels a leave request.
-        Only the employee who submitted it can cancel.
-        Raises PermissionDenied if actor != employee.
-        Raises ValidationError if status != &#x27;submitted&#x27;.
-        &quot;&quot;&quot;</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="4-django-views" class="section">
-        <div class="content-card">
-          <h2 class="section-title">4. Django Views</h2>
-          <h3><code>WorkspaceMemberMixin</code></h3>
-<pre><code class="language-python">class WorkspaceMemberMixin(LoginRequiredMixin):
-    def dispatch(self, request, *args, **kwargs):
-        self.workspace = get_object_or_404(Workspace, id=kwargs[&#x27;workspace_id&#x27;])
-        self.membership = get_object_or_404(
-            WorkspaceMember, workspace=self.workspace, user=request.user, status=&#x27;active&#x27;
-        )
-        return super().dispatch(request, *args, **kwargs)</code></pre>
-<h3>Views to Build</h3>
-<pre><code class="language-text">MyLeavesView (GET /workspace/{id}/my-leaves/)
-  — WorkspaceMemberMixin
-  — Returns request.user&#x27;s leave requests (paginated, 10 per page)
-  — Supports ?status= filter
-  — Template: my_leaves.html
-
-SubmitLeaveView (GET+POST /workspace/{id}/my-leaves/submit/)
-  — WorkspaceMemberMixin
-  — GET: render empty LeaveRequestForm
-  — POST: validate form → LeaveService.submit_request() → redirect to my-leaves
-  — Template: submit_form.html
-
-CancelLeaveView (POST /workspace/{id}/my-leaves/{leave_id}/cancel/)
-  — WorkspaceMemberMixin
-  — POST only (from a form button with CSRF)
-  — Calls LeaveService.cancel_request()
-  — Redirects back to my-leaves with a success/error message
-
-AdminLeavesView (GET /workspace/{id}/admin/leaves/)
-  — WorkspaceMemberMixin + admin role check (403 if not admin)
-  — Returns all workspace leave requests (paginated, 20 per page)
-  — Supports ?status= and ?employee_id= filters
-  — Template: admin_leaves.html
-
-ApproveLeaveView (POST /workspace/{id}/admin/leaves/{leave_id}/approve/)
-  — WorkspaceMemberMixin + admin role check
-  — Calls LeaveService.approve_request()
-  — Redirects to admin-leaves with success message
-
-RejectLeaveView (POST /workspace/{id}/admin/leaves/{leave_id}/reject/)
-  — WorkspaceMemberMixin + admin role check
-  — review_notes from POST data — required
-  — Calls LeaveService.reject_request()
-  — Redirects to admin-leaves with success/error message</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/new-view.md">Django New View</a> for each view</p>
-<hr />
-        </div>
-      </section>
-
-      <section id="5-templates" class="section">
-        <div class="content-card">
-          <h2 class="section-title">5. Templates</h2>
-          <p>All templates must:</p>
-<ul>
-  <li>Extend <code>base.html</code></li>
-  <li>Have NO <code>&lt;style&gt;</code> blocks (all CSS in <code>static/css/leaves.css</code>)</li>
-  <li>Have NO inline <code>&lt;script&gt;</code> logic (all JS in <code>static/js/leaves.js</code>)</li>
-  <li>Load static with <code>{% load static %}</code></li>
-</ul>
-<h3><code>my_leaves.html</code></h3>
-<pre><code class="language-html">{% extends &quot;base.html&quot; %}
-{% load static %}
-
-{% block title %}My Leave Requests{% endblock %}
-
-{% block content %}
-  &lt;!-- Filter form (GET method, ?status=...) --&gt;
-  &lt;!-- Leave request table --&gt;
-  &lt;!-- Status badges using CSS classes --&gt;
-  &lt;!-- Cancel button as a POST form — wrapped in confirmation check via data-* --&gt;
-  &lt;!-- Pagination links --&gt;
-{% endblock %}</code></pre>
-<p><strong>Status badge CSS classes:</strong></p>
-<pre><code class="language-css">/* in static/css/leaves.css */
-.badge-submitted  { background: #3b82f6; color: white; }
-.badge-approved   { background: #22c55e; color: white; }
-.badge-rejected   { background: #ef4444; color: white; }
-.badge-cancelled  { background: #9ca3af; color: white; }</code></pre>
-<h3><code>submit_form.html</code></h3>
-<pre><code class="language-html">{% extends &quot;base.html&quot; %}
-
-{% block content %}
-  &lt;h1&gt;Submit Leave Request&lt;/h1&gt;
-  &lt;form method=&quot;post&quot;&gt;
-    {% csrf_token %}
-    &lt;!-- Render form fields individually (not {{ form.as_p }}) --&gt;
-    &lt;!-- Show field errors below each field --&gt;
-    &lt;!-- Show non-field errors at top of form --&gt;
-    &lt;!-- Submit button with loading state via data-* and JS --&gt;
-  &lt;/form&gt;
-{% endblock %}</code></pre>
-<h3><code>admin_leaves.html</code></h3>
-<pre><code class="language-html">{% extends &quot;base.html&quot; %}
-
-{% block content %}
-  &lt;!-- Filter form --&gt;
-  &lt;!-- All requests table: Employee | Leave Type | Dates | Days | Status | Actions --&gt;
-  &lt;!-- Approve: POST form button (no confirmation — low risk action) --&gt;
-  &lt;!-- Reject: POST form button — opens an inline rejection reason form via JS --&gt;
-  &lt;!-- Pagination --&gt;
-{% endblock %}</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/django/template.md">Django Template</a> for each template</p>
-<hr />
-        </div>
-      </section>
-
-      <section id="6-static-css-staticcssleavescss" class="section">
-        <div class="content-card">
-          <h2 class="section-title">6. Static CSS (`static/css/leaves.css`)</h2>
-          <label><input type="checkbox" data-checklist-item /> Status badge styles (.badge-submitted, .badge-approved, .badge-rejected, .badge-cancelled)</label><br />
-<label><input type="checkbox" data-checklist-item /> Leave type label styles</label><br />
-<label><input type="checkbox" data-checklist-item /> Table styles (striped rows, hover)</label><br />
-<label><input type="checkbox" data-checklist-item /> Form field styles (label above field, error message below)</label><br />
-<label><input type="checkbox" data-checklist-item /> Responsive: table scrolls horizontally on mobile</label><br />
-<label><input type="checkbox" data-checklist-item /> Filter bar styles</label><br />
-<label><input type="checkbox" data-checklist-item /> Pagination styles</label><br />
-<label><input type="checkbox" data-checklist-item /> NO hardcoded colors in HTML — all in CSS</label><br />
-<label><input type="checkbox" data-checklist-item /> CSS uses variables for colors: --color-success, --color-danger, etc.</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="7-static-js-staticjsleavesjs" class="section">
-        <div class="content-card">
-          <h2 class="section-title">7. Static JS (`static/js/leaves.js`)</h2>
-          <pre><code class="language-text">All JavaScript must use data-* attributes to read values — never string interpolation.
-
-CANCEL CONFIRMATION:
-&lt;!-- HTML --&gt;
-&lt;button
-  class=&quot;btn-cancel-leave&quot;
-  data-leave-id=&quot;{{ leave.id }}&quot;
-  data-leave-type=&quot;{{ leave.get_leave_type_display }}&quot;
-  data-form-id=&quot;cancel-form-{{ leave.id }}&quot;
-&gt;Cancel&lt;/button&gt;
-&lt;form id=&quot;cancel-form-{{ leave.id }}&quot; method=&quot;post&quot;
-      action=&quot;{% url &#x27;cancel-leave&#x27; workspace.id leave.id %}&quot; style=&quot;display:none;&quot;&gt;
-  {% csrf_token %}
-&lt;/form&gt;
-
-// JS — reads from data-* attributes
-document.querySelectorAll(&#x27;.btn-cancel-leave&#x27;).forEach(btn =&gt; {
-  btn.addEventListener(&#x27;click&#x27;, () =&gt; {
-    const leaveType = btn.dataset.leaveType;
-    if (confirm(`Cancel your ${leaveType} request?`)) {
-      document.getElementById(btn.dataset.formId).submit();
-    }
-  });
-});
-
-REJECT REASON INLINE FORM:
-[ ] Clicking &quot;Reject&quot; shows an inline form (hidden div) asking for rejection reason
-[ ] Reason text passed as a hidden input in the reject POST form
-[ ] All shown/hidden via CSS class toggle — no inline style manipulation</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="url-configuration" class="section">
-        <div class="content-card">
-          <h2 class="section-title">URL Configuration</h2>
-          <pre><code class="language-python">urlpatterns = [
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/my-leaves/&#x27;,
-         MyLeavesView.as_view(), name=&#x27;my-leaves&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/my-leaves/submit/&#x27;,
-         SubmitLeaveView.as_view(), name=&#x27;submit-leave&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/my-leaves/&lt;int:leave_id&gt;/cancel/&#x27;,
-         CancelLeaveView.as_view(), name=&#x27;cancel-leave&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/admin/leaves/&#x27;,
-         AdminLeavesView.as_view(), name=&#x27;admin-leaves&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/admin/leaves/&lt;int:leave_id&gt;/approve/&#x27;,
-         ApproveLeaveView.as_view(), name=&#x27;approve-leave&#x27;),
-    path(&#x27;workspace/&lt;int:workspace_id&gt;/admin/leaves/&lt;int:leave_id&gt;/reject/&#x27;,
-         RejectLeaveView.as_view(), name=&#x27;reject-leave&#x27;),
-]</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="what-you-should-not-do" class="section">
-        <div class="content-card">
-          <h2 class="section-title">What You Should NOT Do</h2>
-          <pre><code class="language-text">× Put business logic (approve/reject/cancel validation) in a view — use LeaveService
-× Add &lt;style&gt; blocks to any template — all CSS in static/css/leaves.css
-× Add &lt;script&gt; blocks with logic to templates — all JS in static/js/leaves.js
-× Pass data to JavaScript via {{ variable }} inside a &lt;script&gt; tag — use data-* attributes
-× Not extend base.html in every template
-× Let the cancel view succeed for someone else&#x27;s leave request
-× Let the admin views be accessible to a member-role user (check role, raise PermissionDenied)
-× Skip CSRF token on any POST form
-× Render form errors with just {{ form.as_p }} — render each field individually
-× Overlap validation missing — two approved requests for same dates must be blocked</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="checklists-to-run-in-order" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Checklists to Run (in order)</h2>
-          <label><input type="checkbox" data-checklist-item /> Django Model — LeaveRequest model</label><br />
-<label><input type="checkbox" data-checklist-item /> Django Form / Serializer — LeaveRequestForm</label><br />
-<label><input type="checkbox" data-checklist-item /> Django New View — each of the 5 views</label><br />
-<label><input type="checkbox" data-checklist-item /> Django Template — my_leaves.html, submit_form.html, admin_leaves.html</label><br />
-<label><input type="checkbox" data-checklist-item /> Permissions & Role-Based UI — admin views inaccessible to members</label><br />
-<label><input type="checkbox" data-checklist-item /> Error Handling — form errors shown per field, service errors shown at top</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete & Destructive Actions — cancel confirmation</label><br />
-<label><input type="checkbox" data-checklist-item /> Notifications & Toasts — success/error messages after redirect (Django messages framework)</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="done-when" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Done When</h2>
-          <label><input type="checkbox" data-checklist-item /> LeaveRequest model: all fields, constraints, indexes, migration</label><br />
-<label><input type="checkbox" data-checklist-item /> LeaveRequestForm: start_date >= today, end_date >= start_date, both validated</label><br />
-<label><input type="checkbox" data-checklist-item /> LeaveService: submit checks overlapping requests, approve/reject check status</label><br />
-<label><input type="checkbox" data-checklist-item /> LeaveService: cancel checks actor == employee AND status == 'submitted'</label><br />
-<label><input type="checkbox" data-checklist-item /> WorkspaceMemberMixin: used in all views</label><br />
-<label><input type="checkbox" data-checklist-item /> Admin views: PermissionDenied (403) if caller is not admin/owner</label><br />
-<label><input type="checkbox" data-checklist-item /> All POST views: redirect on success (POST→redirect→GET pattern)</label><br />
-<label><input type="checkbox" data-checklist-item /> All templates: extend base.html, no inline styles, no inline scripts</label><br />
-<label><input type="checkbox" data-checklist-item /> Leaves CSS: all badge classes defined with CSS variables</label><br />
-<label><input type="checkbox" data-checklist-item /> Leaves JS: cancel uses data-* attributes, no string interpolation in script</label><br />
-<label><input type="checkbox" data-checklist-item /> Reject: inline reason form shown via JS class toggle, reason passed as hidden input</label><br />
-<label><input type="checkbox" data-checklist-item /> Filter forms: GET method, filter results from DB (not client-side)</label><br />
-<label><input type="checkbox" data-checklist-item /> Status badges: correct CSS class applied based on leave status</label><br />
-<label><input type="checkbox" data-checklist-item /> Pagination: works on my-leaves and admin pages</label><br />
-<label><input type="checkbox" data-checklist-item /> Django messages: success/error messages shown after redirect</label><br />
-<label><input type="checkbox" data-checklist-item /> Migration generated and reviewed</label><br />
-<label><input type="checkbox" data-checklist-item /> Mobile: table scrolls horizontally on small screens</label><br />
-<label><input type="checkbox" data-checklist-item /> CSRF token present on all POST forms</label><br />
-        </div>
-      </section>
+    Owner --> OwnerOverview[View leave requests across owned workspaces]
+    OwnerOverview --> OwnerFilter[Filter by workspace, member, status, date]
+    OwnerFilter --> OwnerDetail[Open request detail]
+    OwnerDetail --> OwnerManage[Approve, reject, cancel, or audit request history]</pre></div></div></div></section>
+      <section id="recommended-app-structure" class="section"><div class="project-rich-card"><h2 class="section-title">Recommended App Structure</h2><div class="project-rich-content"><pre><code class="language-text">leave_requests/
+  models.py
+  forms.py
+  services.py
+  views.py
+  urls.py
+  permissions.py
+  tests.py
+  templates/
+    leave_requests/
+      list.html
+      form.html
+      detail.html
+      admin_review.html
+  static/
+    leave_requests/
+      css/
+      js/</code></pre><p>Recommended shared template:</p><pre><code class="language-text">templates/
+  base.html
+  partials/
+    navbar.html
+    sidebar.html
+    messages.html</code></pre></div></div></section><section id="required-pages" class="section"><div class="project-rich-card"><h2 class="section-title">Required Pages</h2><div class="project-screen-grid"><article class="project-screen-card"><h3>My Leave Requests</h3><div class="project-rich-content"><p>Shows:</p><ul><li>Request date, leave type, date range, duration, status, and available actions.</li><li>Search or quick filter by status.</li><li>Pagination if a user has a long request history.</li><li>View button for full request detail.</li><li>Cancel action only when the workflow allows it.</li><li>Empty state and Django message feedback after actions.</li></ul></div></article><article class="project-screen-card"><h3>Create Leave Request</h3><div class="project-rich-content"><p>Fields:</p><ul><li>Leave type, start date, end date, and reason.</li><li>Server-rendered validation messages next to invalid fields.</li><li>Submit button should be disabled during save when JavaScript enhancement is used.</li><li>Date summary so the user understands what will be submitted.</li></ul></div></article><article class="project-screen-card"><h3>Leave Request Detail</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Full request information, current status, and timeline or decision summary.</li><li>Rejection reason if rejected.</li><li>Back link to the member request list.</li><li>Permission-safe access so one member cannot open another member’s request.</li></ul></div></article><article class="project-screen-card"><h3>Admin Review Page</h3><div class="project-rich-content"><p>Shows:</p><ul><li>Pending leave requests with user name, leave type, date range, and reason.</li><li>Search/filter by status or user where needed.</li><li>Pagination for larger workspaces.</li><li>View button before approve/reject.</li><li>Approve action and reject action with rejection reason capture.</li></ul></div></article></div></div></section><section id="template-data-attributes" class="section"><div class="project-rich-card"><h2 class="section-title">Template Data Attributes</h2><div class="project-rich-content"><p>Use data attributes for JavaScript hooks instead of fragile class selectors.</p><p>Examples:</p><pre><code class="language-html">&lt;button data-action=&quot;approve-leave&quot; data-request-id=&quot;123&quot;&gt;Approve&lt;/button&gt;
+&lt;form data-form=&quot;leave-request&quot;&gt;&lt;/form&gt;
+&lt;div data-state=&quot;empty-leave-list&quot;&gt;&lt;/div&gt;</code></pre></div></div></section><section id="permission-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Permission Rules</h2><div class="project-rich-content"><div class="table-wrapper"><table class="table"><thead><tr><th>Actor</th><th>Allowed</th></tr></thead><tbody><tr><td>Owner</td><td>Manage all workspace leave requests.</td></tr><tr><td>Admin</td><td>Approve/reject assigned workspace requests.</td></tr><tr><td>Member</td><td>Create/view own requests.</td></tr><tr><td>Non-member</td><td>No access.</td></tr></tbody></table></div></div></div></section><section id="acceptance-checklist" class="section"><div class="project-rich-card"><h2 class="section-title">Acceptance Checklist</h2><div class="project-rich-content"><ul><li><code>base.html</code> is used.</li><li>Templates are organized properly.</li><li>Business logic is in services, not directly in views.</li><li>Member can create leave request.</li><li>Admin can approve/reject only assigned workspace requests.</li><li>Member cannot approve own request.</li><li>Date validation works.</li><li>Django messages show success/error feedback.</li><li>Empty states are implemented.</li></ul></div></div></section>
     </div>
   </main>
-
   <footer class="footer">
     <div class="footer-inner">
       <div>
         <div class="footer-brand">Development Standards</div>
-        <p class="footer-text">Build to the standard. Every time.</p>
+        <p class="footer-text">Build a server-rendered leave request system using Django models, forms, services, views, and templates.</p>
       </div>
       <div class="footer-links">
         <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
         <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
-        <a href="../../pages/standards.html" class="footer-link">Standards</a>
       </div>
     </div>
   </footer>
-
   <script type="module" src="../../../js/main.js"></script>
 </body>
 </html>
