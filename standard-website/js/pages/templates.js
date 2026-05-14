@@ -1,7 +1,24 @@
-import { qsa, on, copyToClipboard } from "../utils.js";
+import { copyToClipboard, initCatalogIndex, on, qsa } from "../utils.js";
 
 export function initTemplatesPage() {
+  initTemplatesCatalogIndex();
   initCopyTemplateButtons();
+}
+
+function initTemplatesCatalogIndex() {
+  initCatalogIndex({
+    catalogSelector: "#templates-catalog",
+    headerSelector: ".templates-catalog-header",
+    groupSelector: ".templates-doc-list",
+    itemSelector: ".templates-doc-card",
+    itemTitleSelector: ".card-title",
+    getGroupTitle: () => "Template Catalog",
+    getGroupDescription: () =>
+      "Pick the exact writing format you need, then open the matching template card below.",
+    extraContentSelectors: ["[data-search-empty]"],
+    idPrefix: "templates",
+    groupTitleFallback: "Template Section",
+  });
 }
 
 function initCopyTemplateButtons() {

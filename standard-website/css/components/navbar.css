@@ -22,19 +22,41 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  font-weight: 700;
   color: var(--color-primary);
+  text-decoration: none;
+}
+
+.navbar-brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.navbar-brand-title {
   font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--color-primary);
+}
+
+.navbar-brand-subtitle {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--color-text-light);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .navbar-logo {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
 }
 
-[data-theme="dark"] .navbar-logo {
-  filter: brightness(0) invert(1);
+[data-theme="dark"] .navbar-brand-subtitle {
+  color: #8fb8ea;
 }
 
 .navbar-menu {

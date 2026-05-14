@@ -1,7 +1,23 @@
-import { qsa, on } from "../utils.js";
+import { initCatalogIndex, qsa, on } from "../utils.js";
 
 export function initChecklistsPage() {
+  initChecklistsCatalogIndex();
   initChecklistProgress();
+}
+
+function initChecklistsCatalogIndex() {
+  initCatalogIndex({
+    catalogSelector: "#checklists-catalog",
+    headerSelector: ".checklists-catalog-header",
+    groupSelector: ".checklists-group",
+    groupTitleSelector: ".checklists-group-header h3",
+    groupDescriptionSelector: ".checklists-group-header > p",
+    itemSelector: ".checklists-doc-card",
+    itemTitleSelector: ".card-title",
+    extraContentSelectors: ["[data-search-empty]"],
+    idPrefix: "checklists",
+    groupTitleFallback: "Checklist Section",
+  });
 }
 
 function initChecklistProgress() {

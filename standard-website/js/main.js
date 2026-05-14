@@ -1,5 +1,6 @@
-import { setActiveLinks } from "./utils.js";
+import { initGlobalPageIndex, setActiveLinks } from "./utils.js";
 import { initNavbar } from "./components/navbar.js";
+import { initFooterBranding } from "./components/footer.js";
 import { initSidebar } from "./components/sidebar.js";
 import { initSearch } from "./components/search.js";
 import { initTabs } from "./components/tabs.js";
@@ -17,6 +18,7 @@ function initGlobalApp() {
   setActiveLinks();
 
   initNavbar();
+  initFooterBranding();
   initSidebar();
   initSearch();
   initTabs();
@@ -25,6 +27,7 @@ function initGlobalApp() {
   initThemeToggle();
 
   initPageSpecificScripts();
+  initGlobalPageIndex();
 }
 
 function initPageSpecificScripts() {

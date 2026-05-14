@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project — Workspace Invite System | Development Standards</title>
-  <meta name="description" content="Build a token-based invite system with Edge Function, accept_workspace_invite RPC, and all error states." />
+  <meta name="description" content="Build a secure invite system where Owners/Admins can invite users to a workspace using email and token-based acceptance." />
   <script>
   (function () {
     try {
@@ -15,16 +15,14 @@
     } catch (error) {}
   })();
 </script>
-
-  <link rel="icon" href="../../../assets/images/working-standards.png" />
+  <link rel="icon" href="../../../assets/images/infiweb-logo.png" />
   <link rel="stylesheet" href="../../../css/main.css" />
 </head>
-
 <body class="project-detail-page" data-page="tasks">
   <header class="navbar">
     <div class="navbar-inner">
       <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
-        <img src="../../../assets/images/working-standards.png" alt="Standards Logo" class="navbar-logo" />
+        <img src="../../../assets/images/infiweb-logo.png" alt="Infi Web Solutions Logo" class="navbar-logo" />
         <span>Development Standards</span>
       </a>
       <nav class="navbar-menu" aria-label="Main Navigation">
@@ -37,479 +35,82 @@
       <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
     </div>
   </header>
-
   <main class="page">
     <div class="container">
       <section class="page-header">
-        <span class="badge badge-info">Project — React + Supabase</span>
+        <span class="badge badge-info">Project Task</span>
         <h1 class="page-title">Project — Workspace Invite System</h1>
-        <p class="page-subtitle">Build a token-based invite system with Edge Function, accept_workspace_invite RPC, and all error states.</p>
+        <p class="page-subtitle">Build a secure invite system where Owners/Admins can invite users to a workspace using email and token-based acceptance.</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
-          <a href="../project-tasks.html" class="btn btn-secondary">Back to Projects</a>
-          
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Project Tasks</a>
         </div>
       </section>
-
-      <section class="section project-intro-grid">
-        <div class="content-card project-brief-card">
-          <span class="project-brief-kicker">Build Brief</span>
-          <div class="project-meta-row">
-            <span class="project-meta-pill">React (TypeScript) + Supabase</span>
-            <span class="project-meta-pill">8 hours</span>
-            <span class="project-meta-pill">Intermediate–Advanced</span>
+      <section class="section project-showcase">
+        <div class="project-showcase-main">
+          <div class="project-kicker-row">
+            <span class="project-stack-badge">React + Supabase</span>
+            <span class="project-brief-kicker">~8 Hours</span>
+            <span class="project-brief-kicker">Intermediate–Advanced</span>
           </div>
           <h2 class="section-title">What You Are Building</h2>
-          <p class="project-brief-copy">A workspace invite system. Admins invite people by email, assigning them a role. The invitee receives an email with a unique link. Clicking the link accepts the invite and adds the person as a workspace member. Admins can view pending invites, copy the invite link, resend the email, and revoke pending invites.</p>
-        </div>
-
-        <div class="content-card project-roles-card">
-          <span class="project-brief-kicker">Roles &amp; Access</span>
-          <ul class="project-role-list">
-            <li><strong>Admin / Owner</strong>Send invites, view pending invites, resend or revoke invites, and manage the workspace member roster.</li>
-            <li><strong>Member</strong>Can use the members tab, but cannot access the pending invites tab or invite-management actions.</li>
-            <li><strong>Invitee</strong>Opens the invite link, passes token validation, and joins the workspace through the accept flow.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="content-card project-flow-card">
-          <div class="project-flow-header">
-            <span class="project-brief-kicker">Core Flows</span>
-            <h2 class="section-title">How this product should work</h2>
-            <p class="project-flow-lead">If someone reads only this section, they should understand the full invite lifecycle: who manages members, how invites are sent, how they are accepted, and what remains admin-only.</p>
-          </div>
-          <div class="project-flow-grid">
-            <article class="project-flow-item">
-              <strong>Members tab</strong>
-              <p>Show current workspace members with role badges, joined date, and admin-only actions like role change and removal.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Send invite</strong>
-              <p>An admin opens the invite modal, enters email and role, and the Edge Function creates the invite record and sends the email.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Accept invite</strong>
-              <p>The invitee opens the link and the RPC validates token, status, and expiry before creating the workspace membership.</p>
-            </article>
-            <article class="project-flow-item">
-              <strong>Pending invite management</strong>
-              <p>Admins review pending invites, copy links, resend emails, and revoke invites using status updates instead of hard deletes.</p>
-            </article>
+          <p class="project-lead">Build a secure invite system where Owners/Admins can invite users to a workspace using email and token-based acceptance.</p>
+          <div class="project-side-block">
+            <h3 class="project-side-title">This project teaches</h3>
+            <ul class="project-skill-list"><li>Supabase tables</li><li>RLS</li><li>Invite email Edge Function</li><li>Accept-invite RPC</li><li>React invite management UI</li><li>Token-based invite acceptance</li></ul>
           </div>
         </div>
+        <aside class="project-showcase-side">
+          <div class="project-side-block">
+            <span class="project-brief-kicker">User Stories</span>
+            <h2 class="section-title">Who this flow is for</h2>
+          </div>
+          <div class="project-story-grid"><article class="project-story-card"><strong>Owner</strong><p>I want to invite admins and members to workspaces.</p></article><article class="project-story-card"><strong>Admin</strong><p>I want to invite members to my assigned workspace.</p></article><article class="project-story-card"><strong>Invited User</strong><p>I want to accept the invite securely and join the correct workspace.</p></article></div>
+        </aside>
       </section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Invite Flow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">flowchart TD
+    Login[User opens app and logs in]
+    Workspace[Selects workspace]
+    InviteArea[Opens members / invites area]
 
-      <section id="features-to-build" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Features to Build</h2>
-          <div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>#</th>
-    <th>Feature</th>
-    <th>Est. Time</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>1</td>
-    <td><code>workspace_invites</code> table + RLS</td>
-    <td>1h</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>Edge Function: <code>send-workspace-invite</code></td>
-    <td>1h 30m</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>RPC: <code>accept_workspace_invite</code></td>
-    <td>1h</td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>React: Members + Invites page (tabs)</td>
-    <td>1h</td>
-  </tr>
-  <tr>
-    <td>5</td>
-    <td>React: Send invite form</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td>React: Accept invite page</td>
-    <td>45m</td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>Invite management (copy, resend, revoke)</td>
-    <td>1h</td>
-  </tr>
-  </tbody>
-</table></div>
-<hr />
-        </div>
-      </section>
+    Login --> Workspace --> InviteArea
 
-      <section id="1-database-workspaceinvites-table" class="section">
-        <div class="content-card">
-          <h2 class="section-title">1. Database — `workspace_invites` Table</h2>
-          <h3>Schema</h3>
-<div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>Column</th>
-    <th>Type</th>
-    <th>Rules</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>id</td>
-    <td>uuid</td>
-    <td>PK, default gen_random_uuid()</td>
-  </tr>
-  <tr>
-    <td>workspace_id</td>
-    <td>uuid</td>
-    <td>FK → workspaces.id, ON DELETE CASCADE</td>
-  </tr>
-  <tr>
-    <td>email</td>
-    <td>text</td>
-    <td>NOT NULL</td>
-  </tr>
-  <tr>
-    <td>role</td>
-    <td>text</td>
-    <td>NOT NULL, one of: 'admin', 'member', default 'member'</td>
-  </tr>
-  <tr>
-    <td>token</td>
-    <td>text</td>
-    <td>NOT NULL, UNIQUE — a secure random token (gen_random_uuid()::text)</td>
-  </tr>
-  <tr>
-    <td>status</td>
-    <td>text</td>
-    <td>NOT NULL, default 'pending', one of: 'pending', 'accepted', 'revoked', 'expired'</td>
-  </tr>
-  <tr>
-    <td>invited_by</td>
-    <td>uuid</td>
-    <td>FK → auth.users.id</td>
-  </tr>
-  <tr>
-    <td>expires_at</td>
-    <td>timestamptz</td>
-    <td>NOT NULL, default: now() + interval '7 days'</td>
-  </tr>
-  <tr>
-    <td>accepted_at</td>
-    <td>timestamptz</td>
-    <td>nullable</td>
-  </tr>
-  <tr>
-    <td>created_at</td>
-    <td>timestamptz</td>
-    <td>default now()</td>
-  </tr>
-  </tbody>
-</table></div>
-<h3>Constraints</h3>
-<pre><code class="language-sql">UNIQUE (workspace_id, email, status)  -- prevents duplicate pending invites for same email
-CHECK (role IN (&#x27;admin&#x27;, &#x27;member&#x27;))
-CHECK (status IN (&#x27;pending&#x27;, &#x27;accepted&#x27;, &#x27;revoked&#x27;, &#x27;expired&#x27;))</code></pre>
-<h3>Indexes</h3>
-<pre><code class="language-sql">CREATE UNIQUE INDEX idx_invites_token ON workspace_invites (token);
-CREATE INDEX idx_invites_workspace_status ON workspace_invites (workspace_id, status);
-CREATE INDEX idx_invites_email ON workspace_invites (email);</code></pre>
-<h3>RLS Policies</h3>
-<pre><code class="language-text">SELECT:
-  — Admins/owners of the workspace can see all invites for their workspace
-  — A user can see their own pending invite (WHERE email = auth.email())
+    InviteArea --> Owner[Owner Flow]
+    InviteArea --> Admin[Admin Flow]
+    InviteArea --> Invitee[Invited User Flow]
 
-INSERT:
-  — Only workspace admins/owners can create invites
+    Owner --> OwnerList[View members and invite history]
+    OwnerList --> OwnerFilter[Search / filter / paginate invites]
+    OwnerFilter --> OwnerSend[Invite admin or member]
+    OwnerSend --> OwnerManage[Resend, revoke, or copy invite link]
+    OwnerManage --> OwnerAudit[Review accepted / expired / revoked invites]
 
-UPDATE:
-  — Only workspace admins/owners can update (for revoke)
-  — The Edge Function and RPC use SECURITY DEFINER to bypass RLS
+    Admin --> AdminList[View assigned workspace members and invites]
+    AdminList --> AdminFilter[Search / filter / paginate invites]
+    AdminFilter --> AdminSend[Invite member to assigned workspace]
+    AdminSend --> AdminManage[Resend, revoke, or copy pending invite]
+    AdminManage -. cannot invite to another workspace or create admin invite .-> AdminBlocked[Blocked by role and workspace rules]
 
-DELETE:
-  — Not allowed — use status = &#x27;revoked&#x27; instead (soft delete pattern)</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/supabase/new-table.md">New Table</a> · <a href="../../../../checklists/supabase/rls-policies.md">RLS Policies</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="2-edge-function-send-workspace-invite" class="section">
-        <div class="content-card">
-          <h2 class="section-title">2. Edge Function: `send-workspace-invite`</h2>
-          <p><strong>Endpoint:</strong> <code>POST /functions/v1/send-workspace-invite</code></p>
-<h3>Logic (10 steps)</h3>
-<pre><code class="language-text">1.  Validate JWT — reject if no valid auth token
-2.  Parse body: { workspace_id, email, role }
-3.  Validate: email is valid format
-4.  Validate: role is &#x27;admin&#x27; or &#x27;member&#x27;
-5.  Check caller is admin/owner of workspace (query workspace_members)
-6.  Check email is not already an active member of the workspace
-7.  Check: no pending invite for this email in this workspace already exists
-    (if exists: return 409 with existing invite details so frontend can offer &quot;Resend&quot;)
-8.  Create invite record: insert into workspace_invites with a generated token + 7-day expiry
-9.  Send invite email via Resend:
-    Subject: &quot;[Admin Name] invited you to join [Workspace Name]&quot;
-    Body: includes workspace name, role, and the invite link:
-    https://yourapp.com/accept-invite?token={token}
-10. Return: { &quot;data&quot;: { invite_id, email, role, expires_at } }</code></pre>
-<h3>Environment Variables Required</h3>
-<pre><code class="language-text">RESEND_API_KEY
-APP_BASE_URL</code></pre>
-<h3>Error Responses</h3>
-<div class="table-wrapper"><table class="table">
-  <thead><tr>
-    <th>Scenario</th>
-    <th>HTTP</th>
-    <th>Code</th>
-  </tr></thead>
-  <tbody>
-  <tr>
-    <td>No auth</td>
-    <td>401</td>
-    <td>AUTH_REQUIRED</td>
-  </tr>
-  <tr>
-    <td>Not admin</td>
-    <td>403</td>
-    <td>FORBIDDEN</td>
-  </tr>
-  <tr>
-    <td>Already a member</td>
-    <td>409</td>
-    <td>DUPLICATE</td>
-  </tr>
-  <tr>
-    <td>Invite already pending</td>
-    <td>409</td>
-    <td>DUPLICATE</td>
-  </tr>
-  <tr>
-    <td>Invalid email</td>
-    <td>400</td>
-    <td>VALIDATION_ERROR</td>
-  </tr>
-  </tbody>
-</table></div>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/supabase/edge-function.md">Edge Function</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="3-rpc-acceptworkspaceinvite" class="section">
-        <div class="content-card">
-          <h2 class="section-title">3. RPC: `accept_workspace_invite`</h2>
-          <pre><code class="language-sql">CREATE OR REPLACE FUNCTION accept_workspace_invite(
-  p_token  text
-)
-RETURNS json
-LANGUAGE plpgsql
-SECURITY DEFINER  -- needs to write workspace_members even if RLS blocks it
-AS $$
-DECLARE
-  v_user_id   uuid := auth.uid();
-  v_invite    workspace_invites%ROWTYPE;
-BEGIN
-  -- 1. Auth check
-  IF v_user_id IS NULL THEN
-    RAISE EXCEPTION &#x27;AUTH_REQUIRED: authentication required&#x27;;
-  END IF;
-
-  -- 2. Find invite by token
-  SELECT * INTO v_invite FROM workspace_invites WHERE token = p_token;
-  IF NOT FOUND THEN
-    RAISE EXCEPTION &#x27;NOT_FOUND: invite not found or already used&#x27;;
-  END IF;
-
-  -- 3. Check status is pending
-  IF v_invite.status != &#x27;pending&#x27; THEN
-    RAISE EXCEPTION &#x27;BUSINESS_RULE_VIOLATION: this invite has already been % &#x27;, v_invite.status;
-  END IF;
-
-  -- 4. Check not expired
-  IF v_invite.expires_at &lt; now() THEN
-    UPDATE workspace_invites SET status = &#x27;expired&#x27; WHERE id = v_invite.id;
-    RAISE EXCEPTION &#x27;BUSINESS_RULE_VIOLATION: this invite has expired&#x27;;
-  END IF;
-
-  -- 5. Check caller email matches invite email
-  IF (SELECT email FROM auth.users WHERE id = v_user_id) != v_invite.email THEN
-    RAISE EXCEPTION &#x27;FORBIDDEN: this invite was sent to a different email address&#x27;;
-  END IF;
-
-  -- 6. Check not already a member
-  IF EXISTS (SELECT 1 FROM workspace_members WHERE workspace_id = v_invite.workspace_id AND user_id = v_user_id) THEN
-    RAISE EXCEPTION &#x27;DUPLICATE: you are already a member of this workspace&#x27;;
-  END IF;
-
-  -- 7. Create workspace_member record
-  INSERT INTO workspace_members (workspace_id, user_id, role, status)
-  VALUES (v_invite.workspace_id, v_user_id, v_invite.role, &#x27;active&#x27;);
-
-  -- 8. Mark invite as accepted
-  UPDATE workspace_invites
-  SET status = &#x27;accepted&#x27;, accepted_at = now()
-  WHERE id = v_invite.id;
-
-  RETURN json_build_object(
-    &#x27;data&#x27;, json_build_object(&#x27;workspace_id&#x27;, v_invite.workspace_id, &#x27;role&#x27;, v_invite.role),
-    &#x27;message&#x27;, &#x27;Invite accepted. Welcome to the workspace!&#x27;
-  );
-END;
-$$;</code></pre>
-<p><strong>Run checklist:</strong> <a href="../../../../checklists/supabase/rpc-function.md">RPC Function</a></p>
-<hr />
-        </div>
-      </section>
-
-      <section id="4-react-members-invites-page" class="section">
-        <div class="content-card">
-          <h2 class="section-title">4. React: Members &amp; Invites Page</h2>
-          <p><strong>URL:</strong> <code>/workspaces/{id}/members</code></p>
-<h3>Two Tabs</h3>
-<p><strong>Tab 1: Members</strong></p>
-<label><input type="checkbox" data-checklist-item /> List of active workspace members</label><br />
-<label><input type="checkbox" data-checklist-item /> Columns: Avatar · Name · Email · Role badge · Joined Date · Actions (admin: change role, remove)</label><br />
-<label><input type="checkbox" data-checklist-item /> Role change: inline dropdown → save immediately with "Saving..." indicator</label><br />
-<label><input type="checkbox" data-checklist-item /> Remove member: confirmation dialog "Remove [Name] from workspace?"</label><br />
-<label><input type="checkbox" data-checklist-item /> Loading: skeleton rows · Empty: "No members yet." · Error: retry button</label><br />
-<p><strong>Tab 2: Pending Invites</strong> (admin/owner only — tab hidden for members)</p>
-<label><input type="checkbox" data-checklist-item /> List of pending invites</label><br />
-<label><input type="checkbox" data-checklist-item /> Columns: Email · Role · Invited By · Expires On · Actions</label><br />
-<label><input type="checkbox" data-checklist-item /> Actions: Copy Link · Resend · Revoke</label><br />
-<label><input type="checkbox" data-checklist-item /> Copy Link: copies full accept URL to clipboard, "Link copied." toast</label><br />
-<label><input type="checkbox" data-checklist-item /> Resend: calls Edge Function again, "Invite resent." toast</label><br />
-<label><input type="checkbox" data-checklist-item /> Revoke: confirmation "Revoke invite to [email]?" → updates status to 'revoked'</label><br />
-<label><input type="checkbox" data-checklist-item /> Expired invites shown with "Expired" badge (not action buttons)</label><br />
-<label><input type="checkbox" data-checklist-item /> Loading: skeleton rows · Empty: "No pending invites." · Error: retry</label><br />
-<label><input type="checkbox" data-checklist-item /> "Invite Member" button at top right — admin only</label><br />
-<label><input type="checkbox" data-checklist-item /> Tab "Pending Invites (3)" — shows count of pending invites</label><br />
-<label><input type="checkbox" data-checklist-item /> Tab URL param: ?tab=members (default) or ?tab=invites</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="5-react-send-invite-modal" class="section">
-        <div class="content-card">
-          <h2 class="section-title">5. React: Send Invite Modal</h2>
-          <pre><code class="language-text">Fields:
-[ ] Email: email input, required
-[ ] Role: dropdown — Member / Admin
-
-Behavior:
-[ ] Submit &quot;Send Invite&quot; → calls Edge Function
-[ ] Loading state during call
-[ ] On success: &quot;Invite sent to [email].&quot; toast, invites list refreshes
-[ ] If already pending: &quot;An invite to this email is already pending. Resend it?&quot; with Resend button
-[ ] If already a member: &quot;This email is already a member of this workspace.&quot;
-[ ] API error: banner above submit</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="6-react-accept-invite-page" class="section">
-        <div class="content-card">
-          <h2 class="section-title">6. React: Accept Invite Page</h2>
-          <p><strong>URL:</strong> <code>/accept-invite?token={token}</code></p>
-<pre><code class="language-text">LOADING STATE:
-[ ] Page loads, token extracted from URL
-[ ] API call to validate the invite (GET /invites?token=xxx or check via RPC)
-[ ] While loading: spinner + &quot;Verifying your invite...&quot;
-
-VALID INVITE:
-[ ] Show workspace name + invited role
-[ ] Show invited email (user must be logged in with this email)
-[ ] &quot;Accept Invite&quot; button → calls accept_workspace_invite RPC
-[ ] On success: redirect to workspace dashboard with &quot;Welcome to [Workspace]!&quot; toast
-[ ] If user not logged in: &quot;Please sign in with [email] to accept this invite.&quot; + sign-in link
-
-INVALID INVITE:
-[ ] Token not found: &quot;This invite link is invalid or has already been used.&quot;
-[ ] Expired: &quot;This invite has expired. Ask your admin to send a new one.&quot;
-[ ] Wrong email: &quot;This invite was sent to a different email address.&quot;
-[ ] Already a member: &quot;You are already a member of this workspace.&quot; + link to workspace</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="what-you-should-not-do" class="section">
-        <div class="content-card">
-          <h2 class="section-title">What You Should NOT Do</h2>
-          <pre><code class="language-text">× Store the invite token as a sequential ID (use UUID for tokens)
-× Use SECURITY INVOKER for accept_workspace_invite — it needs to write workspace_members
-× Let the Edge Function skip the &quot;already a member&quot; check
-× Let accept_workspace_invite succeed for an expired or already-accepted token
-× Show the Pending Invites tab to member-role users
-× Generate signed URLs for the invite link — it should be a plain token URL
-× Skip the email match check (user must accept with the same email the invite was sent to)</code></pre>
-<hr />
-        </div>
-      </section>
-
-      <section id="checklists-to-run-in-order" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Checklists to Run (in order)</h2>
-          <label><input type="checkbox" data-checklist-item /> New Table — workspace_invites table</label><br />
-<label><input type="checkbox" data-checklist-item /> RLS Policies — workspace_invites</label><br />
-<label><input type="checkbox" data-checklist-item /> Edge Function — send-workspace-invite</label><br />
-<label><input type="checkbox" data-checklist-item /> RPC Function — accept_workspace_invite</label><br />
-<label><input type="checkbox" data-checklist-item /> React Page Build — Members & Invites page</label><br />
-<label><input type="checkbox" data-checklist-item /> Modals & Dialogs — Send Invite modal</label><br />
-<label><input type="checkbox" data-checklist-item /> Loading States & Skeletons — members list + invites list</label><br />
-<label><input type="checkbox" data-checklist-item /> Error Handling — accept invite page (all invalid states)</label><br />
-<label><input type="checkbox" data-checklist-item /> Notifications & Toasts — all async actions</label><br />
-<label><input type="checkbox" data-checklist-item /> Permissions & Role-Based UI — Invites tab hidden for members</label><br />
-<label><input type="checkbox" data-checklist-item /> Delete & Destructive Actions — revoke invite, remove member</label><br />
-<hr />
-        </div>
-      </section>
-
-      <section id="done-when" class="section">
-        <div class="content-card">
-          <h2 class="section-title">Done When</h2>
-          <label><input type="checkbox" data-checklist-item /> workspace_invites table: all columns, unique token index, correct RLS</label><br />
-<label><input type="checkbox" data-checklist-item /> Edge Function: validates JWT, checks admin role, prevents duplicates, sends email</label><br />
-<label><input type="checkbox" data-checklist-item /> Edge Function: returns 409 with invite details when invite already pending</label><br />
-<label><input type="checkbox" data-checklist-item /> accept_workspace_invite RPC: SECURITY DEFINER with auth.uid() as first line</label><br />
-<label><input type="checkbox" data-checklist-item /> RPC: validates token, status, expiry, email match — all 8 validation steps</label><br />
-<label><input type="checkbox" data-checklist-item /> RPC: creates workspace_member AND marks invite as accepted atomically</label><br />
-<label><input type="checkbox" data-checklist-item /> Members tab: role change saved immediately, remove member with confirmation</label><br />
-<label><input type="checkbox" data-checklist-item /> Invites tab: visible only to admin/owner</label><br />
-<label><input type="checkbox" data-checklist-item /> Invites tab: copy link, resend, revoke all work</label><br />
-<label><input type="checkbox" data-checklist-item /> Revoked invite: status = 'revoked' (not deleted)</label><br />
-<label><input type="checkbox" data-checklist-item /> Expired invites: show "Expired" badge, no action buttons</label><br />
-<label><input type="checkbox" data-checklist-item /> Accept invite page: handles all 5 states (loading/valid/expired/invalid/wrong-email)</label><br />
-<label><input type="checkbox" data-checklist-item /> Accept invite page: redirects to workspace on success</label><br />
-<label><input type="checkbox" data-checklist-item /> Accept invite page: prompts login if not authenticated</label><br />
-<label><input type="checkbox" data-checklist-item /> Tab state in URL: ?tab=members and ?tab=invites</label><br />
-<label><input type="checkbox" data-checklist-item /> Mobile tested at 375px and 768px</label><br />
-<label><input type="checkbox" data-checklist-item /> No silent failures — all errors shown in UI</label><br />
-        </div>
-      </section>
+    Invitee --> InviteOpen[Open invite link]
+    InviteOpen --> InviteReview[Review workspace, role, and expiry]
+    InviteReview --> InviteAccept[Accept invite]
+    InviteAccept --> InviteValidate[RPC validates token, email match, expiry, and status]
+    InviteValidate --> InviteJoin[Workspace membership created]
+    InviteValidate -. revoked, expired, invalid, or reused token .-> InviteBlocked[Acceptance denied with clear state]</pre></div></div></div></section>
+      <section id="required-screens" class="section"><div class="project-rich-card"><h2 class="section-title">Required Screens</h2><div class="project-screen-grid"><article class="project-screen-card"><h3>Invite Management Page</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Tabs or filters for pending, accepted, expired, and revoked invites.</li><li>Email, role, workspace, invited by, created date, and expiry date.</li><li>Search by email.</li><li>Filters for role, workspace, and invite status.</li><li>Pagination if the workspace has invite history.</li><li>Resend, revoke, and copy-link actions for Admin/Owner only.</li></ul></div></article><article class="project-screen-card"><h3>Send Invite Form</h3><div class="project-rich-content"><p>Fields:</p><ul><li>Email, workspace, and role.</li><li>Validation for existing member, duplicate pending invite, and allowed role assignment.</li><li>Submit state while Edge Function runs.</li><li>Success feedback after invite email is sent.</li></ul></div></article><article class="project-screen-card"><h3>Accept Invite Page</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Workspace name, invited role, invite email, and expiry information.</li><li>Primary accept button that triggers server-side token validation.</li><li>Expired, revoked, invalid, and already-used token states.</li><li>Success state after workspace membership is created.</li></ul></div></article><article class="project-screen-card"><h3>Members Tab</h3><div class="project-rich-content"><p>Should include:</p><ul><li>Current workspace members with role and joined date.</li><li>Search/filter for members where useful.</li><li>Role update and remove-member actions for Owner/Admin only.</li><li>Clear separation between active members and pending invites.</li></ul></div></article></div></div></section><section id="data-model" class="section"><div class="project-rich-card"><h2 class="section-title">Data Model</h2><div class="project-rich-content"><p>Recommended tables:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Table</th><th>Purpose</th></tr></thead><tbody><tr><td><code>workspaces</code></td><td>Workspace records.</td></tr><tr><td><code>workspace_members</code></td><td>Active memberships.</td></tr><tr><td><code>workspace_invites</code></td><td>Pending invite records.</td></tr></tbody></table></div><p>Recommended <code>workspace_invites</code> fields:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Field</th><th>Purpose</th></tr></thead><tbody><tr><td><code>workspace_id</code></td><td>Target workspace.</td></tr><tr><td><code>email</code></td><td>Invited email.</td></tr><tr><td><code>role</code></td><td>Admin or member.</td></tr><tr><td><code>token_hash</code></td><td>Hashed invite token.</td></tr><tr><td><code>status</code></td><td>Pending, accepted, expired, revoked.</td></tr><tr><td><code>expires_at</code></td><td>Expiry time.</td></tr><tr><td><code>invited_by</code></td><td>Inviter user ID.</td></tr></tbody></table></div></div></div></section><section id="security-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Security Rules</h2><div class="project-rich-content"><ul><li>Never store raw invite token if avoidable; store token hash.</li><li>Token must expire.</li><li>Token must be single-use.</li><li>Accept invite must be handled server-side through RPC.</li><li>User email must match the invited email exactly before the invite can be accepted.</li><li>Revoked invite cannot be accepted.</li></ul></div></div></section><section id="permission-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Permission Rules</h2><div class="project-rich-content"><div class="table-wrapper"><table class="table"><thead><tr><th>Actor</th><th>Allowed</th></tr></thead><tbody><tr><td>Owner</td><td>Invite admins and members to owned workspaces.</td></tr><tr><td>Admin</td><td>Invite members to assigned workspace.</td></tr><tr><td>Member</td><td>Cannot invite users. Invite actions are out of scope for members.</td></tr><tr><td>Non-member</td><td>Cannot access invite management.</td></tr></tbody></table></div></div></div></section><section id="acceptance-checklist" class="section"><div class="project-rich-card"><h2 class="section-title">Acceptance Checklist</h2><div class="project-rich-content"><ul><li>Owner can invite admin/member.</li><li>Admin can invite member only to assigned workspace.</li><li>Admin cannot invite users to another workspace.</li><li>Invite email is sent through Edge Function.</li><li>Invite token expires.</li><li>Invite token cannot be reused.</li><li>Revoked invite cannot be accepted.</li><li>RLS blocks unauthorized invite reads.</li><li>Accept invite RPC handles all validation server-side.</li></ul></div></div></section>
     </div>
   </main>
-
   <footer class="footer">
     <div class="footer-inner">
       <div>
         <div class="footer-brand">Development Standards</div>
-        <p class="footer-text">Build to the standard. Every time.</p>
+        <p class="footer-text">Build a secure invite system where Owners/Admins can invite users to a workspace using email and token-based acceptance.</p>
       </div>
       <div class="footer-links">
         <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
         <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
-        <a href="../../pages/standards.html" class="footer-link">Standards</a>
       </div>
     </div>
   </footer>
-
   <script type="module" src="../../../js/main.js"></script>
 </body>
 </html>
