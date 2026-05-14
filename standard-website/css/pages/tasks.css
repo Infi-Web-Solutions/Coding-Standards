@@ -73,7 +73,7 @@
 }
 
 .tasks-library-page .tasks-hero-stat strong {
-  font-size: var(--text-lg);
+  font-size: var(--text-2xl);
   line-height: 1;
 }
 
@@ -205,7 +205,7 @@
 
 .tasks-library-page .tasks-overview-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   align-content: start;
 }
@@ -387,6 +387,10 @@
   font-size: var(--text-sm);
 }
 
+.tasks-library-page .tasks-doc-list-compact .tasks-doc-card {
+  min-height: 0;
+}
+
 .tasks-library-page .tasks-doc-card {
   min-height: 220px;
   padding: var(--space-5);
@@ -411,6 +415,49 @@
 
 .tasks-library-page [data-search-item] {
   height: 100%;
+}
+
+/* Stack badge color overrides (data-stack injected by JS) */
+.project-detail-page .project-stack-badge[data-stack="nextjs"],
+.tasks-library-page .tasks-project-kicker[data-stack="nextjs"] {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+.project-detail-page .project-stack-badge[data-stack="weweb"],
+.tasks-library-page .tasks-project-kicker[data-stack="weweb"] {
+  background: #6d28d9;
+  color: #ffffff;
+  border-color: #6d28d9;
+}
+
+.project-detail-page .project-stack-badge[data-stack="react"],
+.tasks-library-page .tasks-project-kicker[data-stack="react"] {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.project-detail-page .project-stack-badge[data-stack="django"],
+.tasks-library-page .tasks-project-kicker[data-stack="django"] {
+  background: #059669;
+  color: #ffffff;
+  border-color: #059669;
+}
+
+.project-detail-page .project-stack-badge[data-stack="xano"],
+.tasks-library-page .tasks-project-kicker[data-stack="xano"] {
+  background: #ea580c;
+  color: #ffffff;
+  border-color: #ea580c;
+}
+
+.project-detail-page .project-stack-badge[data-stack="supabase"],
+.tasks-library-page .tasks-project-kicker[data-stack="supabase"] {
+  background: #1a7f4b;
+  color: #ffffff;
+  border-color: #1a7f4b;
 }
 
 .project-overview-page .project-overview-intro,
@@ -714,6 +761,10 @@
   .tasks-library-page .tasks-overview-grid,
   .tasks-library-page .tasks-doc-list,
   .tasks-library-page .tasks-doc-list-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tasks-library-page .tasks-hero-strip {
     grid-template-columns: 1fr;
   }
 

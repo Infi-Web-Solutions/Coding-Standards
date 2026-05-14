@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project — Meeting Room Booking | Development Standards</title>
+  <meta name="description" content="Build a workspace-based meeting room booking system using Next.js and Supabase." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+  <link rel="icon" href="../../../assets/images/infiweb-logo.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+<body class="project-detail-page" data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/infiweb-logo.png" alt="Infi Web Solutions Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-info">Project Task</span>
+        <h1 class="page-title">Project — Meeting Room Booking</h1>
+        <p class="page-subtitle">Build a workspace-based meeting room booking system using Next.js and Supabase.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Project Tasks</a>
+        </div>
+      </section>
+      <section class="section project-showcase">
+        <div class="project-showcase-main">
+          <div class="project-kicker-row">
+            <span class="project-stack-badge">Next.js + Supabase</span>
+            <span class="project-brief-kicker">~8 Hours</span>
+            <span class="project-brief-kicker">Intermediate</span>
+          </div>
+          <h2 class="section-title">What You Are Building</h2>
+          <p class="project-lead">Build a workspace-based meeting room booking system where teams reserve shared rooms without double-booking conflicts.</p>
+          <div class="project-side-block">
+            <h3 class="project-side-title">This project teaches</h3>
+            <ul class="project-skill-list"><li>Next.js dashboard pages</li><li>Supabase relational schema</li><li>Conflict validation</li><li>Calendar or schedule views</li><li>Role-based actions</li><li>Server-side permission enforcement</li></ul>
+          </div>
+        </div>
+        <aside class="project-showcase-side">
+          <div class="project-side-block">
+            <span class="project-brief-kicker">User Stories</span>
+            <h2 class="section-title">Who this flow is for</h2>
+          </div>
+          <div class="project-story-grid"><article class="project-story-card"><strong>Owner</strong><p>I want to configure meeting rooms and monitor booking usage across owned workspaces.</p></article><article class="project-story-card"><strong>Admin</strong><p>I want to manage rooms and approve or adjust bookings in the assigned workspace.</p></article><article class="project-story-card"><strong>Member</strong><p>I want to reserve available rooms for meetings and view my upcoming bookings.</p></article></div>
+        </aside>
+      </section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Booking Workflow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">flowchart TD
+    Login[User logs in]
+    Workspace[Selects workspace]
+    Booking[Opens Meeting Room Booking]
+
+    Login --> Workspace --> Booking
+
+    Booking --> Owner[Owner Flow]
+    Booking --> Admin[Admin Flow]
+    Booking --> Member[Member Flow]
+
+    Owner --> OwnerRooms[Configure rooms across owned workspaces]
+    OwnerRooms --> OwnerUsage[Review booking usage]
+    OwnerUsage --> OwnerAudit[Audit conflicts and overrides]
+
+    Admin --> AdminRooms[Manage assigned workspace rooms]
+    AdminRooms --> AdminQueue[Review booking queue]
+    AdminQueue --> AdminAction[Confirm, update, or cancel booking]
+    AdminAction -. cannot access another workspace .-> AdminBlocked[Blocked by workspace permission rules]
+
+    Member --> MemberBrowse[Browse available rooms]
+    MemberBrowse --> MemberSelect[Choose date and time]
+    MemberSelect --> MemberSubmit[Submit booking request]
+    MemberSubmit --> MemberTrack[Track confirmed or cancelled status]
+    MemberSubmit -. overlapping booking denied by backend validation .-> MemberConflict[Conflict message shown]</pre></div></div></div></section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Status Workflow</span><h2 class="section-title">Booking States</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">stateDiagram-v2
+    [*] --> Requested
+    Requested --> Confirmed: approved or auto-confirmed
+    Requested --> Cancelled: rejected or cancelled
+    Confirmed --> Completed: meeting finished
+    Confirmed --> Cancelled: booking cancelled</pre></div></div></div></section>
+      <section id="required-screens" class="section"><div class="project-rich-card"><h2 class="section-title">Required Screens</h2><div class="project-screen-grid"><article class="project-screen-card"><h3>Room Booking Dashboard</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Room list with capacity, amenities, and current status.</li><li>Booking calendar or agenda list.</li><li>Filters by room, date, and status.</li><li>Counts for requested, confirmed, cancelled, and completed bookings.</li><li>Permission-aware actions by role.</li><li>Loading, empty, no-result, and error states.</li></ul></div></article><article class="project-screen-card"><h3>Create Booking Form</h3><div class="project-rich-content"><p>Fields:</p><ul><li>Room selection.</li><li>Meeting title.</li><li>Date.</li><li>Start time and end time.</li><li>Attendee count.</li><li>Optional notes.</li><li>Conflict validation before submission completes.</li></ul></div></article><article class="project-screen-card"><h3>Booking Detail Page</h3><div class="project-rich-content"><p>Should include:</p><ul><li>Full booking information.</li><li>Room information and workspace details.</li><li>Status history.</li><li>Edit or cancel actions for allowed roles only.</li><li>Unauthorized or missing booking handling.</li></ul></div></article><article class="project-screen-card"><h3>Room Management</h3><div class="project-rich-content"><p>Should include:</p><ul><li>Create or edit room name, capacity, location, and amenities.</li><li>Disable room temporarily for maintenance.</li><li>Prevent deletion when active future bookings exist.</li></ul></div></article></div></div></section>
+      <section id="data-model" class="section"><div class="project-rich-card"><h2 class="section-title">Data Model</h2><div class="project-rich-content"><p>Recommended tables:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Table</th><th>Purpose</th></tr></thead><tbody><tr><td><code>meeting_rooms</code></td><td>Room records by workspace.</td></tr><tr><td><code>room_bookings</code></td><td>Booking records.</td></tr><tr><td><code>workspace_members</code></td><td>Role and access checks.</td></tr><tr><td><code>workspaces</code></td><td>Workspace records.</td></tr></tbody></table></div><p>Recommended <code>room_bookings</code> fields:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Field</th><th>Purpose</th></tr></thead><tbody><tr><td><code>workspace_id</code></td><td>Workspace relation.</td></tr><tr><td><code>room_id</code></td><td>Selected meeting room.</td></tr><tr><td><code>title</code></td><td>Meeting title.</td></tr><tr><td><code>booking_date</code></td><td>Reservation date.</td></tr><tr><td><code>start_time</code></td><td>Meeting start.</td></tr><tr><td><code>end_time</code></td><td>Meeting end.</td></tr><tr><td><code>status</code></td><td>Requested, confirmed, cancelled, completed.</td></tr><tr><td><code>created_by</code></td><td>User who created booking.</td></tr></tbody></table></div></div></div></section>
+      <section id="validation-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Validation Rules</h2><div class="project-rich-content"><ul><li>Booking date, start time, and end time are required.</li><li>End time must be after start time.</li><li>The same room cannot have overlapping confirmed bookings.</li><li>Members must not be able to bypass room conflict validation by changing request payload manually.</li><li>Past-date booking should be blocked in the base project unless explicitly allowed.</li></ul></div></div></section>
+      <section id="permission-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Permission Rules</h2><div class="project-rich-content"><div class="table-wrapper"><table class="table"><thead><tr><th>Actor</th><th>Allowed</th></tr></thead><tbody><tr><td>Owner</td><td>Manage rooms and bookings in owned workspaces.</td></tr><tr><td>Admin</td><td>Manage rooms and bookings in assigned workspace.</td></tr><tr><td>Member</td><td>Create and view bookings in the shared workspace.</td></tr><tr><td>Non-member</td><td>No access.</td></tr></tbody></table></div></div></div></section>
+      <section id="acceptance-checklist" class="section"><div class="project-rich-card"><h2 class="section-title">Acceptance Checklist</h2><div class="project-rich-content"><ul><li>Rooms are scoped by workspace.</li><li>Booking conflict validation prevents overlapping confirmed bookings for the same room.</li><li>Member can create booking only in assigned workspace.</li><li>Admin cannot manage another workspace's rooms or bookings.</li><li>Availability filters work correctly.</li><li>Cancelled bookings are clearly shown and do not block future valid reservations.</li></ul></div></div></section>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build a workspace-based meeting room booking system using Next.js and Supabase.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>
