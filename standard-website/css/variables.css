@@ -23,14 +23,14 @@
   --color-text-light: #6a85a6;
 
   /* Status Colors */
-  --color-success: #0057ad;
-  --color-success-bg: #e4efff;
+  --color-success: #16a34a;
+  --color-success-bg: #dcfce7;
 
-  --color-warning: #0a2e57;
-  --color-warning-bg: #edf4ff;
+  --color-warning: #d97706;
+  --color-warning-bg: #fef3c7;
 
-  --color-danger: #0057ad;
-  --color-danger-bg: #e4efff;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fee2e2;
 
   --color-info: #0d71d4;
   --color-info-bg: #eaf3ff;
@@ -99,12 +99,12 @@
   --color-text: #ffffff;
   --color-text-muted: #d6e7ff;
   --color-text-light: #8fb8ea;
-  --color-success: #b4dcff;
-  --color-success-bg: rgba(140, 200, 255, 0.14);
-  --color-warning: #d8e9ff;
-  --color-warning-bg: rgba(180, 220, 255, 0.1);
-  --color-danger: #b4dcff;
-  --color-danger-bg: rgba(140, 200, 255, 0.14);
+  --color-success: #4ade80;
+  --color-success-bg: rgba(74, 222, 128, 0.14);
+  --color-warning: #fbbf24;
+  --color-warning-bg: rgba(251, 191, 36, 0.14);
+  --color-danger: #f87171;
+  --color-danger-bg: rgba(248, 113, 113, 0.14);
   --color-info: #b4dcff;
   --color-info-bg: rgba(140, 200, 255, 0.14);
   --shadow-sm: 0 2px 14px rgba(0, 0, 0, 0.28);
@@ -148,12 +148,24 @@
 }
 
 [data-theme="dark"] .badge-primary,
-[data-theme="dark"] .badge-success,
-[data-theme="dark"] .badge-warning,
-[data-theme="dark"] .badge-danger,
 [data-theme="dark"] .badge-info {
-  background: rgba(63, 150, 255, 0.12);
-  color: #d8e9ff;
+  background: rgba(140, 200, 255, 0.14);
+  color: #b4dcff;
+}
+
+[data-theme="dark"] .badge-success {
+  background: rgba(74, 222, 128, 0.14);
+  color: #4ade80;
+}
+
+[data-theme="dark"] .badge-warning {
+  background: rgba(251, 191, 36, 0.14);
+  color: #fbbf24;
+}
+
+[data-theme="dark"] .badge-danger {
+  background: rgba(248, 113, 113, 0.14);
+  color: #f87171;
 }
 
 [data-theme="dark"] .table tr:hover td,

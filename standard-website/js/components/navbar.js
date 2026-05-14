@@ -4,7 +4,6 @@ export function initNavbar() {
   initNavbarBranding();
   initMobileNavbar();
   initNavbarScrollState();
-  initHashLinkClosing();
 }
 
 function initNavbarBranding() {
@@ -32,16 +31,58 @@ function initNavbarBranding() {
 }
 
 function initMobileNavbar() {
-  const toggleButton = qs("[data-navbar-toggle]");
-  const menu = qs("[data-navbar-menu]");
+  const navbarInner = qs(".navbar-inner");
+  const menu = qs(".navbar-menu");
 
-  if (!toggleButton || !menu) return;
+  if (!navbarInner || !menu) return;
 
-  on(toggleButton, "click", () => {
-    const isOpen = menu.classList.toggle("active");
+  menu.setAttribute("data-navbar-menu", "");
 
-    toggleButton.setAttribute("aria-expanded", String(isOpen));
-    menu.setAttribute("aria-hidden", String(!isOpen));
+  let toggleButton = qs("[data-navbar-toggle]");
+
+  if (!toggleButton) {
+    toggleButton = document.createElement("button");
+    toggleButton.className = "navbar-toggle";
+    toggleButton.setAttribute("data-navbar-toggle", "");
+    toggleButton.setAttribute("aria-label", "Open navigation menu");
+    toggleButton.setAttribute("aria-expanded", "false");
+    toggleButton.innerHTML = `
+      <span class="navbar-toggle-bar"></span>
+      <span class="navbar-toggle-bar"></span>
+      <span class="navbar-toggle-bar"></span>
+    `;
+    navbarInner.appendChild(toggleButton);
+  }
+
+  const close = () => {
+    menu.classList.remove("navbar-menu-open");
+    toggleButton.classList.remove("navbar-toggle-open");
+    toggleButton.setAttribute("aria-expanded", "false");
+  };
+
+  const open = () => {
+    menu.classList.add("navbar-menu-open");
+    toggleButton.classList.add("navbar-toggle-open");
+    toggleButton.setAttribute("aria-expanded", "true");
+  };
+
+  on(toggleButton, "click", (e) => {
+    e.stopPropagation();
+    menu.classList.contains("navbar-menu-open") ? close() : open();
+  });
+
+  qsa(".navbar-menu a").forEach((link) => {
+    on(link, "click", close);
+  });
+
+  on(document, "click", (e) => {
+    if (!navbarInner.contains(e.target)) {
+      close();
+    }
+  });
+
+  on(document, "keydown", (e) => {
+    if (e.key === "Escape") close();
   });
 }
 
@@ -51,28 +92,9 @@ function initNavbarScrollState() {
   if (!navbar) return;
 
   const updateNavbarState = () => {
-    if (window.scrollY > 8) {
-      navbar.classList.add("navbar-scrolled");
-    } else {
-      navbar.classList.remove("navbar-scrolled");
-    }
+    navbar.classList.toggle("navbar-scrolled", window.scrollY > 8);
   };
 
   updateNavbarState();
   on(window, "scroll", updateNavbarState, { passive: true });
-}
-
-function initHashLinkClosing() {
-  const menu = qs("[data-navbar-menu]");
-  const toggleButton = qs("[data-navbar-toggle]");
-
-  if (!menu || !toggleButton) return;
-
-  qsa('[data-navbar-menu] a[href^="#"]').forEach((link) => {
-    on(link, "click", () => {
-      menu.classList.remove("active");
-      menu.setAttribute("aria-hidden", "true");
-      toggleButton.setAttribute("aria-expanded", "false");
-    });
-  });
 }

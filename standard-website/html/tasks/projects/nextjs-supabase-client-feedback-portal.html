@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project — Client Feedback Portal | Development Standards</title>
+  <meta name="description" content="Build a workspace-based client feedback portal using Next.js and Supabase." />
+  <script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("working_standards_theme");
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = safeTheme;
+      document.documentElement.style.colorScheme = safeTheme;
+    } catch (error) {}
+  })();
+</script>
+  <link rel="icon" href="../../../assets/images/infiweb-logo.png" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+</head>
+<body class="project-detail-page" data-page="tasks">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="../../../index.html" class="navbar-brand" aria-label="Development Standards Home">
+        <img src="../../../assets/images/infiweb-logo.png" alt="Infi Web Solutions Logo" class="navbar-logo" />
+        <span>Development Standards</span>
+      </a>
+      <nav class="navbar-menu" aria-label="Main Navigation">
+        <a href="../../../index.html" class="navbar-link">Home</a>
+        <a href="../../pages/standards.html" class="navbar-link">Standards</a>
+        <a href="../../pages/checklists.html" class="navbar-link">Checklists</a>
+        <a href="../../pages/tasks.html" class="navbar-link active">Tasks</a>
+        <a href="../../pages/templates.html" class="navbar-link">Templates</a>
+      </nav>
+      <button class="btn btn-secondary btn-sm" data-theme-toggle>Dark Mode</button>
+    </div>
+  </header>
+  <main class="page">
+    <div class="container">
+      <section class="page-header">
+        <span class="badge badge-info">Project Task</span>
+        <h1 class="page-title">Project — Client Feedback Portal</h1>
+        <p class="page-subtitle">Build a workspace-based client feedback portal using Next.js and Supabase.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <a href="../project-tasks.html" class="btn btn-secondary">Back to Project Tasks</a>
+        </div>
+      </section>
+      <section class="section project-showcase">
+        <div class="project-showcase-main">
+          <div class="project-kicker-row">
+            <span class="project-stack-badge">Next.js + Supabase</span>
+            <span class="project-brief-kicker">~8 Hours</span>
+            <span class="project-brief-kicker">Intermediate</span>
+          </div>
+          <h2 class="section-title">What You Are Building</h2>
+          <p class="project-lead">Build a workspace-based client feedback portal where internal teams collect, review, and resolve product or service feedback.</p>
+          <div class="project-side-block">
+            <h3 class="project-side-title">This project teaches</h3>
+            <ul class="project-skill-list"><li>Next.js App Router structure</li><li>Supabase Auth and tables</li><li>Server Actions or API routes</li><li>Role-aware dashboards</li><li>Search and filters</li><li>Status workflow handling</li></ul>
+          </div>
+        </div>
+        <aside class="project-showcase-side">
+          <div class="project-side-block">
+            <span class="project-brief-kicker">User Stories</span>
+            <h2 class="section-title">Who this flow is for</h2>
+          </div>
+          <div class="project-story-grid"><article class="project-story-card"><strong>Owner</strong><p>I want to see all feedback activity across owned workspaces so I can monitor service quality.</p></article><article class="project-story-card"><strong>Admin</strong><p>I want to review feedback, update status, and respond inside the assigned workspace.</p></article><article class="project-story-card"><strong>Member</strong><p>I want to submit new feedback and track updates for items I created.</p></article></div>
+        </aside>
+      </section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Flow Design</span><h2 class="section-title">Feedback Workflow</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">flowchart TD
+    Login[User logs in]
+    Workspace[Selects workspace]
+    Portal[Opens Feedback Portal]
+
+    Login --> Workspace --> Portal
+
+    Portal --> Owner[Owner Flow]
+    Portal --> Admin[Admin Flow]
+    Portal --> Member[Member Flow]
+
+    Owner --> OwnerDashboard[View workspace summaries]
+    OwnerDashboard --> OwnerInsights[Filter by category / status / priority]
+    OwnerInsights --> OwnerReview[Open feedback detail and audit responses]
+
+    Admin --> AdminQueue[View assigned workspace feedback queue]
+    AdminQueue --> AdminReview[Review new feedback]
+    AdminReview --> AdminUpdate[Update status, assign reply, add note]
+    AdminUpdate -. cannot access another workspace .-> AdminBlocked[Blocked by workspace permission rules]
+
+    Member --> MemberCreate[Create feedback]
+    MemberCreate --> MemberTrack[Track progress]
+    MemberTrack --> MemberRead[Read responses and status updates]
+    MemberRead -. hidden admin controls and denied write actions outside scope .-> MemberBlocked[Restricted actions denied]</pre></div></div></div></section>
+      <section class="section"><div class="project-diagram-panel"><div class="project-diagram-header"><span class="project-brief-kicker">Status Workflow</span><h2 class="section-title">Resolution States</h2></div><div class="project-diagram-stack"><div class="project-mermaid-shell"><pre class="mermaid">stateDiagram-v2
+    [*] --> Open
+    Open --> InReview: admin starts review
+    InReview --> Resolved: issue fixed or addressed
+    InReview --> Closed: not actionable / duplicate
+    Resolved --> Closed: confirmation complete</pre></div></div></div></section>
+      <section id="required-screens" class="section"><div class="project-rich-card"><h2 class="section-title">Required Screens</h2><div class="project-screen-grid"><article class="project-screen-card"><h3>Feedback Dashboard</h3><div class="project-rich-content"><p>Should show:</p><ul><li>Feedback cards or table with title, category, status, priority, created by, and created date.</li><li>Search by title or message.</li><li>Filters by category, priority, and status.</li><li>Workspace counts for open, in-review, resolved, and closed items.</li><li>Permission-aware actions depending on role.</li><li>Loading, empty, no-result, and error states.</li></ul></div></article><article class="project-screen-card"><h3>Feedback Detail Page</h3><div class="project-rich-content"><p>Should include:</p><ul><li>Full feedback message and metadata.</li><li>Status timeline or update history.</li><li>Admin notes or public reply thread.</li><li>Workspace-safe navigation back to list.</li><li>Not-found or unauthorized handling if URL is changed manually.</li></ul></div></article><article class="project-screen-card"><h3>Submit Feedback Form</h3><div class="project-rich-content"><p>Fields:</p><ul><li>Title, category, priority, and full message.</li><li>Optional screenshot or reference link field in the base version.</li><li>Validation for required fields.</li><li>Submit loading state and clear success feedback.</li></ul></div></article><article class="project-screen-card"><h3>Admin Response Panel</h3><div class="project-rich-content"><p>Should include:</p><ul><li>Status update controls.</li><li>Reply or note text area.</li><li>Optional internal note vs visible response separation.</li><li>Audit-friendly timestamp display.</li></ul></div></article></div></div></section>
+      <section id="data-model" class="section"><div class="project-rich-card"><h2 class="section-title">Data Model</h2><div class="project-rich-content"><p>Recommended tables:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Table</th><th>Purpose</th></tr></thead><tbody><tr><td><code>feedback_items</code></td><td>Main feedback records.</td></tr><tr><td><code>feedback_replies</code></td><td>Replies, responses, or internal notes.</td></tr><tr><td><code>workspace_members</code></td><td>Permission checks and roles.</td></tr><tr><td><code>workspaces</code></td><td>Workspace records.</td></tr></tbody></table></div><p>Recommended <code>feedback_items</code> fields:</p><div class="table-wrapper"><table class="table"><thead><tr><th>Field</th><th>Purpose</th></tr></thead><tbody><tr><td><code>workspace_id</code></td><td>Workspace relation.</td></tr><tr><td><code>title</code></td><td>Short feedback summary.</td></tr><tr><td><code>message</code></td><td>Full issue or suggestion description.</td></tr><tr><td><code>category</code></td><td>Bug, suggestion, service, billing, other.</td></tr><tr><td><code>priority</code></td><td>Low, medium, high, urgent.</td></tr><tr><td><code>status</code></td><td>Open, in review, resolved, closed.</td></tr><tr><td><code>created_by</code></td><td>User who submitted feedback.</td></tr></tbody></table></div></div></div></section>
+      <section id="nextjs-implementation" class="section"><div class="project-rich-card"><h2 class="section-title">Next.js Implementation Expectations</h2><div class="project-rich-content"><ul><li>Use Next.js App Router pages for dashboard, detail, and create form.</li><li>Use server-side permission checks before returning sensitive feedback records.</li><li>Use Server Actions or route handlers for create and update operations.</li><li>Keep auth and workspace checks outside the UI layer so direct requests remain protected.</li><li>Keep components split into route-level page, form component, and feedback list/detail modules.</li></ul></div></div></section>
+      <section id="permission-rules" class="section"><div class="project-rich-card"><h2 class="section-title">Permission Rules</h2><div class="project-rich-content"><div class="table-wrapper"><table class="table"><thead><tr><th>Actor</th><th>Allowed</th></tr></thead><tbody><tr><td>Owner</td><td>View and manage all feedback in owned workspaces.</td></tr><tr><td>Admin</td><td>Manage feedback in assigned workspace.</td></tr><tr><td>Member</td><td>Create feedback and view permitted feedback in shared workspace.</td></tr><tr><td>Non-member</td><td>No access.</td></tr></tbody></table></div></div></div></section>
+      <section id="acceptance-checklist" class="section"><div class="project-rich-card"><h2 class="section-title">Acceptance Checklist</h2><div class="project-rich-content"><ul><li>Feedback is always scoped by workspace.</li><li>Member can create feedback successfully.</li><li>Admin can update status only in assigned workspace.</li><li>Owner can review feedback trends across owned workspaces.</li><li>Search and filters work correctly.</li><li>Unauthorized users cannot open or mutate feedback from another workspace.</li></ul></div></div></section>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Development Standards</div>
+        <p class="footer-text">Build a workspace-based client feedback portal using Next.js and Supabase.</p>
+      </div>
+      <div class="footer-links">
+        <a href="../project-tasks.html" class="footer-link">Project Tasks</a>
+        <a href="../../pages/tasks.html" class="footer-link">All Tasks</a>
+      </div>
+    </div>
+  </footer>
+  <script type="module" src="../../../js/main.js"></script>
+</body>
+</html>
